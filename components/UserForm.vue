@@ -1,0 +1,75 @@
+<template>
+    <form @submit.prevent="formMethod(formData)">
+        <fieldset v-show="formType === 'register'">
+            <label for="first-name">First Name</label>
+            <input
+                id="first-name"
+                v-model="formData.firstName"
+                type="text"
+                placeholder="John"
+            />
+        </fieldset>
+        <fieldset v-show="formType === 'register'">
+            <label for="last-name">Last Name</label>
+            <input
+                id="last-name"
+                v-model="formData.lastName"
+                type="text"
+                placeholder="Doe"
+            />
+        </fieldset>
+        <fieldset>
+            <label for="email">E-mail</label>
+            <input
+                id="email"
+                v-model="formData.email"
+                type="email"
+                placeholder="abcd.efgh@example.com"
+            />
+        </fieldset>
+        <fieldset>
+            <label for="password">Password</label>
+            <input
+                id="password"
+                v-model="formData.password"
+                type="password"
+                placeholder="password"
+            />
+        </fieldset>
+        <fieldset v-show="formType === 'register'">
+            <label for="password-confirm">Confirm password</label>
+            <input
+                id="password-confirm"
+                v-model="formData.passwordConfirmation"
+                type="password"
+                placeholder="password"
+            />
+        </fieldset>
+        <button type="submit">
+            {{ formType === 'register' ? 'Register' : 'Login' }}
+        </button>
+    </form>
+</template>
+
+<script>
+export default {
+    props: {
+        formType: {
+            default: () => '',
+            type: String,
+        },
+        formMethod: { default: () => () => {}, type: Function },
+    },
+    data() {
+        return {
+            formData: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+                passwordConfirmation: '',
+            },
+        };
+    },
+};
+</script>
