@@ -1,6 +1,6 @@
 <template>
     <main>
-        <h1>Welcome</h1>
+        <h1>Dashboard</h1>
         <section>
             <h2>My Lists</h2>
             <ul>
