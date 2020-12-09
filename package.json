@@ -7,6 +7,8 @@
         "build": "nuxt build",
         "start": "nuxt start",
         "generate": "nuxt generate",
+        "server": "cd server && npm start",
+        "full": "npm run generate && npm run server",
         "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
         "lint": "npm run lint:js",
         "test": "jest",
