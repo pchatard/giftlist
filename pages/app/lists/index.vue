@@ -1,17 +1,21 @@
 <template>
     <main>
-        <h1>Lists</h1>
         <section>
             <h2>My Lists</h2>
             <ul>
-                <!-- Change lis into components (ListPreview or else), change key to list.id -->
-                <li v-for="list in lists" :key="list.name">{{ list.name }}</li>
-                <li>Birthday</li>
-                <li>Christmas</li>
-                <li>Wedding</li>
+                <!-- change key to list.id -->
+                <ListPreview
+                    v-for="list in lists"
+                    :key="list.name"
+                    :list="list"
+                    @remove="handleRemoveList"
+                />
             </ul>
-            <form v-show="showForm">
-                <button @click="closeForm">Close</button>
+            <form
+                v-show="showForm"
+                class="border-2 border-black flex flex-col items-start"
+                @submit.prevent="handleCreateList"
+            >
                 <label for="new-list">List name</label>
                 <input
                     id="new-list"
@@ -19,8 +23,10 @@
                     type="text"
                     placeholder="Birthday"
                 />
+                <button type="button" @click="toggleForm">Annuler</button>
+                <button type="submit">Create</button>
             </form>
-            <button @click="toggleForm">Create a new list</button>
+            <button @click="toggleForm">Add a new list</button>
         </section>
         <!-- <section>
             <h2>My Friends Lists</h2>
@@ -36,6 +42,7 @@
 </template>
 
 <script>
+// Use initialize method to populate the lists state somewhere
 import { mapActions } from 'vuex';
 export default {
     data() {
@@ -50,17 +57,20 @@ export default {
         },
     },
     methods: {
-        ...mapActions({ createList: 'lists/createList' }),
-        toggleForm() {
-            if (this.showForm) {
-                this.createList(this.newListName);
-                this.showForm = false;
-            } else {
-                this.showForm = true;
-            }
+        ...mapActions({
+            createList: 'lists/createList',
+            deleteList: 'lists/deleteList',
+        }),
+        handleCreateList() {
+            this.createList(this.newListName);
+            this.newListName = '';
+            this.toggleForm();
         },
-        closeForm() {
-            this.showForm = false;
+        handleRemoveList(listId) {
+            this.deleteList(listId);
+        },
+        toggleForm() {
+            this.showForm = !this.showForm;
         },
     },
 };

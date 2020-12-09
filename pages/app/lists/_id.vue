@@ -35,3 +35,22 @@
         </section>
     </main>
 </template>
+
+<script>
+export default {
+    async asyncData() {
+        // Call API for the list here
+    },
+    // Use this to edit the list quickly, along with contenteditable="true" and @focusout="updateValue"
+    data() {
+        return {
+            pValue: '',
+        };
+    },
+    methods: {
+        updateValue(e) {
+            this.pValue = e.target.textContent;
+        },
+    },
+};
+</script>
