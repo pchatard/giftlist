@@ -6,13 +6,7 @@ const api = express.Router();
 
 // Global router
 api.use('/auth', auth);
-api.use('lists', lists);
-
-api.get('/', (req, res) => {
-    res.send({
-        msg: 'Hello, world',
-    });
-});
+api.use('/lists', lists);
 
 // Exemple for error handling
 api.post('/', (req, res, next) => {
