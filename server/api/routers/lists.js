@@ -6,6 +6,9 @@ const ListController = require('../controllers/ListController');
 // Get all the lists
 lists.get('/', ListController.findAll);
 
+// Get my lists
+lists.get('/mine', ListController.findMine);
+
 // Get one list
 lists.get('/:listId', ListController.findOne);
 

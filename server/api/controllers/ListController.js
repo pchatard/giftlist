@@ -10,6 +10,15 @@ class ListController {
         }
     }
 
+    static async findMine(req, res, next) {
+        try {
+            const myLists = await List.getMine(req.db, req.userId);
+            res.send(myLists);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static async findOne(req, res, next) {
         try {
             const list = await List.getOne(req.db, req.params.listId);
@@ -25,6 +34,7 @@ class ListController {
                 name: req.body.name,
                 created_at: Date(),
                 modified_at: Date(),
+                ownerId: req.userId,
             };
             const createdList = await List.create(req.db, list);
             res.send(createdList);
