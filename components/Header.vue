@@ -5,20 +5,46 @@
         <NuxtLink to="/" class="logo"><h1>GiftList</h1></NuxtLink>
         <nav>
             <ul class="flex">
-                <li><NuxtLink to="/">Home</NuxtLink></li>
-                <li><NuxtLink to="/app">Dashboard</NuxtLink></li>
-                <li>
-                    <NuxtLink to="/app/profile">Account</NuxtLink>
+                <li
+                    v-for="page in pages"
+                    v-show="page.auth === loggedIn"
+                    :key="page.name"
+                >
+                    <NuxtLink :to="page.path">{{ page.name }}</NuxtLink>
                 </li>
-                <li><NuxtLink to="/app/lists">Lists</NuxtLink></li>
-                <li><NuxtLink to="/login">Login</NuxtLink></li>
-                <li>
-                    <NuxtLink to="/register">Register</NuxtLink>
-                </li>
+                <button v-show="this.$auth.loggedIn" @click="logout">
+                    Logout
+                </button>
             </ul>
         </nav>
     </header>
 </template>
+
+<script>
+export default {
+    data() {
+        const pages = [
+            { path: '/', name: 'Home', auth: false },
+            { path: '/app', name: 'Dashboard', auth: true },
+            { path: '/app/lists', name: 'Lists', auth: true },
+            { path: '/app/profile', name: 'Profile', auth: true },
+            { path: '/login', name: 'Login', auth: false },
+            { path: '/register', name: 'Register', auth: false },
+        ];
+        return { pages };
+    },
+    computed: {
+        loggedIn() {
+            return this.$auth.loggedIn;
+        },
+    },
+    methods: {
+        async logout() {
+            await this.$auth.logout();
+        },
+    },
+};
+</script>
 
 <style lang="postcss">
 nav li a {

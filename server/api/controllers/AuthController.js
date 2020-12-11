@@ -32,7 +32,10 @@ class AuthController {
             setCookies(res, tokens);
 
             // Send back public token
-            res.send({ token: tokens.publicToken, user: dbUser });
+            res.send({
+                token: tokens.publicToken,
+                user: dbUser,
+            });
         } catch (error) {
             next(error);
         }
@@ -57,7 +60,10 @@ class AuthController {
             setCookies(res, tokens);
 
             // Send back public token and user object
-            res.send({ token: tokens.publicToken, user: dbUser });
+            res.send({
+                token: tokens.publicToken,
+                user: dbUser,
+            });
         } catch (error) {
             next(error);
         }

@@ -8,6 +8,9 @@
                 <li>Birthday</li>
                 <li>Christmas</li>
                 <li>Wedding</li>
+                <!-- {{
+                    lists.map((list) => list.name).join('')
+                }} -->
             </ul>
             <button>Create a new list</button>
         </section>
@@ -27,3 +30,15 @@
         </section>
     </main>
 </template>
+
+<script>
+export default {
+    async asyncData({ $axios }) {
+        let lists = [];
+        try {
+            lists = await $axios.$get('/lists', { withCredentials: true });
+        } catch (error) {}
+        return { lists };
+    },
+};
+</script>

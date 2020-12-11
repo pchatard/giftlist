@@ -14,6 +14,10 @@ export default {
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },
 
+    router: {
+        middleware: ['auth'],
+    },
+
     // Global CSS (https://go.nuxtjs.dev/config-css)
     css: [],
 
@@ -34,10 +38,32 @@ export default {
     modules: [
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
+        '@nuxtjs/auth',
     ],
 
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-    axios: {},
+    axios: {
+        baseURL: 'http://localhost:5000/api',
+    },
+
+    auth: {
+        strategies: {
+            local: {
+                endpoints: {
+                    login: {
+                        url: '/auth/local/login',
+                        method: 'post',
+                        propertyName: 'token',
+                    },
+                    logout: {
+                        url: '/auth/local/signout',
+                        method: 'get',
+                    },
+                    user: false,
+                },
+            },
+        },
+    },
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {},

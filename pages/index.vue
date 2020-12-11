@@ -34,3 +34,9 @@
         </section>
     </main>
 </template>
+
+<script>
+export default {
+    auth: false,
+};
+</script>

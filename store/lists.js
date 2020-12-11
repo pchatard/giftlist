@@ -26,7 +26,7 @@ const mutations = {
     REMOVE_LIST: (state, listId) => {
         const listIndex = state.lists.findIndex((list) => list.id === listId);
         if (listIndex < 0) {
-            console.log('This list does not exist');
+            // console.log('This list does not exist');
             return;
         }
         state.lists.splice(listIndex, 1);

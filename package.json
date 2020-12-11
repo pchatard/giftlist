@@ -15,7 +15,8 @@
         "prettier": "prettier -w ."
     },
     "dependencies": {
-        "@nuxtjs/axios": "^5.12.2",
+        "@nuxtjs/auth": "^4.9.1",
+        "@nuxtjs/axios": "5.12.1",
         "core-js": "^3.6.5",
         "nuxt": "^2.14.6"
     },
