@@ -1,19 +1,22 @@
-const List = require('../services/ListService');
+const Item = require('../services/ItemService');
 
-class ListController {
+class ItemController {
     static async findAll(req, res, next) {
         try {
-            const lists = await List.getAll(req.db);
+            const lists = await Item.getAll(req.db);
             res.send(lists);
         } catch (error) {
             next(error);
         }
     }
 
-    static async findMine(req, res, next) {
+    static async findItemsFromList(req, res, next) {
         try {
-            const myLists = await List.getMine(req.db, req.userId);
-            res.send(myLists);
+            const listItems = await Item.getItemsFromList(
+                req.db,
+                req.params.listId
+            );
+            res.send(listItems);
         } catch (error) {
             next(error);
         }
@@ -21,7 +24,7 @@ class ListController {
 
     static async findOne(req, res, next) {
         try {
-            const list = await List.getOne(req.db, req.params.listId);
+            const list = await Item.getOne(req.db, req.params.listId);
             res.send(list);
         } catch (error) {
             next(error);
@@ -30,14 +33,13 @@ class ListController {
 
     static async create(req, res, next) {
         try {
-            const list = {
-                name: req.body.name,
+            const item = {
+                ...req.body.item,
                 created_at: Date(),
                 modified_at: Date(),
-                ownerId: req.userId,
             };
-            const createdList = await List.create(req.db, list);
-            res.send(createdList);
+            const createdItem = await Item.create(req.db, item);
+            res.send(createdItem);
         } catch (error) {
             next(error);
         }
@@ -45,12 +47,12 @@ class ListController {
 
     static delete(req, res, next) {
         try {
-            List.delete(req.db, req.params.listId);
-            ListController.findMine(req, res, next);
+            Item.delete(req.db, req.params.itemId);
+            res.send(true);
         } catch (error) {
             next(error);
         }
     }
 }
 
-module.exports = ListController;
+module.exports = ItemController;

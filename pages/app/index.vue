@@ -30,15 +30,3 @@
         </section>
     </main>
 </template>
-
-<script>
-export default {
-    async asyncData({ $axios }) {
-        let lists = [];
-        try {
-            lists = await $axios.$get('/lists', { withCredentials: true });
-        } catch (error) {}
-        return { lists };
-    },
-};
-</script>

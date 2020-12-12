@@ -8,24 +8,18 @@
                 <!-- Create new entry in the list -->
             </form>
         </section>
-        <section>
+        <!-- <section>
             <h2>Favorites</h2>
             <ul>
                 <li>iPad Pro</li>
                 <li>One Piece</li>
                 <li>Roadtrip</li>
-            </ul>
-        </section>
+            </ul> 
+        </section> -->
         <section>
             <h2>Wishlist</h2>
-            <ul>
-                <li>iPad Pro</li>
-                <li>Books</li>
-                <li>Clothes</li>
-                <li>Bike</li>
-                <li>Sportswear</li>
-                <li>TV</li>
-                <li>Computer</li>
+            <ul v-show="items.length">
+                <li v-for="item in items" :key="item.id">{{ item.title }}</li>
             </ul>
         </section>
         <section>
@@ -37,9 +31,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
-    async asyncData() {
-        // Call API for the list here
+    async asyncData({ params, $axios }) {
+        const list = await $axios.$get(`/lists/${params.id}`);
+        return {
+            listId: params.id,
+            list,
+        };
     },
     // Use this to edit the list quickly, along with contenteditable="true" and @focusout="updateValue"
     data() {
@@ -47,7 +47,16 @@ export default {
             pValue: '',
         };
     },
+    computed: {
+        items() {
+            return this.$store.state.items.items;
+        },
+    },
+    mounted() {
+        this.initItems(this.listId);
+    },
     methods: {
+        ...mapActions({ initItems: 'items/initialize' }),
         updateValue(e) {
             this.pValue = e.target.textContent;
         },

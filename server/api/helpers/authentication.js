@@ -4,31 +4,41 @@ const refreshSecret = process.env.REFRESH_SECRET || 'ghijkl';
 const publicSecret = process.env.PUBLIC_SECRET || 'mnopqr';
 
 const authenticateUser = (req, res, next) => {
-    const accessToken = req.cookies.accessToken;
+    const accessToken = req.cookies.access;
+    let userId;
     try {
         // Check accessToken validity
         const { payload } = jwt.verify(accessToken, accessSecret);
-        req.userId = payload;
+        if (payload) {
+            userId = payload;
+        } else {
+            throw new Error('no payload');
+        }
     } catch (error) {
-        const refreshToken = req.cookies.refreshToken;
+        const refreshToken = JSON.stringify(req.cookies.refresh);
         try {
             // Check refreshToken validity
             const { payload } = jwt.verify(refreshToken, refreshSecret);
-            req.userId = payload;
+            if (payload) {
+                userId = payload;
+            } else {
+                throw new Error('no payload');
+            }
         } catch (error) {
             next(error);
         }
     }
     // If one of the tokens is valid, resign new tokens
-    const newTokens = signTokens(req.userId);
+    req.userId = userId;
+    const newTokens = signTokens(userId);
     setCookies(res, newTokens);
     next();
 };
 
-const signTokens = (id) => {
-    const accessToken = signAccessToken(id);
-    const refreshToken = signRefreshToken(id);
-    const publicToken = signPublicToken(id);
+const signTokens = (userId) => {
+    const accessToken = signAccessToken(userId);
+    const refreshToken = signRefreshToken(userId);
+    const publicToken = signPublicToken();
     return { accessToken, refreshToken, publicToken };
 };
 
@@ -40,8 +50,8 @@ const signRefreshToken = (payload, exp = '7d') => {
     return jwt.sign({ payload }, refreshSecret, { expiresIn: exp });
 };
 
-const signPublicToken = (payload) => {
-    return jwt.sign({ payload }, publicSecret);
+const signPublicToken = () => {
+    return jwt.sign({}, publicSecret);
 };
 
 // Checks that password's length is 8 or more, contains one uppercase, one lowercase letter, and one digit
@@ -50,8 +60,10 @@ const verifyPassword = (password) => {
 };
 
 const setCookies = (res, tokens) => {
-    res.cookie('accessToken', tokens.accessToken, { httpOnly: true });
-    res.cookie('refreshToken', tokens.refreshToken, {
+    res.cookie('access', tokens.accessToken, {
+        httpOnly: true,
+    });
+    res.cookie('refresh', tokens.refreshToken, {
         httpOnly: true,
     });
 };

@@ -3,10 +3,9 @@
         <section>
             <h2>My Lists</h2>
             <ul>
-                <!-- change key to list.id -->
                 <ListPreview
                     v-for="list in lists"
-                    :key="list.name"
+                    :key="list.id"
                     :list="list"
                     @remove="handleRemoveList"
                 />
@@ -14,7 +13,7 @@
             <form
                 v-show="showForm"
                 class="border-2 border-black flex flex-col items-start"
-                @submit.prevent="handleCreateList"
+                @submit.prevent="createList"
             >
                 <label for="new-list">List name</label>
                 <input
@@ -42,8 +41,8 @@
 </template>
 
 <script>
-// Use initialize method to populate the lists state somewhere
 import { mapActions } from 'vuex';
+
 export default {
     data() {
         return {
@@ -53,18 +52,16 @@ export default {
     },
     computed: {
         lists() {
-            return this.$store.state.lists.lists;
+            return this.$store.state.lists.mine;
         },
     },
     methods: {
         ...mapActions({
-            createList: 'lists/createList',
+            newList: 'lists/createList',
             deleteList: 'lists/deleteList',
         }),
-        handleCreateList() {
-            this.createList(this.newListName);
-            this.newListName = '';
-            this.toggleForm();
+        createList() {
+            this.newList(this.newListName);
         },
         handleRemoveList(listId) {
             this.deleteList(listId);

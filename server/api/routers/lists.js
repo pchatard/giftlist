@@ -17,5 +17,4 @@ lists.post('/', ListController.create);
 
 // Delete a list
 lists.delete('/:listId', ListController.delete);
-
 module.exports = lists;

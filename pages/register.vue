@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     asyncData({ $auth, redirect }) {
         if ($auth.loggedIn) {
@@ -14,6 +16,7 @@ export default {
     },
     auth: false,
     methods: {
+        ...mapActions({ initLists: 'lists/initialize' }),
         async registerUser(user) {
             try {
                 await this.$axios.$post('/auth/local/register', user);
@@ -21,6 +24,7 @@ export default {
                     data: user,
                 });
                 this.$auth.setUser(data.user);
+                await this.initLists();
                 this.$router.push('/app');
             } catch (error) {}
         },

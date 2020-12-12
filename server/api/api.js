@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const auth = require('./routers/auth');
 const lists = require('./routers/lists');
+const items = require('./routers/items');
 const { authenticateUser } = require('./helpers/authentication');
 
 const api = express.Router();
@@ -13,5 +14,6 @@ api.use(
     authenticateUser
 );
 api.use('/lists', lists);
+api.use('/items', items);
 
 module.exports = api;

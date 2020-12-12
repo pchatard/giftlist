@@ -71,9 +71,9 @@ class AuthController {
 
     static signout(req, res, next) {
         try {
-            // Clear cookies
-            res.clearCookie('accessToken');
-            res.clearCookie('refreshToken');
+            // Clear cookiess
+            res.clearCookie('access', { httpOnly: true });
+            res.clearCookie('refresh', { httpOnly: true });
 
             // Send back something
             res.send('signout called');
