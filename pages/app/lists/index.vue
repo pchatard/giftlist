@@ -62,6 +62,7 @@ export default {
         }),
         createList() {
             this.newList(this.newListName);
+            this.toggleForm();
         },
         handleRemoveList(listId) {
             this.deleteList(listId);

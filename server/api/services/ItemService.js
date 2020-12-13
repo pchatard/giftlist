@@ -35,6 +35,14 @@ class ItemService {
         return await this.getOne(db, newItem.key);
     }
 
+    static update(db, itemId, field) {
+        const ref = db.ref(`items/${itemId}`);
+        ref.update({
+            [`/${field[0]}`]: Boolean(field[1]),
+        });
+        return field[1];
+    }
+
     static delete(db, itemId) {
         const ref = db.ref('items/' + itemId);
         ref.remove();

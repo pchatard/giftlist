@@ -17,10 +17,13 @@
     "dependencies": {
         "@nuxtjs/auth": "^4.9.1",
         "@nuxtjs/axios": "5.12.1",
+        "@nuxtjs/fontawesome": "^1.1.2",
         "core-js": "^3.6.5",
         "nuxt": "^2.14.6"
     },
     "devDependencies": {
+        "@fortawesome/free-regular-svg-icons": "^5.15.1",
+        "@fortawesome/free-solid-svg-icons": "^5.15.1",
         "@nuxtjs/eslint-config": "^3.1.0",
         "@nuxtjs/eslint-module": "^2.0.0",
         "@nuxtjs/tailwindcss": "^3.3.3",

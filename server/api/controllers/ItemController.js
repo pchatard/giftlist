@@ -45,6 +45,19 @@ class ItemController {
         }
     }
 
+    static favoritize(req, res, next) {
+        try {
+            const newState = req.body.newState;
+            const newFavState = Item.update(req.db, req.params.itemId, [
+                'favorite',
+                newState,
+            ]);
+            res.send(newFavState);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static delete(req, res, next) {
         try {
             Item.delete(req.db, req.params.itemId);

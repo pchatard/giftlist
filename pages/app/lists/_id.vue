@@ -1,32 +1,53 @@
 <template>
     <main>
-        <h1>My Birthday list</h1>
+        <h1>{{ list.name }}</h1>
         <section>
-            <!-- Hide when visiting a friend's list -->
-            <h2>New gift idea</h2>
-            <form>
-                <!-- Create new entry in the list -->
-            </form>
-        </section>
-        <!-- <section>
             <h2>Favorites</h2>
-            <ul>
-                <li>iPad Pro</li>
-                <li>One Piece</li>
-                <li>Roadtrip</li>
-            </ul> 
-        </section> -->
-        <section>
-            <h2>Wishlist</h2>
-            <ul v-show="items.length">
-                <li v-for="item in items" :key="item.id">{{ item.title }}</li>
+            <ul v-show="favItems.length">
+                <GiftItem
+                    v-for="item in favItems"
+                    :key="item.id"
+                    :item="item"
+                    @remove="handleRemoveItem"
+                    @favorite="handleFavoriteItem"
+                >
+                    {{ item.title }}
+                </GiftItem>
             </ul>
         </section>
         <section>
-            <!-- Hide when visiting a friend's list -->
-            <h2>Diffusion</h2>
-            <!-- Handle diffusion: make it private / public, diffusion link, add user -->
+            <h2>Wishlist</h2>
+            <ul v-show="otherItems.length">
+                <GiftItem
+                    v-for="item in otherItems"
+                    :key="item.id"
+                    :item="item"
+                    @remove="handleRemoveItem"
+                    @favorite="handleFavoriteItem"
+                >
+                    {{ item.title }}
+                </GiftItem>
+            </ul>
         </section>
+
+        <!-- 
+        Hide when visiting a friend's list
+        <ItemForm />
+        <section>
+            <h2>New gift idea</h2>
+            <form>
+                Create new entry in the list
+            </form>
+        </section>
+        -->
+
+        <!--
+        <section>
+            Hide when visiting a friend's list
+            <h2>Diffusion</h2>
+            Handle diffusion: make it private / public, diffusion link, add user
+        </section>
+        -->
     </main>
 </template>
 
@@ -49,14 +70,34 @@ export default {
     },
     computed: {
         items() {
-            return this.$store.state.items.items;
+            return this.$store.state.items.items || [];
+        },
+        favItems() {
+            return this.items.filter((item) => item.favorite);
+        },
+        otherItems() {
+            return this.items.filter((item) => !item.favorite);
         },
     },
     mounted() {
         this.initItems(this.listId);
     },
     methods: {
-        ...mapActions({ initItems: 'items/initialize' }),
+        ...mapActions({
+            initItems: 'items/initialize',
+            favItem: 'items/favoritizeItem',
+            deleteItem: 'items/deleteItem',
+            addItem: 'items/addItemToList',
+        }),
+        createItem(item) {
+            this.addItem(item);
+        },
+        handleRemoveItem(itemId) {
+            this.deleteItem(itemId);
+        },
+        handleFavoriteItem(itemId, newFavoriteState) {
+            this.favItem({ itemId, newState: newFavoriteState });
+        },
         updateValue(e) {
             this.pValue = e.target.textContent;
         },

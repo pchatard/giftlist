@@ -15,6 +15,9 @@ items.get('/:itemId', ItemController.findOne);
 // Create a new item
 items.post('/', ItemController.create);
 
+// Update favorite state
+items.put('/:itemId/fav', ItemController.favoritize);
+
 // Delete an item
 items.delete('/:itemId', ItemController.delete);
 
