@@ -3,7 +3,7 @@ const cors = require('cors');
 const auth = require('./routers/auth');
 const lists = require('./routers/lists');
 const items = require('./routers/items');
-const { authenticateUser } = require('./helpers/authentication');
+const { authenticate } = require('./middlewares/authenticate');
 
 const api = express.Router();
 
@@ -11,7 +11,7 @@ const api = express.Router();
 api.use('/auth', cors(), auth);
 api.use(
     cors({ origin: process.env.CLIENT_URL, credentials: true }),
-    authenticateUser
+    authenticate
 );
 api.use('/lists', lists);
 api.use('/items', items);

@@ -1,9 +1,7 @@
 const Auth = require('../services/AuthService');
-const {
-    signTokens,
-    verifyPassword,
-    setCookies,
-} = require('../helpers/authentication');
+const { verifyPassword } = require('../middlewares/authenticate');
+const { signTokens } = require('../helpers/jwt');
+const { setCookies, clearCookies } = require('../helpers/cookies');
 
 class AuthController {
     static async register(req, res, next) {
@@ -72,9 +70,7 @@ class AuthController {
     static signout(req, res, next) {
         try {
             // Clear cookiess
-            res.clearCookie('access', { httpOnly: true });
-            res.clearCookie('refresh', { httpOnly: true });
-
+            clearCookies(res);
             // Send back something
             res.send('signout called');
         } catch (error) {
