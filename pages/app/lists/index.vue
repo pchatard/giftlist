@@ -44,16 +44,15 @@
 import { mapActions } from 'vuex';
 
 export default {
+    async asyncData({ store }) {
+        const lists = await store.dispatch('lists/initialize');
+        return { lists };
+    },
     data() {
         return {
             showForm: false,
             newListName: '',
         };
-    },
-    computed: {
-        lists() {
-            return this.$store.state.lists.mine;
-        },
     },
     methods: {
         ...mapActions({

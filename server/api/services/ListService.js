@@ -17,6 +17,7 @@ class ListService {
         const lists = await this.getAll(db);
         const myLists = lists.filter((list) => list.ownerId === userId);
         return myLists;
+        // return lists;
     }
 
     static async getOne(db, listId) {

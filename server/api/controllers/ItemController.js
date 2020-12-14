@@ -45,22 +45,23 @@ class ItemController {
         }
     }
 
-    static favoritize(req, res, next) {
+    static async favoritize(req, res, next) {
         try {
             const newState = req.body.newState;
-            const newFavState = Item.update(req.db, req.params.itemId, [
-                'favorite',
-                newState,
-            ]);
+            const newFavState = await Item.updateFavoriteState(
+                req.db,
+                req.params.itemId,
+                newState
+            );
             res.send(newFavState);
         } catch (error) {
             next(error);
         }
     }
 
-    static delete(req, res, next) {
+    static async delete(req, res, next) {
         try {
-            Item.delete(req.db, req.params.itemId);
+            await Item.delete(req.db, req.params.itemId);
             res.send(true);
         } catch (error) {
             next(error);

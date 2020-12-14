@@ -30,16 +30,8 @@
             </ul>
         </section>
 
-        <!-- 
-        Hide when visiting a friend's list
-        <ItemForm />
-        <section>
-            <h2>New gift idea</h2>
-            <form>
-                Create new entry in the list
-            </form>
-        </section>
-        -->
+        <!-- Hide when visiting a friend's list -->
+        <ItemForm @create="handleCreateItem" />
 
         <!--
         <section>
@@ -55,11 +47,13 @@
 import { mapActions } from 'vuex';
 
 export default {
-    async asyncData({ params, $axios }) {
+    async asyncData({ params, store, $axios }) {
         const list = await $axios.$get(`/lists/${params.id}`);
+        const items = await store.dispatch('items/initialize', list.id);
         return {
             listId: params.id,
             list,
+            items,
         };
     },
     // Use this to edit the list quickly, along with contenteditable="true" and @focusout="updateValue"
@@ -69,9 +63,6 @@ export default {
         };
     },
     computed: {
-        items() {
-            return this.$store.state.items.items || [];
-        },
         favItems() {
             return this.items.filter((item) => item.favorite);
         },
@@ -79,18 +70,14 @@ export default {
             return this.items.filter((item) => !item.favorite);
         },
     },
-    mounted() {
-        this.initItems(this.listId);
-    },
     methods: {
         ...mapActions({
-            initItems: 'items/initialize',
+            addItem: 'items/addItemToList',
             favItem: 'items/favoritizeItem',
             deleteItem: 'items/deleteItem',
-            addItem: 'items/addItemToList',
         }),
-        createItem(item) {
-            this.addItem(item);
+        handleCreateItem(item) {
+            this.addItem({ ...item, listId: this.listId });
         },
         handleRemoveItem(itemId) {
             this.deleteItem(itemId);

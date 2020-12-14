@@ -4,11 +4,12 @@ const state = () => ({
 
 const actions = {
     // ITEMS
-    async initialize({ commit }, listId) {
+    async initialize({ commit, state }, listId) {
         const items = await this.$axios.$get(`/items/${listId}`, {
             withCredentials: true,
         });
         commit('POPULATE_ITEMS', items);
+        return state.items;
     },
     async addItemToList({ commit }, item) {
         // API CALL RETURNING UPDATED LIST
@@ -41,7 +42,10 @@ const actions = {
 };
 
 const mutations = {
-    POPULATE_ITEMS: (state, items) => (state.items = items),
+    POPULATE_ITEMS: (state, items) => {
+        state.items = items;
+        return state.items;
+    },
     ADD_ITEM: (state, item) => {
         state.items.push(item);
     },

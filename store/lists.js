@@ -3,11 +3,12 @@ const state = () => ({
 });
 
 const actions = {
-    async initialize({ commit }) {
+    async initialize({ commit, state }) {
         const lists = await this.$axios.$get('/lists/mine', {
             withCredentials: true,
         });
         commit('POPULATE_LISTS', lists);
+        return state.mine;
     },
     async createList({ commit }, name) {
         const createdList = await this.$axios.$post(

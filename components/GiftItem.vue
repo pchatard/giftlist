@@ -10,7 +10,17 @@
             :icon="['far', 'heart']"
             @click="$emit('favorite', item.id, true)"
         />
-        <h3>{{ item.title }}</h3>
+
+        <a
+            v-if="item.link"
+            :href="item.link"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            {{ item.title }}
+        </a>
+        <h3 v-else>{{ item.title }}</h3>
+
         <button @click="$emit('remove', item.id)">Delete</button>
     </li>
 </template>
