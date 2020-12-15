@@ -19,10 +19,13 @@ class AuthController {
             await req.auth.signOut();
 
             // Create user for DB
-            const databaseUser = {
-                email: user.email,
-                firebase_uid: user.uid,
-            };
+            const {
+                password: nope,
+                passwordConfirmation: nope2,
+                ...databaseUser
+            } = req.body;
+            databaseUser.firebase_uid = user.uid;
+
             const dbUser = await Auth.create(req.db, databaseUser);
 
             // Sign tokens and set cookies
