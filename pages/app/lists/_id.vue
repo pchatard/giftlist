@@ -3,35 +3,35 @@
         <h1>{{ list.name }}</h1>
         <section>
             <h2>Favorites</h2>
-            <ul v-show="favItems.length">
+            <ul v-show="favGifts.length">
                 <GiftItem
-                    v-for="item in favItems"
-                    :key="item.id"
-                    :item="item"
-                    @remove="handleRemoveItem"
-                    @favorite="handleFavoriteItem"
+                    v-for="gift in favGifts"
+                    :key="gift.id"
+                    :gift="gift"
+                    @remove="handleRemoveGift"
+                    @favorite="handleFavoriteGift"
                 >
-                    {{ item.title }}
+                    {{ gift.title }}
                 </GiftItem>
             </ul>
         </section>
         <section>
             <h2>Wishlist</h2>
-            <ul v-show="otherItems.length">
+            <ul v-show="otherGifts.length">
                 <GiftItem
-                    v-for="item in otherItems"
-                    :key="item.id"
-                    :item="item"
-                    @remove="handleRemoveItem"
-                    @favorite="handleFavoriteItem"
+                    v-for="gift in otherGifts"
+                    :key="gift.id"
+                    :gift="gift"
+                    @remove="handleRemoveGift"
+                    @favorite="handleFavoriteGift"
                 >
-                    {{ item.title }}
+                    {{ gift.title }}
                 </GiftItem>
             </ul>
         </section>
 
         <!-- Hide when visiting a friend's list -->
-        <ItemForm @create="handleCreateItem" />
+        <GiftForm @create="handleCreateGift" />
 
         <!--
         <section>
@@ -47,43 +47,47 @@
 import { mapActions } from 'vuex';
 
 export default {
-    async asyncData({ params, store, $axios }) {
-        const list = await $axios.$get(`/lists/${params.id}`);
-        const items = await store.dispatch('items/initialize', list.id);
-        return {
-            listId: params.id,
-            list,
-            items,
-        };
-    },
     // Use this to edit the list quickly, along with contenteditable="true" and @focusout="updateValue"
     data() {
         return {
             pValue: '',
+            list: {},
+            gifts: [],
         };
     },
     computed: {
-        favItems() {
-            return this.items.filter((item) => item.favorite);
+        favGifts() {
+            return this.gifts.filter((gift) => gift.favorite);
         },
-        otherItems() {
-            return this.items.filter((item) => !item.favorite);
+        otherGifts() {
+            return this.gifts.filter((gift) => !gift.favorite);
         },
+    },
+    async mounted() {
+        const list = await this.$axios.$get(
+            `/api/lists/${this.$route.params.id}`
+        );
+        this.list = list;
+        const gifts = await this.$store.dispatch(
+            'gifts/initialize',
+            this.list.id
+        );
+        this.gifts = gifts;
     },
     methods: {
         ...mapActions({
-            addItem: 'items/addItemToList',
-            favItem: 'items/favoritizeItem',
-            deleteItem: 'items/deleteItem',
+            addGift: 'gifts/addGiftToList',
+            favGift: 'gifts/favoritizeGift',
+            deleteGift: 'gifts/deleteGift',
         }),
-        handleCreateItem(item) {
-            this.addItem({ ...item, listId: this.listId });
+        handleCreateGift(gift) {
+            this.addGift({ ...gift, listId: this.list.id });
         },
-        handleRemoveItem(itemId) {
-            this.deleteItem(itemId);
+        handleRemoveGift(giftId) {
+            this.deleteGift(giftId);
         },
-        handleFavoriteItem(itemId, newFavoriteState) {
-            this.favItem({ itemId, newState: newFavoriteState });
+        handleFavoriteGift(giftId, newFavoriteState) {
+            this.favGift({ giftId, newState: newFavoriteState });
         },
         updateValue(e) {
             this.pValue = e.target.textContent;

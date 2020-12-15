@@ -17,17 +17,17 @@ const authenticate = (req, res, next) => {
         if (payload) {
             userId = payload;
         } else {
-            throw new Error('no payload');
+            throw new Error('Access Token Expired');
         }
     } catch (error) {
-        const refreshToken = JSON.stringify(req.cookies.refresh);
+        const refreshToken = req.cookies.refresh;
         try {
             // Check refreshToken validity
             const { payload } = verifyToken(refreshToken, refreshSecret);
             if (payload) {
                 userId = payload;
             } else {
-                throw new Error('no payload');
+                throw new Error('Refresh Token Expired');
             }
         } catch (error) {
             next(error);

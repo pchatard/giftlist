@@ -44,15 +44,16 @@
 import { mapActions } from 'vuex';
 
 export default {
-    async asyncData({ store }) {
-        const lists = await store.dispatch('lists/initialize');
-        return { lists };
-    },
     data() {
         return {
             showForm: false,
             newListName: '',
+            lists: [],
         };
+    },
+    async mounted() {
+        const lists = await this.$store.dispatch('lists/initialize');
+        this.lists = lists;
     },
     methods: {
         ...mapActions({
@@ -63,8 +64,8 @@ export default {
             this.newList(this.newListName);
             this.toggleForm();
         },
-        handleRemoveList(listId) {
-            this.deleteList(listId);
+        async handleRemoveList(listId) {
+            this.lists = await this.deleteList(listId);
         },
         toggleForm() {
             this.showForm = !this.showForm;

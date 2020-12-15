@@ -4,7 +4,7 @@ const state = () => ({
 
 const actions = {
     async initialize({ commit, state }) {
-        const lists = await this.$axios.$get('/lists/mine', {
+        const lists = await this.$axios.$get('/api/lists/mine', {
             withCredentials: true,
         });
         commit('POPULATE_LISTS', lists);
@@ -12,17 +12,18 @@ const actions = {
     },
     async createList({ commit }, name) {
         const createdList = await this.$axios.$post(
-            '/lists',
+            '/api/lists',
             { name },
             { withCredentials: true }
         );
         commit('NEW_LIST', createdList);
     },
-    async deleteList({ commit }, listId) {
-        const newLists = await this.$axios.$delete(`/lists/${listId}`, {
+    async deleteList({ commit, state }, listId) {
+        const newLists = await this.$axios.$delete(`/api/lists/${listId}`, {
             withCredentials: true,
         });
         commit('REMOVE_LIST', newLists);
+        return state.mine;
     },
 };
 const mutations = {

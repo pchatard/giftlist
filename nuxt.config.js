@@ -1,5 +1,5 @@
 export default {
-    target: 'static',
+    // target: 'static',
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
         title: 'GiftList',
@@ -14,6 +14,8 @@ export default {
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },
 
+    serverMiddleware: { '/api': '~/api' },
+
     router: {
         middleware: ['auth'],
     },
@@ -22,7 +24,9 @@ export default {
     css: [],
 
     // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-    plugins: [],
+    plugins: [
+        // { src: '@/plugins/ssr-cookie-proxy.js' }
+    ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
     components: true,
@@ -44,7 +48,7 @@ export default {
 
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
     axios: {
-        baseURL: 'http://localhost:5000/api',
+        // baseURL: 'http://localhost:5000/api',
     },
 
     auth: {
@@ -52,12 +56,12 @@ export default {
             local: {
                 endpoints: {
                     login: {
-                        url: '/auth/local/login',
+                        url: '/api/auth/local/login',
                         method: 'post',
                         propertyName: 'token',
                     },
                     logout: {
-                        url: '/auth/local/signout',
+                        url: '/api/auth/local/signout',
                         method: 'get',
                     },
                     user: false,

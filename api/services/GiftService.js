@@ -1,4 +1,4 @@
-class ItemService {
+class GiftService {
     static async getAll(db) {
         const ref = db.ref('items');
         const items = (await ref.once('value')).val();
@@ -32,7 +32,7 @@ class ItemService {
     static async create(db, item) {
         const ref = db.ref('items');
         const newItem = ref.push(item);
-        await ItemService.updateListModificationDate(db, newItem.key);
+        await GiftService.updateListModificationDate(db, newItem.key);
         return await this.getOne(db, newItem.key);
     }
 
@@ -42,20 +42,19 @@ class ItemService {
             [`/favorite`]: Boolean(newState),
         });
 
-        await ItemService.updateListModificationDate(db, itemId);
+        await GiftService.updateListModificationDate(db, itemId);
 
         return newState;
     }
 
     static async delete(db, itemId) {
         const ref = db.ref('items/' + itemId);
-        await ItemService.updateListModificationDate(db, itemId);
+        await GiftService.updateListModificationDate(db, itemId);
         ref.remove();
     }
 
     static async updateListModificationDate(db, itemId) {
-        // Update list modified date
-        const gift = await ItemService.getOne(db, itemId);
+        const gift = await GiftService.getOne(db, itemId);
         const refList = db.ref(`lists/${gift.listId}`);
         refList.update({
             '/modified_at': Date(),
@@ -63,4 +62,4 @@ class ItemService {
     }
 }
 
-module.exports = ItemService;
+module.exports = GiftService;

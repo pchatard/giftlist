@@ -16,7 +16,7 @@ export default {
     methods: {
         async registerUser(user) {
             try {
-                await this.$axios.$post('/auth/local/register', user);
+                await this.$axios.$post('/api/auth/local/register', user);
                 const { data } = await this.$auth.loginWith('local', {
                     data: user,
                 });

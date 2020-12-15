@@ -2,43 +2,51 @@
 
 Work in progress
 
-Frontend : NuxtJS, @nuxtjs/auth, @nuxtjs/axios
+NuxtJS SSR application using:
 
-Backend : Express API, Firebase Authentication and Database
+-   @nuxtjs/auth for client Authentication
+-   @nuxtjs/axios for API requests
+-   Express for the API as a server middleware
+-   Firebase Authentication for backend user handling
+-   Firebase Database
 
- 
 ### 🎁 Wishlist application
 
 GiftList is a web application allowing you to create your wishlists for special events such as birthdays, weddings, births or simply a bucket list.
 
-
 ### 🔗 Share it with your loved ones
 
-You'll then be able to share your list with your friends and family. 
+You'll then be able to share your list with your friends and family.
 
-
-### 🔏 Choose what to offer 
+### 🔏 Choose what to offer
 
 Everyone having the share link will be able to mark what they plan to offer/buy.
-
 
 ### ❌ No more duplicate gifts
 
 That way, the other offering people will know what's available and what's not, in order to avoid duplicates gifts.
 
-
 ### 🙈 Keep the element of surprise
 
 Of course, the list owner won't be able to see what people intend to offer him.
 
-### How can I discover the running app
-Coming soon...
-<!--
+### How can I discover the app
+
+Create a .env file containing:
+
+-   Firebase configs (see api/config/firebase.js)
+-   Tokens secrets named ACCESS_SECRET, REFRESH_SECRET, PUBLIC_SECRET
+
 ```bash
 # install dependencies
 $ npm install
 
-# Run the entire app (frontend + api, running on port 5000)
-$ npm run full
+# Run the app in development mode
+$ npm run dev
+
+# Build the app for production
+$ npm run build
+
+# Run the app after production is done
+$ npm run start
 ```
--->

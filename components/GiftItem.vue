@@ -1,34 +1,34 @@
 <template>
     <li class="flex">
         <font-awesome-icon
-            v-if="item.favorite"
+            v-if="gift.favorite"
             :icon="['fas', 'heart']"
-            @click="$emit('favorite', item.id, false)"
+            @click="$emit('favorite', gift.id, false)"
         />
         <font-awesome-icon
             v-else
             :icon="['far', 'heart']"
-            @click="$emit('favorite', item.id, true)"
+            @click="$emit('favorite', gift.id, true)"
         />
 
         <a
-            v-if="item.link"
-            :href="item.link"
+            v-if="gift.link"
+            :href="gift.link"
             target="_blank"
             rel="noopener noreferrer"
         >
-            {{ item.title }}
+            {{ gift.title }}
         </a>
-        <h3 v-else>{{ item.title }}</h3>
+        <h3 v-else>{{ gift.title }}</h3>
 
-        <button @click="$emit('remove', item.id)">Delete</button>
+        <button @click="$emit('remove', gift.id)">Delete</button>
     </li>
 </template>
 
 <script>
 export default {
     props: {
-        item: {
+        gift: {
             default: () => ({}),
             type: Object,
         },
