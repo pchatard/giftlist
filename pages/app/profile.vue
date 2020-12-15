@@ -1,12 +1,12 @@
 <template>
     <main>
         <h1>My account</h1>
-        <section>
+        <!-- <section>
             <ul>
                 <li>Manage your name, email, password</li>
                 <li>Manage your plan</li>
             </ul>
-        </section>
+        </section> -->
     </main>
 </template>
 

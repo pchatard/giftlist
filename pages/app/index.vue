@@ -1,19 +1,19 @@
 <template>
     <main>
         <h1>Dashboard</h1>
-        <section>
+        <!-- <section>
             <h2>My Lists</h2>
             <ul>
-                <!-- Change lis into components (ListPreview or else) -->
+                 Change lis into components (ListPreview or else)
                 <li>Birthday</li>
                 <li>Christmas</li>
                 <li>Wedding</li>
-                <!-- {{
+                {{
                     lists.map((list) => list.name).join('')
-                }} -->
+                }}
             </ul>
             <button>Create a new list</button>
-        </section>
+        </section> -->
         <!-- <section>
             <h2>My Friends Lists</h2>
             <ul>
@@ -24,9 +24,10 @@
             </ul>
             <button>Open a friend's list</button>
         </section> -->
-        <section>
+        <!-- <section>
             <h2>My Account</h2>
-            <!-- Profile -->
+            Profile 
         </section>
+        -->
     </main>
 </template>

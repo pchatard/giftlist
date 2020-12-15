@@ -2,7 +2,7 @@
     <main>
         <h1>{{ list.name }}</h1>
         <section>
-            <h2>Favorites</h2>
+            <h2 class="text-red-600">Favorites</h2>
             <ul v-show="favGifts.length">
                 <GiftItem
                     v-for="gift in favGifts"
@@ -16,7 +16,7 @@
             </ul>
         </section>
         <section>
-            <h2>Wishlist</h2>
+            <h2 class="text-red-600">Wishlist</h2>
             <ul v-show="otherGifts.length">
                 <GiftItem
                     v-for="gift in otherGifts"
