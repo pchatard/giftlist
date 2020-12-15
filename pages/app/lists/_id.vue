@@ -67,11 +67,8 @@ export default {
         const list = await this.$axios.$get(
             `/api/lists/${this.$route.params.id}`
         );
+        const gifts = await this.$store.dispatch('gifts/initialize', list.id);
         this.list = list;
-        const gifts = await this.$store.dispatch(
-            'gifts/initialize',
-            this.list.id
-        );
         this.gifts = gifts;
     },
     methods: {
@@ -84,10 +81,14 @@ export default {
             this.addGift({ ...gift, listId: this.list.id });
         },
         handleRemoveGift(giftId) {
-            this.deleteGift(giftId);
+            this.deleteGift({ giftId, listId: this.list.id });
         },
         handleFavoriteGift(giftId, newFavoriteState) {
-            this.favGift({ giftId, newState: newFavoriteState });
+            this.favGift({
+                giftId,
+                listId: this.list.id,
+                newState: newFavoriteState,
+            });
         },
         updateValue(e) {
             this.pValue = e.target.textContent;

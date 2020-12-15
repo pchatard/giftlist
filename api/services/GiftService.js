@@ -20,7 +20,7 @@ class GiftService {
     }
 
     static async getOne(db, itemId) {
-        const ref = db.ref('items/' + itemId);
+        const ref = db.ref('gifts/' + itemId);
         const item = (await ref.once('value')).val();
         if (item) {
             item.id = itemId;
@@ -30,14 +30,14 @@ class GiftService {
     }
 
     static async create(db, item) {
-        const ref = db.ref('items');
+        const ref = db.ref('gifts');
         const newItem = ref.push(item);
         await GiftService.updateListModificationDate(db, newItem.key);
         return await this.getOne(db, newItem.key);
     }
 
     static async updateFavoriteState(db, itemId, newState) {
-        const ref = db.ref(`items/${itemId}`);
+        const ref = db.ref(`gifts/${itemId}`);
         ref.update({
             [`/favorite`]: Boolean(newState),
         });
@@ -48,7 +48,7 @@ class GiftService {
     }
 
     static async delete(db, itemId) {
-        const ref = db.ref('items/' + itemId);
+        const ref = db.ref('gifts/' + itemId);
         await GiftService.updateListModificationDate(db, itemId);
         ref.remove();
     }

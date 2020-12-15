@@ -12,7 +12,7 @@ const actions = {
     },
     async addGiftToList({ commit }, gift) {
         const newGift = await this.$axios.$post(
-            `/api/gifts`,
+            `/api/gifts/${gift.listId}`,
             {
                 gift,
             },
@@ -20,19 +20,21 @@ const actions = {
         );
         commit('ADD_GIFT', newGift);
     },
-    async favoritizeGift({ commit }, payload) {
-        const { giftId, newState } = payload;
+    async favoritizeGift({ commit }, { giftId, listId, newState }) {
         const newFavoriteState = await this.$axios.$put(
-            `/api/gifts/${giftId}/fav`,
+            `/api/gifts/${listId}/${giftId}/fav`,
             { newState },
             { withCredentials: true }
         );
         commit('MARK_GIFT_FAVORITE', { giftId, newState: newFavoriteState });
     },
-    async deleteGift({ commit }, giftId) {
-        const success = await this.$axios.$delete(`/api/gifts/${giftId}`, {
-            withCredentials: true,
-        });
+    async deleteGift({ commit }, { giftId, listId }) {
+        const success = await this.$axios.$delete(
+            `/api/gifts/${listId}/${giftId}`,
+            {
+                withCredentials: true,
+            }
+        );
         if (success) {
             commit('DELETE_GIFT', giftId);
         }
