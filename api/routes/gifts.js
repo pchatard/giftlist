@@ -9,6 +9,7 @@ gifts.get('/:listId', GiftController.findItemsFromList);
 gifts.get('/:itemId', GiftController.findOne);
 
 gifts.post('/:listId', authorize, GiftController.create);
+gifts.put('/:listId/:giftId', authorize, GiftController.update);
 gifts.put('/:listId/:itemId/fav', authorize, GiftController.favoritize);
 gifts.delete('/:listId/:itemId', authorize, GiftController.delete);
 

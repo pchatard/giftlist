@@ -1,6 +1,6 @@
 class GiftService {
     static async getAll(db) {
-        const ref = db.ref('items');
+        const ref = db.ref('gifts');
         const items = (await ref.once('value')).val();
         let formatedItems;
         if (items) {
@@ -34,6 +34,13 @@ class GiftService {
         const newItem = ref.push(item);
         await GiftService.updateListModificationDate(db, newItem.key);
         return await this.getOne(db, newItem.key);
+    }
+
+    static async update(db, id, gift) {
+        const ref = db.ref(`gifts/${id}`);
+        ref.set(gift);
+        await GiftService.updateListModificationDate(db, id);
+        return await this.getOne(db, id);
     }
 
     static async updateFavoriteState(db, itemId, newState) {

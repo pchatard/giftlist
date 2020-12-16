@@ -8,11 +8,10 @@
                     v-for="gift in favGifts"
                     :key="gift.id"
                     :gift="gift"
+                    @update="handleUpdateGift"
                     @remove="handleRemoveGift"
                     @favorite="handleFavoriteGift"
-                >
-                    {{ gift.title }}
-                </GiftItem>
+                />
             </ul>
         </section>
         <section>
@@ -22,11 +21,10 @@
                     v-for="gift in otherGifts"
                     :key="gift.id"
                     :gift="gift"
+                    @update="handleUpdateGift"
                     @remove="handleRemoveGift"
                     @favorite="handleFavoriteGift"
-                >
-                    {{ gift.title }}
-                </GiftItem>
+                />
             </ul>
         </section>
 
@@ -67,14 +65,18 @@ export default {
         const list = await this.$axios.$get(
             `/api/lists/${this.$route.params.id}`
         );
-        const gifts = await this.$store.dispatch('gifts/initialize', list.id);
         this.list = list;
+        const gifts = await this.$store.dispatch(
+            'gifts/initialize',
+            this.list.id
+        );
         this.gifts = gifts;
     },
     methods: {
         ...mapActions({
             addGift: 'gifts/addGiftToList',
             favGift: 'gifts/favoritizeGift',
+            updateGift: 'gifts/updateGift',
             deleteGift: 'gifts/deleteGift',
         }),
         handleCreateGift(gift) {
@@ -89,6 +91,9 @@ export default {
                 listId: this.list.id,
                 newState: newFavoriteState,
             });
+        },
+        handleUpdateGift(updatedGift) {
+            this.updateGift(updatedGift);
         },
         updateValue(e) {
             this.pValue = e.target.textContent;

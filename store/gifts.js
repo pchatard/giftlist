@@ -28,6 +28,16 @@ const actions = {
         );
         commit('MARK_GIFT_FAVORITE', { giftId, newState: newFavoriteState });
     },
+    async updateGift({ commit }, { id, ...gift }) {
+        const updatedGift = await this.$axios.$put(
+            `/api/gifts/${gift.listId}/${id}`,
+            {
+                ...gift,
+            },
+            { withCredentials: true }
+        );
+        commit('UPDATE_GIFT', updatedGift);
+    },
     async deleteGift({ commit }, { giftId, listId }) {
         const success = await this.$axios.$delete(
             `/api/gifts/${listId}/${giftId}`,
@@ -53,6 +63,14 @@ const mutations = {
         const giftIndex = state.gifts.findIndex((gift) => gift.id === giftId);
         if (giftIndex >= 0) {
             state.gifts[giftIndex].favorite = newState;
+        }
+    },
+    UPDATE_GIFT: (state, updatedGift) => {
+        const giftIndex = state.gifts.findIndex(
+            (gift) => gift.id === updatedGift.id
+        );
+        if (giftIndex >= 0) {
+            state.gifts.splice(giftIndex, 1, updatedGift);
         }
     },
     DELETE_GIFT: (state, giftId) => {

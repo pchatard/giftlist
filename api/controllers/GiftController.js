@@ -45,6 +45,20 @@ class GiftController {
         }
     }
 
+    static async update(req, res, next) {
+        try {
+            const gift = req.body;
+            const updatedItem = await Gift.update(
+                req.db,
+                req.params.giftId,
+                gift
+            );
+            res.send(updatedItem);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static async favoritize(req, res, next) {
         try {
             const newState = req.body.newState;
