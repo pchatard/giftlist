@@ -43,6 +43,19 @@ class ListController {
         }
     }
 
+    static async update(req, res, next) {
+        try {
+            const updatedList = await List.update(
+                req.db,
+                req.params.listId,
+                req.body.name
+            );
+            res.send(updatedList);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     static delete(req, res, next) {
         try {
             List.delete(req.db, req.params.listId);

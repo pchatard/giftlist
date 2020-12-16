@@ -18,6 +18,16 @@ const actions = {
         );
         commit('NEW_LIST', createdList);
     },
+    async updateList({ commit }, { name, id }) {
+        const updatedList = await this.$axios.$put(
+            `/api/lists/${id}`,
+            {
+                name,
+            },
+            { withCredentials: true }
+        );
+        commit('UPDATE_LIST', updatedList);
+    },
     async deleteList({ commit, state }, listId) {
         const newLists = await this.$axios.$delete(`/api/lists/${listId}`, {
             withCredentials: true,
@@ -32,6 +42,14 @@ const mutations = {
     },
     NEW_LIST: (state, list) => {
         state.mine.push(list);
+    },
+    UPDATE_LIST: (state, newList) => {
+        const listIndex = state.mine.findIndex(
+            (list) => list.id === newList.id
+        );
+        if (listIndex >= 0) {
+            state.mine.splice(listIndex, 1, newList);
+        }
     },
     REMOVE_LIST: (state, newLists) => {
         state.mine = newLists;

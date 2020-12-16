@@ -7,6 +7,7 @@
                     v-for="list in lists"
                     :key="list.id"
                     :list="list"
+                    @update="handleUpdateList"
                     @remove="handleRemoveList"
                 />
             </ul>
@@ -52,17 +53,20 @@ export default {
         };
     },
     async mounted() {
-        const lists = await this.$store.dispatch('lists/initialize');
-        this.lists = lists;
+        this.lists = await this.$store.dispatch('lists/initialize');
     },
     methods: {
         ...mapActions({
             newList: 'lists/createList',
+            updateList: 'lists/updateList',
             deleteList: 'lists/deleteList',
         }),
         createList() {
             this.newList(this.newListName);
             this.toggleForm();
+        },
+        handleUpdateList(data) {
+            this.updateList(data);
         },
         async handleRemoveList(listId) {
             this.lists = await this.deleteList(listId);

@@ -33,7 +33,16 @@ class ListService {
     static async create(db, list) {
         const ref = db.ref('lists');
         const newList = ref.push(list);
-        return await this.getOne(db, newList.key);
+        return await ListService.getOne(db, newList.key);
+    }
+
+    static async update(db, id, newName) {
+        const ref = db.ref(`lists/${id}`);
+        ref.update({
+            '/name': newName,
+            '/modified_at': Date(),
+        });
+        return await ListService.getOne(db, id);
     }
 
     static delete(db, listId) {

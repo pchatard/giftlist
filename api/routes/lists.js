@@ -8,7 +8,7 @@ lists.get('/', ListController.findAll);
 lists.get('/mine', ListController.findMine);
 lists.get('/:listId', ListController.findOne);
 lists.post('/', ListController.create);
-
+lists.put('/:listId', authorize, ListController.update);
 lists.delete('/:listId', authorize, ListController.delete);
 
 module.exports = lists;
