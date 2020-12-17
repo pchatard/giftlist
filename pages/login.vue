@@ -16,10 +16,9 @@ export default {
     methods: {
         async loginUser(user) {
             try {
-                const { data } = await this.$auth.loginWith('local', {
+                await this.$auth.loginWith('local', {
                     data: user,
                 });
-                this.$auth.setUser(data.user);
                 this.$router.push('/app');
             } catch (error) {}
         },

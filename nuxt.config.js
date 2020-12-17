@@ -62,7 +62,10 @@ export default {
                         url: '/api/auth/local/signout',
                         method: 'get',
                     },
-                    user: false,
+                    user: {
+                        url: '/api/users/me',
+                        method: 'get',
+                    },
                 },
             },
         },

@@ -26,16 +26,11 @@ class AuthController {
             } = req.body;
             databaseUser.firebase_uid = user.uid;
 
-            const dbUser = await Auth.create(req.db, databaseUser);
-
-            // Sign tokens and set cookies
-            const tokens = signTokens(dbUser.id);
-            setCookies(res, tokens);
+            const { id } = await Auth.create(req.db, databaseUser);
 
             // Send back public token
             res.send({
-                token: tokens.publicToken,
-                user: dbUser,
+                id,
             });
         } catch (error) {
             next(error);
@@ -54,16 +49,15 @@ class AuthController {
             await req.auth.signOut();
 
             // Retrive user from database
-            const dbUser = await Auth.getOne(req.db, user.uid);
+            const { id } = await Auth.getOne(req.db, user.uid);
 
             // Sign tokens and set cookies
-            const tokens = signTokens(dbUser.id);
+            const tokens = signTokens(id);
             setCookies(res, tokens);
 
             // Send back public token and user object
             res.send({
                 token: tokens.publicToken,
-                user: dbUser,
             });
         } catch (error) {
             next(error);

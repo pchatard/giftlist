@@ -12,8 +12,19 @@
 export default {
     computed: {
         name() {
-            return `${this.$auth.user.firstName} ${this.$auth.user.lastName}`;
+            const firstName = this.$auth.user.firstName;
+            const lastName = this.$auth.user.lastName;
+            if (firstName && lastName) {
+                return `${firstName} ${lastName}`;
+            }
+            return '';
         },
+        email() {
+            return this.$auth.user.email || '';
+        },
+    },
+    async mounted() {
+        await this.$auth.fetchUser();
     },
 };
 </script>
