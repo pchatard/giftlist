@@ -12,9 +12,13 @@
                 >
                     <NuxtLink :to="page.path">{{ page.name }}</NuxtLink>
                 </li>
-                <button v-show="this.$auth.loggedIn" @click="logout">
+                <li
+                    v-show="this.$auth.loggedIn"
+                    class="cursor-pointer"
+                    @click="logout"
+                >
                     Logout
-                </button>
+                </li>
             </ul>
         </nav>
     </header>

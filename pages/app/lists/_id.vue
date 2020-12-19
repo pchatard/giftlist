@@ -1,6 +1,7 @@
 <template>
     <main>
         <h1>{{ list.name }}</h1>
+        <button @click="toggleForm">New Gift</button>
         <section>
             <h2 class="text-red-600">Favorites</h2>
             <ul v-show="favGifts.length">
@@ -29,7 +30,11 @@
         </section>
 
         <!-- Hide when visiting a friend's list -->
-        <GiftForm @create="handleCreateGift" />
+        <GiftFormModal
+            v-show="showForm"
+            @close="toggleForm"
+            @create="handleCreateGift"
+        />
 
         <!--
         <section>
@@ -49,6 +54,7 @@ export default {
     data() {
         return {
             pValue: '',
+            showForm: false,
             list: {},
             gifts: [],
         };
@@ -81,6 +87,7 @@ export default {
         }),
         handleCreateGift(gift) {
             this.addGift({ ...gift, listId: this.list.id });
+            this.toggleForm();
         },
         handleRemoveGift(giftId) {
             this.deleteGift({ giftId, listId: this.list.id });
@@ -97,6 +104,9 @@ export default {
         },
         updateValue(e) {
             this.pValue = e.target.textContent;
+        },
+        toggleForm() {
+            this.showForm = !this.showForm;
         },
     },
 };

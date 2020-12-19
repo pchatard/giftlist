@@ -1,14 +1,21 @@
 <template>
-    <li v-if="editMode" class="flex justify-between px-8 py-4 hover:bg-red-500">
-        <input v-if="editMode" v-model="listName" type="text" />
-        <button @click="updateList">Save</button>
-    </li>
-    <li v-else class="flex justify-between px-8 py-4 hover:bg-red-500">
+    <li class="flex justify-between px-8 py-4 hover:bg-red-500">
         <NuxtLink :to="`/app/lists/${list.id}`">{{ list.name }}</NuxtLink>
-        <p>Creation: {{ creationDate }}</p>
-        <p>Last modification: {{ modificationDate }}</p>
-        <button @click="showEditMode">Update</button>
+        <div>
+            <p>Creation: {{ creationDate }}</p>
+            <p>Last modification: {{ modificationDate }}</p>
+        </div>
+        <button @click="toggleSharingMode">Share</button>
+        <button @click="toggleEditMode">Update</button>
         <button @click="$emit('remove', list.id)">Delete</button>
+
+        <ListEditorModal
+            v-show="editMode"
+            :list-name="list.name"
+            @close="toggleEditMode"
+            @update="updateList"
+        />
+        <ListShareModal v-show="sharingMode" @close="toggleSharingMode" />
     </li>
 </template>
 
@@ -23,7 +30,7 @@ export default {
     data() {
         return {
             editMode: false,
-            listName: this.list.name,
+            sharingMode: false,
         };
     },
     computed: {
@@ -41,12 +48,15 @@ export default {
         },
     },
     methods: {
-        showEditMode() {
-            this.editMode = true;
+        toggleEditMode() {
+            this.editMode = !this.editMode;
         },
-        updateList() {
-            this.$emit('update', { name: this.listName, id: this.list.id });
-            this.editMode = false;
+        updateList(newName) {
+            this.$emit('update', { name: newName, id: this.list.id });
+            this.toggleEditMode();
+        },
+        toggleSharingMode() {
+            this.sharingMode = !this.sharingMode;
         },
     },
 };

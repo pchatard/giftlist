@@ -11,23 +11,14 @@
                     @remove="handleRemoveList"
                 />
             </ul>
-            <form
+            <ListFormModal
                 v-show="showForm"
-                class="border-2 border-black flex flex-col items-start"
-                @submit.prevent="createList"
-            >
-                <label for="new-list">List name</label>
-                <input
-                    id="new-list"
-                    v-model="newListName"
-                    type="text"
-                    placeholder="Birthday"
-                />
-                <button type="button" @click="toggleForm">Annuler</button>
-                <button type="submit">Create</button>
-            </form>
+                @close="toggleForm"
+                @create="createList"
+            />
             <button @click="toggleForm">Add a new list</button>
         </section>
+
         <!-- <section>
             <h2>My Friends Lists</h2>
             <ul>
@@ -48,7 +39,6 @@ export default {
     data() {
         return {
             showForm: false,
-            newListName: '',
             lists: [],
         };
     },
@@ -61,8 +51,8 @@ export default {
             updateList: 'lists/updateList',
             deleteList: 'lists/deleteList',
         }),
-        createList() {
-            this.newList(this.newListName);
+        createList(newListName) {
+            this.newList(newListName);
             this.toggleForm();
         },
         handleUpdateList(data) {

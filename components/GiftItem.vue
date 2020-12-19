@@ -1,6 +1,5 @@
 <template>
-    <li class="flex border border-black rounded m-2">
-        <GiftEditor v-show="editMode" :gift="gift" @update="updateGift" />
+    <li class="flex items-center border border-black rounded m-2">
         <font-awesome-icon
             v-if="gift.favorite"
             class="text-red-600"
@@ -22,8 +21,10 @@
             {{ gift.title }}
         </a>
         <h3 v-else>{{ gift.title }}</h3>
-        <button @click="showEditor">Modify</button>
+        <button @click="toggleEditMode">Modify</button>
         <button @click="$emit('remove', gift.id)">Delete</button>
+
+        <GiftEditorModal v-show="editMode" :gift="gift" @update="updateGift" />
     </li>
 </template>
 
@@ -41,12 +42,12 @@ export default {
         };
     },
     methods: {
-        showEditor() {
-            this.editMode = true;
+        toggleEditMode() {
+            this.editMode = !this.editMode;
         },
         updateGift(newGift) {
             this.$emit('update', newGift);
-            this.editMode = false;
+            this.toggleEditMode();
         },
     },
 };

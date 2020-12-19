@@ -1,7 +1,6 @@
 <template>
-    <section>
-        <h2>New gift idea</h2>
-        <form class="flex" @submit.prevent="submitNewItem">
+    <Modal @close="$emit('close')">
+        <form class="flex flex-col" @submit.prevent="submitNewItem">
             <fieldset>
                 <label for="gift-title">Title</label>
                 <input id="gift-title" v-model="gift.title" type="text" />
@@ -16,7 +15,7 @@
             </fieldset>
             <button type="submit">Create</button>
         </form>
-    </section>
+    </Modal>
 </template>
 <script>
 export default {

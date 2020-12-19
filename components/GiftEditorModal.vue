@@ -1,6 +1,6 @@
 <template>
-    <div class="modal">
-        <form @submit.prevent="$emit('update', formGift)">
+    <Modal @close="$emit('close')">
+        <form class="flex flex-col" @submit.prevent="$emit('update', formGift)">
             <label>
                 Title
                 <input
@@ -27,7 +27,7 @@
             </label>
             <button type="submit">Save</button>
         </form>
-    </div>
+    </Modal>
 </template>
 
 <script>
