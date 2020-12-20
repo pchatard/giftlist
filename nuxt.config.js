@@ -42,6 +42,7 @@ export default {
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
         '@nuxtjs/auth',
+        'nuxt-clipboard2',
     ],
 
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -73,7 +74,7 @@ export default {
 
     fontawesome: {
         icons: {
-            solid: ['faHeart'],
+            solid: ['faHeart', 'faUsers'],
             regular: ['faHeart'],
         },
     },

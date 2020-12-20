@@ -18,6 +18,13 @@ const actions = {
         );
         commit('NEW_LIST', createdList);
     },
+    async shareList({ commit, state }, listId) {
+        const { list: newList } = await this.$axios.$get(
+            `/api/lists/${listId}/share`
+        );
+        commit('UPDATE_LIST', newList);
+        return state.mine;
+    },
     async updateList({ commit }, { name, id }) {
         const updatedList = await this.$axios.$put(
             `/api/lists/${id}`,

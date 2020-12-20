@@ -7,6 +7,7 @@
                     v-for="list in lists"
                     :key="list.id"
                     :list="list"
+                    @share="handleShareList"
                     @update="handleUpdateList"
                     @remove="handleRemoveList"
                 />
@@ -48,12 +49,16 @@ export default {
     methods: {
         ...mapActions({
             newList: 'lists/createList',
+            shareList: 'lists/shareList',
             updateList: 'lists/updateList',
             deleteList: 'lists/deleteList',
         }),
         createList(newListName) {
             this.newList(newListName);
             this.toggleForm();
+        },
+        async handleShareList(listId) {
+            this.lists = await this.shareList(listId);
         },
         handleUpdateList(data) {
             this.updateList(data);

@@ -1,5 +1,6 @@
 <template>
-    <li class="flex justify-between px-8 py-4 hover:bg-red-500">
+    <li class="flex justify-between items-center px-8 py-4">
+        <font-awesome-icon v-show="list.sharingCode" :icon="['fas', 'users']" />
         <NuxtLink :to="`/app/lists/${list.id}`">{{ list.name }}</NuxtLink>
         <div>
             <p>Creation: {{ creationDate }}</p>
@@ -15,7 +16,13 @@
             @close="toggleEditMode"
             @update="updateList"
         />
-        <ListShareModal v-show="sharingMode" @close="toggleSharingMode" />
+        <ListShareModal
+            v-show="sharingMode"
+            :list-id="list.id"
+            :sharing-code="list.sharingCode"
+            @generate="generateSharingCode"
+            @close="toggleSharingMode"
+        />
     </li>
 </template>
 
@@ -57,6 +64,9 @@ export default {
         },
         toggleSharingMode() {
             this.sharingMode = !this.sharingMode;
+        },
+        generateSharingCode(listId) {
+            this.$emit('share', listId);
         },
     },
 };

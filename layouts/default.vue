@@ -12,7 +12,11 @@ input {
 }
 
 button {
-    @apply bg-blue-500 text-white p-2 rounded w-48 block m-4;
+    @apply bg-blue-500 text-white p-2 rounded w-40 block m-4;
+
+    &:hover {
+        @apply bg-blue-600;
+    }
 }
 
 .modal-container {

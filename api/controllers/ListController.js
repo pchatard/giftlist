@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const List = require('../services/ListService');
 
 class ListController {
@@ -23,6 +24,16 @@ class ListController {
         try {
             const list = await List.getOne(req.db, req.params.listId);
             res.send(list);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async findSharedList(req, res, next) {
+        try {
+            const sharingCode = req.params.sharingCode;
+            const sharedList = await List.getSharedList(req.db, sharingCode);
+            res.send(sharedList);
         } catch (error) {
             next(error);
         }
@@ -60,6 +71,26 @@ class ListController {
         try {
             List.delete(req.db, req.params.listId);
             ListController.findMine(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async share(req, res, next) {
+        try {
+            // Get the list ID.
+            const listId = req.params.listId;
+            const currentList = await List.getOne(req.db, listId);
+            if (currentList.sharingCode) {
+                res.send({ list: currentList });
+            } else {
+                // Generate a random link and a link
+                const code = uuidv4();
+                // Add them to the list in DB
+                const list = await List.share(req.db, listId, code);
+                // Return
+                res.send({ list });
+            }
         } catch (error) {
             next(error);
         }

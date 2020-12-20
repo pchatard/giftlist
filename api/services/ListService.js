@@ -49,6 +49,20 @@ class ListService {
         const ref = db.ref('lists/' + listId);
         ref.remove();
     }
+
+    static async share(db, listId, code) {
+        const ref = db.ref(`lists/${listId}/sharingCode`);
+        ref.set(code);
+        return await ListService.getOne(db, listId);
+    }
+
+    static async getSharedList(db, sharingCode) {
+        const lists = await ListService.getAll(db);
+        const sharedList = lists.find(
+            (list) => list.sharingCode === sharingCode
+        );
+        return sharedList;
+    }
 }
 
 module.exports = ListService;
