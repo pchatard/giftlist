@@ -29,6 +29,18 @@ const actions = {
         commit('UPDATE_LIST', newList);
         return state;
     },
+    async getSharedList({ commit, state }, sharingCode) {
+        const sharedList = await this.$axios.$get(
+            `/api/lists/shared/${sharingCode}`,
+            { withCredentials: true }
+        );
+        if (state.shared.findIndex((list) => list.id === sharedList.id) >= 0) {
+            return state.shared;
+        } else {
+            commit('NEW_SHARED_LIST', sharedList);
+            return state.shared;
+        }
+    },
     async updateList({ commit }, { name, id }) {
         const updatedList = await this.$axios.$put(
             `/api/lists/${id}`,
@@ -55,6 +67,9 @@ const mutations = {
     NEW_LIST: (state, list) => {
         state.mine.push(list);
     },
+    NEW_SHARED_LIST: (state, newSharedList) => {
+        state.shared.push(newSharedList);
+    },
     UPDATE_LIST: (state, newList) => {
         const listIndex = state.mine.findIndex(
             (list) => list.id === newList.id
@@ -64,7 +79,7 @@ const mutations = {
         }
     },
     REMOVE_LIST: (state, newLists) => {
-        state.mine = newLists;
+        state.mine = newLists.mine;
     },
 };
 

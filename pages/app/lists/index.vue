@@ -29,6 +29,12 @@
                     }}</NuxtLink>
                 </li>
             </ul>
+            <ListSharedFormModal
+                v-show="showShareForm"
+                @close="toggleShareForm"
+                @code="addSharedList"
+            />
+            <button @click="toggleShareForm">Add a sharing code</button>
         </section>
     </main>
 </template>
@@ -40,6 +46,7 @@ export default {
     data() {
         return {
             showForm: false,
+            showShareForm: false,
             lists: { mine: [], shared: [] },
         };
     },
@@ -50,6 +57,7 @@ export default {
         ...mapActions({
             newList: 'lists/createList',
             shareList: 'lists/shareList',
+            getSharedList: 'lists/getSharedList',
             updateList: 'lists/updateList',
             deleteList: 'lists/deleteList',
         }),
@@ -66,8 +74,14 @@ export default {
         async handleRemoveList(listId) {
             this.lists = await this.deleteList(listId);
         },
+        async addSharedList(code) {
+            this.lists.shared = await this.getSharedList(code);
+        },
         toggleForm() {
             this.showForm = !this.showForm;
+        },
+        toggleShareForm() {
+            this.showShareForm = !this.showShareForm;
         },
     },
 };
