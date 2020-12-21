@@ -62,7 +62,7 @@ export default {
     computed: {
         link() {
             if (this.code) {
-                return `http://localhost:3000/lists/shared/${this.code}`;
+                return `http://localhost:3000/app/lists/shared/${this.code}`;
             }
             return '';
         },
