@@ -3,6 +3,7 @@ const lists = express.Router();
 
 const ListController = require('../controllers/ListController');
 const { authorize } = require('../middlewares/authorize');
+const { preventOwner } = require('../middlewares/shared');
 
 /** Finds all lists */
 lists.get('/', ListController.findAll);
@@ -26,6 +27,6 @@ lists.delete('/:listId', authorize, ListController.delete);
 lists.get('/:listId/share', authorize, ListController.share);
 
 /** Finds the sharingCode shared list  */
-lists.get('/shared/:sharingCode', ListController.findSharedList);
+lists.get('/shared/:sharingCode', preventOwner, ListController.findSharedList);
 
 module.exports = lists;
