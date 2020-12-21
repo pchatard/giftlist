@@ -4,7 +4,7 @@
             <h2>My Lists</h2>
             <ul>
                 <ListPreview
-                    v-for="list in lists"
+                    v-for="list in lists.mine"
                     :key="list.id"
                     :list="list"
                     @share="handleShareList"
@@ -20,16 +20,16 @@
             <button @click="toggleForm">Add a new list</button>
         </section>
 
-        <!-- <section>
+        <section>
             <h2>My Friends Lists</h2>
             <ul>
-                Change lis into components (ListPreview or else)
-                <li>Max's Birthday</li>
-                <li>John's Christmas</li>
-                <li>Rachel & Eliott's Wedding</li>
+                <li v-for="list in lists.shared" :key="list.id">
+                    <NuxtLink :to="`/app/lists/shared/${list.sharingCode}`">{{
+                        list.name
+                    }}</NuxtLink>
+                </li>
             </ul>
-            <button>Open a friend's list</button>
-        </section> -->
+        </section>
     </main>
 </template>
 
@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             showForm: false,
-            lists: [],
+            lists: { mine: [], shared: [] },
         };
     },
     async mounted() {

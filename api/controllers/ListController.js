@@ -13,8 +13,8 @@ class ListController {
 
     static async findMine(req, res, next) {
         try {
-            const myLists = await List.getMine(req.db, req.userId);
-            res.send(myLists);
+            const { mine, shared } = await List.getMine(req.db, req.userId);
+            res.send({ mine, shared });
         } catch (error) {
             next(error);
         }
@@ -31,8 +31,17 @@ class ListController {
 
     static async findSharedList(req, res, next) {
         try {
-            const sharingCode = req.params.sharingCode;
-            const sharedList = await List.getSharedList(req.db, sharingCode);
+            // Retrieve the list from the sharing code
+            const sharedList = await List.getSharedList(
+                req.db,
+                req.params.sharingCode
+            );
+
+            // Add the user to the list's sharedWith property if not already done
+            if (!sharedList.sharedWith.includes(req.userId)) {
+                List.addUserToList(req.db, req.userId, sharedList.id);
+            }
+
             res.send(sharedList);
         } catch (error) {
             next(error);

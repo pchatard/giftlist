@@ -6,7 +6,11 @@ class ListService {
         let resultsArr;
         if (results) {
             resultsArr = Object.keys(results).map((key) => {
-                return { ...results[key], id: key };
+                const id = key;
+                const sharedWith = results[key].sharedWith
+                    ? Object.values(results[key].sharedWith)
+                    : [];
+                return { ...results[key], sharedWith, id };
             });
         } else {
             resultsArr = [];
@@ -16,8 +20,9 @@ class ListService {
 
     static async getMine(db, userId) {
         const lists = await this.getAll(db);
-        const myLists = lists.filter((list) => list.ownerId === userId);
-        return myLists;
+        const mine = lists.filter((list) => list.ownerId === userId);
+        const shared = lists.filter((list) => list.sharedWith.includes(userId));
+        return { mine, shared };
     }
 
     static async getOne(db, listId) {
@@ -70,6 +75,11 @@ class ListService {
             (list) => list.sharingCode === sharingCode
         );
         return sharedList;
+    }
+
+    static addUserToList(db, userId, listId) {
+        const ref = db.ref(`lists/${listId}/sharedWith`);
+        ref.push(userId);
     }
 }
 

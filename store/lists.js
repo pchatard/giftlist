@@ -1,5 +1,6 @@
 const state = () => ({
     mine: [],
+    shared: [],
 });
 
 const actions = {
@@ -8,7 +9,7 @@ const actions = {
             withCredentials: true,
         });
         commit('POPULATE_LISTS', lists);
-        return state.mine;
+        return state;
     },
     async createList({ commit }, name) {
         const createdList = await this.$axios.$post(
@@ -20,10 +21,13 @@ const actions = {
     },
     async shareList({ commit, state }, listId) {
         const { list: newList } = await this.$axios.$get(
-            `/api/lists/${listId}/share`
+            `/api/lists/${listId}/share`,
+            {
+                withCredentials: true,
+            }
         );
         commit('UPDATE_LIST', newList);
-        return state.mine;
+        return state;
     },
     async updateList({ commit }, { name, id }) {
         const updatedList = await this.$axios.$put(
@@ -40,12 +44,13 @@ const actions = {
             withCredentials: true,
         });
         commit('REMOVE_LIST', newLists);
-        return state.mine;
+        return state;
     },
 };
 const mutations = {
     POPULATE_LISTS: (state, lists) => {
-        state.mine = lists;
+        state.mine = lists.mine;
+        state.shared = lists.shared;
     },
     NEW_LIST: (state, list) => {
         state.mine.push(list);
