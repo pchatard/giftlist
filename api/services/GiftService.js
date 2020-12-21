@@ -1,39 +1,39 @@
 class GiftService {
     static async getAll(db) {
         const ref = db.ref('gifts');
-        const items = (await ref.once('value')).val();
-        let formatedItems;
-        if (items) {
-            formatedItems = Object.keys(items).map((key) => {
-                return { ...items[key], id: key };
+        const gifts = (await ref.once('value')).val();
+        let formatedGifts;
+        if (gifts) {
+            formatedGifts = Object.keys(gifts).map((key) => {
+                return { ...gifts[key], id: key };
             });
         } else {
-            formatedItems = [];
+            formatedGifts = [];
         }
-        return formatedItems;
+        return formatedGifts;
     }
 
-    static async getItemsFromList(db, listId) {
-        const items = await this.getAll(db);
-        const myItems = items.filter((item) => item.listId === listId);
-        return myItems;
+    static async getFromList(db, listId) {
+        const gifts = await this.getAll(db);
+        const myGifts = gifts.filter((gift) => gift.listId === listId);
+        return myGifts;
     }
 
-    static async getOne(db, itemId) {
-        const ref = db.ref('gifts/' + itemId);
-        const item = (await ref.once('value')).val();
-        if (item) {
-            item.id = itemId;
-            return item;
+    static async getOne(db, giftId) {
+        const ref = db.ref('gifts/' + giftId);
+        const gift = (await ref.once('value')).val();
+        if (gift) {
+            gift.id = giftId;
+            return gift;
         }
         return [];
     }
 
-    static async create(db, item) {
+    static async create(db, gift) {
         const ref = db.ref('gifts');
-        const newItem = ref.push(item);
-        await GiftService.updateListModificationDate(db, newItem.key);
-        return await this.getOne(db, newItem.key);
+        const newGift = ref.push(gift);
+        await GiftService.updateListModificationDate(db, newGift.key);
+        return await this.getOne(db, newGift.key);
     }
 
     static async update(db, id, gift) {
@@ -43,25 +43,27 @@ class GiftService {
         return await this.getOne(db, id);
     }
 
-    static async updateFavoriteState(db, itemId, newState) {
-        const ref = db.ref(`gifts/${itemId}`);
+    static async updateFavoriteState(db, giftId, newState) {
+        const ref = db.ref(`gifts/${giftId}`);
         ref.update({
             [`/favorite`]: Boolean(newState),
         });
 
-        await GiftService.updateListModificationDate(db, itemId);
+        await GiftService.updateListModificationDate(db, giftId);
 
         return newState;
     }
 
-    static async delete(db, itemId) {
-        const ref = db.ref('gifts/' + itemId);
-        await GiftService.updateListModificationDate(db, itemId);
+    static async delete(db, giftId, fromList = false) {
+        const ref = db.ref('gifts/' + giftId);
+        if (!fromList) {
+            await GiftService.updateListModificationDate(db, giftId);
+        }
         ref.remove();
     }
 
-    static async updateListModificationDate(db, itemId) {
-        const gift = await GiftService.getOne(db, itemId);
+    static async updateListModificationDate(db, giftId) {
+        const gift = await GiftService.getOne(db, giftId);
         const refList = db.ref(`lists/${gift.listId}`);
         refList.update({
             '/modified_at': Date(),

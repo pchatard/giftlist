@@ -10,12 +10,9 @@ class GiftController {
         }
     }
 
-    static async findItemsFromList(req, res, next) {
+    static async findGiftsFromList(req, res, next) {
         try {
-            const listItems = await Gift.getItemsFromList(
-                req.db,
-                req.params.listId
-            );
+            const listItems = await Gift.getFromList(req.db, req.params.listId);
             res.send(listItems);
         } catch (error) {
             next(error);
@@ -24,7 +21,7 @@ class GiftController {
 
     static async findOne(req, res, next) {
         try {
-            const list = await Gift.getOne(req.db, req.params.listId);
+            const list = await Gift.getOne(req.db, req.params.giftId);
             res.send(list);
         } catch (error) {
             next(error);
@@ -64,7 +61,7 @@ class GiftController {
             const newState = req.body.newState;
             const newFavState = await Gift.updateFavoriteState(
                 req.db,
-                req.params.itemId,
+                req.params.giftId,
                 newState
             );
             res.send(newFavState);
@@ -75,7 +72,7 @@ class GiftController {
 
     static async delete(req, res, next) {
         try {
-            await Gift.delete(req.db, req.params.itemId);
+            await Gift.delete(req.db, req.params.giftId);
             res.send(true);
         } catch (error) {
             next(error);

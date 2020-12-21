@@ -1,3 +1,4 @@
+const Gift = require('./GiftService');
 class ListService {
     static async getAll(db) {
         const ref = db.ref('lists');
@@ -17,7 +18,6 @@ class ListService {
         const lists = await this.getAll(db);
         const myLists = lists.filter((list) => list.ownerId === userId);
         return myLists;
-        // return lists;
     }
 
     static async getOne(db, listId) {
@@ -45,9 +45,17 @@ class ListService {
         return await ListService.getOne(db, id);
     }
 
-    static delete(db, listId) {
+    static async delete(db, listId) {
+        await ListService.deleteGiftsFromList(db, listId);
         const ref = db.ref('lists/' + listId);
         ref.remove();
+    }
+
+    static async deleteGiftsFromList(db, listId) {
+        const gifts = await Gift.getFromList(db, listId);
+        gifts.forEach((gift) => {
+            Gift.delete(db, gift.id, true);
+        });
     }
 
     static async share(db, listId, code) {

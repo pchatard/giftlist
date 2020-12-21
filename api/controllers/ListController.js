@@ -67,10 +67,10 @@ class ListController {
         }
     }
 
-    static delete(req, res, next) {
+    static async delete(req, res, next) {
         try {
-            List.delete(req.db, req.params.listId);
-            ListController.findMine(req, res, next);
+            await List.delete(req.db, req.params.listId);
+            await ListController.findMine(req, res, next);
         } catch (error) {
             next(error);
         }
