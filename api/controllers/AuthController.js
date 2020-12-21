@@ -4,6 +4,14 @@ const { signTokens } = require('../helpers/jwt');
 const { setCookies, clearCookies } = require('../helpers/cookies');
 
 class AuthController {
+    /**
+     * Registers a new user
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     * @returns {String} - Returns the new user's ID.
+     */
     static async register(req, res, next) {
         try {
             const { email, password } = req.body;
@@ -28,7 +36,6 @@ class AuthController {
 
             const { id } = await Auth.create(req.db, databaseUser);
 
-            // Send back public token
             res.send({
                 id,
             });
@@ -37,6 +44,14 @@ class AuthController {
         }
     }
 
+    /**
+     * Logs a new user in
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     * @returns {Object} - Returns an object with the public token.
+     */
     static async login(req, res, next) {
         try {
             const { email, password } = req.body;
@@ -64,12 +79,18 @@ class AuthController {
         }
     }
 
+    /**
+     * Logs a new user out
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static signout(req, res, next) {
         try {
             // Clear cookiess
             clearCookies(res);
-            // Send back something
-            res.send('signout called');
+            res.status(204).send();
         } catch (error) {
             next(error);
         }
