@@ -81,6 +81,14 @@ class ListService {
         const ref = db.ref(`lists/${listId}/sharedWith`);
         ref.push(userId);
     }
+
+    static async private(db, listId) {
+        const refCode = db.ref(`lists/${listId}/sharingCode`);
+        refCode.remove();
+        const refIds = db.ref(`lists/${listId}/sharedWith`);
+        refIds.remove();
+        return await ListService.getOne(db, listId);
+    }
 }
 
 module.exports = ListService;

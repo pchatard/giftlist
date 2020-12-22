@@ -1,5 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const List = require('../services/ListService');
+const User = require('../services/UserService');
 
 class ListController {
     static async findAll(req, res, next) {
@@ -50,11 +51,16 @@ class ListController {
 
     static async create(req, res, next) {
         try {
+            const { firstName, lastName } = await User.getOne(
+                req.db,
+                req.userId
+            );
             const list = {
                 name: req.body.name,
                 created_at: Date(),
                 modified_at: Date(),
                 ownerId: req.userId,
+                owner: `${firstName} ${lastName}`,
             };
             const createdList = await List.create(req.db, list);
             res.send(createdList);
@@ -98,6 +104,21 @@ class ListController {
                 // Add them to the list in DB
                 const list = await List.share(req.db, listId, code);
                 // Return
+                res.send({ list });
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    static async private(req, res, next) {
+        try {
+            const listId = req.params.listId;
+            const list = await List.getOne(req.db, listId);
+            if (list.sharingCode) {
+                const privateList = await List.private(req.db, listId);
+                res.send({ list: privateList });
+            } else {
                 res.send({ list });
             }
         } catch (error) {

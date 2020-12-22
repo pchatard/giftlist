@@ -29,4 +29,7 @@ lists.get('/:listId/share', authorize, ListController.share);
 /** Finds the sharingCode shared list  */
 lists.get('/shared/:sharingCode', preventOwner, ListController.findSharedList);
 
+/** Makes a shared list private */
+lists.get('/:listId/private', authorize, ListController.private);
+
 module.exports = lists;

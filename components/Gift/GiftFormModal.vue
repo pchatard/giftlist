@@ -38,6 +38,7 @@ export default {
         },
         clearForm() {
             this.gift.title = '';
+            this.gift.link = '';
             this.gift.favorite = false;
         },
     },

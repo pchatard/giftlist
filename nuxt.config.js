@@ -20,6 +20,10 @@ export default {
         middleware: ['auth'],
     },
 
+    env: {
+        projectUrl: process.env.PROJECT_URL,
+    },
+
     // Global CSS (https://go.nuxtjs.dev/config-css)
     css: [],
 

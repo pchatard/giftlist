@@ -8,6 +8,7 @@
                     :key="list.id"
                     :list="list"
                     @share="handleShareList"
+                    @private="handlePrivateList"
                     @update="handleUpdateList"
                     @remove="handleRemoveList"
                 />
@@ -23,11 +24,11 @@
         <section>
             <h2>My Friends Lists</h2>
             <ul>
-                <li v-for="list in lists.shared" :key="list.id">
-                    <NuxtLink :to="`/app/lists/shared/${list.sharingCode}`">{{
-                        list.name
-                    }}</NuxtLink>
-                </li>
+                <SharedListPreview
+                    v-for="list in lists.shared"
+                    :key="list.id"
+                    :shared-list="list"
+                />
             </ul>
             <ListSharedFormModal
                 v-show="showShareForm"
@@ -57,6 +58,7 @@ export default {
         ...mapActions({
             newList: 'lists/createList',
             shareList: 'lists/shareList',
+            makeListPrivate: 'lists/privateList',
             getSharedList: 'lists/getSharedList',
             updateList: 'lists/updateList',
             deleteList: 'lists/deleteList',
@@ -67,6 +69,9 @@ export default {
         },
         async handleShareList(listId) {
             this.lists = await this.shareList(listId);
+        },
+        async handlePrivateList(listId) {
+            this.lists = await this.makeListPrivate(listId);
         },
         handleUpdateList(data) {
             this.updateList(data);

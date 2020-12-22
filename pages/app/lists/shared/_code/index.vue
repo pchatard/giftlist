@@ -1,12 +1,25 @@
 <template>
     <div>
         <h1>Shared List</h1>
-        <h2>{{ list.name }}</h2>
+        <h2>{{ list.name }} - {{ list.owner }}</h2>
         <section>
-            <ul>
-                <li v-for="gift in gifts" :key="gift.id">
-                    {{ gift.title }}
-                </li>
+            <h2 class="text-red-600">Favorites</h2>
+            <ul v-show="favGifts.length">
+                <SharedGift
+                    v-for="gift in favGifts"
+                    :key="gift.id"
+                    :shared-gift="gift"
+                />
+            </ul>
+        </section>
+        <section>
+            <h2 class="text-red-600">Wishlist</h2>
+            <ul v-show="otherGifts.length">
+                <SharedGift
+                    v-for="gift in otherGifts"
+                    :key="gift.id"
+                    :shared-gift="gift"
+                />
             </ul>
         </section>
     </div>
@@ -20,11 +33,22 @@ export default {
             gifts: [],
         };
     },
+    computed: {
+        favGifts() {
+            return this.gifts.filter((gift) => gift.favorite);
+        },
+        otherGifts() {
+            return this.gifts.filter((gift) => !gift.favorite);
+        },
+    },
     async mounted() {
         const listCode = this.$route.params.code;
-        // Integrate this into the store
         this.list = await this.$axios.$get(`/api/lists/shared/${listCode}`);
-        this.gifts = await this.$axios.$get(`/api/gifts/${this.list.id}`);
+
+        this.gifts = await this.$store.dispatch(
+            'gifts/initialize',
+            this.list.id
+        );
     },
 };
 </script>

@@ -21,6 +21,7 @@
             :list-id="list.id"
             :sharing-code="list.sharingCode"
             @generate="generateSharingCode"
+            @private="makeListPrivate"
             @close="toggleSharingMode"
         />
     </li>
@@ -67,6 +68,9 @@ export default {
         },
         generateSharingCode(listId) {
             this.$emit('share', listId);
+        },
+        makeListPrivate(listId) {
+            this.$emit('private', listId);
         },
     },
 };

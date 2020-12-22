@@ -24,7 +24,12 @@
         <button @click="toggleEditMode">Modify</button>
         <button @click="$emit('remove', gift.id)">Delete</button>
 
-        <GiftEditorModal v-show="editMode" :gift="gift" @update="updateGift" />
+        <GiftEditorModal
+            v-show="editMode"
+            :gift="gift"
+            @update="updateGift"
+            @close="toggleEditMode"
+        />
     </li>
 </template>
 

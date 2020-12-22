@@ -53,7 +53,7 @@ export default {
     // Use this to edit the list quickly, along with contenteditable="true" and @focusout="updateValue"
     data() {
         return {
-            pValue: '',
+            // pValue: '',
             showForm: false,
             list: {},
             gifts: [],
@@ -102,9 +102,9 @@ export default {
         handleUpdateGift(updatedGift) {
             this.updateGift(updatedGift);
         },
-        updateValue(e) {
-            this.pValue = e.target.textContent;
-        },
+        // updateValue(e) {
+        //     this.pValue = e.target.textContent;
+        // },
         toggleForm() {
             this.showForm = !this.showForm;
         },

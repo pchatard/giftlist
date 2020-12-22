@@ -32,6 +32,9 @@
                 <p>Note: They will need an account to see it.</p>
                 <button @click="handleLink">Link</button>
             </div>
+            <div>
+                <button @click="handlePrivate">Make private</button>
+            </div>
         </section>
 
         <section v-else>
@@ -62,7 +65,7 @@ export default {
     computed: {
         link() {
             if (this.code) {
-                return `http://localhost:3000/app/lists/shared/${this.code}`;
+                return `${process.env.projectUrl}/app/lists/shared/${this.code}`;
             }
             return '';
         },
@@ -81,6 +84,9 @@ export default {
         async handleLink() {
             await this.$copyText(this.link);
             alert('Copied link');
+        },
+        handlePrivate() {
+            this.$emit('private', this.listId);
         },
     },
 };

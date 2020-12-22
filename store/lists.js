@@ -29,6 +29,16 @@ const actions = {
         commit('UPDATE_LIST', newList);
         return state;
     },
+    async privateList({ commit, state }, listId) {
+        const { list } = await this.$axios.$get(
+            `/api/lists/${listId}/private`,
+            {
+                withCredentials: true,
+            }
+        );
+        commit('UPDATE_LIST', list);
+        return state;
+    },
     async getSharedList({ commit, state }, sharingCode) {
         const sharedList = await this.$axios.$get(
             `/api/lists/shared/${sharingCode}`,
