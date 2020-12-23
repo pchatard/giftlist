@@ -1,6 +1,13 @@
 const Gift = require('../services/GiftService');
 
 class GiftController {
+    /**
+     * Sends back all the gifts in the response.
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static async findAll(req, res, next) {
         try {
             const lists = await Gift.getAll(req.db);
@@ -10,6 +17,13 @@ class GiftController {
         }
     }
 
+    /**
+     * Sends back all the gifts from a given list in the response.
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static async findGiftsFromList(req, res, next) {
         try {
             const listItems = await Gift.getFromList(req.db, req.params.listId);
@@ -19,6 +33,13 @@ class GiftController {
         }
     }
 
+    /**
+     * Sends back in the response the gift with the giftId id.
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static async findOne(req, res, next) {
         try {
             const list = await Gift.getOne(req.db, req.params.giftId);
@@ -28,6 +49,13 @@ class GiftController {
         }
     }
 
+    /**
+     * Creates a new gift and sends back its database representation in the response.
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static async create(req, res, next) {
         try {
             const gift = {
@@ -42,6 +70,13 @@ class GiftController {
         }
     }
 
+    /**
+     * Updates a gift and sends it back in the response.
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static async update(req, res, next) {
         try {
             const gift = req.body;
@@ -56,6 +91,13 @@ class GiftController {
         }
     }
 
+    /**
+     * Toggles the favorite property of the given gift and sends back its new state in the response.
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static async favoritize(req, res, next) {
         try {
             const newState = req.body.newState;
@@ -70,6 +112,13 @@ class GiftController {
         }
     }
 
+    /**
+     * Deletes a gift and sends back true if it succeeds.
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
     static async delete(req, res, next) {
         try {
             await Gift.delete(req.db, req.params.giftId);

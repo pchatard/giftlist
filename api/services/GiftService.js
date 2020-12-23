@@ -1,4 +1,10 @@
 class GiftService {
+    /**
+     * Returns all the gifts.
+     * @function
+     * @param {Object} db - Database connection
+     * @returns {Array} An array of gifts
+     */
     static async getAll(db) {
         const ref = db.ref('gifts');
         const gifts = (await ref.once('value')).val();
@@ -13,12 +19,26 @@ class GiftService {
         return formatedGifts;
     }
 
+    /**
+     * Returns all the gifts from a particular list.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {String} listId - The id of the list you want the gifts from
+     * @returns {Array} An array of gifts from a same list.
+     */
     static async getFromList(db, listId) {
         const gifts = await this.getAll(db);
         const myGifts = gifts.filter((gift) => gift.listId === listId);
         return myGifts;
     }
 
+    /**
+     * Returns a gift based on its id.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {String} giftId - The id of the gift you're looking for.
+     * @returns {Object} Gift matching the giftId parameter.
+     */
     static async getOne(db, giftId) {
         const ref = db.ref('gifts/' + giftId);
         const gift = (await ref.once('value')).val();
@@ -29,6 +49,13 @@ class GiftService {
         return [];
     }
 
+    /**
+     * Creates a gift in the database and returns its representation.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {Object} gift - The gift you want to create.
+     * @returns {Object} The created gift's representation in the database.
+     */
     static async create(db, gift) {
         const ref = db.ref('gifts');
         const newGift = ref.push(gift);
@@ -36,6 +63,14 @@ class GiftService {
         return await this.getOne(db, newGift.key);
     }
 
+    /**
+     * Updates and returns a given gift.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {String} id - The id of the gift you want to update.
+     * @param {Object} gift - The updated version of the gift.
+     * @returns {Object} The updated gift's database represenation.
+     */
     static async update(db, id, gift) {
         const ref = db.ref(`gifts/${id}`);
         ref.set(gift);
@@ -43,6 +78,14 @@ class GiftService {
         return await this.getOne(db, id);
     }
 
+    /**
+     * Sets the favorite property of a given gift to the newState value.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {String} giftId - The id of the gift you want to toggle the favorite state.
+     * @param {Boolean} newState - The new state of the favorite property of the gift.
+     * @returns {Boolean} The new value of the Favorite property of that gift.
+     */
     static async updateFavoriteState(db, giftId, newState) {
         const ref = db.ref(`gifts/${giftId}`);
         ref.update({
@@ -54,14 +97,27 @@ class GiftService {
         return newState;
     }
 
-    static async delete(db, giftId, fromList = false) {
+    /**
+     * Removes a gift from the database based on its id.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {String} giftId - The id of the gift you want to delete.
+     * @param {Boolean} deletedByList - The fact that this gift is deleted by deleting a complete list or not.
+     */
+    static async delete(db, giftId, deletedByList = false) {
         const ref = db.ref('gifts/' + giftId);
-        if (!fromList) {
+        if (!deletedByList) {
             await GiftService.updateListModificationDate(db, giftId);
         }
         ref.remove();
     }
 
+    /**
+     * Updates a list's modified_at property after an operation on one of its gifts have been made.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {String} giftId - The id of the gift that was created / deleted / modified.
+     */
     static async updateListModificationDate(db, giftId) {
         const gift = await GiftService.getOne(db, giftId);
         const refList = db.ref(`lists/${gift.listId}`);
