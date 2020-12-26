@@ -98,6 +98,23 @@ class GiftService {
     }
 
     /**
+     * Sets the booked property of a given gift to the booked value.
+     * @function
+     * @param {Object} db - Database connection
+     * @param {String} giftId - The id of the gift you want to toggle the booked state.
+     * @param {*} booked - The new booked property of the gift.
+     * @returns {Object} The updated gift.
+     */
+    static async updateBookedState(db, giftId, booked) {
+        const ref = db.ref(`gifts/${giftId}`);
+        ref.update({
+            '/booked': booked,
+        });
+        const updatedGift = await GiftService.getOne(db, giftId);
+        return updatedGift;
+    }
+
+    /**
      * Removes a gift from the database based on its id.
      * @function
      * @param {Object} db - Database connection

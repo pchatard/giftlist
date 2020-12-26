@@ -28,6 +28,14 @@ const actions = {
         );
         commit('MARK_GIFT_FAVORITE', { giftId, newState: newFavoriteState });
     },
+    async bookGift({ commit }, { listId, giftId, status }) {
+        const updatedGift = await this.$axios.$put(
+            `/api/gifts/${listId}/${giftId}/book`,
+            { booked: status },
+            { withCredentials: true }
+        );
+        commit('UPDATE_GIFT', updatedGift);
+    },
     async updateGift({ commit }, { id, ...gift }) {
         const updatedGift = await this.$axios.$put(
             `/api/gifts/${gift.listId}/${id}`,

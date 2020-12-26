@@ -60,6 +60,7 @@ class GiftController {
         try {
             const gift = {
                 ...req.body.gift,
+                booked: false,
                 created_at: Date(),
                 modified_at: Date(),
             };
@@ -107,6 +108,30 @@ class GiftController {
                 newState
             );
             res.send(newFavState);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    /**
+     * Toggles the booked property of a gift, and sends back the updated gift in the response
+     * @function
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     * @param {Function} next - Following middleware
+     */
+    static async book(req, res, next) {
+        try {
+            let booked = false;
+            if (req.body.booked) {
+                booked = req.userId;
+            }
+            const updatedGift = await Gift.updateBookedState(
+                req.db,
+                req.params.giftId,
+                booked
+            );
+            res.send(updatedGift);
         } catch (error) {
             next(error);
         }

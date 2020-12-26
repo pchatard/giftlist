@@ -25,7 +25,30 @@
         <!-- Buttons: More info (sizes), Book -->
         <div class="actions flex">
             <button>More info</button>
-            <button>I take this!</button>
+            <button
+                v-show="!sharedGift.booked"
+                @click="
+                    $emit('book', {
+                        giftId: sharedGift.id,
+                        listId: sharedGift.listId,
+                        status: true,
+                    })
+                "
+            >
+                I take this!
+            </button>
+            <button
+                v-show="userIsBooker"
+                @click="
+                    $emit('book', {
+                        giftId: sharedGift.id,
+                        listId: sharedGift.listId,
+                        status: false,
+                    })
+                "
+            >
+                Unbook
+            </button>
         </div>
     </li>
 </template>
@@ -36,6 +59,11 @@ export default {
         sharedGift: {
             default: () => ({}),
             type: Object,
+        },
+    },
+    computed: {
+        userIsBooker() {
+            return this.sharedGift.booked === this.$auth.user.id;
         },
     },
 };

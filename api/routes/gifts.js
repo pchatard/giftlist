@@ -3,6 +3,7 @@ const gifts = express.Router();
 
 const GiftController = require('../controllers/GiftController');
 const { authorize } = require('../middlewares/authorize');
+const { preventOwner } = require('../middlewares/shared');
 
 /** Finds all gifts */
 gifts.get('/', GiftController.findAll);
@@ -21,6 +22,9 @@ gifts.put('/:listId/:giftId', authorize, GiftController.update);
 
 /** Toggles the favorite status of giftId gift  */
 gifts.put('/:listId/:giftId/fav', authorize, GiftController.favoritize);
+
+/** Books a gift */
+gifts.put('/:listId/:giftId/book', preventOwner, GiftController.book);
 
 /** Deletes the giftId gift */
 gifts.delete('/:listId/:giftId', authorize, GiftController.delete);

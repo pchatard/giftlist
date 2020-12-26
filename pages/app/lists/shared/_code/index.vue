@@ -9,6 +9,7 @@
                     v-for="gift in favGifts"
                     :key="gift.id"
                     :shared-gift="gift"
+                    @book="handleBookGift"
                 />
             </ul>
         </section>
@@ -19,6 +20,7 @@
                     v-for="gift in otherGifts"
                     :key="gift.id"
                     :shared-gift="gift"
+                    @book="handleBookGift"
                 />
             </ul>
         </section>
@@ -26,6 +28,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
     data() {
         return {
@@ -49,6 +52,12 @@ export default {
             'gifts/initialize',
             this.list.id
         );
+    },
+    methods: {
+        ...mapActions({ bookGift: 'gifts/bookGift' }),
+        handleBookGift(payload) {
+            this.bookGift(payload);
+        },
     },
 };
 </script>
