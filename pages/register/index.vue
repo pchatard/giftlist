@@ -1,7 +1,11 @@
 <template>
     <main>
-        <h1>Register</h1>
-        <UserForm :form-type="'register'" :form-method="registerUser" />
+        <div
+            class="container register flex flex-col justify-center items-center"
+        >
+            <h1 class="form">Register</h1>
+            <UserForm :form-type="'register'" :form-method="registerUser" />
+        </div>
     </main>
 </template>
 
@@ -26,3 +30,9 @@ export default {
     },
 };
 </script>
+
+<style lang="postcss">
+.register {
+    width: 30%;
+}
+</style>

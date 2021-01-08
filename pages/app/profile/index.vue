@@ -1,10 +1,12 @@
 <template>
     <main>
-        <h1>My account</h1>
-        <section>
-            <h2>{{ name }}</h2>
-            <p>{{ $auth.user.email }}</p>
-        </section>
+        <div class="container">
+            <h1>My account</h1>
+            <section>
+                <h2>{{ name }}</h2>
+                <p>{{ $auth.user.email }}</p>
+            </section>
+        </div>
     </main>
 </template>
 

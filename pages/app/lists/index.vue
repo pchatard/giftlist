@@ -1,42 +1,46 @@
 <template>
     <main>
-        <section>
-            <h2>My Lists</h2>
-            <ul>
-                <ListPreview
-                    v-for="list in lists.mine"
-                    :key="list.id"
-                    :list="list"
-                    @share="handleShareList"
-                    @private="handlePrivateList"
-                    @update="handleUpdateList"
-                    @remove="handleRemoveList"
+        <div class="container">
+            <section>
+                <h1>My Lists</h1>
+                <hr class="my-4" />
+                <ul>
+                    <ListPreview
+                        v-for="list in lists.mine"
+                        :key="list.id"
+                        :list="list"
+                        @share="handleShareList"
+                        @private="handlePrivateList"
+                        @update="handleUpdateList"
+                        @remove="handleRemoveList"
+                    />
+                </ul>
+                <ListFormModal
+                    v-show="showForm"
+                    @close="toggleForm"
+                    @create="createList"
                 />
-            </ul>
-            <ListFormModal
-                v-show="showForm"
-                @close="toggleForm"
-                @create="createList"
-            />
-            <button @click="toggleForm">Add a new list</button>
-        </section>
+                <button @click="toggleForm">Add a new list</button>
+            </section>
 
-        <section>
-            <h2>My Friends Lists</h2>
-            <ul>
-                <SharedListPreview
-                    v-for="list in lists.shared"
-                    :key="list.id"
-                    :shared-list="list"
+            <section>
+                <h1>My Friends Lists</h1>
+                <hr class="my-4" />
+                <ul>
+                    <SharedListPreview
+                        v-for="list in lists.shared"
+                        :key="list.id"
+                        :shared-list="list"
+                    />
+                </ul>
+                <ListSharedFormModal
+                    v-show="showShareForm"
+                    @close="toggleShareForm"
+                    @code="addSharedList"
                 />
-            </ul>
-            <ListSharedFormModal
-                v-show="showShareForm"
-                @close="toggleShareForm"
-                @code="addSharedList"
-            />
-            <button @click="toggleShareForm">Add a sharing code</button>
-        </section>
+                <button @click="toggleShareForm">Add a sharing code</button>
+            </section>
+        </div>
     </main>
 </template>
 

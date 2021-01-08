@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="formMethod(formData)">
+    <form class="p-4 w-full" @submit.prevent="formMethod(formData)">
         <fieldset v-show="formType === 'register'">
             <label for="first-name">First Name</label>
             <input
@@ -45,7 +45,7 @@
                 placeholder="password"
             />
         </fieldset>
-        <button type="submit">
+        <button type="submit" class="form-btn">
             {{ formType === 'register' ? 'Register' : 'Login' }}
         </button>
     </form>
@@ -73,3 +73,18 @@ export default {
     },
 };
 </script>
+
+<style lang="postcss">
+fieldset {
+    @apply flex flex-col w-full;
+}
+
+input {
+    @apply w-full p-2;
+}
+
+button.form-btn {
+    width: 80%;
+    margin: 0.75rem auto;
+}
+</style>

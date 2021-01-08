@@ -1,8 +1,10 @@
 <template>
     <header
-        class="fixed h-20 w-screen flex justify-between items-center bg-white border-2 border-black p-4"
+        class="fixed h-20 w-screen flex justify-between items-center bg-white p-4"
     >
-        <NuxtLink to="/" class="logo"><h1>GiftList</h1></NuxtLink>
+        <NuxtLink :to="loggedIn ? '/app' : '/'" class="logo">
+            GiftList
+        </NuxtLink>
         <nav>
             <ul class="flex">
                 <li
@@ -10,15 +12,23 @@
                     v-show="page.auth === loggedIn"
                     :key="page.name"
                 >
-                    <NuxtLink :to="page.path">{{ page.name }}</NuxtLink>
+                    <NuxtLink v-if="page.name" :to="page.path">
+                        {{ page.name }}
+                    </NuxtLink>
+                    <NuxtLink v-else :to="page.path">
+                        <img
+                            src="@/assets/images/icons/User.svg"
+                            alt="user icon"
+                        />
+                    </NuxtLink>
                 </li>
-                <li
+                <!-- <li
                     v-show="this.$auth.loggedIn"
                     class="cursor-pointer"
                     @click="logout"
                 >
                     Logout
-                </li>
+                </li> -->
             </ul>
         </nav>
     </header>
@@ -29,11 +39,9 @@ export default {
     data() {
         const pages = [
             { path: '/', name: 'Home', auth: false },
-            { path: '/app', name: 'Dashboard', auth: true },
-            { path: '/app/lists', name: 'Lists', auth: true },
-            { path: '/app/profile', name: 'Profile', auth: true },
             { path: '/login', name: 'Login', auth: false },
             { path: '/register', name: 'Register', auth: false },
+            { path: '/app/profile', auth: true },
         ];
         return { pages };
     },
@@ -51,6 +59,10 @@ export default {
 </script>
 
 <style lang="postcss">
+header {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.8);
+}
+
 nav li a {
     @apply mx-4 py-2;
     border-bottom: 2px solid transparent;
@@ -59,7 +71,7 @@ nav li a {
 nav .nuxt-link-exact-active,
 nav ul li:hover a {
     @apply py-2;
-    border-bottom: 2px solid red;
+    border-bottom: 2px solid var(--actions);
 }
 
 nav .nuxt-link-exact-active.logo {

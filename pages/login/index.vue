@@ -1,7 +1,9 @@
 <template>
     <main>
-        <h1>Login</h1>
-        <UserForm :form-type="'login'" :form-method="loginUser" />
+        <div class="container login flex flex-col justify-center items-center">
+            <h1 class="form">Login</h1>
+            <UserForm :form-type="'login'" :form-method="loginUser" />
+        </div>
     </main>
 </template>
 
@@ -25,3 +27,9 @@ export default {
     },
 };
 </script>
+
+<style lang="postcss">
+.login {
+    width: 30%;
+}
+</style>

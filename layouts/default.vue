@@ -1,21 +1,60 @@
 <template>
     <div>
         <Header />
-        <Nuxt class="pt-20" />
-        <Footer />
+        <Nuxt />
+        <!-- <Footer /> -->
     </div>
 </template>
 
 <style lang="postcss">
+:root {
+    --primary: #749c75;
+    --secondary: #3e517a;
+    --actions: #ff8811;
+    --actions-hover: #ff8811ee;
+}
+
+*,
+*:after,
+*:before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    box-sizing: inherit;
+}
+
+main {
+    @apply p-4 pt-24 h-screen flex justify-center;
+}
+
+.container {
+    width: 100%;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 30px;
+}
+
 input {
-    @apply border-blue-500 border-2 rounded p-1 m-2;
+    @apply border-2 rounded p-1 my-2;
+    border-color: var(--secondary);
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--actions);
 }
 
 button {
-    @apply bg-blue-500 text-white p-2 rounded w-40 block m-4;
+    @apply text-white p-2 rounded w-40 block my-2;
+    background-color: var(--primary);
 
     &:hover {
-        @apply bg-blue-600;
+        background-color: var(--actions-hover);
     }
 }
 
