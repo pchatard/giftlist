@@ -1,0 +1,52 @@
+.dashboard {
+    min-height: calc(100vh - 8rem);
+    padding: 1rem 14rem;
+
+    h1 {
+        font-size: 4.5rem;
+        font-weight: bold;
+        line-height: 5.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .lists {
+        display: flex;
+        justify-content: space-around;
+
+        section {
+            width: 40rem;
+
+            .section-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                h2 {
+                    font-size: 3.5rem;
+                    font-weight: bold;
+                }
+
+                .btn-list {
+                    background-color: $cta;
+                    color: $white;
+                    font-size: 2rem;
+                    padding: 0.8rem 1.6rem;
+                    border-radius: 1rem;
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        margin-right: 1.2rem;
+                    }
+                }
+            }
+
+            ul {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                list-style: none;
+            }
+        }
+    }
+}

@@ -1,12 +1,12 @@
 <template>
     <main>
-        <div class="container">
-            <h1>Welcome, Pierre!</h1>
+        <div class="dashboard lg-container">
+            <h1>Welcome, {{ firstName }}!</h1>
             <div class="lists">
                 <section class="owner">
-                    <div class="owner-header">
+                    <div class="section-header">
                         <h2>My Lists</h2>
-                        <ButtonAddList @clicked="toggleForm" />
+                        <ButtonAddList class="btn-list" @clicked="toggleForm" />
                     </div>
                     <ul>
                         <ListPreview
@@ -26,9 +26,12 @@
                     />
                 </section>
                 <section class="friends">
-                    <div class="friends-header">
+                    <div class="section-header">
                         <h2>Friends Lists</h2>
-                        <ButtonAddList @clicked="toggleShareForm" />
+                        <ButtonAddList
+                            class="btn-list"
+                            @clicked="toggleShareForm"
+                        />
                     </div>
                     <ul>
                         <SharedListPreview
@@ -57,6 +60,11 @@ export default {
             showShareForm: false,
             lists: { mine: [], shared: [] },
         };
+    },
+    computed: {
+        firstName() {
+            return this.$auth.user.firstName;
+        },
     },
     async mounted() {
         this.lists = await this.$store.dispatch('lists/initialize');

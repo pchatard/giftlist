@@ -1,0 +1,65 @@
+li.list-preview {
+    border-radius: 1rem;
+    background: linear-gradient(
+            to right bottom,
+            $linear-bg-start,
+            $linear-bg-end
+        )
+        no-repeat;
+    margin: 1rem 0;
+    color: $white;
+    padding: 1.5rem 3rem;
+    padding-bottom: 2.5rem;
+    box-shadow: 1px 2px 4px rgba($black, 0.25);
+    overflow: visible;
+
+    .preview {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+
+        h3 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        span {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        &__info {
+            display: flex;
+            position: relative;
+
+            .shared {
+                cursor: pointer;
+                margin-right: 0.5rem;
+                position: relative;
+            }
+
+            .options {
+                cursor: pointer;
+                position: relative;
+            }
+        }
+    }
+
+    .btn-list-link {
+        background-color: $cta;
+        color: $white;
+        font-size: 2rem;
+        font-weight: 600;
+        padding: 0.8rem 1.6rem;
+        border-radius: 1rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            margin-right: 1.2rem;
+        }
+    }
+}

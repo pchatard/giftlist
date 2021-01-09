@@ -1,0 +1,51 @@
+header {
+    height: 8rem;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    width: 100vw;
+
+    background-color: $white;
+    box-shadow: 0px 1px 5px rgba($secondary, 0.2);
+
+    @include lg-container-padding(5rem);
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        // Add Typography Styling
+
+        .logo {
+            font-size: 3rem;
+        }
+
+        nav ul {
+            display: flex;
+
+            // li a {
+            //     // @apply mx-4 py-2;
+            //     border-bottom: 2px solid transparent;
+            // }
+
+            // li .nuxt-link-exact-active {
+            //     border-bottom: 2px solid $primary;
+            // }
+
+            // nav .nuxt-link-exact-active,
+            // nav ul li:hover a {
+            //     @apply py-2;
+            //     border-bottom: 2px solid var(--actions);
+            // }
+
+            // nav .nuxt-link-exact-active.logo {
+            //     border: none;
+            // }
+
+            .profile-icon {
+                width: 3rem;
+            }
+        }
+    }
+}
