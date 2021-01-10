@@ -1,11 +1,12 @@
 <template>
     <Modal @close="$emit('close')">
-        <form
-            class="flex flex-col justify-between px-8 py-4"
-            @submit.prevent="$emit('update', newName)"
-        >
+        <div class="">
+            <h2>Edit a list</h2>
+            <CloseIcon @click="$emit('close')" />
+        </div>
+        <form class="" @submit.prevent="$emit('update', newName)">
             <label>
-                Name
+                Edit the name of your list:
                 <input v-model="newName" type="text" />
             </label>
             <button type="submit">Save</button>

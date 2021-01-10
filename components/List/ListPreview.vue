@@ -75,18 +75,6 @@ export default {
         };
     },
     computed: {
-        creationDate() {
-            const date = new Date(this.list.created_at);
-            return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date
-                .getMinutes()
-                .toLocaleString(undefined, { minimumIntegerDigits: 2 })}`;
-        },
-        modificationDate() {
-            const date = new Date(this.list.modified_at);
-            return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date
-                .getMinutes()
-                .toLocaleString(undefined, { minimumIntegerDigits: 2 })}`;
-        },
         sharedNumber() {
             return this.list.sharedWith ? this.list.sharedWith.length : 0;
         },

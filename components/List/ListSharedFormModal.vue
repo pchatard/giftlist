@@ -1,8 +1,12 @@
 <template>
     <Modal @close="$emit('close')">
-        <form @submit.prevent="handleSubmit">
+        <div class="">
+            <h2>Find a friend's list</h2>
+            <CloseIcon @click="$emit('close')" />
+        </div>
+        <form class="" @submit.prevent="handleSubmit">
             <label>
-                Enter the list code:
+                Enter the list sharing code:
                 <input v-model="code" type="text" />
             </label>
             <button type="submit">Submit</button>

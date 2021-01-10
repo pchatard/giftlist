@@ -1,14 +1,17 @@
 <template>
     <Modal @close="$emit('close')">
-        <form class="flex flex-col items-start" @submit.prevent="create">
-            <label for="new-list">List name</label>
+        <div class="">
+            <h2>Create a new list</h2>
+            <CloseIcon @click="$emit('close')" />
+        </div>
+        <form class="" @submit.prevent="create">
+            <label for="new-list">Choose a title for your new list</label>
             <input
                 id="new-list"
                 v-model="newListName"
                 type="text"
                 placeholder="Birthday"
             />
-            <button type="button" @click="$emit('close')">Annuler</button>
             <button type="submit">Create</button>
         </form>
     </Modal>

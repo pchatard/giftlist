@@ -1,6 +1,6 @@
 <template>
     <Bubble class="bubble__options">
-        <button class="options-btn">
+        <button class="options-btn" @click="$emit('info')">
             <img
                 src="@/assets/images/icons/Information.svg"
                 alt="Information Icon"

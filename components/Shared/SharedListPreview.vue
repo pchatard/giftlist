@@ -18,14 +18,20 @@
                 <SharedListOptionsBubble
                     v-show="showOptions"
                     @close="toggleOptions"
+                    @info="toggleInfo"
                 />
-                <!-- @delete="removeSharedList" @info="toggleInfo"
+                <!-- @delete="removeSharedList" 
                      -->
             </div>
         </div>
         <NuxtLink :to="link" tag="button" class="btn-list-link">
             Choose your gift
         </NuxtLink>
+        <SharedListInfoModal
+            v-show="showInfo"
+            :list="sharedList"
+            @close="toggleInfo"
+        />
     </li>
 </template>
 
@@ -40,6 +46,7 @@ export default {
     data() {
         return {
             showOptions: false,
+            showInfo: false,
         };
     },
     computed: {
@@ -50,6 +57,9 @@ export default {
     methods: {
         toggleOptions() {
             this.showOptions = !this.showOptions;
+        },
+        toggleInfo() {
+            this.showInfo = !this.showInfo;
         },
     },
 };

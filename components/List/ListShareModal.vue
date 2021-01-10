@@ -1,11 +1,16 @@
 <template>
     <Modal @close="$emit('close')">
-        <h1>Share your list</h1>
+        <div class="">
+            <h2>Share your list</h2>
+            <CloseIcon @click="$emit('close')" />
+        </div>
 
         <section v-if="code">
+            <p>This list is currently <span class="">public</span></p>
             <div>
                 <label>
-                    Give this code to your friends so they can see your list.
+                    Copy and share this code with your friends so they can see
+                    your list and choose one of your wishes.
                     <input
                         :id="`input-code-${listId}`"
                         :value="code"
@@ -13,34 +18,24 @@
                         disabled
                     />
                 </label>
+                <button @click="handleCode">Copy code</button>
+            </div>
+            <div>
+                <p>Or copy and share this link with them directly.</p>
                 <p>
-                    once they'll have added it to their account, they will be
-                    able to see your list !
+                    {{ link }}
                 </p>
-                <button @click="handleCode">Code</button>
-            </div>
-            <div>
-                <label>
-                    Share this link with your friends so they can see your list.
-                    <input
-                        :id="`input-link-${listId}`"
-                        :value="link"
-                        type="url"
-                        disabled
-                    />
-                </label>
                 <p>Note: They will need an account to see it.</p>
-                <button @click="handleLink">Link</button>
+
+                <button @click="handleLink">Copy link</button>
             </div>
-            <div>
-                <button @click="handlePrivate">Make private</button>
-            </div>
+            <button @click="handlePrivate">Turn list private</button>
         </section>
 
         <section v-else>
-            This list is currently private. Make it public by generating your
-            sharing code and link.
-            <button @click="$emit('generate', listId)">Share my list</button>
+            <p>This list is currently<span>private</span>.</p>
+            <p>Make it public by clicking the <span>Share</span> button.</p>
+            <button @click="$emit('generate', listId)">Share</button>
         </section>
     </Modal>
 </template>
@@ -79,11 +74,9 @@ export default {
     methods: {
         async handleCode() {
             await this.$copyText(this.code);
-            alert('Copied code');
         },
         async handleLink() {
             await this.$copyText(this.link);
-            alert('Copied link');
         },
         handlePrivate() {
             this.$emit('private', this.listId);
