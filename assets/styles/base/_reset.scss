@@ -20,3 +20,19 @@ main {
     padding-top: 8rem;
     min-height: 100vh;
 }
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+a,
+a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}

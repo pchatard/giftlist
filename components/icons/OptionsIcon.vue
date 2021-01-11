@@ -46,8 +46,6 @@ export default {
     },
     methods: {
         hovered(leaving = true) {
-            if (leaving) this.$emit('show');
-            else this.$emit('hide');
             this.color = leaving ? '#78C3FB' : this.options;
         },
     },

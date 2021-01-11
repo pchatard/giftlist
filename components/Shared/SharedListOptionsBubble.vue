@@ -1,17 +1,13 @@
 <template>
     <Bubble class="bubble__options">
-        <button class="options-btn" @click="$emit('info')">
-            <img
-                src="@/assets/images/icons/Information.svg"
-                alt="Information Icon"
-                class="info"
-            />
+        <button class="btn-bubble" @click="$emit('info')">
+            <InfoIcon class="info" />
             Information
         </button>
-        <button class="options-btn">
-            <img src="@/assets/images/icons/Delete.svg" alt="Delete Icon" />
+        <button class="btn-bubble">
+            <CloseIcon :options="'white'" :hover="false" />
             Remove list
         </button>
-        <button class="options-btn" @click="$emit('close')">Close</button>
+        <button class="btn-bubble" @click="$emit('close')">Close</button>
     </Bubble>
 </template>

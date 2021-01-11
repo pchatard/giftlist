@@ -13,8 +13,19 @@
 }
 .modal {
     background-color: $white;
-    width: 30%;
-    padding: 1.6rem 3.2rem;
+    padding: 2.5rem;
     box-shadow: 4px 4px 10px rgba($black, 0.2);
     border-radius: 1rem;
+    min-width: 46rem;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+    }
 }

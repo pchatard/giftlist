@@ -6,7 +6,10 @@
                 <section class="owner">
                     <div class="section-header">
                         <h2>My Lists</h2>
-                        <ButtonAddList class="btn-list" @clicked="toggleForm" />
+                        <ButtonAddList
+                            class="btn btn-list"
+                            @clicked="toggleForm"
+                        />
                     </div>
                     <ul>
                         <ListPreview
@@ -29,7 +32,7 @@
                     <div class="section-header">
                         <h2>Friends Lists</h2>
                         <ButtonAddList
-                            class="btn-list"
+                            class="btn btn-list"
                             @clicked="toggleShareForm"
                         />
                     </div>
@@ -40,7 +43,7 @@
                             :shared-list="list"
                         />
                     </ul>
-                    <ListSharedFormModal
+                    <SharedListFormModal
                         v-show="showShareForm"
                         @close="toggleShareForm"
                         @code="addSharedList"

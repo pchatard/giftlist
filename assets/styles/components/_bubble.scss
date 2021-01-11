@@ -43,33 +43,17 @@
             top: -1.4rem;
             left: 5.65rem;
         }
-    }
 
-    .options-btn {
-        font-size: 2rem;
-        padding: 0.5rem 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-
+        svg,
         img {
-            height: 2.4rem;
+            height: 2rem;
+            width: auto;
             position: absolute;
             left: 1rem;
 
             &.info {
-                height: 2rem;
-                left: 2rem;
+                left: 1.6rem;
             }
-        }
-
-        &:not(:last-child) {
-            border-bottom: 1px solid rgba(#c4c4c4, 0.5);
-        }
-
-        &:hover {
-            background-color: rgba(#c4c4c4, 0.2);
         }
     }
 }

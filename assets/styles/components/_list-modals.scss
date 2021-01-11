@@ -1,0 +1,94 @@
+.modal__new-list,
+.modal__edit-list,
+.modal__share-list,
+.modal__shared-new-list,
+.modal__shared-list-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: $black;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        margin-top: 1.5rem;
+
+        label {
+            font-size: 1.8rem;
+            font-weight: normal;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+
+            &::placeholder {
+                color: rgba(#c4c4c4, 0.8);
+            }
+        }
+    }
+
+    section {
+        display: flex;
+        flex-direction: column;
+
+        margin-top: 1.5rem;
+
+        strong {
+            font-weight: bold;
+        }
+
+        .share-status {
+            margin-bottom: 1rem;
+        }
+
+        .share-code {
+            width: 100%;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #c4c4c4;
+
+            input {
+                margin: 1rem 0;
+            }
+
+            button {
+                margin: 0;
+            }
+        }
+
+        .share-link {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #c4c4c4;
+
+            p {
+                margin-top: 1rem;
+            }
+
+            .link {
+                color: $linear-bg-start;
+            }
+
+            button {
+                margin-top: 1rem;
+            }
+        }
+
+        button {
+            margin-top: 2rem;
+        }
+    }
+
+    ul {
+        margin: 1rem 0;
+        font-size: 1.8rem;
+
+        li {
+            margin: 0.5rem 0;
+            span {
+                font-weight: bold;
+            }
+        }
+    }
+}

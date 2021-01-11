@@ -1,42 +1,64 @@
 <template>
     <Modal @close="$emit('close')">
-        <div class="">
-            <h2>Share your list</h2>
-            <CloseIcon @click="$emit('close')" />
-        </div>
+        <div class="modal__share-list">
+            <div class="modal__header">
+                <h2>Share your list</h2>
+                <CloseIcon cursor="pointer" @close="$emit('close')" />
+            </div>
+            <section v-if="code">
+                <p class="share-status">
+                    This list is currently <strong>public</strong>.
+                </p>
 
-        <section v-if="code">
-            <p>This list is currently <span class="">public</span></p>
-            <div>
-                <label>
-                    Copy and share this code with your friends so they can see
-                    your list and choose one of your wishes.
+                <div class="share-code">
+                    <label>
+                        Copy and share this code with your friends so they can
+                        see your list and choose one of your wishes.
+                    </label>
                     <input
                         :id="`input-code-${listId}`"
                         :value="code"
                         type="text"
+                        class="ipt"
                         disabled
                     />
-                </label>
-                <button @click="handleCode">Copy code</button>
-            </div>
-            <div>
-                <p>Or copy and share this link with them directly.</p>
+                    <button class="btn btn-list btn-full" @click="handleCode">
+                        Copy code
+                    </button>
+                </div>
+
+                <div class="share-link">
+                    <p>Or copy and share this link with them directly.</p>
+                    <p class="link">
+                        {{ link }}
+                    </p>
+
+                    <button class="btn btn-list btn-full" @click="handleLink">
+                        Copy link
+                    </button>
+
+                    <p>Note: They will need an account to see it.</p>
+                </div>
+
+                <button class="btn btn-danger btn-full" @click="handlePrivate">
+                    Turn list private
+                </button>
+            </section>
+
+            <section v-else>
+                <p>Your list is currently <strong>private</strong>.</p>
                 <p>
-                    {{ link }}
+                    Make it public by clicking the
+                    <strong>Share</strong> button.
                 </p>
-                <p>Note: They will need an account to see it.</p>
-
-                <button @click="handleLink">Copy link</button>
-            </div>
-            <button @click="handlePrivate">Turn list private</button>
-        </section>
-
-        <section v-else>
-            <p>This list is currently<span>private</span>.</p>
-            <p>Make it public by clicking the <span>Share</span> button.</p>
-            <button @click="$emit('generate', listId)">Share</button>
-        </section>
+                <button
+                    class="btn btn-list btn-full"
+                    @click="$emit('generate', listId)"
+                >
+                    Share
+                </button>
+            </section>
+        </div>
     </Modal>
 </template>
 

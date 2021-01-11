@@ -36,7 +36,7 @@
         <NuxtLink
             :to="`/app/lists/${list.id}`"
             tag="button"
-            class="btn-list-link"
+            class="btn btn-list btn-full"
         >
             Add new gift ideas
         </NuxtLink>
@@ -88,7 +88,9 @@ export default {
         },
         toggleEditMode() {
             this.editMode = !this.editMode;
-            this.toggleOptions();
+            if (this.showOptions) {
+                this.toggleOptions();
+            }
         },
         updateList(newName) {
             this.$emit('update', { name: newName, id: this.list.id });
@@ -96,7 +98,9 @@ export default {
         },
         toggleSharingMode() {
             this.sharingMode = !this.sharingMode;
-            this.toggleOptions();
+            if (this.showOptions) {
+                this.toggleOptions();
+            }
         },
         generateSharingCode(listId) {
             this.$emit('share', listId);

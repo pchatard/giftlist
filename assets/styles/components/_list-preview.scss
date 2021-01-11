@@ -45,21 +45,4 @@ li.list-preview {
             }
         }
     }
-
-    .btn-list-link {
-        background-color: $cta;
-        color: $white;
-        font-size: 2rem;
-        font-weight: 600;
-        padding: 0.8rem 1.6rem;
-        border-radius: 1rem;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
-            margin-right: 1.2rem;
-        }
-    }
 }

@@ -1,16 +1,25 @@
 <template>
     <Modal @close="$emit('close')">
-        <div class="">
-            <h2>Edit a list</h2>
-            <CloseIcon @click="$emit('close')" />
+        <div class="modal__edit-list">
+            <div class="modal__header">
+                <h2>Edit a list</h2>
+                <CloseIcon cursor="pointer" @close="$emit('close')" />
+            </div>
+            <form @submit.prevent="$emit('update', newName)">
+                <label for="list-ipt-editor">
+                    Edit the name of your list:
+                </label>
+                <input
+                    id="list-ipt-editor"
+                    v-model="newName"
+                    class="ipt"
+                    type="text"
+                />
+                <button type="submit" class="btn btn-list btn-full">
+                    Save changes
+                </button>
+            </form>
         </div>
-        <form class="" @submit.prevent="$emit('update', newName)">
-            <label>
-                Edit the name of your list:
-                <input v-model="newName" type="text" />
-            </label>
-            <button type="submit">Save</button>
-        </form>
     </Modal>
 </template>
 

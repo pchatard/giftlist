@@ -37,7 +37,6 @@ export default {
     buildModules: [
         // https://go.nuxtjs.dev/eslint
         '@nuxtjs/eslint-module',
-        '@nuxtjs/tailwindcss',
         '@nuxtjs/fontawesome',
     ],
 
