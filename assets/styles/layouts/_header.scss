@@ -24,27 +24,14 @@ header {
         nav ul {
             display: flex;
 
-            // li a {
-            //     // @apply mx-4 py-2;
-            //     border-bottom: 2px solid transparent;
-            // }
+            li {
+                position: relative;
 
-            // li .nuxt-link-exact-active {
-            //     border-bottom: 2px solid $primary;
-            // }
-
-            // nav .nuxt-link-exact-active,
-            // nav ul li:hover a {
-            //     @apply py-2;
-            //     border-bottom: 2px solid var(--actions);
-            // }
-
-            // nav .nuxt-link-exact-active.logo {
-            //     border: none;
-            // }
-
-            .profile-icon {
-                width: 3rem;
+                svg {
+                    height: 2.4rem;
+                    width: auto;
+                    margin-left: 3rem;
+                }
             }
         }
     }

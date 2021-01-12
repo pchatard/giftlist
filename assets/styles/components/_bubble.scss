@@ -4,7 +4,6 @@
     background-color: $black;
     border-radius: 1rem;
     color: $white;
-    // overflow: hidden;
 
     &__share {
         width: 30rem;
@@ -55,5 +54,14 @@
                 left: 1.6rem;
             }
         }
+    }
+
+    &__header {
+        background-color: $black;
+        color: $white;
+        position: absolute;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        left: 20%;
     }
 }

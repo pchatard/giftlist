@@ -18,11 +18,15 @@
                     </li>
                     <li>
                         <NuxtLink v-show="loggedIn" to="/app/profile">
-                            <img
-                                src="@/assets/images/icons/User.svg"
-                                alt="Profile Icon"
-                                class="profile-icon"
+                            <UserIcon
+                                :options="'black'"
+                                :active="profileActive"
+                                @show="toggleUserBubble"
+                                @hide="toggleUserBubble"
                             />
+                            <HeaderBubble v-show="showUserBubble">
+                                Profile
+                            </HeaderBubble>
                         </NuxtLink>
                     </li>
 
@@ -31,7 +35,15 @@
                         class="cursor-pointer"
                         @click="logout"
                     >
-                        Logout
+                        <PowerIcon
+                            cursor="pointer"
+                            :options="'black'"
+                            @show="toggleLogoutBubble"
+                            @hide="toggleLogoutBubble"
+                        />
+                        <HeaderBubble v-show="showLogoutBubble">
+                            Logout
+                        </HeaderBubble>
                     </li>
                 </ul>
             </nav>
@@ -41,14 +53,29 @@
 
 <script>
 export default {
+    data() {
+        return {
+            showUserBubble: false,
+            showLogoutBubble: false,
+        };
+    },
     computed: {
         loggedIn() {
             return this.$auth.loggedIn;
+        },
+        profileActive() {
+            return this.$route.name === 'app-profile';
         },
     },
     methods: {
         async logout() {
             await this.$auth.logout();
+        },
+        toggleUserBubble() {
+            this.showUserBubble = !this.showUserBubble;
+        },
+        toggleLogoutBubble() {
+            this.showLogoutBubble = !this.showLogoutBubble;
         },
     },
 };
