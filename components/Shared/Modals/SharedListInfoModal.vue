@@ -3,7 +3,7 @@
         <div class="modal__shared-list-info">
             <div class="modal__header">
                 <h2>List Information</h2>
-                <CloseIcon cursor="pointer" @close="$emit('close')" />
+                <CloseIcon cursor="pointer" @click="$emit('close')" />
             </div>
             <ul>
                 <li><span>Title</span>: {{ list.name }}</li>

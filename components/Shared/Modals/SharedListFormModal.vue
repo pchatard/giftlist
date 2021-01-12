@@ -3,7 +3,7 @@
         <div class="modal__shared-new-list">
             <div class="modal__header">
                 <h2>Find a friend's list</h2>
-                <CloseIcon cursor="pointer" @close="$emit('close')" />
+                <CloseIcon cursor="pointer" @click="$emit('close')" />
             </div>
             <form @submit.prevent="handleSubmit">
                 <label for="shared-list-ipt-creator">

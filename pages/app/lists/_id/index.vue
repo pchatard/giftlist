@@ -1,48 +1,68 @@
 <template>
     <main>
-        <h1>{{ list.name }}</h1>
-        <button @click="toggleForm">New Gift</button>
-        <section>
-            <h2 class="text-red-600">Favorites</h2>
-            <ul v-show="favGifts.length">
-                <GiftItem
-                    v-for="gift in favGifts"
-                    :key="gift.id"
-                    :gift="gift"
-                    @update="handleUpdateGift"
-                    @remove="handleRemoveGift"
-                    @favorite="handleFavoriteGift"
-                />
-            </ul>
-        </section>
-        <section>
-            <h2 class="text-red-600">Wishlist</h2>
-            <ul v-show="otherGifts.length">
-                <GiftItem
-                    v-for="gift in otherGifts"
-                    :key="gift.id"
-                    :gift="gift"
-                    @update="handleUpdateGift"
-                    @remove="handleRemoveGift"
-                    @favorite="handleFavoriteGift"
-                />
-            </ul>
-        </section>
+        <div class="list lg-container">
+            <div class="list__header">
+                <h1>{{ list.name }}</h1>
+                <button class="btn btn-list" @click="toggleForm">
+                    New gift
+                </button>
+            </div>
 
-        <!-- Hide when visiting a friend's list -->
-        <GiftFormModal
-            v-show="showForm"
-            @close="toggleForm"
-            @create="handleCreateGift"
-        />
+            <div class="list__content">
+                <section class="gifts">
+                    <div class="favorites">
+                        <h2>Favorite gifts</h2>
+                        <ul v-show="favGifts.length">
+                            <GiftPreview
+                                v-for="gift in favGifts"
+                                :key="gift.id"
+                                :selected="selectedGiftId === gift.id"
+                                :gift="gift"
+                                @select="selectGift"
+                                @update="handleUpdateGift"
+                                @remove="handleRemoveGift"
+                                @favorite="handleFavoriteGift"
+                            />
+                        </ul>
+                    </div>
 
-        <!--
-        <section>
-            Hide when visiting a friend's list
-            <h2>Diffusion</h2>
-            Handle diffusion: make it private / public, diffusion link, add user
-        </section>
-        -->
+                    <div class="normal">
+                        <h2>Wishlist</h2>
+                        <ul v-show="otherGifts.length">
+                            <GiftPreview
+                                v-for="gift in otherGifts"
+                                :key="gift.id"
+                                :gift="gift"
+                                :selected="selectedGiftId === gift.id"
+                                @select="selectGift"
+                                @update="handleUpdateGift"
+                                @remove="handleRemoveGift"
+                                @favorite="handleFavoriteGift"
+                            />
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="vl"></div>
+
+                <section class="editor">
+                    <h2 v-if="!selectedGiftId">
+                        Select a gift to update its details
+                    </h2>
+                    <GiftEditor
+                        v-else
+                        :gift="selectedGift"
+                        @update="handleUpdateGift"
+                    />
+                </section>
+            </div>
+
+            <GiftFormModal
+                v-show="showForm"
+                @close="toggleForm"
+                @create="handleCreateGift"
+            />
+        </div>
     </main>
 </template>
 
@@ -50,13 +70,12 @@
 import { mapActions } from 'vuex';
 
 export default {
-    // Use this to edit the list quickly, along with contenteditable="true" and @focusout="updateValue"
     data() {
         return {
-            // pValue: '',
             showForm: false,
             list: {},
             gifts: [],
+            selectedGiftId: '',
         };
     },
     computed: {
@@ -65,6 +84,15 @@ export default {
         },
         otherGifts() {
             return this.gifts.filter((gift) => !gift.favorite);
+        },
+        selectedGift() {
+            if (this.selectedGiftId) {
+                return this.gifts.find(
+                    (gift) => gift.id === this.selectedGiftId
+                );
+            } else {
+                return {};
+            }
         },
     },
     async mounted() {
@@ -91,6 +119,9 @@ export default {
         },
         handleRemoveGift(giftId) {
             this.deleteGift({ giftId, listId: this.list.id });
+            if (this.selectedGiftId === giftId) {
+                this.selectedGiftId = '';
+            }
         },
         handleFavoriteGift(giftId, newFavoriteState) {
             this.favGift({
@@ -102,11 +133,15 @@ export default {
         handleUpdateGift(updatedGift) {
             this.updateGift(updatedGift);
         },
-        // updateValue(e) {
-        //     this.pValue = e.target.textContent;
-        // },
         toggleForm() {
             this.showForm = !this.showForm;
+        },
+        selectGift(id) {
+            if (this.selectedGiftId !== id) {
+                this.selectedGiftId = id;
+            } else {
+                this.selectedGiftId = '';
+            }
         },
     },
 };

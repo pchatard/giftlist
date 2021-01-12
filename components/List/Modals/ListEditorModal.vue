@@ -3,7 +3,7 @@
         <div class="modal__edit-list">
             <div class="modal__header">
                 <h2>Edit a list</h2>
-                <CloseIcon cursor="pointer" @close="$emit('close')" />
+                <CloseIcon cursor="pointer" @click="$emit('close')" />
             </div>
             <form @submit.prevent="$emit('update', newName)">
                 <label for="list-ipt-editor">

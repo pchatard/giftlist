@@ -3,7 +3,7 @@
         <div class="modal__share-list">
             <div class="modal__header">
                 <h2>Share your list</h2>
-                <CloseIcon cursor="pointer" @close="$emit('close')" />
+                <CloseIcon cursor="pointer" @click="$emit('close')" />
             </div>
             <section v-if="code">
                 <p class="share-status">

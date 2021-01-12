@@ -1,11 +1,6 @@
 li.list-preview {
     border-radius: 1rem;
-    background: linear-gradient(
-            to right bottom,
-            $linear-bg-start,
-            $linear-bg-end
-        )
-        no-repeat;
+    background: linear-gradient(to right bottom, $primary, $secondary) no-repeat;
     margin: 1rem 0;
     color: $white;
     padding: 1.5rem 3rem;

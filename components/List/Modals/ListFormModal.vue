@@ -3,7 +3,7 @@
         <div class="modal__new-list">
             <div class="modal__header">
                 <h2>Create a new list</h2>
-                <CloseIcon cursor="pointer" @close="$emit('close')" />
+                <CloseIcon cursor="pointer" @click="$emit('close')" />
             </div>
             <form @submit.prevent="create">
                 <label for="list-ipt-creator">

@@ -1,0 +1,48 @@
+.gift-preview {
+    width: 70%;
+    padding: 0.4rem;
+    margin: 0.5rem 0;
+
+    border-radius: 1.2rem;
+    cursor: pointer;
+
+    &.selected,
+    &:hover {
+        background: linear-gradient(to right bottom, $primary, $secondary);
+        box-shadow: 2px 4px 4px rgba($black, 0.25);
+
+        .preview {
+            border: none;
+            box-shadow: none;
+        }
+    }
+
+    .preview {
+        border: 2px solid;
+        border-radius: 1rem;
+        background: $white;
+        height: 6rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 2px 4px 4px rgba($black, 0.25);
+        padding: 0 2rem;
+
+        &__left {
+            display: flex;
+            align-items: center;
+
+            h3 {
+                font-size: 2.2rem;
+            }
+
+            .heart {
+                font-size: 2rem;
+                margin-right: 1.5rem;
+                &.red {
+                    color: red;
+                }
+            }
+        }
+    }
+}
