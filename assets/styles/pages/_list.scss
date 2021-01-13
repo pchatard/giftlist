@@ -18,6 +18,10 @@
             margin-bottom: 1rem;
         }
 
+        h2 {
+            margin-left: 1.5rem;
+        }
+
         button {
             margin-left: 8rem;
             font-weight: 400;
@@ -100,6 +104,61 @@
 
                 button {
                     margin-top: 1rem;
+                }
+            }
+
+            .shared-preview {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                .header {
+                    display: flex;
+                    align-items: baseline;
+
+                    h2 {
+                        font-size: 3rem;
+                        margin-bottom: 2rem;
+
+                        .red {
+                            color: $primary;
+                            margin-right: 2rem;
+                        }
+                    }
+
+                    a {
+                        margin-left: 2rem;
+                        color: $primary;
+                    }
+                }
+
+                ul {
+                    font-size: 2rem;
+
+                    li {
+                        margin-bottom: 1rem;
+
+                        span {
+                            font-weight: bold;
+                            margin-right: 1rem;
+                        }
+                    }
+                }
+
+                button {
+                    margin-top: 2rem;
+                    align-self: start;
+                    width: 30%;
+
+                    &.booked {
+                        background-color: $primary;
+                    }
+                }
+
+                & > span {
+                    font-weight: 2rem;
+                    color: $primary;
                 }
             }
         }

@@ -40,9 +40,22 @@
                 font-size: 2rem;
                 margin-right: 1.5rem;
                 &.red {
-                    color: red;
+                    color: $primary;
                 }
             }
+        }
+
+        button {
+            font-size: 1.6rem;
+            width: 8rem;
+
+            &.booked {
+                background-color: $primary;
+            }
+        }
+
+        span {
+            color: $primary;
         }
     }
 }

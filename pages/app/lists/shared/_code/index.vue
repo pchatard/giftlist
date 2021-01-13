@@ -1,30 +1,72 @@
 <template>
-    <div>
-        <h1>Shared List</h1>
-        <h2>{{ list.name }} - {{ list.owner }}</h2>
-        <section>
-            <h2 class="text-red-600">Favorites</h2>
-            <ul v-show="favGifts.length">
-                <SharedGift
-                    v-for="gift in favGifts"
-                    :key="gift.id"
-                    :shared-gift="gift"
-                    @book="handleBookGift"
-                />
-            </ul>
-        </section>
-        <section>
-            <h2 class="text-red-600">Wishlist</h2>
-            <ul v-show="otherGifts.length">
-                <SharedGift
-                    v-for="gift in otherGifts"
-                    :key="gift.id"
-                    :shared-gift="gift"
-                    @book="handleBookGift"
-                />
-            </ul>
-        </section>
-    </div>
+    <main>
+        <div class="list lg-container">
+            <div class="list__header">
+                <h1>{{ list.name }}</h1>
+                <h2>by {{ list.owner }}</h2>
+            </div>
+
+            <div class="list__content">
+                <section class="gifts">
+                    <div class="favorites">
+                        <h2>Favorites</h2>
+                        <ul v-show="favGifts.length">
+                            <GiftPreview
+                                v-for="gift in favGifts"
+                                :key="gift.id"
+                                :gift="gift"
+                                :share-mode="true"
+                                :selected="selectedGiftId === gift.id"
+                                @select="selectGift"
+                                @book="handleBookGift"
+                            />
+                        </ul>
+                    </div>
+                    <div class="normal">
+                        <h2>Wishlist</h2>
+                        <ul v-show="otherGifts.length">
+                            <GiftPreview
+                                v-for="gift in otherGifts"
+                                :key="gift.id"
+                                :gift="gift"
+                                :share-mode="true"
+                                :selected="selectedGiftId === gift.id"
+                                @select="selectGift"
+                                @book="handleBookGift"
+                            />
+                        </ul>
+                    </div>
+                    <div class="taken">
+                        <h2>Already Booked</h2>
+                        <ul v-show="takenGifts.length">
+                            <GiftPreview
+                                v-for="gift in takenGifts"
+                                :key="gift.id"
+                                :gift="gift"
+                                :share-mode="true"
+                                :selected="selectedGiftId === gift.id"
+                                @select="selectGift"
+                                @book="handleBookGift"
+                            />
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="vl"></div>
+
+                <section class="editor">
+                    <h2 v-if="!selectedGiftId">
+                        Select a gift to see its details
+                    </h2>
+                    <SharedGiftPreview
+                        v-else
+                        :gift="selectedGift"
+                        @book="handleBookGift"
+                    />
+                </section>
+            </div>
+        </div>
+    </main>
 </template>
 
 <script>
@@ -34,14 +76,37 @@ export default {
         return {
             list: {},
             gifts: [],
+            selectedGiftId: '',
         };
     },
     computed: {
         favGifts() {
-            return this.gifts.filter((gift) => gift.favorite);
+            return this.gifts.filter(
+                (gift) =>
+                    gift.favorite &&
+                    !(gift.booked !== this.$auth.user.id && gift.booked)
+            );
         },
         otherGifts() {
-            return this.gifts.filter((gift) => !gift.favorite);
+            return this.gifts.filter(
+                (gift) =>
+                    !gift.favorite &&
+                    !(gift.booked !== this.$auth.user.id && gift.booked)
+            );
+        },
+        takenGifts() {
+            return this.gifts.filter(
+                (gift) => gift.booked !== this.$auth.user.id && gift.booked
+            );
+        },
+        selectedGift() {
+            if (this.selectedGiftId) {
+                return this.gifts.find(
+                    (gift) => gift.id === this.selectedGiftId
+                );
+            } else {
+                return {};
+            }
         },
     },
     async mounted() {
@@ -57,6 +122,13 @@ export default {
         ...mapActions({ bookGift: 'gifts/bookGift' }),
         handleBookGift(payload) {
             this.bookGift(payload);
+        },
+        selectGift(id) {
+            if (this.selectedGiftId !== id) {
+                this.selectedGiftId = id;
+            } else {
+                this.selectedGiftId = '';
+            }
         },
     },
 };
