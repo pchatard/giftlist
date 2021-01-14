@@ -12,6 +12,7 @@
 
 <script>
 export default {
+    middleware: 'redirectMid',
     computed: {
         name() {
             const firstName = this.$auth.user.firstName;

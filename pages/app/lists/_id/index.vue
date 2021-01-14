@@ -70,6 +70,7 @@
 import { mapActions } from 'vuex';
 
 export default {
+    middleware: 'redirectMid',
     data() {
         return {
             showForm: false,

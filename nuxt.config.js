@@ -16,10 +16,6 @@ export default {
 
     serverMiddleware: { '/api': '~/api' },
 
-    router: {
-        middleware: ['auth'],
-    },
-
     env: {
         projectUrl: process.env.PROJECT_URL,
     },
