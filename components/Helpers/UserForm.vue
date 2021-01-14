@@ -1,51 +1,56 @@
 <template>
-    <form class="p-4 w-full" @submit.prevent="formMethod(formData)">
-        <fieldset v-show="formType === 'register'">
+    <form @submit.prevent="formMethod(formData)">
+        <div v-show="formType === 'register'">
             <label for="first-name">First Name</label>
             <input
                 id="first-name"
                 v-model="formData.firstName"
                 type="text"
                 placeholder="John"
+                class="ipt"
             />
-        </fieldset>
-        <fieldset v-show="formType === 'register'">
+        </div>
+        <div v-show="formType === 'register'">
             <label for="last-name">Last Name</label>
             <input
                 id="last-name"
                 v-model="formData.lastName"
                 type="text"
                 placeholder="Doe"
+                class="ipt"
             />
-        </fieldset>
-        <fieldset>
+        </div>
+        <div>
             <label for="email">E-mail</label>
             <input
                 id="email"
                 v-model="formData.email"
                 type="email"
                 placeholder="abcd.efgh@example.com"
+                class="ipt"
             />
-        </fieldset>
-        <fieldset>
+        </div>
+        <div>
             <label for="password">Password</label>
             <input
                 id="password"
                 v-model="formData.password"
                 type="password"
                 placeholder="password"
+                class="ipt"
             />
-        </fieldset>
-        <fieldset v-show="formType === 'register'">
+        </div>
+        <div v-show="formType === 'register'">
             <label for="password-confirm">Confirm password</label>
             <input
                 id="password-confirm"
                 v-model="formData.passwordConfirmation"
                 type="password"
                 placeholder="password"
+                class="ipt"
             />
-        </fieldset>
-        <button type="submit" class="form-btn">
+        </div>
+        <button type="submit" class="btn btn-list btn-full">
             {{ formType === 'register' ? 'Register' : 'Login' }}
         </button>
     </form>

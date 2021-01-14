@@ -6,12 +6,12 @@
             </NuxtLink>
             <nav>
                 <ul>
-                    <li>
+                    <li class="text">
                         <NuxtLink v-show="!loggedIn" to="/login">
                             Login
                         </NuxtLink>
                     </li>
-                    <li>
+                    <li class="text">
                         <NuxtLink v-show="!loggedIn" to="/register">
                             Register
                         </NuxtLink>

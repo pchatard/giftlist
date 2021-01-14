@@ -1,4 +1,6 @@
-.ipt[type='text'] {
+.ipt[type='text'],
+.ipt[type='email'],
+.ipt[type='password'] {
     border: 2px solid #c4c4c4;
     border-radius: 1rem;
     padding: 1.2rem;

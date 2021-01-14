@@ -1,9 +1,11 @@
 <template>
     <main>
-        <div
-            class="container register flex flex-col justify-center items-center"
-        >
-            <h1 class="form">Register</h1>
+        <div class="register lg-container">
+            <h1>Register</h1>
+            <p>
+                Already a user ?
+                <NuxtLink to="/login">Click here to login</NuxtLink>
+            </p>
             <UserForm :form-type="'register'" :form-method="registerUser" />
         </div>
     </main>
@@ -16,7 +18,6 @@ export default {
             redirect('/app');
         }
     },
-    auth: false,
     methods: {
         async registerUser(user) {
             try {
@@ -24,15 +25,10 @@ export default {
                 await this.$auth.loginWith('local', {
                     data: user,
                 });
-                this.$router.push('/app');
+                const redirect = this.$route.query.redirect || '/app';
+                this.$router.push(redirect);
             } catch (error) {}
         },
     },
 };
 </script>
-
-<style lang="postcss">
-.register {
-    width: 30%;
-}
-</style>

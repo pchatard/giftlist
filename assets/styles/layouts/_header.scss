@@ -26,11 +26,24 @@ header {
 
             li {
                 position: relative;
+                margin-left: 3rem;
+
+                &.text {
+                    a {
+                        font-size: 2rem;
+                        padding: 0.5rem 0;
+                        border-bottom: 2px solid transparent;
+
+                        &:hover,
+                        &.nuxt-link-exact-active {
+                            border-bottom: 2px solid $cta;
+                        }
+                    }
+                }
 
                 svg {
                     height: 2.4rem;
                     width: auto;
-                    margin-left: 3rem;
                 }
             }
         }

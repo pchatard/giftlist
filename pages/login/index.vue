@@ -1,7 +1,11 @@
 <template>
     <main>
-        <div class="container login flex flex-col justify-center items-center">
-            <h1 class="form">Login</h1>
+        <div class="login lg-container">
+            <h1>Login</h1>
+            <p>
+                Not a user yet ?
+                <NuxtLink :to="registerPath">Click here to register</NuxtLink>
+            </p>
             <UserForm :form-type="'login'" :form-method="loginUser" />
         </div>
     </main>
@@ -14,22 +18,26 @@ export default {
             redirect('/app');
         }
     },
-    auth: false,
+    computed: {
+        redirectPath() {
+            return this.$route.query.redirect || '/app';
+        },
+        registerPath() {
+            if (this.redirectPath !== '/app') {
+                return `/register?redirect=${this.redirectPath}`;
+            }
+            return '/register';
+        },
+    },
     methods: {
         async loginUser(user) {
             try {
                 await this.$auth.loginWith('local', {
                     data: user,
                 });
-                this.$router.push('/app');
+                this.$router.push(this.redirectPath);
             } catch (error) {}
         },
     },
 };
 </script>
-
-<style lang="postcss">
-.login {
-    width: 30%;
-}
-</style>

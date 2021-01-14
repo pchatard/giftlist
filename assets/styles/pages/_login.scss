@@ -1,0 +1,42 @@
+.login,
+.register {
+    height: calc(100vh - 8rem);
+    padding: 1rem 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+        font-size: 3.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    a {
+        color: $primary;
+    }
+
+    form {
+        width: 35%;
+        margin: 0 2rem;
+
+        div {
+            margin: 1rem 0;
+
+            label {
+                font-weight: bold;
+            }
+
+            .ipt {
+                font-size: 1.8rem;
+                margin-top: 0.5rem;
+                padding: 1rem;
+            }
+        }
+
+        button {
+            padding: 1rem;
+        }
+    }
+}
