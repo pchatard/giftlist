@@ -6,7 +6,7 @@ header {
     width: 100vw;
 
     background-color: $white;
-    box-shadow: 0px 1px 5px rgba($secondary, 0.2);
+    box-shadow: 0px 1px 5px rgba($primary, 0.2);
 
     @include lg-container-padding(5rem);
 

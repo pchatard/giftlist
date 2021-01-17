@@ -1,6 +1,6 @@
 .login,
 .register {
-    height: calc(100vh - 8rem);
+    min-height: calc(100vh - 8rem);
     padding: 1rem 5rem;
     display: flex;
     flex-direction: column;
@@ -18,11 +18,17 @@
     }
 
     form {
-        width: 35%;
+        // width: 35%;
         margin: 0 2rem;
+        display: flex;
 
-        div {
-            margin: 1rem 0;
+        div.inputs {
+            padding: 0 3rem;
+            transition: all 2s;
+
+            div {
+                margin: 1rem 0;
+            }
 
             label {
                 font-weight: bold;
@@ -32,11 +38,54 @@
                 font-size: 1.8rem;
                 margin-top: 0.5rem;
                 padding: 1rem;
+
+                &:hover,
+                &:focus {
+                    border-color: $secondary;
+                }
+
+                &.ipt-error {
+                    border-color: $primary;
+
+                    &:hover,
+                    &:focus {
+                        border-color: $secondary;
+                    }
+                }
+            }
+
+            button {
+                padding: 1rem;
+            }
+
+            .error {
+                color: $primary;
             }
         }
 
-        button {
-            padding: 1rem;
+        .password-checker {
+            align-self: center;
+            padding-left: 3rem;
+
+            h2 {
+                margin-bottom: 1rem;
+            }
+
+            li {
+                padding: 0.5rem 0;
+                display: flex;
+                align-items: center;
+
+                &.valid {
+                    color: $green;
+                }
+
+                svg {
+                    height: 2.4rem;
+                    width: auto;
+                    margin-right: 1rem;
+                }
+            }
         }
     }
 }

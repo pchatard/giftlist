@@ -5,10 +5,13 @@
 @import 'abstracts/utilities';
 
 @import 'layouts/header';
+@import 'layouts/footer';
 
 @import 'pages/dashboard';
 @import 'pages/list';
 @import 'pages/login';
+@import 'pages/landing';
+@import 'pages/profile';
 
 @import 'components/bubble';
 @import 'components/input';

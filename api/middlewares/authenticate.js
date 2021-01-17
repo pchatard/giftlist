@@ -5,8 +5,9 @@ const refreshSecret = process.env.REFRESH_SECRET || 'ghijkl';
 
 // Checks that password's length is 8 or more, contains one uppercase, one lowercase letter, and one digit
 const verifyPassword = (password) => {
-    console.log(process.env.FIREBASE_DATABASE_URL_TEST);
-    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(password);
+    return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z~`! @#$%^&*()_\-+=[\]{}|:;"'<,>.?/]{8,}$/.test(
+        password
+    );
 };
 
 const authenticate = (req, res, next) => {

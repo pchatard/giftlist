@@ -1,11 +1,8 @@
 <template>
     <main>
-        <div class="container">
-            <h1>My account</h1>
-            <section>
-                <h2>{{ name }}</h2>
-                <p>{{ $auth.user.email }}</p>
-            </section>
+        <div class="profile lg-container">
+            <h1>{{ name }}</h1>
+            <section>Work in progress</section>
         </div>
     </main>
 </template>

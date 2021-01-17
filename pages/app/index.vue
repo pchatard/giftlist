@@ -9,7 +9,9 @@
                         <ButtonAddList
                             class="btn btn-list"
                             @clicked="toggleForm"
-                        />
+                        >
+                            New list
+                        </ButtonAddList>
                     </div>
                     <ul>
                         <ListPreview
@@ -34,7 +36,9 @@
                         <ButtonAddList
                             class="btn btn-list"
                             @clicked="toggleShareForm"
-                        />
+                        >
+                            New code
+                        </ButtonAddList>
                     </div>
                     <ul>
                         <SharedListPreview

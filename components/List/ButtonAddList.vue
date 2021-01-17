@@ -1,6 +1,6 @@
 <template>
     <button @click="$emit('clicked')">
         <PlusIcon />
-        New List
+        <slot />
     </button>
 </template>

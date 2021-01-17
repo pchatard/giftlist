@@ -1,6 +1,10 @@
 const errorHandler = (err, req, res, next) => {
-    // const customErr = { code: 404, message: 'prout' };
-    res.status(404).send({ error: err.message });
+    res.status(200).send({
+        err: {
+            name: err.name,
+            message: err.message,
+        },
+    });
 };
 
 module.exports = errorHandler;

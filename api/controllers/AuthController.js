@@ -2,6 +2,7 @@ const Auth = require('../services/AuthService');
 const { verifyPassword } = require('../middlewares/authenticate');
 const { signTokens } = require('../helpers/jwt');
 const { setCookies, clearCookies } = require('../helpers/cookies');
+const PasswordRequirementsError = require('../errors/PasswordRequirementsError');
 
 class AuthController {
     /**
@@ -17,7 +18,9 @@ class AuthController {
             const { email, password } = req.body;
 
             // Regex password verification
-            if (!verifyPassword(password)) throw new Error('unvalid password');
+            if (!verifyPassword(password)) {
+                throw new PasswordRequirementsError();
+            }
 
             // Firebase user creation
             const { user } = await req.auth.createUserWithEmailAndPassword(
