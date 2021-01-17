@@ -10,7 +10,9 @@
                 :form-type="'register'"
                 :form-method="registerUser"
                 :password-error-message="passwordErrorMessage"
-                @reset="resetError"
+                :email-error-message="emailErrorMessage"
+                @resetEmail="resetErrorEmail"
+                @resetPassword="resetErrorPassword"
             />
         </div>
     </main>
@@ -26,6 +28,7 @@ export default {
     data() {
         return {
             passwordErrorMessage: '',
+            emailErrorMessage: '',
         };
     },
     methods: {
@@ -39,8 +42,14 @@ export default {
                 response.err.name === 'PasswordRequirementsError'
             ) {
                 this.passwordErrorMessage = response.err.message;
+            } else if (
+                response.err &&
+                response.err.name === 'UserAlreadyExistsError'
+            ) {
+                this.emailErrorMessage = response.err.message;
             } else {
-                this.passwordErrorMessage = '';
+                this.resetErrorEmail();
+                this.resetErrorPassword();
                 await this.$auth.loginWith('local', {
                     data: user,
                 });
@@ -48,7 +57,10 @@ export default {
                 this.$router.push(redirect);
             }
         },
-        resetError() {
+        resetErrorEmail() {
+            this.emailErrorMessage = '';
+        },
+        resetErrorPassword() {
             this.passwordErrorMessage = '';
         },
     },

@@ -2,7 +2,9 @@ const Auth = require('../services/AuthService');
 const { verifyPassword } = require('../middlewares/authenticate');
 const { signTokens } = require('../helpers/jwt');
 const { setCookies, clearCookies } = require('../helpers/cookies');
-const PasswordRequirementsError = require('../errors/PasswordRequirementsError');
+const PasswordRequirementsError = require('../errors/AuthErrors/PasswordRequirementsError');
+const UserAlreadyExistsError = require('../errors/AuthErrors/UserAlreadyExistsError');
+const InvalidCredentialsError = require('../errors/AuthErrors/InvalidCredentialsError');
 
 class AuthController {
     /**
@@ -22,26 +24,30 @@ class AuthController {
                 throw new PasswordRequirementsError();
             }
 
-            // Firebase user creation
-            const { user } = await req.auth.createUserWithEmailAndPassword(
-                email,
-                password
-            );
-            await req.auth.signOut();
+            try {
+                // Firebase user creation
+                const { user } = await req.auth.createUserWithEmailAndPassword(
+                    email,
+                    password
+                );
+                await req.auth.signOut();
 
-            // Create user for DB
-            const {
-                password: nope,
-                passwordConfirmation: nope2,
-                ...databaseUser
-            } = req.body;
-            databaseUser.firebase_uid = user.uid;
+                // Create user for DB
+                const {
+                    password: nope,
+                    passwordConfirmation: nope2,
+                    ...databaseUser
+                } = req.body;
+                databaseUser.firebase_uid = user.uid;
 
-            const { id } = await Auth.create(req.db, databaseUser);
+                const { id } = await Auth.create(req.db, databaseUser);
 
-            res.send({
-                id,
-            });
+                res.send({
+                    id,
+                });
+            } catch (error) {
+                throw new UserAlreadyExistsError();
+            }
         } catch (error) {
             next(error);
         }
@@ -59,24 +65,28 @@ class AuthController {
         try {
             const { email, password } = req.body;
 
-            // Firebase signIn check
-            const { user } = await req.auth.signInWithEmailAndPassword(
-                email,
-                password
-            );
-            await req.auth.signOut();
+            try {
+                // Firebase signIn check
+                const { user } = await req.auth.signInWithEmailAndPassword(
+                    email,
+                    password
+                );
+                await req.auth.signOut();
 
-            // Retrive user from database
-            const { id } = await Auth.getOne(req.db, user.uid);
+                // Retrive user from database
+                const { id } = await Auth.getOne(req.db, user.uid);
 
-            // Sign tokens and set cookies
-            const tokens = signTokens(id);
-            setCookies(res, tokens);
+                // Sign tokens and set cookies
+                const tokens = signTokens(id);
+                setCookies(res, tokens);
 
-            // Send back public token and user object
-            res.send({
-                token: tokens.publicToken,
-            });
+                // Send back public token and user object
+                res.send({
+                    token: tokens.publicToken,
+                });
+            } catch (error) {
+                throw new InvalidCredentialsError();
+            }
         } catch (error) {
             next(error);
         }

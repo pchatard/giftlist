@@ -29,7 +29,10 @@
                     type="email"
                     placeholder="abcd.efgh@example.com"
                     class="ipt"
+                    :class="{ 'ipt-error': emailErrorMessage }"
+                    @input="handleResetEmail"
                 />
+                <p class="error">{{ emailErrorMessage }}</p>
             </div>
             <div>
                 <label for="password">Password</label>
@@ -40,7 +43,7 @@
                     placeholder="password"
                     class="ipt"
                     :class="{ 'ipt-error': passwordErrorMessage }"
-                    @change="handleReset"
+                    @input="handleResetPassword"
                 />
                 <p class="error">{{ passwordErrorMessage }}</p>
             </div>
@@ -54,6 +57,7 @@
                     class="ipt"
                 />
             </div>
+            <p class="error">{{ loginError }}</p>
             <button type="submit" class="btn btn-list btn-full">
                 {{ formType === 'register' ? 'Register' : 'Login' }}
             </button>
@@ -74,6 +78,8 @@ export default {
         },
         formMethod: { default: () => () => {}, type: Function },
         passwordErrorMessage: { default: () => '', type: String },
+        emailErrorMessage: { default: () => '', type: String },
+        loginError: { default: () => '', type: String },
     },
     data() {
         return {
@@ -87,9 +93,14 @@ export default {
         };
     },
     methods: {
-        handleReset() {
-            if (this.passwordErrorMessage) {
-                this.$emit('reset');
+        handleResetEmail() {
+            if (this.emailErrorMessage || this.loginError) {
+                this.$emit('resetEmail');
+            }
+        },
+        handleResetPassword() {
+            if (this.passwordErrorMessage || this.loginError) {
+                this.$emit('resetPassword');
             }
         },
     },

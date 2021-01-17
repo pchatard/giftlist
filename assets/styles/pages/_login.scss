@@ -54,12 +54,13 @@
                 }
             }
 
-            button {
-                padding: 1rem;
-            }
-
             .error {
                 color: $primary;
+            }
+
+            button {
+                margin-top: 1rem;
+                padding: 1rem;
             }
         }
 

@@ -6,7 +6,13 @@
                 Not a user yet ?
                 <NuxtLink :to="registerPath">Click here to register</NuxtLink>
             </p>
-            <UserForm :form-type="'login'" :form-method="loginUser" />
+            <UserForm
+                :form-type="'login'"
+                :form-method="loginUser"
+                :login-error="loginErrorMessage"
+                @resetEmail="reset"
+                @resetPassword="reset"
+            />
         </div>
     </main>
 </template>
@@ -17,6 +23,11 @@ export default {
         if ($auth.loggedIn) {
             redirect('/app');
         }
+    },
+    data() {
+        return {
+            loginErrorMessage: '',
+        };
     },
     computed: {
         redirectPath() {
@@ -31,12 +42,18 @@ export default {
     },
     methods: {
         async loginUser(user) {
-            try {
-                await this.$auth.loginWith('local', {
-                    data: user,
-                });
+            const response = await this.$auth.loginWith('local', {
+                data: user,
+            });
+            if (response.data.err) {
+                this.loginErrorMessage = response.data.err.message;
+            } else {
+                this.reset();
                 this.$router.push(this.redirectPath);
-            } catch (error) {}
+            }
+        },
+        reset() {
+            this.loginErrorMessage = '';
         },
     },
 };
