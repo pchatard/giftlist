@@ -1,4 +1,4 @@
-const APIError = require('./APIError');
+const APIError = require('../APIError');
 
 class PasswordRequirementsError extends APIError {
     constructor() {

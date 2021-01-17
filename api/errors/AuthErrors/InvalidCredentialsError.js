@@ -1,4 +1,4 @@
-const APIError = require('./APIError');
+const APIError = require('../APIError');
 
 class InvalidCredentialsError extends APIError {
     constructor() {

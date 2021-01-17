@@ -1,4 +1,4 @@
-const APIError = require('./APIError');
+const APIError = require('../APIError');
 
 class UserAlreadyExistsError extends APIError {
     constructor() {
