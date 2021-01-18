@@ -2,6 +2,7 @@
     <header>
         <div class="header lg-container">
             <NuxtLink :to="loggedIn ? '/app' : '/'" class="logo">
+                <img src="@/assets/images/LogoSmall.png" alt="Gift Logo" />
                 GiftList
             </NuxtLink>
             <nav>
@@ -17,9 +18,21 @@
                         </NuxtLink>
                     </li>
                     <li>
+                        <NuxtLink v-show="loggedIn" to="/app">
+                            <HomeIcon
+                                :active="homeActive"
+                                @show="toggleHomeBubble"
+                                @hide="toggleHomeBubble"
+                            />
+                            <HeaderBubble v-show="showHomeBubble" class="home">
+                                Home
+                            </HeaderBubble>
+                        </NuxtLink>
+                    </li>
+
+                    <li>
                         <NuxtLink v-show="loggedIn" to="/app/profile">
                             <UserIcon
-                                :options="'black'"
                                 :active="profileActive"
                                 @show="toggleUserBubble"
                                 @hide="toggleUserBubble"
@@ -55,6 +68,7 @@
 export default {
     data() {
         return {
+            showHomeBubble: false,
             showUserBubble: false,
             showLogoutBubble: false,
         };
@@ -63,6 +77,9 @@ export default {
         loggedIn() {
             return this.$auth.loggedIn;
         },
+        homeActive() {
+            return this.$route.name === 'app';
+        },
         profileActive() {
             return this.$route.name === 'app-profile';
         },
@@ -70,6 +87,9 @@ export default {
     methods: {
         async logout() {
             await this.$auth.logout();
+        },
+        toggleHomeBubble() {
+            this.showHomeBubble = !this.showHomeBubble;
         },
         toggleUserBubble() {
             this.showUserBubble = !this.showUserBubble;

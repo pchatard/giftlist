@@ -15,10 +15,15 @@ header {
         align-items: center;
         justify-content: space-between;
 
-        // Add Typography Styling
-
         .logo {
+            img {
+                margin-right: 2rem;
+            }
+
             font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         nav ul {

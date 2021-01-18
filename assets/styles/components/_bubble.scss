@@ -63,5 +63,9 @@
         padding: 0.5rem 1rem;
         border-radius: 1rem;
         left: -90%;
+
+        &.home {
+            left: -60%;
+        }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <footer>
-        <div class="footer lg-container">
+        <div class="footer">
             <div>GiftList © {{ year }}</div>
             <div>Tous droits réservés</div>
             <div>

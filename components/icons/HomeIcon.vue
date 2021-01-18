@@ -1,0 +1,58 @@
+<template>
+    <svg
+        width="50"
+        height="44"
+        viewBox="0 0 50 44"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        @mouseenter="hovered"
+        @mouseleave="hovered(false)"
+    >
+        <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M43.4518 18L24.5745 5.57931L5.99776 18H10.0634V38.0794H15.0634V30.5794C15.0634 25.3327 19.3167 21.0794 24.5634 21.0794C29.8101 21.0794 34.0634 25.3327 34.0634 30.5794V38.0794H39.0634V18H43.4518ZM44.0634 18.4024L46.6259 20.0885L49.3742 15.9115L27.0457 1.22008C25.5345 0.225757 23.5749 0.233007 22.0711 1.23847L0.110442 15.9217L2.88956 20.0782L5.06339 18.6248V39.5794C5.06339 41.5124 6.63039 43.0794 8.56339 43.0794H16.5634C18.4964 43.0794 20.0634 41.5124 20.0634 39.5794V30.5794C20.0634 28.0941 22.0781 26.0794 24.5634 26.0794C27.0487 26.0794 29.0634 28.0941 29.0634 30.5794V39.5794C29.0634 41.5124 30.6304 43.0794 32.5634 43.0794H40.5634C42.4964 43.0794 44.0634 41.5124 44.0634 39.5794V18.4024Z"
+            :fill="color"
+        />
+    </svg>
+</template>
+
+<script>
+export default {
+    props: {
+        options: {
+            default: () => 'black',
+            type: String,
+        },
+        active: {
+            default: () => false,
+            type: Boolean,
+        },
+    },
+    data() {
+        const color = this.active ? '#78C3FB' : this.options;
+        return {
+            color,
+        };
+    },
+    watch: {
+        active(newActive) {
+            if (!newActive) {
+                this.color = this.options;
+            }
+        },
+    },
+    methods: {
+        hovered(leaving = true) {
+            if (leaving) {
+                this.$emit('show');
+            } else {
+                this.$emit('hide');
+            }
+            if (!this.active) {
+                this.color = leaving ? '#78C3FB' : 'black';
+            }
+        },
+    },
+};
+</script>
