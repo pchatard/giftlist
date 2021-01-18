@@ -1,16 +1,23 @@
 const List = require('../services/ListService');
+const SharedListAccessError = require('../errors/ListErrors/SharedListAccessError');
+const UnvalidSharingCodeError = require('../errors/ListErrors/UnvalidSharingCodeError');
 
 const preventOwner = async (req, res, next) => {
     try {
-        const { ownerId } = await List.getSharedList(
+        const response = await List.getSharedList(
             req.db,
             req.params.sharingCode
         );
-        const userId = req.userId;
-        if (ownerId === userId) {
-            throw new Error('Owner cannot access its own shared list');
+        if (response) {
+            const { ownerId } = response;
+            const userId = req.userId;
+            if (ownerId === userId) {
+                throw new SharedListAccessError();
+            }
+            next();
+        } else {
+            throw new UnvalidSharingCodeError();
         }
-        next();
     } catch (error) {
         next(error);
     }

@@ -12,12 +12,17 @@ const actions = {
         return state;
     },
     async createList({ commit }, name) {
-        const createdList = await this.$axios.$post(
+        const response = await this.$axios.$post(
             '/api/lists',
             { name },
             { withCredentials: true }
         );
-        commit('NEW_LIST', createdList);
+        if (response.err) {
+            return response.err.message;
+        } else {
+            commit('NEW_LIST', response);
+            return false;
+        }
     },
     async shareList({ commit, state }, listId) {
         const { list: newList } = await this.$axios.$get(
@@ -40,26 +45,35 @@ const actions = {
         return state;
     },
     async getSharedList({ commit, state }, sharingCode) {
-        const sharedList = await this.$axios.$get(
+        const response = await this.$axios.$get(
             `/api/lists/shared/${sharingCode}`,
             { withCredentials: true }
         );
-        if (state.shared.findIndex((list) => list.id === sharedList.id) >= 0) {
-            return state.shared;
+
+        if (response.err) {
+            return response.err.message;
+        } else if (
+            state.shared.findIndex((list) => list.id === response.id) >= 0
+        ) {
+            return false;
         } else {
-            commit('NEW_SHARED_LIST', sharedList);
-            return state.shared;
+            commit('NEW_SHARED_LIST', response);
         }
     },
     async updateList({ commit }, { name, id }) {
-        const updatedList = await this.$axios.$put(
+        const response = await this.$axios.$put(
             `/api/lists/${id}`,
             {
                 name,
             },
             { withCredentials: true }
         );
-        commit('UPDATE_LIST', updatedList);
+        if (response.err) {
+            return response.err.message;
+        } else {
+            commit('UPDATE_LIST', response);
+            return false;
+        }
     },
     async deleteList({ commit, state }, listId) {
         const newLists = await this.$axios.$delete(`/api/lists/${listId}`, {

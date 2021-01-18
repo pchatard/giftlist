@@ -20,12 +20,13 @@
                             :list="list"
                             @share="handleShareList"
                             @private="handlePrivateList"
-                            @update="handleUpdateList"
                             @remove="handleRemoveList"
                         />
                     </ul>
                     <ListFormModal
                         v-show="showForm"
+                        :error="errors.list"
+                        @reset="resetError('list')"
                         @close="toggleForm"
                         @create="createList"
                     />
@@ -49,7 +50,9 @@
                     </ul>
                     <SharedListFormModal
                         v-show="showShareForm"
+                        :code-error="errors.sharedList"
                         @close="toggleShareForm"
+                        @reset="resetError('sharedList')"
                         @code="addSharedList"
                     />
                 </section>
@@ -67,6 +70,10 @@ export default {
             showForm: false,
             showShareForm: false,
             lists: { mine: [], shared: [] },
+            errors: {
+                list: '',
+                sharedList: '',
+            },
         };
     },
     computed: {
@@ -83,12 +90,16 @@ export default {
             shareList: 'lists/shareList',
             makeListPrivate: 'lists/privateList',
             getSharedList: 'lists/getSharedList',
-            updateList: 'lists/updateList',
             deleteList: 'lists/deleteList',
         }),
-        createList(newListName) {
-            this.newList(newListName);
-            this.toggleForm();
+        async createList(newListName) {
+            const error = await this.newList(newListName);
+            if (error) {
+                this.errors.list = error;
+            } else {
+                this.resetError('list');
+                this.toggleForm();
+            }
         },
         async handleShareList(listId) {
             this.lists = await this.shareList(listId);
@@ -96,20 +107,26 @@ export default {
         async handlePrivateList(listId) {
             this.lists = await this.makeListPrivate(listId);
         },
-        handleUpdateList(data) {
-            this.updateList(data);
-        },
         async handleRemoveList(listId) {
             this.lists = await this.deleteList(listId);
         },
         async addSharedList(code) {
-            this.lists.shared = await this.getSharedList(code);
+            const error = await this.getSharedList(code);
+            if (error) {
+                this.errors.sharedList = error;
+            } else {
+                this.resetError('sharedList');
+                this.toggleShareForm();
+            }
         },
         toggleForm() {
             this.showForm = !this.showForm;
         },
         toggleShareForm() {
             this.showShareForm = !this.showShareForm;
+        },
+        resetError(type) {
+            this.errors[type] = '';
         },
     },
 };

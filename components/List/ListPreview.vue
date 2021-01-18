@@ -44,8 +44,10 @@
         <ListEditorModal
             v-show="editMode"
             :list-name="list.name"
+            :error="updateErrorMessage"
+            @reset="resetErrorMessage"
             @close="toggleEditMode"
-            @update="updateList"
+            @update="handleUpdateList"
         />
         <ListShareModal
             v-show="sharingMode"
@@ -59,6 +61,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     props: {
         list: {
@@ -72,6 +76,7 @@ export default {
             showOptions: false,
             editMode: false,
             sharingMode: false,
+            updateErrorMessage: '',
         };
     },
     computed: {
@@ -80,6 +85,7 @@ export default {
         },
     },
     methods: {
+        ...mapActions({ updateList: 'lists/updateList' }),
         toggleShareInfo() {
             this.showShareInfo = !this.showShareInfo;
         },
@@ -92,9 +98,17 @@ export default {
                 this.toggleOptions();
             }
         },
-        updateList(newName) {
-            this.$emit('update', { name: newName, id: this.list.id });
-            this.toggleEditMode();
+        async handleUpdateList(newName) {
+            const error = await this.updateList({
+                name: newName,
+                id: this.list.id,
+            });
+            if (error) {
+                this.updateErrorMessage = error;
+            } else {
+                this.resetErrorMessage();
+                this.toggleEditMode();
+            }
         },
         toggleSharingMode() {
             this.sharingMode = !this.sharingMode;
@@ -107,6 +121,9 @@ export default {
         },
         makeListPrivate(listId) {
             this.$emit('private', listId);
+        },
+        resetErrorMessage() {
+            this.updateErrorMessage = '';
         },
     },
 };

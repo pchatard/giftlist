@@ -36,12 +36,20 @@
         }
 
         input {
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             font-size: 1.8rem;
 
             &::placeholder {
                 color: rgba(#c4c4c4, 0.8);
             }
+        }
+
+        p.error {
+            color: $primary;
+        }
+
+        button {
+            margin-top: 1rem;
         }
     }
 

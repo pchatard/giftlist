@@ -2,6 +2,10 @@ const { v4: uuidv4 } = require('uuid');
 const List = require('../services/ListService');
 const User = require('../services/UserService');
 
+const { checkListNameAvailabilty } = require('../helpers/lists');
+
+const ListNameAlreadyUsedError = require('../errors/ListErrors/ListNameAlreadyUsedError');
+
 class ListController {
     /**
      * Sends back in the response all the lists.
@@ -64,6 +68,17 @@ class ListController {
                 req.db,
                 req.userId
             );
+
+            if (
+                !(await checkListNameAvailabilty(
+                    req.db,
+                    req.userId,
+                    req.body.name
+                ))
+            ) {
+                throw new ListNameAlreadyUsedError();
+            }
+
             const list = {
                 name: req.body.name,
                 created_at: Date(),
@@ -87,6 +102,16 @@ class ListController {
      */
     static async update(req, res, next) {
         try {
+            if (
+                !(await checkListNameAvailabilty(
+                    req.db,
+                    req.userId,
+                    req.body.name
+                ))
+            ) {
+                throw new ListNameAlreadyUsedError();
+            }
+
             const updatedList = await List.update(
                 req.db,
                 req.params.listId,

@@ -9,6 +9,10 @@
 
     &:focus,
     &:hover {
-        border: 2px solid $primary;
+        border-color: $secondary;
+    }
+
+    &.error {
+        border-color: $primary;
     }
 }
