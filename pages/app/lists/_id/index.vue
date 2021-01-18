@@ -24,6 +24,9 @@
                                 @favorite="handleFavoriteGift"
                             />
                         </ul>
+                        <p v-show="!favGifts.length" class="nothing">
+                            No favorite gifts yet
+                        </p>
                     </div>
 
                     <div class="normal">
@@ -40,6 +43,9 @@
                                 @favorite="handleFavoriteGift"
                             />
                         </ul>
+                        <p v-show="!otherGifts.length" class="nothing">
+                            No gifts yet
+                        </p>
                     </div>
                 </section>
 

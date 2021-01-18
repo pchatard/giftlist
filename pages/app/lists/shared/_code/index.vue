@@ -21,6 +21,9 @@
                                 @book="handleBookGift"
                             />
                         </ul>
+                        <p v-show="!favGifts.length" class="nothing">
+                            No favorite gifts yet
+                        </p>
                     </div>
                     <div class="normal">
                         <h2>Wishlist</h2>
@@ -35,6 +38,9 @@
                                 @book="handleBookGift"
                             />
                         </ul>
+                        <p v-show="!otherGifts.length" class="nothing">
+                            No gifts yet
+                        </p>
                     </div>
                     <div class="taken">
                         <h2>Already Booked</h2>
@@ -49,6 +55,9 @@
                                 @book="handleBookGift"
                             />
                         </ul>
+                        <p v-show="!takenGifts.length" class="nothing">
+                            No gifts taken yet
+                        </p>
                     </div>
                 </section>
 
