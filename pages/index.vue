@@ -13,11 +13,13 @@
                 <h2>How it works</h2>
                 <div class="details">
                     <div>
-                        <img
-                            src="@/assets/images/ListIcon.png"
-                            alt="List Icon"
-                        />
-                        <h3>Create</h3>
+                        <div>
+                            <img
+                                src="@/assets/images/ListIcon.png"
+                                alt="List Icon"
+                            />
+                            <h3>Create</h3>
+                        </div>
                         <ul>
                             <li>Create and manage your wishlists.</li>
                             <li>
@@ -31,11 +33,13 @@
                         </ul>
                     </div>
                     <div>
-                        <img
-                            src="@/assets/images/icons/SharedDark.png"
-                            alt="Share Icon"
-                        />
-                        <h3>Share</h3>
+                        <div>
+                            <img
+                                src="@/assets/images/icons/SharedDark.png"
+                                alt="Share Icon"
+                            />
+                            <h3>Share</h3>
+                        </div>
                         <ul>
                             <li>
                                 Share your wishlists with your friends, family
@@ -47,11 +51,13 @@
                         </ul>
                     </div>
                     <div>
-                        <img
-                            src="@/assets/images/GiftIcon.png"
-                            alt="Gift Icon"
-                        />
-                        <h3>Offer</h3>
+                        <div>
+                            <img
+                                src="@/assets/images/GiftIcon.png"
+                                alt="Gift Icon"
+                            />
+                            <h3>Offer</h3>
+                        </div>
                         <ul>
                             <li>Choose what you offer to your friend.</li>
                             <li>

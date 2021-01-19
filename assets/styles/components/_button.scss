@@ -18,19 +18,11 @@
         width: auto;
         margin-right: 1.2rem;
     }
-
-    &:hover {
-        filter: contrast(1.1);
-    }
 }
 
 .btn-danger {
     background-color: $primary;
     color: $white;
-
-    &:hover {
-        filter: contrast(1.1);
-    }
 }
 
 .btn-full {
@@ -49,8 +41,24 @@
     &:not(:last-child) {
         border-bottom: 1px solid rgba(#c4c4c4, 0.5);
     }
+}
 
-    &:hover {
-        background-color: rgba(#c4c4c4, 0.2);
+@media screen and (min-width: 900px) {
+    .btn-list {
+        &:hover {
+            filter: contrast(1.1);
+        }
+    }
+
+    .btn-danger {
+        &:hover {
+            filter: contrast(1.1);
+        }
+    }
+
+    .btn-bubble {
+        &:hover {
+            background-color: rgba(#c4c4c4, 0.2);
+        }
     }
 }

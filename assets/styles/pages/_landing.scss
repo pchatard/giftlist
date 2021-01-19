@@ -3,52 +3,49 @@
 
     section {
         min-height: calc(90vh - 8rem);
-        padding-top: 1rem;
-        padding-left: 5rem;
-        padding-right: 5rem;
+        padding: 0 2rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
 
-        &.hero {
-            padding-top: 0;
+        button {
+            margin-top: 2rem;
+            font-size: 2rem;
+            min-width: 20rem;
+            width: 25%;
+            max-width: 30rem;
+            padding: 1.2rem 0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
 
+        &.hero {
             img {
+                height: 6rem;
                 margin-bottom: 1.5rem;
             }
 
             h1 {
-                font-size: 6.5rem;
+                font-size: 4.5rem;
                 font-weight: bold;
             }
 
             p {
-                font-size: 3.5rem;
-            }
-
-            button {
-                margin-top: 2rem;
-                font-size: 2rem;
-                min-width: 20rem;
-                width: 25%;
-                max-width: 30rem;
-                padding: 1.2rem 0;
-                font-weight: 600;
-                text-transform: uppercase;
+                font-size: 2.5rem;
             }
         }
 
         &.about {
-            height: calc(110vh - 8rem);
-            padding-top: 10rem;
+            min-height: calc(110vh - 8rem);
+            padding-top: 12vh;
             padding-bottom: 5rem;
             background: $primary;
             color: $white;
             clip-path: polygon(0% 10vh, 100% 0%, 100% 100%, 0% 100%);
 
             h2 {
-                font-size: 5.5rem;
+                font-size: 4.5rem;
                 font-weight: bold;
                 margin-bottom: 1rem;
             }
@@ -56,17 +53,15 @@
             .details {
                 width: 100%;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                padding: 2rem;
 
-                div {
-                    min-width: 25rem;
-                    max-width: 35rem;
-                    width: 30%;
-                    height: 100%;
-                    padding: 3rem 2rem 5rem 2rem;
-                    margin: 0 2rem;
+                & > div {
+                    max-width: 32rem;
+                    width: 100%;
+                    padding: 3rem 2rem;
+                    margin: 2rem 0;
 
                     display: flex;
                     flex-direction: column;
@@ -77,15 +72,18 @@
                     border-radius: 1rem;
                     box-shadow: 2px 4px 4px rgba($black, 0.2);
 
-                    img {
-                        height: 4.8rem;
-                        width: auto;
-                        margin-bottom: 1.5rem;
-                    }
-
-                    h3 {
-                        font-size: 2.5rem;
+                    div {
+                        text-align: center;
                         margin-bottom: 1rem;
+
+                        img {
+                            height: 4.8rem;
+                            width: auto;
+                        }
+
+                        h3 {
+                            font-size: 2.5rem;
+                        }
                     }
 
                     ul {
@@ -106,17 +104,86 @@
                     }
                 }
             }
+        }
+    }
+}
 
-            button {
-                margin-top: 1.5rem;
-                font-size: 2rem;
-                min-width: 20rem;
-                width: 25%;
-                max-width: 30rem;
-                padding: 1.2rem 0;
-                font-weight: 600;
-                text-transform: uppercase;
-                background-color: $secondary;
+@media screen and (min-width: 600px) {
+    .landing {
+        section {
+            &.hero {
+                img {
+                    height: auto;
+                    margin-bottom: 1.5rem;
+                }
+
+                h1 {
+                    font-size: 5.5rem;
+                }
+
+                p {
+                    font-size: 3.5rem;
+                }
+
+                button {
+                    width: 25%;
+                }
+            }
+
+            &.about {
+                h2 {
+                    font-size: 5.5rem;
+                }
+
+                .details {
+                    & > div {
+                        max-width: none;
+                        width: 80%;
+                        flex-direction: row;
+
+                        div {
+                            flex: 1;
+                            margin: 0;
+                        }
+
+                        ul {
+                            flex: 3;
+                            padding-left: 2.5rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (min-width: 900px) {
+    .landing {
+        section {
+            &.hero {
+                h1 {
+                    font-size: 6.5rem;
+                }
+            }
+
+            &.about {
+                .details {
+                    flex-direction: row;
+                    align-items: stretch;
+                    padding: 2rem 0;
+
+                    & > div {
+                        min-width: 25rem;
+                        max-width: 35rem;
+                        width: 30%;
+                        margin: 0 2rem;
+
+                        flex-direction: column;
+
+                        ul {
+                            padding: 0;
+                        }
+                    }
+                }
             }
         }
     }

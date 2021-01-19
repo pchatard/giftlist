@@ -84,7 +84,9 @@ export default {
             this.toggleNavbar();
         },
         toggleNavbar() {
-            this.showNavbar = !this.showNavbar;
+            if (window.innerWidth <= 600) {
+                this.showNavbar = !this.showNavbar;
+            }
         },
     },
 };

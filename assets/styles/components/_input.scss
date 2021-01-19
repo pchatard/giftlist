@@ -7,12 +7,21 @@
     outline: none;
     width: 100%;
 
-    &:focus,
-    &:hover {
+    &:focus {
         border-color: $secondary;
     }
 
     &.error {
         border-color: $primary;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .ipt[type='text'],
+    .ipt[type='email'],
+    .ipt[type='password'] {
+        &:hover {
+            border-color: $secondary;
+        }
     }
 }
