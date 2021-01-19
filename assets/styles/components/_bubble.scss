@@ -55,17 +55,9 @@
             }
         }
     }
+}
 
-    &__header {
-        background-color: $black;
-        color: $white;
-        position: absolute;
-        padding: 0.5rem 1rem;
-        border-radius: 1rem;
-        left: -90%;
-
-        &.home {
-            left: -60%;
-        }
-    }
+@media screen and (min-width: 600px) {
+}
+@media screen and (min-width: 900px) {
 }

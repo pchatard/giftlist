@@ -1,5 +1,5 @@
 <template>
-    <Bubble class="bubble__header">
+    <Bubble>
         <slot />
     </Bubble>
 </template>

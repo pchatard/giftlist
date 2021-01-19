@@ -5,8 +5,6 @@
         viewBox="0 0 57 60"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        @mouseenter="hovered"
-        @mouseleave="hovered(false)"
     >
         <path
             fill-rule="evenodd"
@@ -20,24 +18,9 @@
 <script>
 export default {
     props: {
-        options: {
+        color: {
             default: () => 'black',
             type: String,
-        },
-    },
-    data() {
-        return {
-            color: this.options,
-        };
-    },
-    methods: {
-        hovered(leaving = true) {
-            if (leaving) {
-                this.$emit('show');
-            } else {
-                this.$emit('hide');
-            }
-            this.color = leaving ? '#78C3FB' : 'black';
         },
     },
 };

@@ -5,41 +5,29 @@
                 <img src="@/assets/images/LogoSmall.png" alt="Gift Logo" />
                 GiftList
             </NuxtLink>
+
             <nav>
-                <ul>
-                    <li class="text">
-                        <NuxtLink v-show="!loggedIn" to="/login">
-                            Login
-                        </NuxtLink>
+                <ul :class="{ show: showNavbar }">
+                    <li v-show="!loggedIn" class="text" @click="toggleNavbar">
+                        <NuxtLink to="/"> Home </NuxtLink>
                     </li>
-                    <li class="text">
-                        <NuxtLink v-show="!loggedIn" to="/register">
-                            Register
-                        </NuxtLink>
+                    <li v-show="!loggedIn" class="text" @click="toggleNavbar">
+                        <NuxtLink to="/login"> Login </NuxtLink>
                     </li>
-                    <li>
-                        <NuxtLink v-show="loggedIn" to="/app">
-                            <HomeIcon
-                                :active="homeActive"
-                                @show="toggleHomeBubble"
-                                @hide="toggleHomeBubble"
-                            />
-                            <HeaderBubble v-show="showHomeBubble" class="home">
-                                Home
-                            </HeaderBubble>
+                    <li v-show="!loggedIn" class="text" @click="toggleNavbar">
+                        <NuxtLink to="/register"> Register </NuxtLink>
+                    </li>
+                    <li v-show="loggedIn" @click="toggleNavbar">
+                        <NuxtLink to="/app">
+                            <HomeIcon :color="homeColor" />
+                            <HeaderBubble> Home </HeaderBubble>
                         </NuxtLink>
                     </li>
 
-                    <li>
-                        <NuxtLink v-show="loggedIn" to="/app/profile">
-                            <UserIcon
-                                :active="profileActive"
-                                @show="toggleUserBubble"
-                                @hide="toggleUserBubble"
-                            />
-                            <HeaderBubble v-show="showUserBubble">
-                                Profile
-                            </HeaderBubble>
+                    <li v-show="loggedIn" @click="toggleNavbar">
+                        <NuxtLink to="/app/profile">
+                            <UserIcon :color="profileColor" />
+                            <HeaderBubble> Profile </HeaderBubble>
                         </NuxtLink>
                     </li>
 
@@ -48,18 +36,18 @@
                         class="cursor-pointer"
                         @click="logout"
                     >
-                        <PowerIcon
-                            cursor="pointer"
-                            :options="'black'"
-                            @show="toggleLogoutBubble"
-                            @hide="toggleLogoutBubble"
-                        />
-                        <HeaderBubble v-show="showLogoutBubble">
-                            Logout
-                        </HeaderBubble>
+                        <div class="link">
+                            <PowerIcon cursor="pointer" :color="'black'" />
+                            <HeaderBubble> Logout </HeaderBubble>
+                        </div>
                     </li>
                 </ul>
             </nav>
+
+            <HamburgerIcon
+                :class="{ active: showNavbar }"
+                @toggle="toggleNavbar"
+            />
         </div>
     </header>
 </template>
@@ -68,34 +56,35 @@
 export default {
     data() {
         return {
-            showHomeBubble: false,
-            showUserBubble: false,
-            showLogoutBubble: false,
+            showNavbar: false,
         };
     },
     computed: {
         loggedIn() {
             return this.$auth.loggedIn;
         },
-        homeActive() {
-            return this.$route.name === 'app';
+        homeColor() {
+            if (this.$route.name === 'app') {
+                return '#78c3fb';
+            } else {
+                return 'black';
+            }
         },
-        profileActive() {
-            return this.$route.name === 'app-profile';
+        profileColor() {
+            if (this.$route.name === 'app-profile') {
+                return '#78c3fb';
+            } else {
+                return 'black';
+            }
         },
     },
     methods: {
         async logout() {
             await this.$auth.logout();
+            this.toggleNavbar();
         },
-        toggleHomeBubble() {
-            this.showHomeBubble = !this.showHomeBubble;
-        },
-        toggleUserBubble() {
-            this.showUserBubble = !this.showUserBubble;
-        },
-        toggleLogoutBubble() {
-            this.showLogoutBubble = !this.showLogoutBubble;
+        toggleNavbar() {
+            this.showNavbar = !this.showNavbar;
         },
     },
 };

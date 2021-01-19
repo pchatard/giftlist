@@ -8,7 +8,7 @@ header {
     background-color: $white;
     box-shadow: 0px 1px 5px rgba($primary, 0.2);
 
-    @include lg-container-padding(5rem);
+    @include lg-container-padding(2rem);
 
     .header {
         display: flex;
@@ -17,38 +17,199 @@ header {
 
         .logo {
             img {
-                margin-right: 2rem;
+                height: 2.4rem;
+                margin-right: 1rem;
             }
 
-            font-size: 3rem;
+            font-size: 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        nav ul {
+        .hamburger {
+            position: relative;
+            z-index: 30;
+            cursor: pointer;
+            width: 4.5rem;
+            padding: 0.5rem 0.5rem;
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
 
-            li {
+            &__line {
                 position: relative;
-                margin-left: 3rem;
+                width: 100%;
+                height: 0.5rem;
+                border-radius: 2px;
+                transform: translateY(0) rotate(0);
+                background-color: $primary;
+                box-shadow: 0 0 2px rgba(black, 0.2);
+                transition: all 0.2s;
 
-                &.text {
-                    a {
-                        font-size: 2rem;
-                        padding: 0.5rem 0;
-                        border-bottom: 2px solid transparent;
+                &:first-of-type {
+                    margin-bottom: 0.6rem;
+                }
 
-                        &:hover,
+                &:last-of-type {
+                    margin-top: 0.6rem;
+                    z-index: 2;
+                }
+            }
+
+            &.active {
+                .hamburger__line {
+                    margin: 0;
+                    background-color: $secondary;
+
+                    &:first-of-type {
+                        transform: translateY(100%) rotate(45deg);
+                    }
+
+                    &:nth-of-type(2) {
+                        opacity: 0;
+                    }
+
+                    &:last-of-type {
+                        transform: translateY(-100%) rotate(135deg);
+                    }
+                }
+            }
+        }
+
+        nav {
+            ul {
+                display: none;
+
+                &.show {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    position: fixed;
+                    top: 8rem;
+                    left: 0;
+                    width: 100%;
+                    height: calc(100vh - 8rem);
+                    background-color: $white;
+                    z-index: 8;
+                    box-shadow: -2px 0px 5px rgba($primary, 0.2);
+                }
+
+                li {
+                    margin: 1rem 0;
+
+                    a,
+                    .link {
+                        font-size: 2.5rem;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
                         &.nuxt-link-exact-active {
-                            border-bottom: 2px solid $cta;
+                            color: $cta;
+
+                            .bubble {
+                                color: $cta;
+                            }
+                        }
+
+                        svg {
+                            height: 5rem;
+                            width: auto;
+                        }
+
+                        .bubble {
+                            position: static;
+                            background: none;
+                            border-radius: 0;
+                            color: $black;
+                            font-size: 2rem;
                         }
                     }
                 }
+            }
+        }
+    }
+}
 
-                svg {
-                    height: 2.4rem;
-                    width: auto;
+@media screen and (min-width: 600px) {
+    header {
+        @include lg-container-padding(5rem);
+
+        .header {
+            .logo {
+                img {
+                    height: auto;
+                    margin-right: 2rem;
+                }
+
+                font-size: 3rem;
+                flex-direction: row;
+            }
+
+            .hamburger {
+                display: none;
+            }
+
+            nav ul,
+            nav ul.show {
+                display: flex;
+                position: static;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                height: auto;
+                background-color: none;
+                box-shadow: none;
+
+                li {
+                    position: relative;
+                    margin: 0;
+
+                    a,
+                    .link {
+                        margin-left: 3rem;
+                        font-size: 2rem;
+                        padding: 0.5rem 0;
+                        align-items: center;
+
+                        &.nuxt-link-exact-active {
+                            color: $cta;
+                        }
+
+                        svg {
+                            height: 2.4rem;
+                            width: auto;
+                        }
+
+                        .bubble {
+                            font-size: 1.8rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 900px) {
+    header {
+        .header {
+            nav ul,
+            nav ul.show {
+                li {
+                    &:hover {
+                        a,
+                        .link {
+                            cursor: pointer;
+
+                            .bubble {
+                                color: $cta;
+                            }
+                        }
+                    }
                 }
             }
         }
