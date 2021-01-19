@@ -62,10 +62,12 @@
                 {{ formType === 'register' ? 'Register' : 'Login' }}
             </button>
         </div>
-        <PasswordValidator
-            v-if="formType === 'register'"
-            :passwords="[formData.password, formData.passwordConfirmation]"
-        />
+        <div id="password-checker">
+            <PasswordValidator
+                v-if="formType === 'register'"
+                :passwords="[formData.password, formData.passwordConfirmation]"
+            />
+        </div>
     </form>
 </template>
 
@@ -90,8 +92,20 @@ export default {
                 password: '',
                 passwordConfirmation: '',
             },
+            passwordValidatorRef: '',
         };
     },
+    watch: {
+        passwordErrorMessage(error) {
+            if (error && window.innerWidth < 600) {
+                this.passwordValidatorRef.scrollIntoView();
+            }
+        },
+    },
+    mounted() {
+        this.passwordValidatorRef = document.querySelector('#password-checker');
+    },
+
     methods: {
         handleResetEmail() {
             if (this.emailErrorMessage || this.loginError) {

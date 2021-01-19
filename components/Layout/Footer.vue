@@ -2,7 +2,6 @@
     <footer>
         <div class="footer">
             <div>GiftList © {{ year }}</div>
-            <div>Tous droits réservés</div>
             <div>
                 Créé par
                 <a

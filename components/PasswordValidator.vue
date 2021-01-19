@@ -68,9 +68,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss">
-.valid {
-    color: green;
-}
-</style>
