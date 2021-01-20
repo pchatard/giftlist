@@ -1,37 +1,123 @@
 .dashboard {
     min-height: calc(100vh - 8rem);
-    padding: 1rem 14rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     h1 {
-        font-size: 4.5rem;
+        padding: 1rem 2rem;
+        font-size: 3.5rem;
         font-weight: bold;
-        line-height: 5.5rem;
         margin-bottom: 1rem;
     }
 
     .lists {
         display: flex;
-        justify-content: space-around;
+        flex-direction: column;
+        justify-content: center;
+        margin: 2rem 0;
 
         section {
-            width: 40rem;
+            margin-bottom: 2.5rem;
+            overflow-y: visible;
 
             .section-header {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                padding: 0rem 2rem;
 
                 h2 {
-                    font-size: 3.5rem;
+                    font-size: 2.5rem;
                     font-weight: bold;
+                }
+
+                button {
+                    width: 40%;
+                    font-size: 1.8rem;
                 }
             }
 
             ul {
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
+                margin-top: 2rem;
+                padding-left: 2rem;
                 list-style: none;
+                display: flex;
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 2rem;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .spacer {
+                    padding: 1rem;
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .dashboard {
+        h1 {
+            font-size: 4.5rem;
+            padding: 1rem 5rem;
+        }
+
+        .lists {
+            section {
+                .section-header {
+                    padding: 0rem 5rem;
+
+                    h2 {
+                        font-size: 3.5rem;
+                    }
+
+                    button {
+                        width: 30%;
+                        font-size: 2rem;
+                    }
+                }
+
+                ul {
+                    margin-top: 3rem;
+                    padding-left: 5rem;
+
+                    .spacer {
+                        padding: 2.5rem;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .dashboard {
+        justify-content: flex-start;
+        .lists {
+            margin: 0;
+            flex-direction: row;
+            justify-content: space-around;
+
+            section {
+                width: 40rem;
+
+                .section-header {
+                    padding: 0;
+                }
+
+                ul {
+                    margin-top: 0.5rem;
+                    padding: 0;
+                    flex-direction: column;
+                    align-items: stretch;
+                    overflow: visible;
+                }
             }
         }
     }

@@ -10,7 +10,7 @@
                             class="btn btn-list"
                             @clicked="toggleForm"
                         >
-                            New list
+                            List
                         </ButtonAddList>
                     </div>
                     <ul>
@@ -22,6 +22,7 @@
                             @private="handlePrivateList"
                             @remove="handleRemoveList"
                         />
+                        <div class="spacer"></div>
                     </ul>
                     <ListFormModal
                         v-show="showForm"
@@ -38,7 +39,7 @@
                             class="btn btn-list"
                             @clicked="toggleShareForm"
                         >
-                            New code
+                            Code
                         </ButtonAddList>
                     </div>
                     <ul>
@@ -47,6 +48,7 @@
                             :key="list.id"
                             :shared-list="list"
                         />
+                        <div class="spacer"></div>
                     </ul>
                     <SharedListFormModal
                         v-show="showShareForm"

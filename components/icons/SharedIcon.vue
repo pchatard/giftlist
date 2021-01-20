@@ -5,6 +5,7 @@
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         @mouseenter="hovered"
+        @touchstart.prevent="hovered"
         @mouseleave="hovered(false)"
     >
         <g filter="url(#filter0_d)">
