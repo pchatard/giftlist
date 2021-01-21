@@ -4,9 +4,9 @@
         viewBox="0 0 83 62"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        @mouseenter="hovered"
-        @touchstart.prevent="hovered"
-        @mouseleave="hovered(false)"
+        @click.stop="handleClick"
+        @mouseenter="handleHover(false)"
+        @mouseleave="handleHover(true)"
     >
         <g filter="url(#filter0_d)">
             <path
@@ -195,10 +195,13 @@ export default {
         };
     },
     methods: {
-        hovered(leaving = true) {
-            if (leaving) this.$emit('show');
-            else this.$emit('hide');
-            this.color = leaving ? '#78C3FB' : 'white';
+        handleClick() {
+            this.$emit('open');
+        },
+        handleHover(leaving = false) {
+            if (window.innerWidth >= 900) {
+                this.color = leaving ? 'white' : '#78C3FB';
+            }
         },
     },
 };

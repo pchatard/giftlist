@@ -7,37 +7,23 @@
             </div>
             <section v-if="code">
                 <p class="share-status">
-                    This list is currently <strong>public</strong>.
+                    This list is currently <strong>public</strong> and shared
+                    with {{ number }} people.
+                </p>
+                <p class="share-status">
+                    Share the code or the link with your friends.
                 </p>
 
                 <div class="share-code">
-                    <label>
-                        Copy and share this code with your friends so they can
-                        see your list and choose one of your wishes.
-                    </label>
-                    <input
-                        :id="`input-code-${listId}`"
-                        :value="code"
-                        type="text"
-                        class="ipt"
-                        disabled
-                    />
                     <button class="btn btn-list btn-full" @click="handleCode">
                         Copy code
                     </button>
                 </div>
 
                 <div class="share-link">
-                    <p>Or copy and share this link with them directly.</p>
-                    <p class="link">
-                        {{ link }}
-                    </p>
-
                     <button class="btn btn-list btn-full" @click="handleLink">
                         Copy link
                     </button>
-
-                    <p>Note: They will need an account to see it.</p>
                 </div>
 
                 <button class="btn btn-danger btn-full" @click="handlePrivate">
@@ -72,6 +58,10 @@ export default {
         sharingCode: {
             default: () => '',
             type: String,
+        },
+        number: {
+            default: () => 0,
+            type: Number,
         },
     },
     data() {

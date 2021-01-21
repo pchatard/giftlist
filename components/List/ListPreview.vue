@@ -9,26 +9,11 @@
                     <SharedIcon
                         v-show="list.sharingCode"
                         class="shared"
-                        @show="toggleShareInfo"
-                        @hide="toggleShareInfo"
-                    />
-                    <ListShareBubble
-                        v-show="showShareInfo"
-                        :number="sharedNumber"
+                        @open="toggleSharingMode"
                     />
                 </div>
                 <div class="options">
-                    <OptionsIcon
-                        :options="showOptions ? '#78C3FB' : 'white'"
-                        @open="toggleOptions"
-                    />
-                    <ListOptionsBubble
-                        v-show="showOptions"
-                        @close="toggleOptions"
-                        @edit="toggleEditMode"
-                        @share="toggleSharingMode"
-                        @delete="$emit('remove', list.id)"
-                    />
+                    <OptionsIcon options="white" @open="toggleOptions" />
                 </div>
             </div>
         </div>
@@ -53,9 +38,17 @@
             v-show="sharingMode"
             :list-id="list.id"
             :sharing-code="list.sharingCode"
+            :number="sharedNumber"
             @generate="generateSharingCode"
             @private="makeListPrivate"
             @close="toggleSharingMode"
+        />
+        <ListOptionsModal
+            v-show="showOptions"
+            @close="toggleOptions"
+            @edit="toggleEditMode"
+            @share="toggleSharingMode"
+            @delete="$emit('remove', list.id)"
         />
     </li>
 </template>
@@ -72,7 +65,6 @@ export default {
     },
     data() {
         return {
-            showShareInfo: false,
             showOptions: false,
             editMode: false,
             sharingMode: false,
@@ -86,9 +78,6 @@ export default {
     },
     methods: {
         ...mapActions({ updateList: 'lists/updateList' }),
-        toggleShareInfo() {
-            this.showShareInfo = !this.showShareInfo;
-        },
         toggleOptions() {
             this.showOptions = !this.showOptions;
         },

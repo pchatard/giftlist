@@ -8,6 +8,10 @@
     flex-direction: column;
     justify-content: space-between;
     color: $black;
+    background-color: $white;
+    box-shadow: 4px 4px 10px rgba($black, 0.2);
+    border-radius: 1rem;
+    padding: 2.5rem;
 
     form {
         display: flex;
@@ -70,11 +74,6 @@
         .share-code {
             width: 100%;
             padding-bottom: 1rem;
-            border-bottom: 1px solid #c4c4c4;
-
-            input {
-                margin: 1rem 0;
-            }
 
             button {
                 margin: 0;
@@ -82,18 +81,6 @@
         }
 
         .share-link {
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #c4c4c4;
-
-            p {
-                margin-top: 1rem;
-            }
-
-            .link {
-                color: $primary;
-            }
-
             button {
                 margin-top: 1rem;
             }
@@ -122,6 +109,26 @@
 
         input {
             margin-left: 1.5rem;
+        }
+    }
+}
+
+.modal__list-options {
+    background-color: transparent;
+    border-radius: 1rem;
+
+    button {
+        width: 100%;
+        margin: 0.5rem 0;
+        padding: 1.5rem 0;
+        background-color: $white;
+        box-shadow: 2px 2px 5px rgba($black, 0.2);
+
+        &.btn-list {
+            color: $black;
+        }
+        &.btn-danger {
+            color: $primary;
         }
     }
 }

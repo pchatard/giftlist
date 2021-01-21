@@ -46,7 +46,9 @@ export default {
     },
     methods: {
         hovered(leaving = true) {
-            this.color = leaving ? '#78C3FB' : this.options;
+            if (window.innerWidth > 900) {
+                this.color = leaving ? '#78C3FB' : this.options;
+            }
         },
     },
 };

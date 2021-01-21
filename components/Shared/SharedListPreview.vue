@@ -12,16 +12,9 @@
             <div class="preview__info">
                 <OptionsIcon
                     cursor="pointer"
-                    :options="showOptions ? '#78C3FB' : 'white'"
+                    options="white"
                     @open="toggleOptions"
                 />
-                <SharedListOptionsBubble
-                    v-show="showOptions"
-                    @close="toggleOptions"
-                    @info="toggleInfo"
-                />
-                <!-- @delete="removeSharedList" 
-                     -->
             </div>
         </div>
         <NuxtLink :to="link" tag="button" class="btn btn-list btn-full">
@@ -31,6 +24,11 @@
             v-show="showInfo"
             :list="sharedList"
             @close="toggleInfo"
+        />
+        <SharedListOptionsModal
+            v-show="showOptions"
+            @close="toggleOptions"
+            @info="toggleInfo"
         />
     </li>
 </template>
@@ -59,6 +57,9 @@ export default {
             this.showOptions = !this.showOptions;
         },
         toggleInfo() {
+            if (this.showOptions) {
+                this.toggleOptions();
+            }
             this.showInfo = !this.showInfo;
         },
     },
