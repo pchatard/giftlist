@@ -24,7 +24,7 @@ const actions = {
             return false;
         }
     },
-    async shareList({ commit, state }, listId) {
+    async shareList({ commit, state }, { listId, returnLists = true }) {
         const { list: newList } = await this.$axios.$get(
             `/api/lists/${listId}/share`,
             {
@@ -32,9 +32,13 @@ const actions = {
             }
         );
         commit('UPDATE_LIST', newList);
-        return state;
+        if (returnLists) {
+            return state;
+        } else {
+            return newList;
+        }
     },
-    async privateList({ commit, state }, listId) {
+    async privateList({ commit, state }, { listId, returnLists = true }) {
         const { list } = await this.$axios.$get(
             `/api/lists/${listId}/private`,
             {
@@ -42,7 +46,11 @@ const actions = {
             }
         );
         commit('UPDATE_LIST', list);
-        return state;
+        if (returnLists) {
+            return state;
+        } else {
+            return list;
+        }
     },
     async getSharedList({ commit, state }, sharingCode) {
         const response = await this.$axios.$get(

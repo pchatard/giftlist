@@ -1,7 +1,7 @@
 <template>
-    <div class="hamburger" @click="$emit('toggle')">
+    <button class="hamburger" @click="$emit('toggle')">
         <div class="hamburger__line"></div>
         <div class="hamburger__line"></div>
         <div class="hamburger__line"></div>
-    </div>
+    </button>
 </template>

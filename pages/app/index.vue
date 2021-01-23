@@ -13,7 +13,7 @@
                             List
                         </ButtonAddList>
                     </div>
-                    <ul>
+                    <ul v-if="lists.mine.length">
                         <ListPreview
                             v-for="list in lists.mine"
                             :key="list.id"
@@ -24,6 +24,7 @@
                         />
                         <div class="spacer"></div>
                     </ul>
+                    <p v-else class="nothing">No lists yet.</p>
                     <ListFormModal
                         v-show="showForm"
                         :error="errors.list"
@@ -42,7 +43,7 @@
                             Code
                         </ButtonAddList>
                     </div>
-                    <ul>
+                    <ul v-if="lists.shared.length">
                         <SharedListPreview
                             v-for="list in lists.shared"
                             :key="list.id"
@@ -50,6 +51,7 @@
                         />
                         <div class="spacer"></div>
                     </ul>
+                    <p v-else class="nothing">No lists yet.</p>
                     <SharedListFormModal
                         v-show="showShareForm"
                         :code-error="errors.sharedList"

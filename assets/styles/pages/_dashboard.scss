@@ -2,7 +2,6 @@
     min-height: calc(100vh - 8rem);
     display: flex;
     flex-direction: column;
-    justify-content: center;
 
     h1 {
         padding: 1rem 2rem;
@@ -56,6 +55,13 @@
                     padding: 1rem;
                     opacity: 0;
                 }
+            }
+
+            .nothing {
+                color: $primary;
+                padding-top: 2rem;
+                padding-left: 5rem;
+                font-size: 2rem;
             }
         }
     }

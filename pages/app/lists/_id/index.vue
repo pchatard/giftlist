@@ -2,9 +2,25 @@
     <main>
         <div class="list lg-container">
             <div class="list__header">
-                <h1>{{ list.name }}</h1>
-                <button class="btn btn-list" @click="toggleForm">
-                    New gift
+                <div class="mine">
+                    <h1>{{ list.name }}</h1>
+                    <button class="btn btn-list desktop" @click="toggleForm">
+                        <PlusIcon />
+                        Gift
+                    </button>
+                </div>
+                <button class="btn btn-list mobile" @click="toggleForm">
+                    <PlusIcon />
+                </button>
+                <button
+                    class="btn"
+                    :class="{
+                        'btn-list': list.sharingCode,
+                        'btn-danger': !list.sharingCode,
+                    }"
+                    @click="toggleShare"
+                >
+                    {{ list.sharingCode ? 'Public' : 'Private' }}
                 </button>
             </div>
 
@@ -51,7 +67,7 @@
 
                 <div class="vl"></div>
 
-                <section class="editor">
+                <section class="editor" display="none">
                     <h2 v-if="!selectedGiftId">
                         Select a gift to update its details
                     </h2>
@@ -68,6 +84,22 @@
                 @close="toggleForm"
                 @create="handleCreateGift"
             />
+            <GiftDetailsModal
+                v-show="selectedGiftId"
+                :gift="selectedGift"
+                type="edit"
+                @update="handleUpdateGift"
+                @close="selectGift(selectedGiftId)"
+            />
+            <ListShareModal
+                v-show="showShare"
+                :list-id="list.id"
+                :sharing-code="list.sharingCode"
+                :number="sharedNumber"
+                @close="toggleShare"
+                @private="handlePrivateList"
+                @generate="handleShareList"
+            />
         </div>
     </main>
 </template>
@@ -80,6 +112,7 @@ export default {
     data() {
         return {
             showForm: false,
+            showShare: false,
             list: {},
             gifts: [],
             selectedGiftId: '',
@@ -101,6 +134,9 @@ export default {
                 return {};
             }
         },
+        sharedNumber() {
+            return this.list.sharedWith ? this.list.sharedWith.length : 0;
+        },
     },
     async mounted() {
         const list = await this.$axios.$get(
@@ -119,6 +155,8 @@ export default {
             favGift: 'gifts/favoritizeGift',
             updateGift: 'gifts/updateGift',
             deleteGift: 'gifts/deleteGift',
+            shareList: 'lists/shareList',
+            makeListPrivate: 'lists/privateList',
         }),
         handleCreateGift(gift) {
             this.addGift({ ...gift, listId: this.list.id });
@@ -139,9 +177,13 @@ export default {
         },
         handleUpdateGift(updatedGift) {
             this.updateGift(updatedGift);
+            this.selectedGiftId = '';
         },
         toggleForm() {
             this.showForm = !this.showForm;
+        },
+        toggleShare() {
+            this.showShare = !this.showShare;
         },
         selectGift(id) {
             if (this.selectedGiftId !== id) {
@@ -149,6 +191,15 @@ export default {
             } else {
                 this.selectedGiftId = '';
             }
+        },
+        async handleShareList(listId) {
+            this.list = await this.shareList({ listId, returnLists: false });
+        },
+        async handlePrivateList(listId) {
+            this.list = await this.makeListPrivate({
+                listId,
+                returnLists: false,
+            });
         },
     },
 };

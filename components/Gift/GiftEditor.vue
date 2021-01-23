@@ -1,6 +1,9 @@
 <template>
-    <form @submit.prevent="$emit('update', formGift)">
-        <h2>Edit your gift</h2>
+    <form @submit.prevent="submit">
+        <div class="form__header">
+            <h2>Edit your gift</h2>
+            <CloseIcon @click="handleClose" />
+        </div>
         <div class="line-1">
             <div>
                 <label for="gift-ipt-editor-title"> Title </label>
@@ -9,7 +12,10 @@
                     v-model="formGift.title"
                     type="text"
                     class="ipt"
+                    :class="{ error: errors.title }"
+                    @input="clearError('title')"
                 />
+                <p class="error">{{ errors.title }}</p>
             </div>
             <div>
                 <label for="gift-ipt-editor-fav"> Favorite </label>
@@ -28,7 +34,10 @@
                 v-model="formGift.link"
                 type="text"
                 class="ipt"
+                :class="{ error: errors.link }"
+                @input="clearError('link')"
             />
+            <p class="error">{{ errors.link }}</p>
         </div>
 
         <div class="line-3">
@@ -87,11 +96,47 @@ export default {
     data() {
         return {
             formGift: { ...this.gift },
+            errors: {
+                title: '',
+                link: '',
+            },
         };
     },
     watch: {
         gift(newGift) {
             this.formGift = { ...newGift };
+        },
+    },
+    methods: {
+        submit() {
+            if (this.formGift.title && this.checkLinkValidity()) {
+                this.$emit('update', this.formGift);
+                this.clearError();
+            } else if (this.formGift.title && !this.checkLinkValidity()) {
+                this.errors.link = 'Invalid URL';
+            } else {
+                this.errors.title = "Title can't be empty";
+            }
+        },
+        clearError(field = '') {
+            if (field) {
+                this.errors[field] = '';
+            } else {
+                this.errors = { title: '', link: '' };
+            }
+        },
+        checkLinkValidity() {
+            if (this.formGift.link) {
+                return /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/.test(
+                    this.formGift.link
+                );
+            } else {
+                return true;
+            }
+        },
+        handleClose() {
+            this.$emit('close');
+            this.clearError();
         },
     },
 };

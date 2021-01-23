@@ -3,7 +3,9 @@
 .modal__share-list,
 .modal__shared-new-list,
 .modal__shared-list-info,
-.modal__new-gift {
+.modal__new-gift,
+.modal__gift-details,
+.modal__gift-edit {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -17,21 +19,6 @@
         display: flex;
         flex-direction: column;
         margin-top: 1.5rem;
-
-        .form-container {
-            width: 100%;
-            display: flex;
-
-            .left {
-                padding: 0 1rem;
-                width: 70%;
-            }
-
-            .right {
-                padding: 0 1rem;
-                width: 30%;
-            }
-        }
 
         label {
             font-size: 1.8rem;
@@ -129,6 +116,168 @@
         }
         &.btn-danger {
             color: $primary;
+        }
+    }
+}
+
+.modal__gift-details {
+    .shared-preview {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: baseline;
+
+            div {
+                width: 100%;
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+
+                h2 {
+                    font-size: 2.5rem;
+                    margin-bottom: 1rem;
+
+                    .red {
+                        color: $primary;
+                        margin-right: 1rem;
+                    }
+                }
+            }
+
+            a {
+                color: $primary;
+            }
+        }
+
+        ul {
+            font-size: 2rem;
+
+            li {
+                margin-bottom: 0.5rem;
+
+                span {
+                    font-weight: bold;
+                    margin-right: 0.5rem;
+                    color: $primary;
+                }
+            }
+        }
+
+        button {
+            margin-top: 1rem;
+            align-self: start;
+            width: 100%;
+
+            &.booked {
+                background-color: $primary;
+            }
+        }
+
+        & > span {
+            font-weight: 2rem;
+            color: $primary;
+        }
+    }
+}
+
+.modal__gift-edit {
+    form {
+        .ipt {
+            padding: 0.8rem;
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+    }
+}
+
+.modal__new-gift {
+    form {
+        .ipt {
+            padding: 0.6rem;
+            margin-bottom: 0.4rem;
+            font-size: 1.6rem;
+        }
+
+        .error {
+            margin: 0;
+        }
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .modal__gift-edit {
+        form {
+            .ipt {
+                padding: 1rem;
+                font-size: 1.8rem;
+                margin-top: 0.4rem;
+                margin-bottom: 0.8rem;
+            }
+
+            & > div {
+                margin-bottom: 0.8rem;
+            }
+
+            .line-3 {
+                display: flex;
+
+                div {
+                    margin: 0 0.5rem;
+                }
+            }
+        }
+    }
+
+    .modal__new-gift {
+        form {
+            .ipt {
+                padding: 1.2rem;
+                margin-bottom: 1rem;
+                font-size: 1.8rem;
+            }
+
+            .line-1,
+            .line-3 {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .title {
+                    width: 70%;
+                }
+            }
+
+            .line-3 {
+                & > div:nth-of-type(2) {
+                    margin: 0 1rem;
+                }
+            }
+
+            .error {
+                margin: 0;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .modal__list-options {
+        button {
+            &:hover {
+                background-color: #e6e6e6;
+            }
         }
     }
 }

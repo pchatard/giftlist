@@ -29,20 +29,6 @@
     width: 100%;
 }
 
-.btn-bubble {
-    font-size: 1.8rem;
-    padding: 0.5rem 0;
-    color: $white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-
-    &:not(:last-child) {
-        border-bottom: 1px solid rgba(#c4c4c4, 0.5);
-    }
-}
-
 @media screen and (min-width: 900px) {
     .btn-list {
         &:hover {
@@ -53,12 +39,6 @@
     .btn-danger {
         &:hover {
             filter: contrast(1.1);
-        }
-    }
-
-    .btn-bubble {
-        &:hover {
-            background-color: rgba(#c4c4c4, 0.2);
         }
     }
 }

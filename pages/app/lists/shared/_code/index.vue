@@ -2,8 +2,10 @@
     <main>
         <div class="list lg-container">
             <div class="list__header">
-                <h1>{{ list.name }}</h1>
-                <h2>by {{ list.owner }}</h2>
+                <div>
+                    <h1>{{ list.name }}</h1>
+                    <h2>by {{ list.owner }}</h2>
+                </div>
             </div>
 
             <div class="list__content">
@@ -74,6 +76,14 @@
                     />
                 </section>
             </div>
+
+            <GiftDetailsModal
+                v-show="selectedGiftId"
+                :gift="selectedGift"
+                type="details"
+                @close="selectGift(selectedGiftId)"
+                @book="handleBookGift"
+            />
         </div>
     </main>
 </template>
