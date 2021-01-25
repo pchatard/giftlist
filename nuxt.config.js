@@ -10,8 +10,17 @@ export default {
                 content: 'width=device-width, initial-scale=1',
             },
             { hid: 'description', name: 'description', content: '' },
+            { name: 'twitter:card', content: 'summary_large_image' },
+            { name: 'twitter:creator', content: 'summary_large_image' },
+            { name: 'twitter:title', content: 'GiftList' },
+            {
+                name: 'twitter:description',
+                content:
+                    'Créez et gérez vos wishlists pour toutes les occasions (mariages, anniversaires, Noël, etc..), partagez les avec vos amis, réservez les cadeaux que vous choisissez.',
+            },
+            { name: 'twitter:image', content: '@/assets/images/LogoBig.png' },
         ],
-        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
     },
 
     serverMiddleware: { '/api': '~/api' },
