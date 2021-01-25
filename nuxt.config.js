@@ -18,7 +18,7 @@ export default {
                 content:
                     'Créez et gérez vos wishlists pour toutes les occasions (mariages, anniversaires, Noël, etc..), partagez les avec vos amis, réservez les cadeaux que vous choisissez.',
             },
-            { name: 'twitter:image', content: '@/assets/images/LogoBig.png' },
+            { name: 'twitter:image', content: '/LogoBig.png' },
         ],
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
     },
