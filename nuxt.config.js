@@ -21,7 +21,7 @@ export default {
             {
                 name: 'twitter:image',
                 content:
-                    'https://res.cloudinary.com/deo7szuol/image/upload/v1611570120/LogoBig_xscqzs.png',
+                    'https://res.cloudinary.com/deo7szuol/image/upload/v1611570397/TwitterThumbnail_bmhnln.png',
             },
         ],
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
