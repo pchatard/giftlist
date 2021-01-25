@@ -1,0 +1,41 @@
+.error-page {
+    min-height: calc(100vh - 8rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        margin-bottom: 3rem;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 3rem;
+        color: $primary;
+    }
+
+    button {
+        width: 80%;
+        margin: 2rem 0;
+    }
+
+    details {
+        font-size: 1.8rem;
+        p {
+            padding: 2rem;
+        }
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .error-page {
+        h1 {
+            font-size: 3.5rem;
+        }
+        button {
+            width: 30rem;
+            font-size: 2rem;
+        }
+    }
+}

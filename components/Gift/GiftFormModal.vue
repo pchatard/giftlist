@@ -2,13 +2,13 @@
     <Modal @close="handleClose">
         <div class="modal__new-gift">
             <div class="modal__header">
-                <h2>Create a new gift</h2>
+                <h2>Créer un cadeau</h2>
                 <CloseIcon cursor="pointer" @click="handleClose" />
             </div>
             <form @submit.prevent="submitNewItem">
                 <div class="line-1">
                     <div class="title">
-                        <label for="gift-ipt-creator-title">Title*</label>
+                        <label for="gift-ipt-creator-title">Nom*</label>
                         <input
                             id="gift-ipt-creator-title"
                             v-model="gift.title"
@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="favorite">
-                        <label for="gift-ipt-creator-fav">Favorite</label>
+                        <label for="gift-ipt-creator-fav">Favori</label>
                         <input
                             id="gift-ipt-creator-fav"
                             v-model="gift.favorite"
@@ -31,7 +31,7 @@
                 </div>
 
                 <div>
-                    <label for="gift-ipt-creator-link">Link</label>
+                    <label for="gift-ipt-creator-link">Lien (URL)</label>
                     <input
                         id="gift-ipt-creator-link"
                         v-model="gift.link"
@@ -45,7 +45,7 @@
 
                 <div class="line-3">
                     <div>
-                        <label for="gift-ipt-creator-brand">Brand</label>
+                        <label for="gift-ipt-creator-brand">Marque</label>
                         <input
                             id="gift-ipt-creator-brand"
                             v-model="gift.brand"
@@ -54,7 +54,7 @@
                         />
                     </div>
                     <div>
-                        <label for="gift-ipt-creator-size">Size</label>
+                        <label for="gift-ipt-creator-size">Taille</label>
                         <input
                             id="gift-ipt-creator-size"
                             v-model="gift.size"
@@ -63,7 +63,7 @@
                         />
                     </div>
                     <div>
-                        <label for="gift-ipt-creator-color">Color</label>
+                        <label for="gift-ipt-creator-color">Couleur</label>
                         <input
                             id="gift-ipt-creator-color"
                             v-model="gift.color"
@@ -74,7 +74,7 @@
                 </div>
 
                 <div>
-                    <label for="gift-ipt-creator-details">Comments</label>
+                    <label for="gift-ipt-creator-details">Commentaires</label>
                     <input
                         id="gift-ipt-creator-details"
                         v-model="gift.details"
@@ -84,7 +84,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-list btn-full">
-                    Create my gift
+                    Créer
                 </button>
             </form>
         </div>
@@ -116,9 +116,9 @@ export default {
                 this.clearForm();
                 this.clearError();
             } else if (this.gift.title && !this.checkLinkValidity()) {
-                this.errors.link = 'Invalid URL';
+                this.errors.link = 'Lien invalide';
             } else {
-                this.errors.title = "Title can't be empty";
+                this.errors.title = 'La liste doit avoir un nom';
             }
         },
         clearForm() {

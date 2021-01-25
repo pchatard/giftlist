@@ -2,7 +2,7 @@ const APIError = require('../APIError');
 
 class UnvalidSharingCodeError extends APIError {
     constructor() {
-        super('UnvalidSharingCodeError', 'Unvalid sharing code.');
+        super('UnvalidSharingCodeError', 'Code de partage invalide');
     }
 }
 

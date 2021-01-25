@@ -2,22 +2,22 @@
     <form @submit.prevent="formMethod(formData)">
         <div class="inputs">
             <div v-show="formType === 'register'">
-                <label for="first-name">First Name</label>
+                <label for="first-name">Prénom</label>
                 <input
                     id="first-name"
                     v-model="formData.firstName"
                     type="text"
-                    placeholder="John"
+                    placeholder="Jean"
                     class="ipt"
                 />
             </div>
             <div v-show="formType === 'register'">
-                <label for="last-name">Last Name</label>
+                <label for="last-name">Nom</label>
                 <input
                     id="last-name"
                     v-model="formData.lastName"
                     type="text"
-                    placeholder="Doe"
+                    placeholder="Dupont"
                     class="ipt"
                 />
             </div>
@@ -27,7 +27,7 @@
                     id="email"
                     v-model="formData.email"
                     type="email"
-                    placeholder="abcd.efgh@example.com"
+                    placeholder="E-mail"
                     class="ipt"
                     :class="{ 'ipt-error': emailErrorMessage }"
                     @input="handleResetEmail"
@@ -35,12 +35,12 @@
                 <p class="error">{{ emailErrorMessage }}</p>
             </div>
             <div>
-                <label for="password">Password</label>
+                <label for="password">Mot de passe</label>
                 <input
                     id="password"
                     v-model="formData.password"
                     type="password"
-                    placeholder="password"
+                    placeholder="Mot de passe"
                     class="ipt"
                     :class="{ 'ipt-error': passwordErrorMessage }"
                     @input="handleResetPassword"
@@ -48,18 +48,18 @@
                 <p class="error">{{ passwordErrorMessage }}</p>
             </div>
             <div v-show="formType === 'register'">
-                <label for="password-confirm">Confirm password</label>
+                <label for="password-confirm">Confirmez le mot de passe</label>
                 <input
                     id="password-confirm"
                     v-model="formData.passwordConfirmation"
                     type="password"
-                    placeholder="password"
+                    placeholder="Mot de passe"
                     class="ipt"
                 />
             </div>
             <p class="error">{{ loginError }}</p>
             <button type="submit" class="btn btn-list btn-full">
-                {{ formType === 'register' ? 'Register' : 'Login' }}
+                {{ formType === 'register' ? 'Inscription' : 'Connexion' }}
             </button>
         </div>
         <div id="password-checker">

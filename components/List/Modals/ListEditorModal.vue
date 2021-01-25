@@ -2,12 +2,12 @@
     <Modal @close="handleClose">
         <div class="modal__edit-list">
             <div class="modal__header">
-                <h2>Edit a list</h2>
+                <h2>Renommer ma liste</h2>
                 <CloseIcon cursor="pointer" @click="handleClose" />
             </div>
             <form @submit.prevent="update">
                 <label for="list-ipt-editor">
-                    Edit the name of your list:
+                    Choisir le nouveau nom de votre liste
                 </label>
                 <input
                     id="list-ipt-editor"
@@ -19,7 +19,7 @@
                 />
                 <p class="error">{{ errorMessage }}</p>
                 <button type="submit" class="btn btn-list btn-full">
-                    Save changes
+                    Sauvegarder
                 </button>
             </form>
         </div>
@@ -55,7 +55,8 @@ export default {
                 this.$emit('update', this.newName);
                 this.resetErrorMessage();
             } else {
-                this.errorMessage = "The name of the list can't be empty";
+                this.errorMessage =
+                    'Le titre de votre liste ne peut pas être vide';
             }
         },
         checkEmptyName() {

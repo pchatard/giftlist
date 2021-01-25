@@ -1,12 +1,12 @@
 <template>
     <form @submit.prevent="submit">
         <div class="form__header">
-            <h2>Edit your gift</h2>
+            <h2>Modifier</h2>
             <CloseIcon @click="handleClose" />
         </div>
         <div class="line-1">
             <div>
-                <label for="gift-ipt-editor-title"> Title </label>
+                <label for="gift-ipt-editor-title"> Nom </label>
                 <input
                     id="gift-ipt-editor-title"
                     v-model="formGift.title"
@@ -18,7 +18,7 @@
                 <p class="error">{{ errors.title }}</p>
             </div>
             <div>
-                <label for="gift-ipt-editor-fav"> Favorite </label>
+                <label for="gift-ipt-editor-fav"> Favori </label>
                 <input
                     id="gift-ipt-editor-fav"
                     v-model="formGift.favorite"
@@ -28,7 +28,7 @@
         </div>
 
         <div>
-            <label for="gift-ipt-editor-link"> Link </label>
+            <label for="gift-ipt-editor-link"> Lien (URL) </label>
             <input
                 id="gift-ipt-editor-link"
                 v-model="formGift.link"
@@ -42,7 +42,7 @@
 
         <div class="line-3">
             <div>
-                <label for="gift-ipt-editor-brand"> Brand </label>
+                <label for="gift-ipt-editor-brand"> Marque </label>
                 <input
                     id="gift-ipt-editor-brand"
                     v-model="formGift.brand"
@@ -51,7 +51,7 @@
                 />
             </div>
             <div>
-                <label for="gift-ipt-editor-size"> Size </label>
+                <label for="gift-ipt-editor-size"> Taille </label>
                 <input
                     id="gift-ipt-editor-size"
                     v-model="formGift.size"
@@ -61,7 +61,7 @@
             </div>
 
             <div>
-                <label for="gift-ipt-editor-color"> Color </label>
+                <label for="gift-ipt-editor-color"> Couleur </label>
                 <input
                     id="gift-ipt-editor-color"
                     v-model="formGift.color"
@@ -72,7 +72,7 @@
         </div>
 
         <div>
-            <label for="gift-ipt-editor-details"> Details </label>
+            <label for="gift-ipt-editor-details"> Commentaires </label>
             <input
                 id="gift-ipt-editor-details"
                 v-model="formGift.details"
@@ -81,7 +81,7 @@
             />
         </div>
 
-        <button type="submit" class="btn btn-list">Save</button>
+        <button type="submit" class="btn btn-list">Enregistrer</button>
     </form>
 </template>
 

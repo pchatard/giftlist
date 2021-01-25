@@ -6,7 +6,7 @@
                     <h1>{{ list.name }}</h1>
                     <button class="btn btn-list desktop" @click="toggleForm">
                         <PlusIcon />
-                        Gift
+                        Cadeau
                     </button>
                 </div>
                 <button class="btn btn-list mobile" @click="toggleForm">
@@ -20,14 +20,14 @@
                     }"
                     @click="toggleShare"
                 >
-                    {{ list.sharingCode ? 'Public' : 'Private' }}
+                    {{ list.sharingCode ? 'Public' : 'Privée' }}
                 </button>
             </div>
 
             <div class="list__content">
                 <section class="gifts">
                     <div class="favorites">
-                        <h2>Favorite gifts</h2>
+                        <h2>Favoris</h2>
                         <ul v-show="favGifts.length">
                             <GiftPreview
                                 v-for="gift in favGifts"
@@ -41,7 +41,7 @@
                             />
                         </ul>
                         <p v-show="!favGifts.length" class="nothing">
-                            No favorite gifts yet
+                            Pas encore de favoris.
                         </p>
                     </div>
 
@@ -60,7 +60,7 @@
                             />
                         </ul>
                         <p v-show="!otherGifts.length" class="nothing">
-                            No gifts yet
+                            Pas encore de cadeaux.
                         </p>
                     </div>
                 </section>
@@ -69,7 +69,7 @@
 
                 <section class="editor" display="none">
                     <h2 v-if="!selectedGiftId">
-                        Select a gift to update its details
+                        Sélectionner un cadeau pour le modifier
                     </h2>
                     <GiftEditor
                         v-else

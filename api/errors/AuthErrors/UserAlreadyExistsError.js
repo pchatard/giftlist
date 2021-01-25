@@ -2,7 +2,7 @@ const APIError = require('../APIError');
 
 class UserAlreadyExistsError extends APIError {
     constructor() {
-        super('UserAlreadyExistsError', 'This email is already used.');
+        super('UserAlreadyExistsError', 'Cet e-mail est déjà utilisé');
     }
 }
 

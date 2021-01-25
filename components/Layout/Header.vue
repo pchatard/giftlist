@@ -9,25 +9,25 @@
             <nav>
                 <ul :class="{ show: showNavbar }">
                     <li v-show="!loggedIn" class="text" @click="toggleNavbar">
-                        <NuxtLink to="/"> Home </NuxtLink>
+                        <NuxtLink to="/"> Accueil </NuxtLink>
                     </li>
                     <li v-show="!loggedIn" class="text" @click="toggleNavbar">
-                        <NuxtLink to="/login"> Login </NuxtLink>
+                        <NuxtLink to="/login"> Connexion </NuxtLink>
                     </li>
                     <li v-show="!loggedIn" class="text" @click="toggleNavbar">
-                        <NuxtLink to="/register"> Register </NuxtLink>
+                        <NuxtLink to="/register"> Inscription </NuxtLink>
                     </li>
                     <li v-show="loggedIn" @click="toggleNavbar">
                         <NuxtLink to="/app">
                             <HomeIcon :color="homeColor" />
-                            <HeaderBubble> Home </HeaderBubble>
+                            <HeaderBubble> Accueil </HeaderBubble>
                         </NuxtLink>
                     </li>
 
                     <li v-show="loggedIn" @click="toggleNavbar">
                         <NuxtLink to="/app/profile">
                             <UserIcon :color="profileColor" />
-                            <HeaderBubble> Profile </HeaderBubble>
+                            <HeaderBubble> Profil </HeaderBubble>
                         </NuxtLink>
                     </li>
 
@@ -38,7 +38,7 @@
                     >
                         <div class="link">
                             <PowerIcon cursor="pointer" :color="'black'" />
-                            <HeaderBubble> Logout </HeaderBubble>
+                            <HeaderBubble> Déconnexion </HeaderBubble>
                         </div>
                     </li>
                 </ul>

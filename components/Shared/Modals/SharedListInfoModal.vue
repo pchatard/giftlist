@@ -2,18 +2,18 @@
     <Modal @close="$emit('close')">
         <div class="modal__shared-list-info">
             <div class="modal__header">
-                <h2>List Information</h2>
+                <h2>Informations</h2>
                 <CloseIcon cursor="pointer" @click="$emit('close')" />
             </div>
             <ul>
-                <li><span>Title</span>: {{ list.name }}</li>
-                <li><span>Owner</span>: {{ list.owner }}</li>
-                <li><span>Status</span>: Public</li>
-                <li><span>Created at</span>: {{ creationDate }}</li>
-                <li><span>Modified at</span>: {{ modificationDate }}</li>
+                <li><span>Nom</span>: {{ list.name }}</li>
+                <li><span>Auteur</span>: {{ list.owner }}</li>
+                <li><span>Statut</span>: Publique</li>
+                <li><span>Créée le</span>: {{ creationDate }}</li>
+                <li><span>Modifiée le</span>: {{ modificationDate }}</li>
             </ul>
             <button class="btn btn-list btn-full" @click="$emit('close')">
-                Close
+                Fermer
             </button>
         </div>
     </Modal>

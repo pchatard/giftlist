@@ -4,14 +4,14 @@
             <div class="list__header">
                 <div>
                     <h1>{{ list.name }}</h1>
-                    <h2>by {{ list.owner }}</h2>
+                    <h2>par {{ list.owner }}</h2>
                 </div>
             </div>
 
             <div class="list__content">
                 <section class="gifts">
                     <div class="favorites">
-                        <h2>Favorites</h2>
+                        <h2>Favoris</h2>
                         <ul v-show="favGifts.length">
                             <GiftPreview
                                 v-for="gift in favGifts"
@@ -24,7 +24,7 @@
                             />
                         </ul>
                         <p v-show="!favGifts.length" class="nothing">
-                            No favorite gifts yet
+                            Pas de favoris
                         </p>
                     </div>
                     <div class="normal">
@@ -41,11 +41,11 @@
                             />
                         </ul>
                         <p v-show="!otherGifts.length" class="nothing">
-                            No gifts yet
+                            Pas de cadeaux
                         </p>
                     </div>
                     <div class="taken">
-                        <h2>Already Booked</h2>
+                        <h2>Déjà réservés</h2>
                         <ul v-show="takenGifts.length">
                             <GiftPreview
                                 v-for="gift in takenGifts"
@@ -58,7 +58,7 @@
                             />
                         </ul>
                         <p v-show="!takenGifts.length" class="nothing">
-                            No gifts taken yet
+                            Rien n'est encore réservé.
                         </p>
                     </div>
                 </section>
@@ -67,7 +67,7 @@
 
                 <section class="editor">
                     <h2 v-if="!selectedGiftId">
-                        Select a gift to see its details
+                        Sélectionner un cadeau pour voir ses détails
                     </h2>
                     <SharedGiftPreview
                         v-else

@@ -23,7 +23,7 @@
             tag="button"
             class="btn btn-list btn-full"
         >
-            Add new gift ideas
+            Modifier
         </NuxtLink>
 
         <ListEditorModal

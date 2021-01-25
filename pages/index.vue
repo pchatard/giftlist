@@ -4,13 +4,13 @@
             <section class="hero">
                 <img src="@/assets/images/LogoBig.png" alt="Gift Logo" />
                 <h1>GiftList</h1>
-                <p>The ultimate wishlist app</p>
+                <p>La meilleure application pour gérer vos wishlists</p>
                 <NuxtLink to="/login" tag="button" class="btn btn-list">
-                    Start now
+                    Créer ma liste
                 </NuxtLink>
             </section>
             <section class="about">
-                <h2>How it works</h2>
+                <h2>Comment ça marche ?</h2>
                 <div class="details">
                     <div>
                         <div>
@@ -18,17 +18,16 @@
                                 src="@/assets/images/ListIcon.png"
                                 alt="List Icon"
                             />
-                            <h3>Create</h3>
+                            <h3>Créez</h3>
                         </div>
                         <ul>
-                            <li>Create and manage your wishlists.</li>
+                            <li>Créez et gérez vos wishlists.</li>
                             <li>
-                                Add gift ideas and specify the ones you prefer
-                                by marking them as favorites.
+                                Ajoutez vos envies et spécifiez vos favorites.
                             </li>
                             <li>
-                                Specify the color, the size or the brand of your
-                                favorite items.
+                                Précisez une couleur, une taille ou une marque
+                                pour vos souhaits.
                             </li>
                         </ul>
                     </div>
@@ -38,15 +37,16 @@
                                 src="@/assets/images/icons/SharedDark.png"
                                 alt="Share Icon"
                             />
-                            <h3>Share</h3>
+                            <h3>Partagez</h3>
                         </div>
                         <ul>
                             <li>
-                                Share your wishlists with your friends, family
-                                or guests so they can see what you want.
+                                Partagez vos listes avec vos amis, votre famille
+                                ou vos invités.
                             </li>
                             <li>
-                                This is as simple as giving them a sharing link.
+                                Rien de plus simple, envoyez leur un code ou un
+                                lien.
                             </li>
                         </ul>
                     </div>
@@ -56,23 +56,24 @@
                                 src="@/assets/images/GiftIcon.png"
                                 alt="Gift Icon"
                             />
-                            <h3>Offer</h3>
+                            <h3>Offrez</h3>
                         </div>
                         <ul>
-                            <li>Choose what you offer to your friend.</li>
+                            <li>Choisissez ce que vous offrez à vos amis.</li>
                             <li>
-                                Browse their list and book what you'll buy them.
+                                Parcourez leurs listes et réservez ce que vous
+                                avez choisi.
                             </li>
                             <li>
-                                The list displays which items are available, and
-                                which are taken.
+                                La liste affiche les cadeaux qui sont
+                                disponibles, et ceux qui sont déjà réservés.
                             </li>
                         </ul>
                     </div>
                 </div>
 
                 <NuxtLink to="/login" tag="button" class="btn btn-list">
-                    Start now
+                    Créer ma liste
                 </NuxtLink>
             </section>
         </div>

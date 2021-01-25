@@ -2,25 +2,25 @@
     <Modal @close="handleClose">
         <div class="modal__new-list">
             <div class="modal__header">
-                <h2>Create a new list</h2>
+                <h2>Créer une liste</h2>
                 <CloseIcon cursor="pointer" @click="handleClose" />
             </div>
             <form @submit.prevent="create">
                 <label for="list-ipt-creator">
-                    Choose a title for your new list
+                    Choisir un titre pour votre nouvelle liste
                 </label>
                 <input
                     id="list-ipt-creator"
                     v-model="newListName"
                     type="text"
-                    placeholder="Birthday"
+                    placeholder="ex : Anniversaire, Noël, Naissance..."
                     class="ipt"
                     :class="{ error: errorMessage }"
                     @input="resetErrorMessage"
                 />
                 <p class="error">{{ errorMessage }}</p>
                 <button type="submit" class="btn btn-list btn-full">
-                    Create my list
+                    Créer ma liste
                 </button>
             </form>
         </div>
@@ -52,7 +52,8 @@ export default {
                 this.$emit('create', this.newListName);
                 this.reset();
             } else {
-                this.errorMessage = "The name of the list can't be empty";
+                this.errorMessage =
+                    'Le titre de votre liste ne peut pas être vide';
             }
         },
         checkValidity() {

@@ -4,7 +4,7 @@ class SharedListAccessError extends APIError {
     constructor() {
         super(
             'SharedListAccessError',
-            'User cannot access its own shared list.'
+            'Vous ne pouvez pas accéder à votre propre liste partagée'
         );
     }
 }

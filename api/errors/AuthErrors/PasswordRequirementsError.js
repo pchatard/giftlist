@@ -4,7 +4,7 @@ class PasswordRequirementsError extends APIError {
     constructor() {
         super(
             'PasswordRequirementsError',
-            'Password does not match requirements'
+            'Le mot de passe ne remplit pas les critères'
         );
     }
 }

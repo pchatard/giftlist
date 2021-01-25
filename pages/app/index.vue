@@ -1,16 +1,16 @@
 <template>
     <main>
         <div class="dashboard lg-container">
-            <h1>Welcome, {{ firstName }}!</h1>
+            <h1>Bienvenue {{ firstName }} !</h1>
             <div class="lists">
                 <section class="owner">
                     <div class="section-header">
-                        <h2>My Lists</h2>
+                        <h2>Mes listes</h2>
                         <ButtonAddList
                             class="btn btn-list"
                             @clicked="toggleForm"
                         >
-                            List
+                            Liste
                         </ButtonAddList>
                     </div>
                     <ul v-if="lists.mine.length">
@@ -24,7 +24,7 @@
                         />
                         <div class="spacer"></div>
                     </ul>
-                    <p v-else class="nothing">No lists yet.</p>
+                    <p v-else class="nothing">Pas encore de liste.</p>
                     <ListFormModal
                         v-show="showForm"
                         :error="errors.list"
@@ -35,7 +35,7 @@
                 </section>
                 <section class="friends">
                     <div class="section-header">
-                        <h2>Friends Lists</h2>
+                        <h2>Listes partagées</h2>
                         <ButtonAddList
                             class="btn btn-list"
                             @clicked="toggleShareForm"
@@ -51,7 +51,7 @@
                         />
                         <div class="spacer"></div>
                     </ul>
-                    <p v-else class="nothing">No lists yet.</p>
+                    <p v-else class="nothing">Pas encore de liste.</p>
                     <SharedListFormModal
                         v-show="showShareForm"
                         :code-error="errors.sharedList"
@@ -106,10 +106,10 @@ export default {
             }
         },
         async handleShareList(listId) {
-            this.lists = await this.shareList(listId);
+            this.lists = await this.shareList({ listId });
         },
         async handlePrivateList(listId) {
-            this.lists = await this.makeListPrivate(listId);
+            this.lists = await this.makeListPrivate({ listId });
         },
         async handleRemoveList(listId) {
             this.lists = await this.deleteList(listId);

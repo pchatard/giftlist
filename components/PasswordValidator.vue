@@ -1,32 +1,31 @@
 <template>
     <div class="password-checker">
-        <h2>Password Checker</h2>
+        <h2>Le mot de passe doit :</h2>
         <ul>
             <li :class="{ valid: checks.length }">
                 <ValidIcon v-if="checks.length" />
                 <UnvalidIcon v-else />
-
-                Password must be at least 8 characters
+                Comporter 8 caractères minimum.
             </li>
             <li :class="{ valid: checks.digit }">
                 <ValidIcon v-if="checks.digit" />
                 <UnvalidIcon v-else />
-                Password should contain one number
+                Comporter un chiffre.
             </li>
             <li :class="{ valid: checks.upper }">
                 <ValidIcon v-if="checks.upper" />
                 <UnvalidIcon v-else />
-                Password should contain one uppercase letter
+                Comporter une lettre majuscule.
             </li>
             <li :class="{ valid: checks.lower }">
                 <ValidIcon v-if="checks.lower" />
                 <UnvalidIcon v-else />
-                Password should contain one lowercase letter
+                Comporter une lettre minuscule.
             </li>
             <li :class="{ valid: checks.identical }">
                 <ValidIcon v-if="checks.identical" />
                 <UnvalidIcon v-else />
-                Password confirmation should match
+                Etre identique à la confirmation.
             </li>
         </ul>
     </div>

@@ -16,10 +16,10 @@
         </div>
 
         <ul>
-            <li><span>Brand</span> {{ gift.brand || '-' }}</li>
-            <li><span>Size</span> {{ gift.size || '-' }}</li>
-            <li><span>Color</span> {{ gift.color || '-' }}</li>
-            <li><span>Comments</span> {{ gift.details || '-' }}</li>
+            <li><span>Marque</span> {{ gift.brand || '-' }}</li>
+            <li><span>Taille</span> {{ gift.size || '-' }}</li>
+            <li><span>Couleur</span> {{ gift.color || '-' }}</li>
+            <li><span>Commentaires</span> {{ gift.details || '-' }}</li>
         </ul>
 
         <button
@@ -31,7 +31,7 @@
             {{ bookButtonText }}
         </button>
         <span v-else-if="gift.booked && !userIsBooker">
-            This gift is already booked by someone else.
+            Ce cadeau est réservé par quelqu'un d'autre.
         </span>
     </div>
 </template>
@@ -50,9 +50,9 @@ export default {
         },
         bookButtonText() {
             if (this.userIsBooker) {
-                return 'Unbook';
+                return 'Annuler';
             } else {
-                return 'Book';
+                return 'Réserver';
             }
         },
     },

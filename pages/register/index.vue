@@ -1,10 +1,10 @@
 <template>
     <main>
         <div class="register lg-container">
-            <h1>Register</h1>
+            <h1>Inscription</h1>
             <p>
-                Already a user ?
-                <NuxtLink to="/login">Click here to login</NuxtLink>
+                Déjà inscrit ?
+                <NuxtLink to="/login">Cliquez ici pour vous connecter</NuxtLink>
             </p>
             <UserForm
                 :form-type="'register'"

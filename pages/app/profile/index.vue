@@ -2,7 +2,7 @@
     <main>
         <div class="profile lg-container">
             <h1>{{ name }}</h1>
-            <section>Work in progress</section>
+            <section>En cours de construction</section>
         </div>
     </main>
 </template>

@@ -18,7 +18,7 @@
             </div>
         </div>
         <NuxtLink :to="link" tag="button" class="btn btn-list btn-full">
-            Choose your gift
+            Consulter
         </NuxtLink>
         <SharedListInfoModal
             v-show="showInfo"

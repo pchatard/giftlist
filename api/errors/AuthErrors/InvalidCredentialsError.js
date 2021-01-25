@@ -2,7 +2,7 @@ const APIError = require('../APIError');
 
 class InvalidCredentialsError extends APIError {
     constructor() {
-        super('InvalidCredentialsError', 'Invalid password or email');
+        super('InvalidCredentialsError', 'E-mail ou mot de passe incorrects');
     }
 }
 

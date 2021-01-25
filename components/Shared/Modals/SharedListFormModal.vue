@@ -2,12 +2,12 @@
     <Modal @close="handleClose">
         <div class="modal__shared-new-list">
             <div class="modal__header">
-                <h2>Find a friend's list</h2>
+                <h2>Ajouter une liste partagée</h2>
                 <CloseIcon cursor="pointer" @click="handleClose" />
             </div>
             <form @submit.prevent="handleSubmit">
                 <label for="shared-list-ipt-creator">
-                    Enter the list sharing code:
+                    Entrer le code de partage :
                 </label>
                 <input
                     id="shared-list-ipt-creator"
@@ -19,7 +19,7 @@
                 />
                 <p class="error">{{ errorMessage }}</p>
                 <button class="btn btn-full btn-list" type="submit">
-                    Submit code
+                    Confirmer
                 </button>
             </form>
         </div>

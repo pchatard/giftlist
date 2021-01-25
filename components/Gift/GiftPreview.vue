@@ -30,7 +30,7 @@
             >
                 {{ bookButtonText }}
             </button>
-            <span v-else-if="shareMode && !bookButtonText">Taken</span>
+            <span v-else-if="shareMode && !bookButtonText">Réservé</span>
             <CloseIcon
                 v-else
                 :options="'black'"
@@ -62,9 +62,9 @@ export default {
         },
         bookButtonText() {
             if (!this.gift.booked) {
-                return 'Book';
+                return 'Réserver';
             } else if (this.userIsBooker) {
-                return 'Unbook';
+                return 'Annuler';
             } else {
                 return '';
             }
