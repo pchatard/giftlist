@@ -35,7 +35,7 @@
                 <p>Votre liste est actuellement <strong>privée</strong>.</p>
                 <p>
                     Rendez la publique en cliquant sur le bouton
-                    <strong>Paratger</strong>.
+                    <strong>Partager</strong>.
                 </p>
                 <button
                     class="btn btn-list btn-full"

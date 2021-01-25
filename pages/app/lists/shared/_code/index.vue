@@ -131,7 +131,14 @@ export default {
     },
     async mounted() {
         const listCode = this.$route.params.code;
-        this.list = await this.$axios.$get(`/api/lists/shared/${listCode}`);
+        const response = await this.$axios.$get(
+            `/api/lists/shared/${listCode}`
+        );
+        if (response.err) {
+            this.$router.push('/app');
+        } else {
+            this.list = response;
+        }
 
         this.gifts = await this.$store.dispatch(
             'gifts/initialize',
