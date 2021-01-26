@@ -1,10 +1,6 @@
 <template>
-    <li
-        class="gift-preview"
-        :class="{ selected }"
-        @click="$emit('select', gift.id)"
-    >
-        <div class="preview">
+    <li class="gift-preview" :class="{ selected }">
+        <div class="preview" @click="handleClickedLi">
             <div class="preview__left">
                 <font-awesome-icon
                     v-if="gift.favorite"
@@ -42,8 +38,7 @@
         <GiftBookModal
             v-show="showBookModal"
             @close="toggleBookModal"
-            @no="handleBookButton(false)"
-            @yes="handleBookButton(true)"
+            @book="handleBookButton"
         />
     </li>
 </template>
@@ -103,6 +98,11 @@ export default {
             if (!this.gift.booked) {
                 this.toggleBookModal();
             }
+        },
+        handleClickedLi(e) {
+            console.log(e.target, e.currentTarget);
+            if (e.target !== e.currentTarget) return;
+            this.$emit('select', this.gift.id);
         },
     },
 };

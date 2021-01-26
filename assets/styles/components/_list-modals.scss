@@ -218,6 +218,7 @@
 }
 
 .modal__book-gift {
+    cursor: default;
     .book-header {
         display: flex;
         justify-content: space-between;
@@ -232,9 +233,26 @@
         margin: 1rem 0;
     }
 
+    label {
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+
+        input {
+            width: 4rem;
+            height: 4rem;
+        }
+    }
+
     .buttons {
         display: flex;
         flex-direction: column;
+
+        .book-btn {
+            margin: 0.5rem 0;
+        }
     }
 }
 
@@ -298,12 +316,22 @@
             font-size: 1.8rem;
         }
 
+        label {
+            justify-content: flex-start;
+            input {
+                margin-right: 1rem;
+                width: 2rem;
+                height: 2rem;
+            }
+        }
+
         .buttons {
             flex-direction: row;
             justify-content: space-between;
 
             .book-btn {
                 width: 48% !important;
+                margin: 0;
             }
         }
     }
@@ -321,6 +349,10 @@
     .modal__book-gift {
         p {
             margin: 2rem 0;
+        }
+
+        label {
+            margin-bottom: 2rem;
         }
     }
 }

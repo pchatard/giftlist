@@ -37,8 +37,7 @@
         <GiftBookModal
             v-show="showBookModal"
             @close="toggleBookModal"
-            @no="handleBookButton(false)"
-            @yes="handleBookButton(true)"
+            @book="handleBookButton"
         />
     </div>
 </template>
