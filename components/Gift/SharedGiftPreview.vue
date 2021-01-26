@@ -26,13 +26,20 @@
             v-if="!gift.booked || userIsBooker"
             class="btn btn-list"
             :class="{ booked: userIsBooker }"
-            @click.stop="handleBookButton"
+            @click.stop="gift.booked ? handleBookButton() : toggleBookModal()"
         >
             {{ bookButtonText }}
         </button>
         <span v-else-if="gift.booked && !userIsBooker">
-            Ce cadeau est réservé par quelqu'un d'autre.
+            Ce cadeau est réservé par
+            {{ gift.booked.name ? gift.booked.name : "quelqu'un d'autre" }}.
         </span>
+        <GiftBookModal
+            v-show="showBookModal"
+            @close="toggleBookModal"
+            @no="handleBookButton(false)"
+            @yes="handleBookButton(true)"
+        />
     </div>
 </template>
 
@@ -44,9 +51,17 @@ export default {
             type: Object,
         },
     },
+    data() {
+        return {
+            showBookModal: false,
+        };
+    },
     computed: {
         userIsBooker() {
-            return this.gift.booked === this.$auth.user.id;
+            const userIsBooker = this.gift.booked
+                ? this.gift.booked.id === this.$auth.user.id
+                : false;
+            return userIsBooker;
         },
         bookButtonText() {
             if (this.userIsBooker) {
@@ -55,14 +70,24 @@ export default {
                 return 'Réserver';
             }
         },
+        userName() {
+            return `${this.$auth.user.firstName} ${this.$auth.user.lastName}`;
+        },
     },
     methods: {
-        handleBookButton() {
+        toggleBookModal() {
+            this.showBookModal = !this.showBookModal;
+        },
+        handleBookButton(showName = false) {
             this.$emit('book', {
                 giftId: this.gift.id,
                 listId: this.gift.listId,
                 status: !this.gift.booked,
+                name: showName ? this.userName : undefined,
             });
+            if (!this.gift.booked) {
+                this.toggleBookModal();
+            }
         },
     },
 };

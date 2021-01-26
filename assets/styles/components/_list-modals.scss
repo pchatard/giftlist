@@ -5,7 +5,8 @@
 .modal__shared-list-info,
 .modal__new-gift,
 .modal__gift-details,
-.modal__gift-edit {
+.modal__gift-edit,
+.modal__book-gift {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -216,6 +217,27 @@
     }
 }
 
+.modal__book-gift {
+    .book-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h1 {
+            font-size: 3rem;
+        }
+    }
+
+    p {
+        margin: 1rem 0;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 @media screen and (min-width: 600px) {
     .modal__gift-edit {
         form {
@@ -270,6 +292,21 @@
             }
         }
     }
+
+    .modal__book-gift {
+        p {
+            font-size: 1.8rem;
+        }
+
+        .buttons {
+            flex-direction: row;
+            justify-content: space-between;
+
+            .book-btn {
+                width: 48% !important;
+            }
+        }
+    }
 }
 
 @media screen and (min-width: 900px) {
@@ -278,6 +315,12 @@
             &:hover {
                 background-color: #e6e6e6;
             }
+        }
+    }
+
+    .modal__book-gift {
+        p {
+            margin: 2rem 0;
         }
     }
 }

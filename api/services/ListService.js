@@ -34,7 +34,9 @@ class ListService {
     static async getMine(db, userId) {
         const lists = await this.getAll(db);
         const mine = lists.filter((list) => list.ownerId === userId);
-        const shared = lists.filter((list) => list.sharedWith.includes(userId));
+        const shared = lists.filter(
+            (list) => list.sharedWith.includes(userId) && list.public
+        );
         return { mine, shared };
     }
 
@@ -50,6 +52,11 @@ class ListService {
         const result = (await ref.once('value')).val();
         if (result) {
             result.id = listId;
+            const sharedWith = result.sharedWith
+                ? Object.values(result.sharedWith)
+                : [];
+            result.sharedWith = sharedWith;
+
             return result;
         }
         return [];
@@ -111,7 +118,7 @@ class ListService {
     }
 
     /**
-     * Sets a sharingCode property to the code parameter in a given list
+     * Turns a list public property to true and Sets a sharingCode property to the code parameter in a given list
      * @function
      * @param {Object} db - Database connection
      * @param {String} listId - The id of the list
@@ -121,6 +128,9 @@ class ListService {
     static async share(db, listId, code) {
         const ref = db.ref(`lists/${listId}/sharingCode`);
         ref.set(code);
+        db.ref(`/lists/${listId}`).update({
+            '/public': true,
+        });
         return await ListService.getOne(db, listId);
     }
 
@@ -152,17 +162,15 @@ class ListService {
     }
 
     /**
-     * Removes sharing properties of a given list.
+     * Turns public property to false of a given list.
      * @function
      * @param {Object} db - Database connection
      * @param {String} listId - The id of the list that should go private
      * @returns {Object} The updated list.
      */
     static async private(db, listId) {
-        const refCode = db.ref(`lists/${listId}/sharingCode`);
-        refCode.remove();
-        const refIds = db.ref(`lists/${listId}/sharedWith`);
-        refIds.remove();
+        const ref = db.ref(`lists/${listId}/public`);
+        ref.set(false);
         return await ListService.getOne(db, listId);
     }
 }

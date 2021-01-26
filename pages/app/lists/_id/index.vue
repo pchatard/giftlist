@@ -94,6 +94,7 @@
             <ListShareModal
                 v-show="showShare"
                 :list-id="list.id"
+                :public="list.public"
                 :sharing-code="list.sharingCode"
                 :number="sharedNumber"
                 @close="toggleShare"

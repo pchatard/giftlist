@@ -85,6 +85,7 @@ class ListController {
                 modified_at: Date(),
                 ownerId: req.userId,
                 owner: `${firstName} ${lastName}`,
+                public: false,
             };
             const createdList = await List.create(req.db, list);
             res.send(createdList);
@@ -152,23 +153,21 @@ class ListController {
             // Get the list ID.
             const listId = req.params.listId;
             const currentList = await List.getOne(req.db, listId);
-            if (currentList.sharingCode) {
-                res.send({ list: currentList });
-            } else {
-                // Generate a random link and a link
-                const code = uuidv4();
-                // Add them to the list in DB
-                const list = await List.share(req.db, listId, code);
-                // Return
-                res.send({ list });
+            let code = currentList.sharingCode;
+            if (!code) {
+                code = uuidv4();
             }
+            // Add them to the list in DB
+            const list = await List.share(req.db, listId, code);
+            // Return
+            res.send({ list });
         } catch (error) {
             next(error);
         }
     }
 
     /**
-     * Removes the sharing code from a list and makes it private.
+     * Makes a list private.
      * Sends back the list in the response.
      * @function
      * @param {Request} req - Express request object
@@ -178,13 +177,8 @@ class ListController {
     static async private(req, res, next) {
         try {
             const listId = req.params.listId;
-            const list = await List.getOne(req.db, listId);
-            if (list.sharingCode) {
-                const privateList = await List.private(req.db, listId);
-                res.send({ list: privateList });
-            } else {
-                res.send({ list });
-            }
+            const privateList = await List.private(req.db, listId);
+            res.send({ list: privateList });
         } catch (error) {
             next(error);
         }

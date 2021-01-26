@@ -5,7 +5,7 @@
                 <h2>Partager ma liste</h2>
                 <CloseIcon cursor="pointer" @click="$emit('close')" />
             </div>
-            <section v-if="code">
+            <section v-if="isPublic">
                 <p class="share-status">
                     Cette liste est actuellement <strong>publique</strong> et
                     partagée avec {{ number }} personne(s).
@@ -55,6 +55,10 @@ export default {
             default: () => '',
             type: String,
         },
+        public: {
+            default: () => false,
+            type: Boolean,
+        },
         sharingCode: {
             default: () => '',
             type: String,
@@ -66,6 +70,7 @@ export default {
     },
     data() {
         return {
+            isPublic: this.public,
             code: this.sharingCode,
         };
     },
@@ -78,8 +83,8 @@ export default {
         },
     },
     watch: {
-        sharingCode(newVal) {
-            this.code = newVal;
+        public(newVal) {
+            this.isPublic = newVal;
         },
     },
 

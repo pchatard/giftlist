@@ -123,8 +123,11 @@ class GiftController {
     static async book(req, res, next) {
         try {
             let booked = false;
-            if (req.body.booked) {
-                booked = req.userId;
+            if (req.body.booked && req.body.name) {
+                // Use an object with id and name
+                booked = { id: req.userId, name: req.body.name };
+            } else if (req.body.booked && !req.body.name) {
+                booked = { id: req.userId };
             }
             const updatedGift = await Gift.updateBookedState(
                 req.db,

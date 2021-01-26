@@ -101,23 +101,13 @@ export default {
     },
     computed: {
         favGifts() {
-            return this.gifts.filter(
-                (gift) =>
-                    gift.favorite &&
-                    !(gift.booked !== this.$auth.user.id && gift.booked)
-            );
+            return this.gifts.filter((gift) => gift.favorite && !gift.booked);
         },
         otherGifts() {
-            return this.gifts.filter(
-                (gift) =>
-                    !gift.favorite &&
-                    !(gift.booked !== this.$auth.user.id && gift.booked)
-            );
+            return this.gifts.filter((gift) => !gift.favorite && !gift.booked);
         },
         takenGifts() {
-            return this.gifts.filter(
-                (gift) => gift.booked !== this.$auth.user.id && gift.booked
-            );
+            return this.gifts.filter((gift) => gift.booked);
         },
         selectedGift() {
             if (this.selectedGiftId) {

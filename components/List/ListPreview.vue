@@ -7,7 +7,7 @@
             <div class="preview__info">
                 <div class="shared">
                     <SharedIcon
-                        v-show="list.sharingCode"
+                        v-show="list.public"
                         class="shared"
                         @open="toggleSharingMode"
                     />
@@ -37,6 +37,7 @@
         <ListShareModal
             v-show="sharingMode"
             :list-id="list.id"
+            :public="list.public"
             :sharing-code="list.sharingCode"
             :number="sharedNumber"
             @generate="generateSharingCode"

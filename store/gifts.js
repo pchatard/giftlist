@@ -28,10 +28,10 @@ const actions = {
         );
         commit('MARK_GIFT_FAVORITE', { giftId, newState: newFavoriteState });
     },
-    async bookGift({ commit }, { listId, giftId, status }) {
+    async bookGift({ commit }, { listId, giftId, status, name }) {
         const updatedGift = await this.$axios.$put(
             `/api/gifts/${listId}/${giftId}/book`,
-            { booked: status },
+            { booked: status, name },
             { withCredentials: true }
         );
         commit('UPDATE_GIFT', updatedGift);

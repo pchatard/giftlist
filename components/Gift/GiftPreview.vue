@@ -26,7 +26,9 @@
                 v-if="shareMode && bookButtonText"
                 class="btn btn-list"
                 :class="{ booked: userIsBooker }"
-                @click.stop="handleBookButton"
+                @click.stop="
+                    gift.booked ? handleBookButton() : toggleBookModal()
+                "
             >
                 {{ bookButtonText }}
             </button>
@@ -37,6 +39,12 @@
                 @click="$emit('remove', gift.id)"
             />
         </div>
+        <GiftBookModal
+            v-show="showBookModal"
+            @close="toggleBookModal"
+            @no="handleBookButton(false)"
+            @yes="handleBookButton(true)"
+        />
     </li>
 </template>
 
@@ -56,9 +64,17 @@ export default {
             type: Boolean,
         },
     },
+    data() {
+        return {
+            showBookModal: false,
+        };
+    },
     computed: {
         userIsBooker() {
-            return this.gift.booked === this.$auth.user.id;
+            const userIsBooker = this.gift.booked
+                ? this.gift.booked.id === this.$auth.user.id
+                : false;
+            return userIsBooker;
         },
         bookButtonText() {
             if (!this.gift.booked) {
@@ -69,14 +85,24 @@ export default {
                 return '';
             }
         },
+        userName() {
+            return `${this.$auth.user.firstName} ${this.$auth.user.lastName}`;
+        },
     },
     methods: {
-        handleBookButton() {
+        toggleBookModal() {
+            this.showBookModal = !this.showBookModal;
+        },
+        handleBookButton(showName = false) {
             this.$emit('book', {
                 giftId: this.gift.id,
                 listId: this.gift.listId,
                 status: !this.gift.booked,
+                name: showName ? this.userName : undefined,
             });
+            if (!this.gift.booked) {
+                this.toggleBookModal();
+            }
         },
     },
 };

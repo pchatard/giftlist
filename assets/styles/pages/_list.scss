@@ -13,17 +13,13 @@
 
         & > div {
             display: flex;
+            flex-direction: column;
             align-items: baseline;
         }
 
         h1 {
             font-size: 3.5rem;
             font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        h2 {
-            margin-left: 1rem;
         }
 
         button.mobile {
@@ -109,8 +105,17 @@
         padding: 2rem 8rem;
 
         &__header {
+            & > div {
+                flex-direction: row;
+            }
+
             h1 {
                 font-size: 4.5rem;
+                margin-bottom: 1rem;
+            }
+
+            h2 {
+                margin-left: 1rem;
             }
 
             button.mobile {
