@@ -30,13 +30,6 @@ That way, the other offering people will know what's available and what's not, i
 
 Of course, the list owner won't be able to see what people intend to offer him.
 
-### How can I discover the app
-
-Create a .env file containing:
-
--   Firebase configs (see api/config/firebase.js)
--   Tokens secrets named ACCESS_SECRET, REFRESH_SECRET, PUBLIC_SECRET
-
 ```bash
 # install dependencies
 $ npm install
