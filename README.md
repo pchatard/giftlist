@@ -29,17 +29,3 @@ That way, the other offering people will know what's available and what's not, i
 ### 🙈 Keep the element of surprise
 
 Of course, the list owner won't be able to see what people intend to offer him.
-
-```bash
-# install dependencies
-$ npm install
-
-# Run the app in development mode
-$ npm run dev
-
-# Build the app for production
-$ npm run build
-
-# Run the app after production is done
-$ npm run start
-```
