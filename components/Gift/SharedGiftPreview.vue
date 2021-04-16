@@ -12,7 +12,13 @@
                 </h2>
                 <CloseIcon @click="$emit('close')" />
             </div>
-            <a v-if="gift.link" :href="gift.link">{{ gift.link }}</a>
+            <a
+                v-if="gift.link"
+                :href="gift.link"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ gift.link }}</a
+            >
         </div>
 
         <ul>
