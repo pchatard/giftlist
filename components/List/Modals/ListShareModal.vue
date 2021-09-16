@@ -15,15 +15,23 @@
                 </p>
 
                 <div class="share-code">
-                    <button class="btn btn-list btn-full" @click="handleCode">
-                        Copier le code
-                    </button>
+                    <label for="sharing-code">Code</label>
+                    <input
+                        type="text"
+                        id="sharing-code"
+                        v-model="code"
+                        disabled
+                    />
                 </div>
 
                 <div class="share-link">
-                    <button class="btn btn-list btn-full" @click="handleLink">
-                        Copier le lien
-                    </button>
+                    <label for="sharing-code">Lien</label>
+                    <input
+                        type="text"
+                        id="sharing-link"
+                        v-model="link"
+                        disabled
+                    />
                 </div>
 
                 <button class="btn btn-danger btn-full" @click="handlePrivate">
