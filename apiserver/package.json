@@ -1,0 +1,43 @@
+{
+  "name": "apiserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/server.ts",
+  "scripts": {
+    "clean": "rm -rf ./build/*",
+    "dev": "nodemon src/server.ts",
+    "build": "npm run clean; TODO",
+    "lint": "eslint -c ./.eslintrc.json './src/**/*.ts'",
+    "prettier:check": "prettier --config .prettierrc.json --check 'server/**/*.ts'",
+    "prettier:write": "prettier --config .prettierrc.json --write 'server/**/*.ts'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.14",
+    "remove": "^0.1.5",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/firebase": "^3.2.1",
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/morgan": "^1.9.3",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
+    "cors": "^2.8.5",
+    "eslint-plugin-promise": "^5.1.1",
+    "eslint-plugin-security": "^1.4.0",
+    "firebase": "^9.1.3",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "prettier": "^2.4.1"
+  }
+}
