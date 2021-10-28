@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response } from "express";
 
 /**
  * Set tokens to httpOnly cookies
@@ -6,13 +6,13 @@ import { Response } from 'express';
  * @param {Response} res - Response object
  * @param {Object} tokens - Object containing the access and refresh tokens
  */
-export function setCookies(res: Response, tokens: object) {
-    res.cookie('access', tokens.accessToken, {
-        httpOnly: true,
-    });
-    res.cookie('refresh', tokens.refreshToken, {
-        httpOnly: true,
-    });
+export function setCookies(res: Response, tokens: { accessToken: string; refreshToken: string }) {
+	res.cookie("access", tokens.accessToken, {
+		httpOnly: true,
+	});
+	res.cookie("refresh", tokens.refreshToken, {
+		httpOnly: true,
+	});
 }
 
 /**
@@ -21,6 +21,6 @@ export function setCookies(res: Response, tokens: object) {
  * @param {Response} res - Response object
  */
 export function clearCookies(res: Response) {
-    res.clearCookie('access', { httpOnly: true });
-    res.clearCookie('refresh', { httpOnly: true });
+	res.clearCookie("access", { httpOnly: true });
+	res.clearCookie("refresh", { httpOnly: true });
 }

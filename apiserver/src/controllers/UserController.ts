@@ -1,24 +1,23 @@
-import User from '../services/UserService';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from "express";
+import { getAuth } from "firebase/auth";
 
 class UserController {
-    /**
-     * Gets logged in user's information
-     * @function
-     * @param {Request} req - Express request object
-     * @param {Response} res - Express response object
-     * @param {Function} next - Following middleware
-     * @returns {Object} - User object
-     */
-    static async me(req: Request, res: Response, next: Function): Promise<object> {
-        try {
-            const userId = req.userId;
-            const user = await User.getOne(req.db, userId);
-            res.send({ user });
-        } catch (error) {
-            next(error);
-        }
-    }
+	/**
+	 * Gets logged in user's information
+	 * @function
+	 * @param {Request} req - Express request object
+	 * @param {Response} res - Express response object
+	 * @param {NextFunction} next - Following middleware
+	 * @returns {Object} - User object
+	 */
+	static me(_req: Request, res: Response, _next: NextFunction): void {
+		const user = getAuth().currentUser;
+		if (user) {
+			res.status(200).send({ user });
+		} else {
+			throw Error("User not logged-in");
+		}
+	}
 }
 
-module.exports = UserController;
+export default UserController;
