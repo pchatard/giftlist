@@ -7,7 +7,7 @@ interface ErrorType {
 
 function errorHandler(err: ErrorType, _req: Request, res: Response, _next: NextFunction): void {
 	res.status(500);
-	res.render("Server Error", {
+	res.json({
 		name: err.name,
 		message: err.message,
 	});

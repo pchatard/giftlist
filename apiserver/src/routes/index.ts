@@ -5,6 +5,7 @@ import auth from "./auth";
 import users from "./users";
 import lists from "./lists";
 import gifts from "./gifts";
+import UserController from '../controllers/UserController';
 
 const router = express.Router();
 
@@ -24,5 +25,7 @@ router.use("/lists", lists);
 
 /** Gifts router */
 router.use("/gifts", gifts);
+
+router.route("/test").get(UserController.test)
 
 export default router;

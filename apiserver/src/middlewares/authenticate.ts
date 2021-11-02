@@ -1,7 +1,6 @@
 import { verifyToken, signTokens } from "../helpers/jwt";
 import { setCookies } from "../helpers/cookies";
 import { Request, Response } from "express";
-import { JwtPayload } from "jsonwebtoken";
 
 const accessSecret = process.env.ACCESS_SECRET || "abcdef";
 const refreshSecret = process.env.REFRESH_SECRET || "ghijkl";
@@ -13,34 +12,27 @@ export function verifyPassword(password: string) {
 	);
 }
 
-export function authenticate(req: Request, res: Response, next: Function) {
-	const accessToken = req.cookies.access;
-	let userId;
+function checkToken(token: string, secret: string, errorMessage: string): string {
+	let payload: string = "";
 	try {
-		// Check accessToken validity
-		const { payload } = verifyToken(accessToken, accessSecret) as JwtPayload;
-		if (payload) {
-			userId = payload;
-		} else {
-			throw new Error("Access Token Expired");
+		payload = verifyToken(token, secret) as string;
+		if (!payload) {
+			throw new Error(errorMessage);
 		}
-	} catch (error) {
-		const refreshToken = req.cookies.refresh;
-		try {
-			// Check refreshToken validity
-			const { payload } = verifyToken(refreshToken, refreshSecret) as JwtPayload;
-			if (payload) {
-				userId = payload;
-			} else {
-				throw new Error("Refresh Token Expired");
-			}
-		} catch (error) {
-			next(error);
-		}
+	} catch (err) {
+
 	}
+	return payload;
+}
+
+export function authenticate(req: Request, res: Response, next: Function) {
+	// Check accessToken validity
+	checkToken(req.cookies.access, accessSecret, "Access Token Expired");
+	// Check refreshToken validity
+	const payload  = checkToken(req.cookies.refresh, refreshSecret, "Refresh Token Expired");
 	// If one of the tokens is valid, resign new tokens
-	req.uid = userId;
-	const newTokens = signTokens(userId);
+	req.uid = payload;
+	const newTokens = signTokens(payload);
 	setCookies(res, newTokens);
 	next();
 }

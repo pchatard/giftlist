@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { getAuth } from "firebase/auth";
+import { Get, Route } from 'tsoa';
+//import { User } from '@firebase/auth';
 
+@Route("test")
 class UserController {
 	/**
 	 * Gets logged in user's information
@@ -18,6 +21,20 @@ class UserController {
 			throw Error("User not logged-in");
 		}
 	}
+
+	@Get("/")
+	static test(): UserDTO {
+		const user = getAuth().currentUser;
+		if (!user) {
+			throw Error("User not logged-in");
+		}
+		return user as UserDTO;
+	}
+
+
+}
+export interface UserDTO {
+	displayName: string
 }
 
 export default UserController;

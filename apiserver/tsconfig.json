@@ -6,7 +6,8 @@
     
       "outDir": "./build",                      
       "rootDir": "./src",                 
-    
+      "resolveJsonModule": true,
+
       "strict": true,                           
 		  "removeComments": true,
 		  "declaration": true,
@@ -22,7 +23,9 @@
       "noUnusedParameters": true,               
       "noImplicitReturns": true,                
       "noFallthroughCasesInSwitch": true,       
-      "typeRoots": ["./node_modules/@types", "./src/types"]
+      "typeRoots": ["./node_modules/@types", "./src/types"],
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"],
