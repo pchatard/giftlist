@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { getAuth } from "firebase/auth";
-import { Get, Route } from 'tsoa';
+import { Get, Route } from "tsoa";
 //import { User } from '@firebase/auth';
-import UserService from '../services/UserService';
+import UserService from "../services/UserService";
 
 @Route("test")
 class UserController {
@@ -15,7 +15,7 @@ class UserController {
 	 * @returns {Object} - User object
 	 */
 	static async me(req: Request, res: Response, _next: NextFunction): Promise<void> {
-		const user = await UserService.getOne(req.database, req.uid || "");
+		const user = await UserService.getOne(req.database, req.uid || "");
 		if (user) {
 			res.status(200).send({ user });
 		} else {
@@ -31,11 +31,9 @@ class UserController {
 		}
 		return user as UserDTO;
 	}
-
-
 }
 export interface UserDTO {
-	displayName: string
+	displayName: string;
 }
 
 export default UserController;

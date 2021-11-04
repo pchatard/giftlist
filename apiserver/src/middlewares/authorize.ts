@@ -7,8 +7,7 @@ export async function authorize(req: Request, _: Response, next: Function) {
 		const listId = req.params.listId;
 
 		// Get the owner id
-		const ownerId = (
-			await List.getOne(req.database, listId) as { ownerId: string }).ownerId;
+		const ownerId = ((await List.getOne(req.database, listId)) as { ownerId: string }).ownerId;
 
 		// Compare user ids
 		if (ownerId === req.uid) {

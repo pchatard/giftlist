@@ -1,5 +1,5 @@
 //require("dotenv").config();
-import { config } from "dotenv"
+import { config } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import cookies from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
@@ -14,7 +14,7 @@ import router from "./routes";
 import errorHandler from "./middlewares/error";
 import { Database } from "@firebase/database";
 
-import swaggerDocument from './config/swagger.json';
+import swaggerDocument from "./config/swagger.json";
 
 config();
 const PORT = process.env.API_PORT;
@@ -36,11 +36,11 @@ app.use((req: Request, _: Response, next: NextFunction): void => {
 });
 
 app.use(
-  '/docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument, {
-    explorer: true,
-  })
+	"/docs",
+	swaggerUi.serve,
+	swaggerUi.setup(swaggerDocument, {
+		explorer: true,
+	})
 );
 
 // Routes and Error handler
@@ -48,7 +48,7 @@ app.use(router);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-	console.info("API Server is listening on " + PORT)
-})
+	console.info("API Server is listening on " + PORT);
+});
 
 module.exports = app;

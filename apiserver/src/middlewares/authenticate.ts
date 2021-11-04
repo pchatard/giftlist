@@ -14,32 +14,32 @@ export function verifyPassword(password: string) {
 
 export function authenticate(req: Request, res: Response, next: Function) {
 	const accessToken = req.cookies.access;
-    let userId;
-    try {
-        // Check accessToken validity
-        const { payload } = verifyToken(accessToken, accessSecret) as any;
-        if (payload) {
-            userId = payload;
-        } else {
-            throw new Error('Access Token Expired');
-        }
-    } catch (error) {
-        const refreshToken = req.cookies.refresh;
-        try {
-            // Check refreshToken validity
-            const { payload } = verifyToken(refreshToken, refreshSecret) as any;
-            if (payload) {
-                userId = payload;
-            } else {
-                throw new Error('Refresh Token Expired');
-            }
-        } catch (error) {
-            next(error);
-        }
-    }
-    // If one of the tokens is valid, resign new tokens
-    req.uid = userId;
-    const newTokens = signTokens(userId);
-    setCookies(res, newTokens);
-    next();
+	let userId;
+	try {
+		// Check accessToken validity
+		const { payload } = verifyToken(accessToken, accessSecret) as any;
+		if (payload) {
+			userId = payload;
+		} else {
+			throw new Error("Access Token Expired");
+		}
+	} catch (error) {
+		const refreshToken = req.cookies.refresh;
+		try {
+			// Check refreshToken validity
+			const { payload } = verifyToken(refreshToken, refreshSecret) as any;
+			if (payload) {
+				userId = payload;
+			} else {
+				throw new Error("Refresh Token Expired");
+			}
+		} catch (error) {
+			next(error);
+		}
+	}
+	// If one of the tokens is valid, resign new tokens
+	req.uid = userId;
+	const newTokens = signTokens(userId);
+	setCookies(res, newTokens);
+	next();
 }

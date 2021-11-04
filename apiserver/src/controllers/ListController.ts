@@ -33,7 +33,7 @@ class ListController {
 	 */
 	static async findMine(req: Request, res: Response, next: Function) {
 		try {
-			const { mine, shared } = await List.getMine(req.database, req.uid || "") as {
+			const { mine, shared } = (await List.getMine(req.database, req.uid || "")) as {
 				mine: string;
 				shared: string;
 			};

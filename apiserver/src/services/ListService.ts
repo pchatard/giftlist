@@ -21,9 +21,11 @@ class ListService {
 	static async getAll(db: Database): Promise<Array<any>> {
 		const reference: DatabaseReference = ref(db, "lists");
 		var results: Array<any> = new Array();
-		(await get(query(reference))).forEach((l) => { results.push(l.val()) });
+		(await get(query(reference))).forEach((l) => {
+			results.push(l.val());
+		});
 		// TODO: Clean
-		let resultsArr: any = results
+		let resultsArr: any = results;
 		if (results) {
 			resultsArr = Object.keys(results).map((key: any) => {
 				const id = key;

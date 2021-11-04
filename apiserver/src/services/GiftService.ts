@@ -12,7 +12,9 @@ class GiftService {
 	static async getAll(db: Database): Promise<Array<any>> {
 		const reference: DatabaseReference = ref(db, "gifts");
 		const gifts: any = new Array();
-		(await get(query(reference))).forEach((g) => { gifts.push(g.val()) });
+		(await get(query(reference))).forEach((g) => {
+			gifts.push(g.val());
+		});
 		/*onValue(
 			reference,
 			(snap) => {
@@ -21,7 +23,7 @@ class GiftService {
 			{ onlyOnce: true }
 		);*/
 		// TODO: Clean
-		let formattedGifts: any = gifts
+		let formattedGifts: any = gifts;
 		if (gifts) {
 			formattedGifts = Object.keys(gifts).map((key) => {
 				return { ...gifts[key], id: key };
@@ -99,11 +101,7 @@ class GiftService {
 	 * @param {Boolean} newState - The new state of the favorite property of the gift.
 	 * @returns {Boolean} The new value of the Favorite property of that gift.
 	 */
-	static updateFavoriteState(
-		db: Database,
-		giftId: string,
-		newState: boolean
-	): boolean {
+	static updateFavoriteState(db: Database, giftId: string, newState: boolean): boolean {
 		const reference: DatabaseReference = ref(db, `gifts/${giftId}`);
 		update(reference, { [`/favorite`]: Boolean(newState) });
 		GiftService.updateListModificationDate(db, giftId);
@@ -146,7 +144,7 @@ class GiftService {
 	 * @param {String} giftId - The id of the gift that was created / deleted / modified.
 	 */
 	static async updateListModificationDate(db: Database, giftId: string): Promise<void> {
-		const gift = await GiftService.getOne(db, giftId) as { listId: string };
+		const gift = (await GiftService.getOne(db, giftId)) as { listId: string };
 		const reference: DatabaseReference = ref(db, `lists/${gift.listId}`);
 		update(reference, { "/modified_at": Date() });
 	}

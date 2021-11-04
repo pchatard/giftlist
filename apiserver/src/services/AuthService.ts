@@ -14,8 +14,8 @@ class AuthService {
 	static create(db: Database, user: DatabaseUser): User {
 		const reference: DatabaseReference = ref(db, "users");
 		push(reference, user);
-		const { firebase_uid, ...res } = user
-		return res as User;//this.getOne(db, user.firebase_uid || "");
+		const { firebase_uid, ...res } = user;
+		return res as User; //this.getOne(db, user.firebase_uid || "");
 	}
 
 	/**
@@ -34,12 +34,14 @@ class AuthService {
 	 * @param {Database} db - Database connection
 	 * @returns {Array} An array of all the users in the database.
 	 */
-	 static async getAll(db: Database): Promise<Array<any>> {
+	static async getAll(db: Database): Promise<Array<any>> {
 		const reference: DatabaseReference = ref(db, "/users");
 		var results = new Array();
-		(await get(query(reference))).forEach((u) => { results.push(u.val()) });
+		(await get(query(reference))).forEach((u) => {
+			results.push(u.val());
+		});
 		// TODO: Clean
-		let resultsArr: any = results
+		let resultsArr: any = results;
 		resultsArr = Object.keys(results).map((key) => {
 			return { ...resultsArr[key], id: key };
 		});

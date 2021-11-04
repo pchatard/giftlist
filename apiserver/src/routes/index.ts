@@ -5,11 +5,11 @@ import auth from "./auth";
 import users from "./users";
 import lists from "./lists";
 import gifts from "./gifts";
-import UserController from '../controllers/UserController';
+import UserController from "../controllers/UserController";
 
 const router = express.Router();
 
-router.use(cors({origin: "http://localhost:3000", credentials: true}));
+router.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 /** Authentication router */
 router.use("/auth", auth);
@@ -26,6 +26,6 @@ router.use("/lists", lists);
 /** Gifts router */
 router.use("/gifts", gifts);
 
-router.route("/test").get(UserController.test)
+router.route("/test").get(UserController.test);
 
 export default router;
