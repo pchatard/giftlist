@@ -1,5 +1,6 @@
-import { Database, onValue, push, ref, remove, set, update } from "@firebase/database";
+import { Database, get, push, ref, remove, set, update } from "@firebase/database";
 import { DatabaseReference } from "@firebase/database";
+import { query } from "firebase/database";
 
 class GiftService {
 	/**
@@ -8,16 +9,19 @@ class GiftService {
 	 * @param {Database} db - Database connection
 	 * @returns {Array} An array of gifts
 	 */
-	static getAll(db: Database): Array<any> {
+	static async getAll(db: Database): Promise<Array<any>> {
 		const reference: DatabaseReference = ref(db, "gifts");
-		const gifts: any = onValue(
+		const gifts: any = new Array();
+		(await get(query(reference))).forEach((g) => { gifts.push(g.val()) });
+		/*onValue(
 			reference,
 			(snap) => {
 				snap.val();
 			},
 			{ onlyOnce: true }
-		);
-		let formattedGifts;
+		);*/
+		// TODO: Clean
+		let formattedGifts: any = gifts
 		if (gifts) {
 			formattedGifts = Object.keys(gifts).map((key) => {
 				return { ...gifts[key], id: key };
@@ -35,8 +39,8 @@ class GiftService {
 	 * @param {String} listId - The id of the list you want the gifts from
 	 * @returns {Array} An array of gifts from a same list.
 	 */
-	static getFromList(db: Database, listId: string): Array<any> {
-		const gifts = this.getAll(db);
+	static async getFromList(db: Database, listId: string): Promise<Array<any>> {
+		const gifts = await this.getAll(db);
 		const myGifts = gifts.filter((gift) => gift.listId === listId);
 		return myGifts;
 	}
@@ -48,15 +52,9 @@ class GiftService {
 	 * @param {String} giftId - The id of the gift you're looking for.
 	 * @returns {Object} Gift matching the giftId parameter.
 	 */
-	static getOne(db: Database, giftId: string): object {
+	static async getOne(db: Database, giftId: string): Promise<object> {
 		const reference: DatabaseReference = ref(db, "gifts/" + giftId);
-		const gift: any = onValue(
-			reference,
-			(snap) => {
-				snap.val();
-			},
-			{ onlyOnce: true }
-		);
+		const gift: any = (await get(query(reference))).val();
 		if (gift) {
 			gift.id = giftId;
 			return gift;
@@ -74,8 +72,8 @@ class GiftService {
 	static async create(db: Database, gift: object): Promise<object> {
 		const reference: DatabaseReference = ref(db, "gifts");
 		const newGift = push(reference, gift);
-		await GiftService.updateListModificationDate(db, newGift.key || "");
-		return this.getOne(db, newGift.key || "");
+		GiftService.updateListModificationDate(db, newGift.key || "");
+		return await this.getOne(db, newGift.key || "");
 	}
 
 	/**
@@ -89,8 +87,8 @@ class GiftService {
 	static async update(db: Database, id: string, gift: object): Promise<object> {
 		const reference: DatabaseReference = ref(db, `gifts/${id}`);
 		set(reference, gift);
-		await GiftService.updateListModificationDate(db, id);
-		return this.getOne(db, id);
+		GiftService.updateListModificationDate(db, id);
+		return await this.getOne(db, id);
 	}
 
 	/**
@@ -101,14 +99,14 @@ class GiftService {
 	 * @param {Boolean} newState - The new state of the favorite property of the gift.
 	 * @returns {Boolean} The new value of the Favorite property of that gift.
 	 */
-	static async updateFavoriteState(
+	static updateFavoriteState(
 		db: Database,
 		giftId: string,
 		newState: boolean
-	): Promise<boolean> {
+	): boolean {
 		const reference: DatabaseReference = ref(db, `gifts/${giftId}`);
 		update(reference, { [`/favorite`]: Boolean(newState) });
-		await GiftService.updateListModificationDate(db, giftId);
+		GiftService.updateListModificationDate(db, giftId);
 		return newState;
 	}
 
@@ -120,10 +118,10 @@ class GiftService {
 	 * @param {*} booked - The new booked property of the gift.
 	 * @returns {Object} The updated gift.
 	 */
-	static updateBookedState(db: Database, giftId: string, booked: any): object {
+	static async updateBookedState(db: Database, giftId: string, booked: any): Promise<object> {
 		const reference: DatabaseReference = ref(db, `gifts/${giftId}`);
 		update(reference, { "/booked": booked });
-		return GiftService.getOne(db, giftId);
+		return await GiftService.getOne(db, giftId);
 	}
 
 	/**
@@ -147,8 +145,8 @@ class GiftService {
 	 * @param {Database} db - Database connection
 	 * @param {String} giftId - The id of the gift that was created / deleted / modified.
 	 */
-	static updateListModificationDate(db: Database, giftId: string): void {
-		const gift = GiftService.getOne(db, giftId) as { listId: string };
+	static async updateListModificationDate(db: Database, giftId: string): Promise<void> {
+		const gift = await GiftService.getOne(db, giftId) as { listId: string };
 		const reference: DatabaseReference = ref(db, `lists/${gift.listId}`);
 		update(reference, { "/modified_at": Date() });
 	}

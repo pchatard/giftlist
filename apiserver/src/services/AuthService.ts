@@ -1,5 +1,6 @@
-import { Database, DatabaseReference, onValue, push, ref, remove } from "@firebase/database";
+import { Database, DatabaseReference, get, push, ref, remove } from "@firebase/database";
 import { User } from "@firebase/auth";
+import { query } from "firebase/database";
 
 class AuthService {
 	/**
@@ -13,7 +14,8 @@ class AuthService {
 	static create(db: Database, user: DatabaseUser): User {
 		const reference: DatabaseReference = ref(db, "users");
 		push(reference, user);
-		return this.getOne(db, user.firebase_uid || "");
+		const { firebase_uid, ...res } = user
+		return res as User;//this.getOne(db, user.firebase_uid || "");
 	}
 
 	/**
@@ -23,8 +25,8 @@ class AuthService {
 	 * @param {String} firebaseId The firebase id of the searched user
 	 * @returns {Object} User's database representation.
 	 */
-	static getOne(db: Database, firebaseId: string): User {
-		return this.getAll(db).find((user) => user.firebase_uid === firebaseId);
+	static async getOne(db: Database, firebaseId: string): Promise<any> {
+		return (await this.getAll(db)).find((user) => user.firebase_uid === firebaseId);
 	}
 
 	/**
@@ -32,17 +34,13 @@ class AuthService {
 	 * @param {Database} db - Database connection
 	 * @returns {Array} An array of all the users in the database.
 	 */
-	static getAll(db: Database): Array<any> {
-		const reference: DatabaseReference = ref(db, "users");
-		let results = new Array();
-		onValue(
-			reference,
-			(snap) => {
-				results.push(snap.val());
-			},
-			{ onlyOnce: true }
-		);
-		const resultsArr: any = Object.keys(results).map((key) => {
+	 static async getAll(db: Database): Promise<Array<any>> {
+		const reference: DatabaseReference = ref(db, "/users");
+		var results = new Array();
+		(await get(query(reference))).forEach((u) => { results.push(u.val()) });
+		// TODO: Clean
+		let resultsArr: any = results
+		resultsArr = Object.keys(results).map((key) => {
 			return { ...resultsArr[key], id: key };
 		});
 		return resultsArr;

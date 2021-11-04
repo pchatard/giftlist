@@ -9,8 +9,8 @@ import { Database } from "@firebase/database";
  * @param {string} listName- The list name to be checked against the list
  * @returns Boolean
  */
-export function checkListNameAvailability(db: Database, userId: string, listName: string): boolean {
-	const { mine } = List.getMine(db, userId) as { mine: Array<any> };
+export async function checkListNameAvailability(db: Database, userId: string, listName: string): Promise<boolean> {
+	const { mine } = await List.getMine(db, userId) as { mine: Array<any> };
 	const listNames = mine.map((list: { name: string }) => list.name.toLowerCase());
 	return !listNames.includes(listName.toLowerCase());
 }

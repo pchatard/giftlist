@@ -2,13 +2,14 @@ import Gift from "./GiftService";
 import {
 	Database,
 	DatabaseReference,
-	onValue,
+	//onValue,
 	push,
 	ref,
 	remove,
 	set,
 	update,
 } from "@firebase/database";
+import { get, query } from "firebase/database";
 
 class ListService {
 	/**
@@ -17,18 +18,14 @@ class ListService {
 	 * @param {Database} db - Database connection
 	 * @returns {Array} An array of gifts
 	 */
-	static getAll(db: Database): Array<any> {
+	static async getAll(db: Database): Promise<Array<any>> {
 		const reference: DatabaseReference = ref(db, "lists");
-		const results: any = onValue(
-			reference,
-			(snap) => {
-				snap.val();
-			},
-			{ onlyOnce: true }
-		);
-		let resultsArr;
+		var results: Array<any> = new Array();
+		(await get(query(reference))).forEach((l) => { results.push(l.val()) });
+		// TODO: Clean
+		let resultsArr: any = results
 		if (results) {
-			resultsArr = Object.keys(results).map((key) => {
+			resultsArr = Object.keys(results).map((key: any) => {
 				const id = key;
 				const sharedWith = results[key].sharedWith
 					? Object.values(results[key].sharedWith)
@@ -48,8 +45,8 @@ class ListService {
 	 * @param {String} userId - The id of the user you want to get the lists
 	 * @returns {Object} An object containing an array of the owned lists and an array of the shared lists
 	 */
-	static getMine(db: Database, userId: string): object {
-		const lists = this.getAll(db);
+	static async getMine(db: Database, userId: string): Promise<object> {
+		const lists = await this.getAll(db);
 		const mine = lists.filter((list) => list.ownerId === userId);
 		const shared = lists.filter((list) => list.sharedWith.includes(userId) && list.public);
 		return { mine, shared };
@@ -62,20 +59,21 @@ class ListService {
 	 * @param {String} listId - The id of the list
 	 * @returns {Object} The list matching the listId id.
 	 */
-	static getOne(db: Database, listId: string): object {
+	static async getOne(db: Database, listId: string): Promise<object> {
 		const reference: DatabaseReference = ref(db, "lists/" + listId);
 		type A = {
 			id?: string;
 			sharedWith?: Array<any>;
 		};
 		let result: A = {};
-		onValue(
+		result.sharedWith = (await get(query(reference))).val();
+		/*onValue(
 			reference,
 			(snap) => {
 				result.sharedWith = snap.val();
 			},
 			{ onlyOnce: true }
-		);
+		);*/
 		result.id = listId;
 		const sharedWith = result.sharedWith ? Object.values(result.sharedWith) : [];
 		result.sharedWith = sharedWith;
@@ -89,10 +87,10 @@ class ListService {
 	 * @param {Object} list - The list object you want to add to the database
 	 * @returns {Object} The list's representation in the database.
 	 */
-	static create(db: Database, list: object): object {
+	static async create(db: Database, list: object): Promise<object> {
 		const reference: DatabaseReference = ref(db, "lists");
 		const newList = push(reference, list);
-		return ListService.getOne(db, newList.key || "");
+		return await ListService.getOne(db, newList.key || "");
 	}
 
 	/**
@@ -103,13 +101,13 @@ class ListService {
 	 * @param {String} newName - The new name of the list
 	 * @returns {Object} The updated list
 	 */
-	static update(db: Database, id: string, newName: string): object {
+	static async update(db: Database, id: string, newName: string): Promise<object> {
 		const reference: DatabaseReference = ref(db, `lists/${id}`);
 		update(reference, {
 			"/name": newName,
 			"/modified_at": Date(),
 		});
-		return ListService.getOne(db, id);
+		return await ListService.getOne(db, id);
 	}
 
 	/**
@@ -159,8 +157,8 @@ class ListService {
 	 * @param {String} sharingCode - The sharing code of the list
 	 * @returns {Object} The list matching with the code.
 	 */
-	static getSharedList(db: Database, sharingCode: string): object {
-		const lists = ListService.getAll(db);
+	static async getSharedList(db: Database, sharingCode: string): Promise<object> {
+		const lists = await this.getAll(db);
 		const sharedList = lists.find((list) => list.sharingCode === sharingCode);
 		return sharedList;
 	}

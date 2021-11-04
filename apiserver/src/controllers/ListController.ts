@@ -15,9 +15,9 @@ class ListController {
 	 * @param {Response} res - Express response object
 	 * @param {Function} next - Following middleware
 	 */
-	static findAll(req: Request, res: Response, next: Function) {
+	static async findAll(req: Request, res: Response, next: Function) {
 		try {
-			const lists = List.getAll(req.database);
+			const lists = await List.getAll(req.database);
 			res.send(lists);
 		} catch (error) {
 			next(error);
@@ -31,9 +31,9 @@ class ListController {
 	 * @param {Response} res - Express response object
 	 * @param {Function} next - Following middleware
 	 */
-	static findMine(req: Request, res: Response, next: Function) {
+	static async findMine(req: Request, res: Response, next: Function) {
 		try {
-			const { mine, shared } = List.getMine(req.database, req.uid || "") as {
+			const { mine, shared } = await List.getMine(req.database, req.uid || "") as {
 				mine: string;
 				shared: string;
 			};

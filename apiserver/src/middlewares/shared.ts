@@ -3,9 +3,9 @@ import SharedListAccessError from "../errors/ListErrors/SharedListAccessError";
 import UnvalidSharingCodeError from "../errors/ListErrors/UnvalidSharingCodeError";
 import { Request, Response } from "express";
 
-export function preventOwner(req: Request, _: Response, next: Function) {
+export async function preventOwner(req: Request, _: Response, next: Function) {
 	try {
-		const response = List.getSharedList(req.database, req.params.sharingCode);
+		const response = await List.getSharedList(req.database, req.params.sharingCode);
 		if (response) {
 			const { ownerId } = response as { ownerId: string };
 			const userId = req.uid;

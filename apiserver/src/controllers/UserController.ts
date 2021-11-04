@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { getAuth } from "firebase/auth";
 import { Get, Route } from 'tsoa';
 //import { User } from '@firebase/auth';
+import UserService from '../services/UserService';
 
 @Route("test")
 class UserController {
@@ -13,8 +14,8 @@ class UserController {
 	 * @param {NextFunction} next - Following middleware
 	 * @returns {Object} - User object
 	 */
-	static me(_req: Request, res: Response, _next: NextFunction): void {
-		const user = getAuth().currentUser;
+	static async me(req: Request, res: Response, _next: NextFunction): Promise<void> {
+		const user = await UserService.getOne(req.database, req.uid || "");
 		if (user) {
 			res.status(200).send({ user });
 		} else {

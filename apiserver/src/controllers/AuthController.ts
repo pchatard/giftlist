@@ -64,10 +64,10 @@ class AuthController {
 				await signOut(req.auth);
 
 				// Retrive user from database
-				const { uid } = await Auth.getOne(req.database, user.uid);
+				const { id } = await Auth.getOne(req.database, user.uid);
 
 				// Sign tokens and set cookies
-				const tokens = signTokens(uid);
+				const tokens = signTokens(id);
 				setCookies(res, tokens);
 
 				// Send back public token and user object

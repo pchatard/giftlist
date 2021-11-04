@@ -9,7 +9,7 @@ import UserController from '../controllers/UserController';
 
 const router = express.Router();
 
-router.use(cors());
+router.use(cors({origin: "http://localhost:3000", credentials: true}));
 
 /** Authentication router */
 router.use("/auth", auth);

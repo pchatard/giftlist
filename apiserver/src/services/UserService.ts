@@ -1,5 +1,6 @@
 import { User } from "@firebase/auth";
-import { Database, DatabaseReference, onValue, ref } from "@firebase/database";
+import { Database, DatabaseReference, ref } from "@firebase/database";
+import { get, query } from "firebase/database";
 import UserDoesNotExistsError from "../errors/AuthErrors/UserDoesNotExistsError";
 
 class UserService {
@@ -11,14 +12,7 @@ class UserService {
 	 */
 	static async getOne(db: Database, userId: string): Promise<User> {
 		const reference: DatabaseReference = ref(db, `users/${userId}`);
-		let user: User | null = null;
-		onValue(
-			reference,
-			(snapshot) => {
-				user = snapshot.val();
-			},
-			{ onlyOnce: true }
-		);
+		let user: User | null = (await get(query(reference))).val();
 		if (!user) {
 			throw new UserDoesNotExistsError();
 		}
