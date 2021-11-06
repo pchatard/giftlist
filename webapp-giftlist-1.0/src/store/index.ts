@@ -1,12 +1,9 @@
 import { createStore } from 'vuex';
-import { auth } from './auth';
-import { list } from './list';
-import { gift } from './gift';
+import { auth, AuthState } from './auth';
+import { list, ListState } from './list';
+import { gift, GiftState } from './gift';
 
 export default createStore({
-	state: {},
-	mutations: {},
-	actions: {},
 	modules: {
 		auth,
 		list,
@@ -15,5 +12,7 @@ export default createStore({
 });
 
 export interface RootState {
-	dd?: any;
+	auth: AuthState;
+	list: ListState;
+	gift: GiftState;
 }

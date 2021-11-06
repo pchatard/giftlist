@@ -1,4 +1,4 @@
 export class Gift {
-    id!: string;
-    favorite!: boolean;
+	id!: string;
+	favorite!: boolean;
 }
