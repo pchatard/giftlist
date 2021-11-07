@@ -1,6 +1,6 @@
-import { PersonalList, SharedList } from '@/types/List';
-import { Module } from 'vuex';
-import { RootState } from '.';
+import { PersonalList, SharedList } from "@/types/List";
+import { Module } from "vuex";
+import { RootState } from ".";
 
 const endpoint = `${process.env.API_URL}/api/list`;
 

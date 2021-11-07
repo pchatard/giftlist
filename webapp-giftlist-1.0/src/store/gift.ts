@@ -1,6 +1,6 @@
-import { Gift } from '@/types/Gift';
-import { Module } from 'vuex';
-import { RootState } from '.';
+import { Gift } from "@/types/Gift";
+import { Module } from "vuex";
+import { RootState } from ".";
 
 const endpoint = `${process.env.API_URL}/api/gift`;
 

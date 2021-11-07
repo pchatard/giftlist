@@ -23,22 +23,22 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { computed, defineComponent } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default defineComponent({
-	name: 'LoggedInNavbar',
+	name: "LoggedInNavbar",
 	setup() {
 		const { getters, dispatch } = useStore();
 		const router = useRouter();
 
 		const logout = async () => {
-			dispatch('logout')
+			dispatch("logout")
 				.then(() => {
-					console.debug('LoggedInNavbar - logout - Logout successful');
-					console.debug('LoggedInNavbar - logout - Redirecting to homepage');
-					router.push('/');
+					console.debug("LoggedInNavbar - logout - Logout successful");
+					console.debug("LoggedInNavbar - logout - Redirecting to homepage");
+					router.push("/");
 				})
 				.catch((error: Error) => {
 					console.error(error.message);

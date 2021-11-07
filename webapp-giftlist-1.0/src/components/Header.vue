@@ -5,11 +5,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import Navbar from './Navbar/Navbar.vue';
+import { defineComponent } from "vue";
+import Navbar from "./Navbar/Navbar.vue";
 
 export default defineComponent({
-	name: 'Header',
+	name: "Header",
 	components: {
 		Navbar,
 	},

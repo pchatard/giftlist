@@ -6,13 +6,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
-import { useStore } from 'vuex';
-import LoggedInNavbar from './LoggedInNavbar.vue';
-import LoggedOutNavbar from './LoggedOutNavbar.vue';
+import { computed, defineComponent } from "vue";
+import { useStore } from "vuex";
+import LoggedInNavbar from "./LoggedInNavbar.vue";
+import LoggedOutNavbar from "./LoggedOutNavbar.vue";
 
 export default defineComponent({
-	name: 'Navbar',
+	name: "Navbar",
 	components: {
 		LoggedInNavbar,
 		LoggedOutNavbar,
