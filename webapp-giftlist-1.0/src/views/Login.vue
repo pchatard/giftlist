@@ -6,6 +6,8 @@
 </template>
 
 <script lang="ts">
+import { SnackbarState } from "@/store/snackbar";
+import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { defineComponent, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -13,9 +15,33 @@ import { useStore } from "vuex";
 export default defineComponent({
 	name: "Login",
 	setup() {
-		const { state, dispatch } = useStore();
+		const { state, getters, dispatch } = useStore();
 		const router = useRouter();
 		const route = useRoute();
+
+		const login = async () => {
+			const snack: SnackbarState = {
+				message: "",
+				type: SnackbarEventEnum.ERROR,
+			};
+
+			dispatch("login", {})
+				.then(() => {
+					const redirectRoute = route.query.redirect || "app";
+					console.debug("Login - login - Success");
+					console.debug("Login - login - Redirecting to /" + redirectRoute);
+					router.push(`/${redirectRoute}`);
+					snack.message = "Connecté en tant que " + getters.fullName;
+					snack.type = SnackbarEventEnum.SUCCESS;
+				})
+				.catch((error: Error) => {
+					console.error("Login - login - " + error.message);
+					snack.message = error.message;
+				})
+				.finally(() => {
+					dispatch("showSnackbar", snack);
+				});
+		};
 
 		onMounted(() => {
 			if (state.auth.loggedIn) {
@@ -23,20 +49,6 @@ export default defineComponent({
 				router.push("/app");
 			}
 		});
-
-		const redirectRoute = route.query.redirect || "app";
-
-		const login = async () => {
-			dispatch("login", {})
-				.then(() => {
-					console.debug("Login - login - Success");
-					console.debug("Login - login - Redirecting to /" + redirectRoute);
-					router.push(`/${redirectRoute}`);
-				})
-				.catch((error: Error) => {
-					console.error("Login - login - " + error.message);
-				});
-		};
 
 		return {
 			login,

@@ -23,6 +23,8 @@
 </template>
 
 <script lang="ts">
+import { SnackbarState } from "@/store/snackbar";
+import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -34,14 +36,26 @@ export default defineComponent({
 		const router = useRouter();
 
 		const logout = async () => {
+			const snack: SnackbarState = {
+				message: "",
+				type: SnackbarEventEnum.ERROR,
+			};
+
 			dispatch("logout")
 				.then(() => {
 					console.debug("LoggedInNavbar - logout - Logout successful");
 					console.debug("LoggedInNavbar - logout - Redirecting to homepage");
 					router.push("/");
+
+					snack.message = "Déconnection réussie";
+					snack.type = SnackbarEventEnum.SUCCESS;
 				})
 				.catch((error: Error) => {
 					console.error(error.message);
+					snack.message = error.message;
+				})
+				.finally(() => {
+					dispatch("showSnackbar", snack);
 				});
 		};
 
