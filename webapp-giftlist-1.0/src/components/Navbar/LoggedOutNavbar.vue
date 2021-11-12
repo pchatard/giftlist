@@ -1,7 +1,9 @@
 <template>
 	<div class="w-full flex flex-row items-center justify-between">
 		<router-link to="/">
-			<span>Logo</span>
+			<span class="bg-yellow-400 rounded-md py-2 px-6 mr-4 font-bold italic text-lg"
+				>GIFTLIST</span
+			>
 		</router-link>
 		<ul class="flex flex-row items-center">
 			<NavbarItem path="/login" text="Connexion" />

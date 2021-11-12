@@ -6,23 +6,16 @@
 			>
 		</router-link>
 		<ul class="flex flex-row items-center">
-			<NavbarItem path="/app/lists" text="Mes Listes" />
-			<NavbarItem path="/app/shared" text="Mes listes partagées" />
+			<NavbarItem path="/app/lists" text="Mes Listes" :outline="true" />
+			<NavbarItem path="/app/shared" text="Mes listes partagées" :outline="true" />
 		</ul>
 	</div>
-	<ul class="flex flex-row items-center">
-		<li class="mx-2">
-			<button v-if="cta" @click="cta.action" class="giftlist-cta">
-				{{ cta.name }}
-			</button>
-		</li>
-		<li>
-			<router-link to="/app/profile">{{ fullName }}</router-link>
-		</li>
-		<li>
-			<button v-on:click="logout">Déconnexion</button>
-		</li>
-	</ul>
+	<div class="flex flex-row items-center">
+		<button v-if="cta" @click="cta.action" class="giftlist-cta mx-2">
+			{{ cta.name }}
+		</button>
+		<NavbarDropdown :fullname="fullname" @logout="logout" />
+	</div>
 </template>
 
 <script lang="ts">
@@ -32,11 +25,13 @@ import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import NavbarItem from "@/components/Styled/NavbarItem.vue";
+import NavbarDropdown from "./NavbarDropdown.vue";
 
 export default defineComponent({
 	name: "LoggedInNavbar",
 	components: {
 		NavbarItem,
+		NavbarDropdown,
 	},
 	setup() {
 		const { getters, dispatch } = useStore();
@@ -68,7 +63,7 @@ export default defineComponent({
 		};
 
 		return {
-			fullName: computed(() => getters.fullName),
+			fullname: computed(() => getters.fullName),
 			logout,
 			cta: computed(() => currentRoute.value.meta.navbarCta),
 		};

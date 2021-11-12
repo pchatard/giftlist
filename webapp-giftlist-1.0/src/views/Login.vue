@@ -1,11 +1,12 @@
 <template>
 	<div class="login">
-		<h1>Connexion</h1>
-		<button v-on:click="login">Se connecter</button>
+		<Title>Connexion</Title>
+		<button v-on:click="login" class="giftlist-cta">Se connecter</button>
 	</div>
 </template>
 
 <script lang="ts">
+import Title from "@/components/Styled/Title.vue";
 import { SnackbarState } from "@/store/snackbar";
 import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { defineComponent, onMounted } from "vue";
@@ -14,6 +15,7 @@ import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "Login",
+	components: { Title },
 	setup() {
 		const { state, getters, dispatch } = useStore();
 		const router = useRouter();

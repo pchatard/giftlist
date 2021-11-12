@@ -1,7 +1,7 @@
 <template>
 	<li :class="{ 'giftlist-cta': isCTA }" class="mx-2">
 		<router-link :to="path">{{ text }}</router-link>
-		<div class="giftlist-outline"></div>
+		<div v-if="outline" class="giftlist-outline"></div>
 	</li>
 </template>
 
@@ -17,6 +17,7 @@ export default defineComponent({
 		},
 		path: String,
 		text: String,
+		outline: Boolean,
 	},
 });
 </script>

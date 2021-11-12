@@ -1,13 +1,15 @@
 <template>
 	<div class="home">
-		<h1>Home</h1>
+		<Title>Home</Title>
 	</div>
 </template>
 
 <script lang="ts">
+import Title from "@/components/Styled/Title.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "Home",
+	components: { Title },
 });
 </script>

@@ -1,11 +1,12 @@
 <template>
 	<div class="register">
-		<h1>Inscription</h1>
-		<button v-on:click="register">S'inscrire</button>
+		<Title>Inscription</Title>
+		<button v-on:click="register" class="giftlist-cta">S'inscrire</button>
 	</div>
 </template>
 
 <script lang="ts">
+import Title from "@/components/Styled/Title.vue";
 import { SnackbarState } from "@/store/snackbar";
 import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { defineComponent, onMounted } from "vue";
@@ -14,6 +15,7 @@ import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "Register",
+	components: { Title },
 	setup() {
 		const { state, getters, dispatch } = useStore();
 		const router = useRouter();
