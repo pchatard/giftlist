@@ -1,6 +1,7 @@
 <template>
 	<div class="dashboard">
 		<h1>Bienvenue</h1>
+		<label for=""><input type="checkbox" name="" id="" />Test</label>
 	</div>
 </template>
 

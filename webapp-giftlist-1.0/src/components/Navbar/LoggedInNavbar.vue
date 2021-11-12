@@ -1,25 +1,28 @@
 <template>
-	<div class="flex flex-row items-center border border-black">
+	<div class="flex flex-row items-center">
 		<router-link to="/app">
-			<span>Logo</span>
+			<span class="bg-yellow-400 rounded-md py-2 px-6 mr-4 font-bold italic text-lg"
+				>GIFTLIST</span
+			>
 		</router-link>
-		<ul class="flex flex-row">
-			<li>
-				<router-link to="/app">Dashboard</router-link>
-			</li>
-			<li>
-				<router-link to="/app/lists">Mes listes</router-link>
-			</li>
-			<li>
-				<router-link to="/app/lists/shared">Mes listes partagées</router-link>
-			</li>
+		<ul class="flex flex-row items-center">
+			<NavbarItem path="/app/lists" text="Mes Listes" />
+			<NavbarItem path="/app/shared" text="Mes listes partagées" />
 		</ul>
 	</div>
-	<div class="flex flex-row border border-black">
-		<button>CTA</button>
-		<router-link to="/app/profile">{{ fullName }}</router-link>
-		<button v-on:click="logout">Déconnexion</button>
-	</div>
+	<ul class="flex flex-row items-center">
+		<li class="mx-2">
+			<button v-if="cta" @click="cta.action" class="giftlist-cta">
+				{{ cta.name }}
+			</button>
+		</li>
+		<li>
+			<router-link to="/app/profile">{{ fullName }}</router-link>
+		</li>
+		<li>
+			<button v-on:click="logout">Déconnexion</button>
+		</li>
+	</ul>
 </template>
 
 <script lang="ts">
@@ -28,12 +31,17 @@ import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import NavbarItem from "@/components/Styled/NavbarItem.vue";
 
 export default defineComponent({
 	name: "LoggedInNavbar",
+	components: {
+		NavbarItem,
+	},
 	setup() {
 		const { getters, dispatch } = useStore();
 		const router = useRouter();
+		const currentRoute = router.currentRoute;
 
 		const logout = async () => {
 			const snack: SnackbarState = {
@@ -62,7 +70,10 @@ export default defineComponent({
 		return {
 			fullName: computed(() => getters.fullName),
 			logout,
+			cta: computed(() => currentRoute.value.meta.navbarCta),
 		};
 	},
 });
 </script>
+
+

@@ -30,4 +30,6 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@import "./scss/global.scss";
+</style>

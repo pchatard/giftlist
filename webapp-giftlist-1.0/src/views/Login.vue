@@ -27,7 +27,7 @@ export default defineComponent({
 
 			dispatch("login", {})
 				.then(() => {
-					const redirectRoute = route.query.redirect || "app";
+					const redirectRoute = route.query.redirect || "app/lists";
 					console.debug("Login - login - Success");
 					console.debug("Login - login - Redirecting to /" + redirectRoute);
 					router.push(`/${redirectRoute}`);
