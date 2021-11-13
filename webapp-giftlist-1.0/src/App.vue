@@ -1,6 +1,6 @@
 <template>
 	<Header />
-	<main class="mt-16">
+	<main class="mt-16 p-8">
 		<router-view />
 		<Snackbar :snack="snack" />
 	</main>

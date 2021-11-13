@@ -6,8 +6,22 @@
 			>
 		</router-link>
 		<ul class="flex flex-row items-center">
-			<NavbarItem path="/app/lists" text="Mes Listes" :outline="true" />
-			<NavbarItem path="/app/shared" text="Mes listes partagées" :outline="true" />
+			<NavbarItem
+				path="/app/lists"
+				text="Mes Listes"
+				:outline="true"
+				class="giftlist-navbar-item"
+			>
+				<CollectionIconOutline class="giftlist-navbar-item-icon h-4 w-4" />
+			</NavbarItem>
+			<NavbarItem
+				path="/app/shared"
+				text="Mes listes partagées"
+				:outline="true"
+				class="giftlist-navbar-item"
+			>
+				<UserGroupIconOutline class="giftlist-navbar-item-icon h-4 w-4" />
+			</NavbarItem>
 		</ul>
 	</div>
 	<div class="flex flex-row items-center">
@@ -26,12 +40,18 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import NavbarItem from "@/components/Styled/NavbarItem.vue";
 import NavbarDropdown from "./NavbarDropdown.vue";
+import {
+	CollectionIcon as CollectionIconOutline,
+	UserGroupIcon as UserGroupIconOutline,
+} from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "LoggedInNavbar",
 	components: {
 		NavbarItem,
 		NavbarDropdown,
+		CollectionIconOutline,
+		UserGroupIconOutline,
 	},
 	setup() {
 		const { getters, dispatch } = useStore();
@@ -71,4 +91,16 @@ export default defineComponent({
 });
 </script>
 
+<style lang="scss" scoped>
+.giftlist-navbar-item {
+	.giftlist-navbar-item-icon {
+		@apply transition-all duration-200;
+	}
 
+	&:hover {
+		.giftlist-navbar-item-icon {
+			@apply text-yellow-400;
+		}
+	}
+}
+</style>

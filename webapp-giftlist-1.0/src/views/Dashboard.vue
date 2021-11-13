@@ -1,16 +1,13 @@
 <template>
-	<div class="dashboard">
-		<Title>Bienvenue</Title>
-		<label for=""><input type="checkbox" name="" id="" />Test</label>
-	</div>
+	<DefaultLayout title="Bienvenue"> </DefaultLayout>
 </template>
 
 <script lang="ts">
-import Title from "@/components/Styled/Title.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	components: { Title },
+	components: { DefaultLayout },
 	name: "Dashboard",
 });
 </script>

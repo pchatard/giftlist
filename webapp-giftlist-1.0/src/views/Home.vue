@@ -1,15 +1,13 @@
 <template>
-	<div class="home">
-		<Title>Home</Title>
-	</div>
+	<DefaultLayout title="Home"></DefaultLayout>
 </template>
 
 <script lang="ts">
-import Title from "@/components/Styled/Title.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "Home",
-	components: { Title },
+	components: { DefaultLayout },
 });
 </script>

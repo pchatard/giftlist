@@ -1,12 +1,17 @@
 <template>
 	<li :class="{ 'giftlist-cta': isCTA }" class="mx-2">
-		<router-link :to="path">{{ text }}</router-link>
+		<router-link :to="path" class="flex flex-row items-center justify-between">
+			<slot />
+			<span class="ml-2">
+				{{ text }}
+			</span>
+		</router-link>
 		<div v-if="outline" class="giftlist-outline"></div>
 	</li>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRef, toRefs } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	name: "NavbarItem",
@@ -24,7 +29,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .giftlist-outline {
-	@apply w-0 h-px transition-all duration-500;
+	@apply w-0 h-px mt-1 transition-all duration-500;
 }
 
 li:hover .giftlist-outline,

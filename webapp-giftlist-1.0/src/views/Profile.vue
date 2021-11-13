@@ -1,15 +1,13 @@
 <template>
-	<div class="profile">
-		<Title>Mon compte</Title>
-	</div>
+	<default-layout title="Mon compte"></default-layout>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Title from "@/components/Styled/Title.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 
 export default defineComponent({
 	name: "Profile",
-	components: { Title },
+	components: { DefaultLayout },
 });
 </script>
