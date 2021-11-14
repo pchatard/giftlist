@@ -1,5 +1,5 @@
 <template>
-	<div class="ml-4 cursor-pointer giftlist-dropdown">
+	<div class="ml-2 cursor-pointer giftlist-dropdown">
 		<div
 			@click="toggleDropdown"
 			class="

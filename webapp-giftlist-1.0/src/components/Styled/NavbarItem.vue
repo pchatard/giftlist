@@ -1,5 +1,5 @@
 <template>
-	<li :class="{ 'giftlist-cta': isCTA }" class="mx-2">
+	<li class="mx-2">
 		<router-link :to="path" class="flex flex-row items-center justify-between">
 			<slot />
 			<span class="ml-2">
@@ -11,15 +11,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "NavbarItem",
 	props: {
-		isCTA: {
-			type: Boolean as PropType<boolean>,
-			default: false,
-		},
 		path: String,
 		text: String,
 		outline: Boolean,

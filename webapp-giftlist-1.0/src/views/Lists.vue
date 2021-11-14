@@ -1,9 +1,12 @@
 <template>
 	<DefaultLayout title="Mes listes">
 		<ul>
-			<li v-for="i in 10" :key="i">
-				<router-link :to="'/app/lists/' + i"> Liste {{ i }}</router-link>
-			</li>
+			<ListItem v-for="i in 10" :key="i">
+				<div class="flex items-center justify-start">
+					<ViewListIcon class="w-5 h-5 mr-5 text-yellow-400" />
+					<router-link :to="'/app/lists/' + i"> Liste {{ i }}</router-link>
+				</div>
+			</ListItem>
 		</ul>
 	</DefaultLayout>
 </template>
@@ -12,11 +15,15 @@
 import { defineComponent } from "vue";
 import router from "@/router";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import ListItem from "@/components/Styled/ListItem.vue";
+import { ViewListIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "Lists",
 	components: {
 		DefaultLayout,
+		ListItem,
+		ViewListIcon,
 	},
 });
 

@@ -25,9 +25,12 @@
 		</ul>
 	</div>
 	<div class="flex flex-row items-center">
-		<button v-if="cta" @click="cta.action" class="giftlist-cta mx-2">
+		<Button v-if="cta" @click="cta.action" :hasIcon="true">
+			<template v-slot:icon>
+				<PlusCircleIcon />
+			</template>
 			{{ cta.name }}
-		</button>
+		</Button>
 		<NavbarDropdown :fullname="fullname" @logout="logout" />
 	</div>
 </template>
@@ -38,25 +41,32 @@ import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+
 import NavbarItem from "@/components/Styled/NavbarItem.vue";
 import NavbarDropdown from "./NavbarDropdown.vue";
+import Button from "@/components/Styled/Button.vue";
 import {
 	CollectionIcon as CollectionIconOutline,
+	PlusCircleIcon,
 	UserGroupIcon as UserGroupIconOutline,
 } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "LoggedInNavbar",
 	components: {
+		Button,
 		NavbarItem,
 		NavbarDropdown,
 		CollectionIconOutline,
+		PlusCircleIcon,
 		UserGroupIconOutline,
 	},
-	setup() {
+	setup(props, context) {
 		const { getters, dispatch } = useStore();
 		const router = useRouter();
 		const currentRoute = router.currentRoute;
+
+		console.log(context.slots);
 
 		const logout = async () => {
 			const snack: SnackbarState = {

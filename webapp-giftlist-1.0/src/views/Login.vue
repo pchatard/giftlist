@@ -1,22 +1,24 @@
 <template>
 	<DefaultLayout title="Connexion">
 		<div class="absolute inset-0 w-full h-full flex items-center justify-center">
-			<button v-on:click="login" class="giftlist-cta">Se connecter</button>
+			<Button @click="login"> Se connecter </Button>
 		</div>
 	</DefaultLayout>
 </template>
 
 <script lang="ts">
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import { SnackbarState } from "@/store/snackbar";
 import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { defineComponent, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import Button from "@/components/Styled/Button.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+
 export default defineComponent({
 	name: "Login",
-	components: { DefaultLayout },
+	components: { Button, DefaultLayout },
 	setup() {
 		const { state, getters, dispatch } = useStore();
 		const router = useRouter();

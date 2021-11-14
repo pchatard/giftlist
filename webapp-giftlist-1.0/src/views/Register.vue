@@ -1,22 +1,24 @@
 <template>
 	<DefaultLayout title="Inscription">
 		<div class="absolute inset-0 w-full h-full flex items-center justify-center">
-			<button v-on:click="register" class="giftlist-cta">S'inscrire</button>
+			<Button @click="register">S'inscrire</Button>
 		</div>
 	</DefaultLayout>
 </template>
 
 <script lang="ts">
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import { SnackbarState } from "@/store/snackbar";
 import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { defineComponent, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import Button from "@/components/Styled/Button.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+
 export default defineComponent({
 	name: "Register",
-	components: { DefaultLayout },
+	components: { Button, DefaultLayout },
 	setup() {
 		const { state, getters, dispatch } = useStore();
 		const router = useRouter();
