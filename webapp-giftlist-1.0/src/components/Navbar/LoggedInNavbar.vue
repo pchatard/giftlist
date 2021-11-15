@@ -32,6 +32,7 @@
 			{{ cta.name }}
 		</Button>
 		<NavbarDropdown :fullname="fullname" @logout="logout" />
+		<!-- <NavbarDropdown :fullname="fullname" @logout="logout" /> -->
 	</div>
 </template>
 
@@ -61,12 +62,10 @@ export default defineComponent({
 		PlusCircleIcon,
 		UserGroupIconOutline,
 	},
-	setup(props, context) {
+	setup() {
 		const { getters, dispatch } = useStore();
 		const router = useRouter();
 		const currentRoute = router.currentRoute;
-
-		console.log(context.slots);
 
 		const logout = async () => {
 			const snack: SnackbarState = {

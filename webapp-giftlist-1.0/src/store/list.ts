@@ -28,6 +28,7 @@ export const list: Module<ListState, RootState> = {
 			}
 		},
 		REMOVE_LIST: (state, newLists: ListState) => {
+			console.debug("list.ts - REMOVE_LIST - Updating lists");
 			state.mine = newLists.mine;
 		},
 	},
@@ -110,13 +111,26 @@ export const list: Module<ListState, RootState> = {
 		//         return false;
 		//     }
 		// },
-		// async deleteList({ commit, state }, listId) {
-		//     const newLists = await this.$axios.$delete(`/api/lists/${listId}`, {
-		//         withCredentials: true,
-		//     });
-		//     commit('REMOVE_LIST', newLists);
-		//     return state;
-		// },
+		async deleteList({ commit, state }, listId) {
+			return new Promise<void>((resolve, reject) => {
+				try {
+					console.debug("list.ts - deleteList - Deleting list " + listId);
+					// Delete on backend
+
+					// Remove from state
+					const mine = state.mine;
+					mine.splice(
+						mine.findIndex((list) => list.id === listId),
+						1
+					);
+
+					commit("REMOVE_LIST", { mine, shared: state.shared });
+					resolve();
+				} catch (error) {
+					reject(error);
+				}
+			});
+		},
 	},
 };
 

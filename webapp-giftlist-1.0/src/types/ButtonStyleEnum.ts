@@ -1,4 +1,4 @@
 export enum ButtonStyleEnum {
-    primary = "primary",
-    secondary = "secondary",
+	primary = "primary",
+	secondary = "secondary",
 }

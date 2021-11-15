@@ -1,0 +1,19 @@
+<template>
+	<td class="px-4 py-4 whitespace-nowrap">
+		<span v-if="content">{{ content }}</span>
+		<slot v-else />
+	</td>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+
+export default defineComponent({
+	name: "TableData",
+	props: {
+		content: {
+			type: String,
+		},
+	},
+});
+</script>

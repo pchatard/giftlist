@@ -1,5 +1,5 @@
 <template>
-	<li class="mx-2">
+	<li class="mx-2 text-md">
 		<router-link :to="path" class="flex flex-row items-center justify-between">
 			<slot />
 			<span class="ml-2">

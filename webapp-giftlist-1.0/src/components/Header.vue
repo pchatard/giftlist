@@ -1,5 +1,5 @@
 <template>
-	<header class="fixed top-0 w-screen h-16 shadow-sm flex items-center">
+	<header class="fixed top-0 z-10 w-screen h-16 flex items-center">
 		<Navbar />
 	</header>
 </template>

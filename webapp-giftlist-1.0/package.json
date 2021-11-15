@@ -12,6 +12,7 @@
         "prettier:write": "prettier --config .prettierrc.json --write 'src/**/*.{vue,js,ts,jsx,tsx}'"
     },
     "dependencies": {
+        "@headlessui/vue": "^1.4.2",
         "@heroicons/vue": "^1.0.5",
         "core-js": "^3.6.5",
         "register-service-worker": "^1.7.1",

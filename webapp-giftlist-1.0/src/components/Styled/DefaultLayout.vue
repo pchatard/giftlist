@@ -1,7 +1,7 @@
 <template>
 	<div class="max-w-7xl mx-auto">
 		<Title class="mb-4">{{ title }}</Title>
-		<div class="rounded-lg min-h-layout h-full relative overflow-hidden">
+		<div class="rounded-lg min-h-layout h-full relative">
 			<slot />
 		</div>
 	</div>
