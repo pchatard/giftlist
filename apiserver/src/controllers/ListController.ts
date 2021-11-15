@@ -29,18 +29,13 @@ class ListController {
 	 * @function
 	 * @param {Request} req - Express request object
 	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
 	 */
-	static async findMine(req: Request, res: Response, next: Function) {
-		try {
-			const { mine, shared } = (await List.getMine(req.database, req.uid || "")) as {
-				mine: string;
-				shared: string;
-			};
-			res.send({ mine, shared });
-		} catch (error) {
-			next(error);
-		}
+	static async findMine(req: Request, res: Response) : Promise<void> {
+		const { mine, shared } = (await List.getMine(req.database, req.uid || "")) as {
+			mine: string;
+			shared: string;
+		};
+		res.status(200).send({ mine: mine, shared: shared });
 	}
 
 	/**
@@ -119,7 +114,7 @@ class ListController {
 	static async delete(req: Request, res: Response, next: Function) {
 		try {
 			await List.delete(req.database, req.params.listId);
-			await ListController.findMine(req, res, next);
+			await ListController.findMine(req, res);
 		} catch (error) {
 			next(error);
 		}

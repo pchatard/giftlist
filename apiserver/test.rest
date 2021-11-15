@@ -1,0 +1,20 @@
+### Login
+# @name login
+POST http://localhost:3001/auth/local/login HTTP/1.1
+content-type: application/json
+
+{
+  "email": "test@test.fr",
+  "password": "Azerty1234!"
+}
+
+###
+@token={{ login.response.body.$.token }}
+
+GET http://localhost:3001/users/me HTTP/1.1
+Authorization: Bearer {{token}}
+
+###
+
+GET http://localhost:3001/lists/mine HTTP/1.1
+Authorization: Bearer {{token}}

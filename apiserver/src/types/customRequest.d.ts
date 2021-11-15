@@ -6,7 +6,7 @@ declare global {
 	namespace Express {
 		interface Request {
 			database: Database;
-			auth: Auth;
+			authent: Auth;
 			uid?: string;
 		}
 	}

@@ -15,7 +15,7 @@ class AuthService {
 		const reference: DatabaseReference = ref(db, "users");
 		push(reference, user);
 		const { firebase_uid, ...res } = user;
-		return res as User; //this.getOne(db, user.firebase_uid || "");
+		return res as User;
 	}
 
 	/**

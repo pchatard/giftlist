@@ -1,9 +1,10 @@
-import { verifyToken, signTokens } from "../helpers/jwt";
-import { setCookies } from "../helpers/cookies";
-import { Request, Response } from "express";
-
-const accessSecret = process.env.ACCESS_SECRET || "abcdef";
-const refreshSecret = process.env.REFRESH_SECRET || "ghijkl";
+import moment from "moment";
+import { NextFunction, Request, Response } from "express";
+import { decodeToken, getTokenIfDefined } from "../helpers/Token/JWTokenVerifier";
+import { signToken } from "../helpers/Token/JWTokenProducer";
+import { addUserIdToScope } from "../helpers/Token/UserInScope";
+import AuthenticationError from "../helpers/Errors/AuthenticationError";
+import jwtConfig from "../config/token";
 
 // Checks that password's length is 8 or more, contains one uppercase, one lowercase letter, and one digit
 export function verifyPassword(password: string) {
@@ -12,34 +13,23 @@ export function verifyPassword(password: string) {
 	);
 }
 
-export function authenticate(req: Request, res: Response, next: Function) {
-	const accessToken = req.cookies.access;
-	let userId;
+export function authenticate(req: Request, res: Response, next: NextFunction): void {
 	try {
-		// Check accessToken validity
-		const { payload } = verifyToken(accessToken, accessSecret) as any;
-		if (payload) {
-			userId = payload;
-		} else {
-			throw new Error("Access Token Expired");
+		const { uid, exp } = decodeToken(getTokenIfDefined(req, res), res);
+
+		// Add user ID into the scope
+		addUserIdToScope(req, uid);
+
+		if (moment.unix(exp) < moment().add(30, "minutes")) {
+			// Update token if expire soon
+			const token = signToken(uid)
+			res.set(jwtConfig.API_TOKEN_NAME, token);
 		}
+		next()
 	} catch (error) {
-		const refreshToken = req.cookies.refresh;
-		try {
-			// Check refreshToken validity
-			const { payload } = verifyToken(refreshToken, refreshSecret) as any;
-			if (payload) {
-				userId = payload;
-			} else {
-				throw new Error("Refresh Token Expired");
-			}
-		} catch (error) {
-			next(error);
+		if (error instanceof AuthenticationError) {
+			res.sendStatus(403)
 		}
 	}
-	// If one of the tokens is valid, resign new tokens
-	req.uid = userId;
-	const newTokens = signTokens(userId);
-	setCookies(res, newTokens);
-	next();
-}
+};
+

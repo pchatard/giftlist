@@ -1,7 +1,6 @@
 import Auth from "../services/AuthService";
 import { verifyPassword } from "../middlewares/authenticate";
-import { signTokens } from "../helpers/jwt";
-import { setCookies, clearCookies } from "../helpers/cookies";
+import { signToken } from "../helpers/Token/JWTokenProducer";
 import PasswordRequirementsError from "../errors/AuthErrors/PasswordRequirementsError";
 import UserAlreadyExistsError from "../errors/AuthErrors/UserAlreadyExistsError";
 import InvalidCredentialsError from "../errors/AuthErrors/InvalidCredentialsError";
@@ -28,8 +27,8 @@ class AuthController {
 
 			try {
 				// Firebase user creation
-				const { user } = await createUserWithEmailAndPassword(req.auth, email, password);
-				await signOut(req.auth);
+				const { user } = await createUserWithEmailAndPassword(req.authent, email, password);
+				await signOut(req.authent);
 
 				// Create user for DB
 				const { password: nope, passwordConfirmation: nope2, ...databaseUser } = req.body;
@@ -60,18 +59,16 @@ class AuthController {
 
 			try {
 				// Firebase signIn check
-				const { user } = await signInWithEmailAndPassword(req.auth, email, password);
-				await signOut(req.auth);
-
+				const { user } = await signInWithEmailAndPassword(req.authent, email, password);
+				
 				// Retrive user from database
 				const { id } = await Auth.getOne(req.database, user.uid);
-
+				
 				// Sign tokens and set cookies
-				const tokens = signTokens(id);
-				setCookies(res, tokens);
+				const token = signToken(id);
 
 				// Send back public token and user object
-				res.send({ token: tokens.publicToken });
+				res.send({ token: token });
 			} catch (error) {
 				throw new InvalidCredentialsError();
 			}
@@ -87,11 +84,12 @@ class AuthController {
 	 * @param {Response} res - Express response object
 	 * @param {Function} next - Following middleware
 	 */
-	static signout(_: Request, res: Response, next: Function) {
+	static async signout(req: Request, res: Response, next: Function) {
 		try {
-			// Clear cookies
-			clearCookies(res);
-			res.status(204).send();
+			// Sign Out from Firebase
+			await signOut(req.authent);
+			
+			res.status(200).send();
 		} catch (error) {
 			next(error);
 		}

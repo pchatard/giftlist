@@ -1,20 +1,20 @@
-//require("dotenv").config();
 import { config } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
-import cookies from "cookie-parser";
-import swaggerUi from "swagger-ui-express";
-
 import helmet from "helmet";
+import cookies from "cookie-parser";
+
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { Auth, getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
+import { Database } from "@firebase/database";
 import firebaseConfig from "./config/firebase";
 
 import router from "./routes";
 import errorHandler from "./middlewares/error";
-import { Database } from "@firebase/database";
 
+import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./config/swagger.json";
+// import jwtConfig from './config/token';
 
 config();
 const PORT = process.env.API_PORT;
@@ -31,9 +31,16 @@ app.use(cookies());
 // Pass firebase instances to the requests
 app.use((req: Request, _: Response, next: NextFunction): void => {
 	req.database = database;
-	req.auth = auth;
+	req.authent = auth;
 	next();
 });
+
+/*
+app.use((_req: Request, res: Response, next: NextFunction): void => {
+	res.set("Access-Control-Expose-Headers", jwtConfig.API_TOKEN_NAME);
+	next()
+})
+*/
 
 app.use(
 	"/docs",

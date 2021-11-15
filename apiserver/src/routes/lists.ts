@@ -1,6 +1,6 @@
 import express from "express";
 import ListController from "../controllers/ListController";
-import { authorize } from "../middlewares/authorize";
+//import { authorize } from "../middlewares/authorize";
 import { preventOwner } from "../middlewares/shared";
 
 const lists = express.Router();
@@ -18,18 +18,18 @@ lists.get("/:listId", ListController.findOne);
 lists.post("/", ListController.create);
 
 /** Updates the listId list */
-lists.put("/:listId", authorize, ListController.update);
+lists.put("/:listId", /*authorize,*/ ListController.update);
 
 /** Deletes the listId list */
-lists.delete("/:listId", authorize, ListController.delete);
+lists.delete("/:listId", /*authorize,*/ ListController.delete);
 
 /** Makes a list shared */
-lists.get("/:listId/share", authorize, ListController.share);
+lists.get("/:listId/share", /*authorize,*/ ListController.share);
 
 /** Finds the sharingCode shared list  */
 lists.get("/shared/:sharingCode", preventOwner, ListController.findSharedList);
 
 /** Makes a shared list private */
-lists.get("/:listId/private", authorize, ListController.private);
+lists.get("/:listId/private", /*authorize,*/ ListController.private);
 
 export default lists;

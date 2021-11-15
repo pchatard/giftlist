@@ -2,7 +2,6 @@ import Gift from "./GiftService";
 import {
 	Database,
 	DatabaseReference,
-	//onValue,
 	push,
 	ref,
 	remove,
@@ -69,13 +68,6 @@ class ListService {
 		};
 		let result: A = {};
 		result.sharedWith = (await get(query(reference))).val();
-		/*onValue(
-			reference,
-			(snap) => {
-				result.sharedWith = snap.val();
-			},
-			{ onlyOnce: true }
-		);*/
 		result.id = listId;
 		const sharedWith = result.sharedWith ? Object.values(result.sharedWith) : [];
 		result.sharedWith = sharedWith;
