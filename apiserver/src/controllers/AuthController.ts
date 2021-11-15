@@ -60,10 +60,10 @@ class AuthController {
 			try {
 				// Firebase signIn check
 				const { user } = await signInWithEmailAndPassword(req.authent, email, password);
-				
+
 				// Retrive user from database
 				const { id } = await Auth.getOne(req.database, user.uid);
-				
+
 				// Sign tokens and set cookies
 				const token = signToken(id);
 
@@ -88,7 +88,7 @@ class AuthController {
 		try {
 			// Sign Out from Firebase
 			await signOut(req.authent);
-			
+
 			res.status(200).send();
 		} catch (error) {
 			next(error);

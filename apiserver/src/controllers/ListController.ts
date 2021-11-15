@@ -30,7 +30,7 @@ class ListController {
 	 * @param {Request} req - Express request object
 	 * @param {Response} res - Express response object
 	 */
-	static async findMine(req: Request, res: Response) : Promise<void> {
+	static async findMine(req: Request, res: Response): Promise<void> {
 		const { mine, shared } = (await List.getMine(req.database, req.uid || "")) as {
 			mine: string;
 			shared: string;

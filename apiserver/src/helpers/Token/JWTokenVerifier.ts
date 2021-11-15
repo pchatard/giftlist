@@ -1,19 +1,14 @@
-import {
-	verify,
-	JsonWebTokenError,
-	TokenExpiredError,
-	VerifyErrors,
-} from "jsonwebtoken";
+import { verify, JsonWebTokenError, TokenExpiredError, VerifyErrors } from "jsonwebtoken";
 import { Request, Response } from "express";
 
 import JWToken from "../../types/JWToken";
-import jwtConfig from '../../config/token';
+import jwtConfig from "../../config/token";
 
 export function getTokenIfDefined(req: Request, res: Response): string {
 	if (typeof req.headers.authorization !== "undefined") {
 		const token = req.headers.authorization.split(" ")[1];
 		if (token) {
-			return token
+			return token;
 		}
 	}
 	res.status(403).json({ error: "Not Authorized" });

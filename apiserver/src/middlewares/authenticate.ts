@@ -22,14 +22,13 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
 
 		if (moment.unix(exp) < moment().add(30, "minutes")) {
 			// Update token if expire soon
-			const token = signToken(uid)
+			const token = signToken(uid);
 			res.set(jwtConfig.API_TOKEN_NAME, token);
 		}
-		next()
+		next();
 	} catch (error) {
 		if (error instanceof AuthenticationError) {
-			res.sendStatus(403)
+			res.sendStatus(403);
 		}
 	}
-};
-
+}

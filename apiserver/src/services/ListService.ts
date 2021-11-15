@@ -1,13 +1,5 @@
 import Gift from "./GiftService";
-import {
-	Database,
-	DatabaseReference,
-	push,
-	ref,
-	remove,
-	set,
-	update,
-} from "@firebase/database";
+import { Database, DatabaseReference, push, ref, remove, set, update } from "@firebase/database";
 import { get, query } from "firebase/database";
 
 class ListService {
