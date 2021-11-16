@@ -21,7 +21,7 @@ router.use("/users", authenticate, users);
 router.use("/lists", authenticate, lists);
 
 /** Gifts router */
-router.use("/gifts", gifts);
+router.use("/gifts", authenticate, gifts);
 
 router.route("/test").get(UserController.test);
 
