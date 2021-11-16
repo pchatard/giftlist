@@ -68,7 +68,7 @@ class AuthController {
 				const token = signToken(id);
 
 				// Send back public token and user object
-				res.send({ token: token });
+				res.send({ token });
 			} catch (error) {
 				throw new InvalidCredentialsError();
 			}
