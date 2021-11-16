@@ -27,8 +27,8 @@ class AuthController {
 
 			try {
 				// Firebase user creation
-				const { user } = await createUserWithEmailAndPassword(req.authent, email, password);
-				await signOut(req.authent);
+				const { user } = await createUserWithEmailAndPassword(req.auth, email, password);
+				await signOut(req.auth);
 
 				// Create user for DB
 				const { password: nope, passwordConfirmation: nope2, ...databaseUser } = req.body;
@@ -59,7 +59,7 @@ class AuthController {
 
 			try {
 				// Firebase signIn check
-				const { user } = await signInWithEmailAndPassword(req.authent, email, password);
+				const { user } = await signInWithEmailAndPassword(req.auth, email, password);
 
 				// Retrive user from database
 				const { id } = await Auth.getOne(req.database, user.uid);
@@ -87,7 +87,7 @@ class AuthController {
 	static async signout(req: Request, res: Response, next: Function) {
 		try {
 			// Sign Out from Firebase
-			await signOut(req.authent);
+			await signOut(req.auth);
 
 			res.status(200).send();
 		} catch (error) {

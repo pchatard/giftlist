@@ -31,7 +31,7 @@ app.use(cookies());
 // Pass firebase instances to the requests
 app.use((req: Request, _: Response, next: NextFunction): void => {
 	req.database = database;
-	req.authent = auth;
+	req.auth = auth;
 	next();
 });
 
