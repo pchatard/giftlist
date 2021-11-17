@@ -1,7 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { getAuth } from "firebase/auth";
+import { Request, Response } from "express";
 import { Get, Route } from "tsoa";
-//import { User } from '@firebase/auth';
 import UserService from "../services/UserService";
 
 @Route("test")
@@ -11,10 +9,9 @@ class UserController {
 	 * @function
 	 * @param {Request} req - Express request object
 	 * @param {Response} res - Express response object
-	 * @param {NextFunction} next - Following middleware
 	 * @returns {Object} - User object
 	 */
-	static async me(req: Request, res: Response, _next: NextFunction): Promise<void> {
+	static async me(req: Request, res: Response): Promise<void> {
 		const user = await UserService.getOne(req.database, req.uid || "");
 		if (user) {
 			res.status(200).send({ user });
@@ -25,9 +22,9 @@ class UserController {
 
 	@Get("/")
 	static test(): UserDTO {
-		const user = getAuth().currentUser;
+		const user = null;
 		if (!user) {
-			throw Error("User not logged-in");
+			return { displayName: "test" };
 		}
 		return user as UserDTO;
 	}
