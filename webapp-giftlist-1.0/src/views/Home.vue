@@ -71,8 +71,10 @@
 				<div class="p-3 border border-gray-200 shadow-md rounded-md">
 					<h3 class="text-xl font-bold">Préférences</h3>
 					<ul class="list-disc list-inside">
-						<li>Vue liste / grille</li>
-						<li>Montrer aux autres que je réserve : on/off</li>
+						<li class="line-through text-gray-400">Vue liste / grille</li>
+						<li class="line-through text-gray-400">
+							Montrer aux autres que je réserve : on/off
+						</li>
 						<li>Nom apparent lors des réservations</li>
 					</ul>
 				</div>
