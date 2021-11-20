@@ -82,6 +82,18 @@ const routes: Array<RouteRecordRaw> = [
 		},
 	},
 	{
+		path: "/app/lists/:id/new-gift",
+		name: "Nouveau cadeau",
+		component: List,
+		beforeEnter: checkConnectionGuard,
+	},
+	{
+		path: "/app/lists/:id/gift/:id",
+		name: "Cadeau",
+		component: List,
+		beforeEnter: checkConnectionGuard,
+	},
+	{
 		path: "/app/shared",
 		name: "Mes listes partagées",
 		component: SharedLists,

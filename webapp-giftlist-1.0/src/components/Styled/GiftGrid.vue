@@ -1,7 +1,7 @@
 <template>
 	<div class="max-w-sm min-w-sm border border-gray-200 shadow-md rounded-md p-4 relative">
 		<HeartIcon
-			v-show="favorite"
+			v-show="gift.favorite"
 			class="
 				absolute
 				w-10
@@ -15,10 +15,14 @@
 			"
 		/>
 		<div class="absolute top-2 right-2 flex" v-if="!shared">
-			<PencilIcon class="w-8 cursor-pointer rounded-md text-gray-400 p-1 hover:bg-gray-200" />
-			<ExternalLinkIcon
-				class="w-8 cursor-pointer rounded-md text-gray-400 p-1 hover:bg-gray-200"
-			/>
+			<router-link to="">
+				<PencilIcon class="w-8 cursor-pointer rounded-md text-gray-400 p-1 hover:bg-gray-200" />
+			</router-link>
+			<a href="#" ref="noopener noreferrer">
+				<ExternalLinkIcon
+					class="w-8 cursor-pointer rounded-md text-gray-400 p-1 hover:bg-gray-200"
+				/>
+			</a>
 			<TrashIcon
 				class="
 					w-8
@@ -48,14 +52,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+
+import Gift from "@/types/Gift";
 
 import Button from "@/components/Styled/Button.vue";
 import { ExternalLinkIcon, PencilIcon, ShoppingCartIcon, TrashIcon } from "@heroicons/vue/outline";
 import { HeartIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
-	name: "Gift",
+	name: "GiftGrid",
 	components: {
 		Button,
 		ExternalLinkIcon,
@@ -65,7 +71,10 @@ export default defineComponent({
 		TrashIcon,
 	},
 	props: {
-		favorite: Boolean,
+		gift: {
+			type: Object as PropType<Gift>,
+			required: true,
+		},
 		shared: {
 			type: Boolean,
 			default: false,

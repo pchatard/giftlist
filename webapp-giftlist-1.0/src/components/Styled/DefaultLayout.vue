@@ -1,6 +1,11 @@
 <template>
 	<div class="max-w-7xl mx-auto">
-		<Title class="mb-4">{{ title }}</Title>
+		<div class="flex items-center justify-between">
+			<Title class="mb-4">{{ title }}</Title>
+			<div class="flex items-center">
+				<slot name="commands" />
+			</div>
+		</div>
 		<div class="rounded-lg min-h-layout h-full relative">
 			<slot />
 		</div>

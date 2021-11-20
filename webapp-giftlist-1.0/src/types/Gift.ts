@@ -1,4 +1,4 @@
-export class Gift {
-	id!: string;
-	favorite!: boolean;
+export default interface Gift {
+	id: string;
+	favorite: boolean;
 }

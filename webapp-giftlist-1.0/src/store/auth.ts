@@ -2,8 +2,6 @@ import { User } from "@/types/User";
 import { ActionPayload, Module } from "vuex";
 import { RootState } from ".";
 
-// const endpoint = `${process.env.API_URL}/api/auth`;
-
 export const auth: Module<AuthState, RootState> = {
 	state: initAuthState,
 	getters: {
@@ -27,11 +25,13 @@ export const auth: Module<AuthState, RootState> = {
 		},
 	},
 	actions: {
-		async login(context, _payload: ActionPayload) {
+		async login(context, payload: ActionPayload) {
 			return new Promise<void>((resolve, reject) => {
 				console.debug("auth.ts - login");
 				try {
 					// TODO: Call /login route on backend
+					// const { data } = AuthUtils.login({});
+					// console.log(data);
 
 					// TODO: If success & rememberMe, commit everything and save user to localStorage
 					context.commit("SET_LOGGED_STATUS", true);

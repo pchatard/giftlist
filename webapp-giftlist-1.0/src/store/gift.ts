@@ -1,8 +1,6 @@
-import { Gift } from "@/types/Gift";
+import Gift from "@/types/Gift";
 import { Module } from "vuex";
 import { RootState } from ".";
-
-const endpoint = `${process.env.API_URL}/api/gift`;
 
 export const gift: Module<GiftState, RootState> = {
 	state: () => ({
@@ -37,13 +35,21 @@ export const gift: Module<GiftState, RootState> = {
 		},
 	},
 	actions: {
-		// async initialize({ commit, state }, listId) {
-		//     const gifts = await this.$axios.$get(`/api/gifts/${listId}`, {
-		//         withCredentials: true,
-		//     });
-		//     commit('POPULATE_GIFTS', gifts);
-		//     return state.gifts;
-		// },
+		async initializeGifts({ commit, state }, listId) {
+			// const gifts = await this.$axios.$get(`/api/gifts/${listId}`, {
+			//     withCredentials: true,
+			// });
+			const gifts: Gift[] = [];
+			for (let i = 0; i < 12; i++) {
+				const gift = {
+					id: `${i}`,
+					favorite: i < 4,
+				};
+				gifts.push(gift);
+			}
+			commit("POPULATE_GIFTS", gifts);
+			return state.gifts;
+		},
 		// async addGiftToList({ commit }, gift) {
 		//     const newGift = await this.$axios.$post(
 		//         `/api/gifts/${gift.listId}`,

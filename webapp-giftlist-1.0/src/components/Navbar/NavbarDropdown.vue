@@ -61,7 +61,7 @@
 								Mon compte
 							</button>
 						</MenuItem>
-						<!-- <MenuItem v-slot="{ active }">
+						<MenuItem v-slot="{ active }">
 							<button
 								:class="[
 									active ? 'bg-gray-50 text-indigo-600' : 'text-black',
@@ -71,7 +71,7 @@
 								<CogIcon class="w-5 h-5 mr-2" />
 								Préférences
 							</button>
-						</MenuItem> -->
+						</MenuItem>
 					</div>
 					<MenuItem v-slot="{ active }">
 						<button
@@ -93,7 +93,7 @@
 
 <script>
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import { UserCircleIcon, LogoutIcon, UserIcon } from "@heroicons/vue/outline";
+import { CogIcon, UserCircleIcon, LogoutIcon, UserIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { useRouter } from "vue-router";
 
@@ -101,7 +101,7 @@ export default {
 	name: "NavbarDropdown",
 	components: {
 		ChevronDownIcon,
-		// CogIcon,
+		CogIcon,
 		LogoutIcon,
 		Menu,
 		MenuButton,

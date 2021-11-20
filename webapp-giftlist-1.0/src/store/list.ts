@@ -2,14 +2,16 @@ import { List } from "@/types/List";
 import { Module } from "vuex";
 import { RootState } from ".";
 
-const endpoint = `${process.env.API_URL}/api/list`;
-
 export const list: Module<ListState, RootState> = {
 	state: () => ({
 		mine: [],
 		shared: [],
 	}),
-	getters: {},
+	getters: {
+		getListById: (state) => (id: string) => {
+			return state.mine.find((list: List) => list.id === id);
+		},
+	},
 	mutations: {
 		POPULATE_LISTS: (state, lists: ListState) => {
 			state.mine = lists.mine;
@@ -33,13 +35,26 @@ export const list: Module<ListState, RootState> = {
 		},
 	},
 	actions: {
-		// async initialize({ commit, state }) {
-		//     const lists = await this.$axios.$get('/api/lists/mine', {
-		//         withCredentials: true,
-		//     });
-		//     commit('POPULATE_LISTS', lists);
-		//     return state;
-		// },
+		async initializeLists({ commit, state }) {
+			// const lists = await this.$axios.$get('/api/lists/mine', {
+			//     withCredentials: true,
+			// });
+			const lists: List[] = [];
+			for (let i = 0; i < 5; i++) {
+				const list: List = {
+					id: `${i}`,
+					name: `Liste ${i + 1}`,
+					public: i % 2 == 0,
+				};
+				lists.push(list);
+			}
+			const listState: ListState = {
+				mine: lists,
+				shared: lists.filter((list: List) => list.public),
+			};
+			commit("POPULATE_LISTS", listState);
+			return state;
+		},
 		// async createList({ commit }, name) {
 		//     const response = await this.$axios.$post(
 		//         '/api/lists',

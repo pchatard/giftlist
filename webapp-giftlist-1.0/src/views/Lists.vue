@@ -2,93 +2,57 @@
 	<DefaultLayout title="Mes listes">
 		<Table :headers="tableHeaders">
 			<tr
-				v-for="i in 5"
-				:key="i"
+				v-for="list in lists"
+				:key="list.id"
 				class="cursor-pointer hover:bg-gray-50"
-				@click="router.push(`/app/lists/${i}`)"
+				@click="router.push(`/app/lists/${list.id}`)"
 			>
-				<TableData>
-					<div class="flex items-center">
-						<ViewListIcon class="w-5 h-5 mr-4 text-yellow-400" />
-						<div>
-							<div class="text-sm font-medium text-gray-900 whitespace-normal">
-								Liste {{ i }}
-							</div>
-							<div class="text-sm text-gray-500">Sous-titre</div>
-						</div>
-					</div>
-				</TableData>
-				<TableData>
-					<div class="text-sm text-gray-500">Moi</div>
-				</TableData>
-				<TableData>
-					<span
-						class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-						:class="{
-							'bg-red-100 text-red-800': !(i % 2),
-							'bg-green-100 text-green-800': i % 2,
-						}"
-					>
-						{{ i % 2 ? "Public" : "Private" }}
-					</span>
-				</TableData>
-				<TableData class="text-sm text-gray-500" content="Aujourd'hui" />
-				<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-					<button
-						@click.stop=""
-						class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
-					>
-						Options
-					</button>
-					<button
-						@click.stop="() => deleteList(i)"
-						class="ml-4 text-red-600 font-medium hover:text-red-900"
-					>
-						Supprimer
-					</button>
-				</td>
+				<ListItem :list="list" />
 			</tr>
 		</Table>
 	</DefaultLayout>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import router from "@/router";
+import { computed, ComputedRef, defineComponent, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
+import router from "@/router";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Table from "@/components/Styled/Table.vue";
-import TableData from "@/components/Styled/TableData.vue";
-import { ViewListIcon } from "@heroicons/vue/outline";
-import { useStore } from "vuex";
+import ListItem from "@/components/Styled/ListItem.vue";
+
+import { List } from "@/types/List";
 
 export default defineComponent({
 	name: "Lists",
 	components: {
 		DefaultLayout,
+		ListItem,
 		Table,
-		TableData,
-		ViewListIcon,
 	},
 	setup() {
-		const { dispatch } = useStore();
+		const { dispatch, state } = useStore();
 		const router = useRouter();
 
-		const tableHeaders = ["Nom", "Propriétaire", "Status", "Dernière modification"];
+		const tableHeaders = [
+			{ title: "", width: "w-8" },
+			{ title: "Nom" },
+			{ title: "Propriétaire" },
+			{ title: "Status" },
+			{ title: "Dernière modification" },
+		];
 
-		const deleteList = async (listId: string) => {
-			dispatch("deleteList", listId)
-				.then(() => {
-					console.debug("Lists - deleteList - Successfully deleted list " + listId);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		};
+		const lists: ComputedRef<List[]> = computed(() => state.list.mine);
+
+		onMounted(() => {
+			dispatch("initializeLists");
+		});
 
 		return {
-			deleteList,
+			lists,
 			router,
 			tableHeaders,
 		};

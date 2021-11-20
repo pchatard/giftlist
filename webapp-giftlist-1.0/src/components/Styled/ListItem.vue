@@ -1,22 +1,113 @@
 <template>
-	<li
-		class="w-full rounded-full my-1 py-4 px-4 hover:bg-gray-50"
-		:class="{ 'cursor-pointer': clickable }"
-	>
-		<slot />
-	</li>
+	<TableData>
+		<ViewListIcon class="w-5 h-5 mx-auto text-yellow-400" />
+	</TableData>
+	<TableData>
+		<div class="flex items-center">
+			<div>
+				<div class="text-sm font-medium text-gray-900 whitespace-normal">{{ list.name }}</div>
+				<div v-if="shared" class="text-sm text-gray-500">12 idées cadeaux</div>
+				<div v-else class="text-sm text-gray-500">Sous-titre</div>
+			</div>
+		</div>
+	</TableData>
+	<TableData>
+		<div class="text-sm text-gray-500">{{ shared ? "Mon copain" : "Moi" }}</div>
+	</TableData>
+	<TableData v-show="!shared">
+		<span
+			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+			:class="{
+				'bg-red-100 text-red-800': !list.public,
+				'bg-green-100 text-green-800': list.public,
+			}"
+		>
+			{{ list.public ? "Public" : "Private" }}
+		</span>
+	</TableData>
+	<TableData class="text-sm text-gray-500" content="Aujourd'hui" />
+	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+		<button
+			v-show="shared"
+			@click.stop=""
+			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
+		>
+			<span class="flex items-center">
+				<InformationCircleIcon class="h-4 w-4 mr-2" />
+				Détails
+			</span>
+		</button>
+		<button
+			v-show="!shared"
+			@click.stop=""
+			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
+		>
+			<span class="flex items-center">
+				<DotsHorizontalIcon class="h-4 w-4 mr-2" />
+				Options
+			</span>
+		</button>
+		<button
+			v-show="!shared"
+			@click.stop="() => deleteList(i)"
+			class="ml-4 text-red-600 font-medium hover:text-red-900"
+		>
+			<span class="flex items-center">
+				<TrashIcon class="h-4 w-4 mr-2" />
+				Supprimer
+			</span>
+		</button>
+	</td>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+
+import TableData from "@/components/Styled/TableData.vue";
+import {
+	DotsHorizontalIcon,
+	TrashIcon,
+	ViewListIcon,
+	InformationCircleIcon,
+} from "@heroicons/vue/outline";
+import { List } from "@/types/List";
+import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "ListItem",
+	components: {
+		DotsHorizontalIcon,
+		InformationCircleIcon,
+		TableData,
+		TrashIcon,
+		ViewListIcon,
+	},
 	props: {
-		clickable: {
-			type: Boolean,
-			default: true,
+		list: {
+			type: Object as PropType<List>,
+			required: true,
 		},
+		shared: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	setup() {
+		const { dispatch, state } = useStore();
+
+		const deleteList = async (listId: string) => {
+			dispatch("deleteList", listId)
+				.then(() => {
+					console.debug("Lists - deleteList - Successfully deleted list " + listId);
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		};
+
+		return {
+			deleteList,
+		};
 	},
 });
 </script>
