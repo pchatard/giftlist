@@ -39,7 +39,7 @@
 		</button>
 		<button
 			v-show="!shared"
-			@click.stop=""
+			@click.stop="router.push(`/app/lists/${list.id}/settings`)"
 			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
 		>
 			<span class="flex items-center">
@@ -72,6 +72,7 @@ import {
 } from "@heroicons/vue/outline";
 import { List } from "@/types/List";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
 	name: "ListItem",
@@ -94,6 +95,7 @@ export default defineComponent({
 	},
 	setup() {
 		const { dispatch, state } = useStore();
+		const router = useRouter();
 
 		const deleteList = async (listId: string) => {
 			dispatch("deleteList", listId)
@@ -107,6 +109,7 @@ export default defineComponent({
 
 		return {
 			deleteList,
+			router,
 		};
 	},
 });

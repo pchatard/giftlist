@@ -8,6 +8,7 @@ import Profile from "../views/Profile.vue";
 import Settings from "../views/Settings.vue";
 import SharedList from "../views/SharedList.vue";
 import Lists from "../views/Lists.vue";
+import ListSettings from "../views/ListSettings.vue";
 import SharedLists from "../views/SharedLists.vue";
 import store from "@/store/index";
 
@@ -87,6 +88,12 @@ const routes: Array<RouteRecordRaw> = [
                 name: "Nouvelle idée cadeau",
             },
         },
+    },
+    {
+        path: "/app/lists/:id/settings",
+        name: "Paramètres de la liste",
+        component: ListSettings,
+        beforeEnter: checkConnectionGuard,
     },
     {
         path: "/app/lists/:id/new-gift",

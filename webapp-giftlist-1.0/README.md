@@ -24,14 +24,16 @@
     - [ ] **[Liste partagée]** Réserver
 
 ### Mes listes, mes Listes partagées
-- [ ] **[Listes]** Ajouter un menu déroulant sur le bouton Options : modifier, gérer la visibilité
 - [ ] Connecter les options aux actions du stores :
-    - [ ] **[Listes]** Modifier / Gérer la visibilité : Page dédiée /app/lists/:id/settings
+    - [x] **[Listes]** Modifier / Gérer la visibilité : Page dédiée /app/lists/:id/settings
     - [ ] **[Listes partagées]** Détails : Modal ou page dédiée
 - [ ] **[Listes]** Supprimer : Modal de confirmation
 - [ ] **[Listes]** Modal Supprimer : Connecter à l'action du store correspondante
 - [ ] **[Listes]** CTA : Redirige vers la page de création de listes
 - [ ] **[Listes partagées]** CTA : Ouvre un popup pour rentrer un nouveau code de partage
+
+### Paramètres de la liste
+- [ ] Créer des tabs : Général, Visibilité
 
 ### Nouvelle liste
 - [ ] Formulaire
