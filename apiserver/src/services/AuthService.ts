@@ -1,6 +1,7 @@
 import { Database, DatabaseReference, get, push, ref, remove } from "@firebase/database";
 import { User } from "@firebase/auth";
 import { query } from "firebase/database";
+import DatabaseUser from '../types/DatabaseUser';
 
 class AuthService {
 	/**

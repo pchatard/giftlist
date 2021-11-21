@@ -4,65 +4,61 @@ import { signToken } from "../helpers/Token/JWTokenProducer";
 import PasswordRequirementsError from "../errors/AuthErrors/PasswordRequirementsError";
 import UserAlreadyExistsError from "../errors/AuthErrors/UserAlreadyExistsError";
 import InvalidCredentialsError from "../errors/AuthErrors/InvalidCredentialsError";
-import { Request, Response } from "express";
+import { Request as ERequest, Response } from "express";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import DatabaseUser from "../types/DatabaseUser"
+import { Post, Route } from "tsoa";
 
+@Route("auth")
 class AuthController {
 	/**
 	 * Registers a new user
 	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
-	 * @returns {String} - Returns the new user's ID.
+	 * @param {ERequest} req - Express request object
+	 * @returns {void} - Returns nothing.
 	 */
-	static async register(req: Request, res: Response, next: Function): Promise<void> {
+	@Post("/")
+	static async register(req: ERequest, res: Response): Promise<void> {
+		const { email, password } = req.body;
+		const auth = req.app.get("auth")
+		// Regex password verification
+		if (!verifyPassword(password)) {
+			throw new PasswordRequirementsError();
+		}
 		try {
-			const { email, password } = req.body;
-
-			// Regex password verification
-			if (!verifyPassword(password)) {
-				throw new PasswordRequirementsError();
-			}
-
-			try {
-				// Firebase user creation
-				const { user } = await createUserWithEmailAndPassword(req.auth, email, password);
-				await signOut(req.auth);
-
-				// Create user for DB
-				const { password: nope, passwordConfirmation: nope2, ...databaseUser } = req.body;
-				databaseUser.firebase_uid = user.uid;
-
-				const { uid } = Auth.create(req.database, databaseUser as DatabaseUser);
-
-				res.send({ uid });
-			} catch (error) {
-				throw new UserAlreadyExistsError();
-			}
+			// Firebase user creation
+			const { user } = await createUserWithEmailAndPassword(auth, email, password);
+			await signOut(auth);
+			// Create user for DB
+			const { password: nope, passwordConfirmation: nope2, ...databaseUser } = req.body;
+			databaseUser.firebase_uid = user.uid;
+			Auth.create(req.app.get("database"), databaseUser as DatabaseUser);
+			res.status(200).json()
 		} catch (error) {
-			next(error);
+			//res.status(500).json({name:"Test", message: "test"})
+			throw new UserAlreadyExistsError();
 		}
 	}
 
 	/**
 	 * Logs a new user in
 	 * @function
-	 * @param {Request} req - Express request object
+	 * @param {ERequest} req - Express request object
 	 * @param {Response} res - Express response object
 	 * @param {Function} next - Following middleware
 	 * @returns {Object} - Returns an object with the public token.
 	 */
-	static async login(req: Request, res: Response, next: Function): Promise<void> {
+	static async login(req: ERequest, res: Response, next: Function): Promise<void> {
 		try {
 			const { email, password } = req.body;
+			const auth = req.app.get("auth")
 
 			try {
 				// Firebase signIn check
-				const { user } = await signInWithEmailAndPassword(req.auth, email, password);
+				const { user } = await signInWithEmailAndPassword(auth, email, password);
 
 				// Retrive user from database
-				const { id } = await Auth.getOne(req.database, user.uid);
+				const { id } = await Auth.getOne(req.app.get("database"), user.uid);
 
 				// Sign tokens and set cookies
 				const token = signToken(id);
@@ -80,14 +76,15 @@ class AuthController {
 	/**
 	 * Logs a new user out
 	 * @function
-	 * @param {Request} req - Express request object
+	 * @param {ERequest} req - Express request object
 	 * @param {Response} res - Express response object
 	 * @param {Function} next - Following middleware
 	 */
-	static async signout(req: Request, res: Response, next: Function) {
+	static async signout(req: ERequest, res: Response, next: Function) {
+		const auth = req.app.get("auth")
 		try {
 			// Sign Out from Firebase
-			await signOut(req.auth);
+			await signOut(auth);
 
 			res.status(200).send();
 		} catch (error) {

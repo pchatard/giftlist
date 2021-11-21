@@ -4,7 +4,7 @@ import AuthController from "../controllers/AuthController";
 const auth = express.Router();
 
 /** Registers a new user */
-auth.post("/local/register", AuthController.register);
+auth.post("/register", AuthController.register);
 
 /** Logs a user in */
 auth.post("/local/login", AuthController.login);

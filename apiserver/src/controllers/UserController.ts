@@ -12,7 +12,7 @@ class UserController {
 	 * @returns {Object} - User object
 	 */
 	static async me(req: Request, res: Response): Promise<void> {
-		const user = await UserService.getOne(req.database, req.uid || "");
+		const user = await UserService.getOne(req.app.get("database"), req.app.get("uid") || "");
 		if (user) {
 			res.status(200).send({ user });
 		} else {

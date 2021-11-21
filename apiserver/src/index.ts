@@ -1,5 +1,4 @@
-import { config } from "dotenv";
-import express, { NextFunction, Request, Response } from "express";
+import express/*, { NextFunction, Request, Response }*/ from "express";
 import helmet from "helmet";
 import cookies from "cookie-parser";
 
@@ -16,7 +15,6 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./config/swagger.json";
 // import jwtConfig from './config/token';
 
-config();
 const PORT = process.env.API_PORT;
 const app: express.Application = express();
 
@@ -29,11 +27,11 @@ app.use(helmet());
 app.use(cookies());
 
 // Pass firebase instances to the requests
-app.use((req: Request, _: Response, next: NextFunction): void => {
-	req.database = database;
-	req.auth = auth;
-	next();
-});
+// app.use((req: Request, _: Response, next: NextFunction): void => {
+// 	req.database = database;
+// 	req.auth = auth;
+// 	next();
+// });
 
 /*
 app.use((_req: Request, res: Response, next: NextFunction): void => {
@@ -41,6 +39,8 @@ app.use((_req: Request, res: Response, next: NextFunction): void => {
 	next()
 })
 */
+app.set("database", database)
+app.set("auth", auth)
 
 app.use(
 	"/docs",
@@ -58,4 +58,4 @@ app.listen(PORT, () => {
 	console.info("API Server is listening on " + PORT);
 });
 
-module.exports = app;
+export default app;
