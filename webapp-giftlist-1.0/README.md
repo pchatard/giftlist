@@ -25,7 +25,7 @@
 
 ### Mes listes, mes Listes partagées
 - [ ] Connecter les options aux actions du stores :
-    - [x] **[Listes]** Modifier / Gérer la visibilité : Page dédiée /app/lists/:id/settings
+    - [x] ~~**[Listes]** Modifier / Gérer la visibilité : Page dédiée /app/lists/:id/settings~~
     - [ ] **[Listes partagées]** Détails : Modal ou page dédiée
 - [ ] **[Listes]** Supprimer : Modal de confirmation
 - [ ] **[Listes]** Modal Supprimer : Connecter à l'action du store correspondante
