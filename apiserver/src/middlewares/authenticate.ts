@@ -20,7 +20,6 @@ export function authenticate(req: Request, res: Response, next: NextFunction): v
 		// Add user ID into the scope
 		addUserIdToScope(req, uid);
 
-		console.log(exp)
 		let expirationDate = DateTime.fromSeconds(exp * 1000)
 		if (expirationDate.plus({minutes: 30}).toMillis() < expirationDate.toMillis()) {
 			// Update token if expire soon
