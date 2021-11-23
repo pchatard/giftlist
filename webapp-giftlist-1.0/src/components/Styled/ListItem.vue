@@ -49,7 +49,7 @@
 		</button>
 		<button
 			v-show="!shared"
-			@click.stop="() => deleteList(i)"
+			@click.stop="$emit('delete', list)"
 			class="ml-4 text-red-600 font-medium hover:text-red-900"
 		>
 			<span class="flex items-center">
@@ -71,7 +71,6 @@ import {
 	InformationCircleIcon,
 } from "@heroicons/vue/outline";
 import { List } from "@/types/List";
-import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -83,6 +82,7 @@ export default defineComponent({
 		TrashIcon,
 		ViewListIcon,
 	},
+	emits: ["delete"],
 	props: {
 		list: {
 			type: Object as PropType<List>,
@@ -94,21 +94,9 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const { dispatch, state } = useStore();
 		const router = useRouter();
 
-		const deleteList = async (listId: string) => {
-			dispatch("deleteList", listId)
-				.then(() => {
-					console.debug("Lists - deleteList - Successfully deleted list " + listId);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		};
-
 		return {
-			deleteList,
 			router,
 		};
 	},
