@@ -1,6 +1,5 @@
 import express from "express";
 import GiftController from "../controllers/GiftController";
-//import { authorize } from "../middlewares/authorize";
 
 const gifts = express.Router();
 
@@ -14,18 +13,18 @@ gifts.get("/:listId", GiftController.findGiftsFromList);
 gifts.get("/:giftId", GiftController.findOne);
 
 /** Creates a new gift in the listId list */
-gifts.post("/:listId", /*authorize,*/ GiftController.create);
+gifts.post("/:listId", GiftController.create);
 
 /** Updates the giftId gift */
-gifts.put("/:listId/:giftId", /*authorize,*/ GiftController.update);
+gifts.put("/:listId/:giftId", GiftController.update);
 
 /** Toggles the favorite status of giftId gift  */
-gifts.put("/:listId/:giftId/fav", /*authorize,*/ GiftController.favoritize);
+gifts.put("/:listId/:giftId/fav", GiftController.favoritize);
 
 /** Books a gift */
 gifts.put("/:listId/:giftId/book", GiftController.book);
 
 /** Deletes the giftId gift */
-gifts.delete("/:listId/:giftId", /*authorize,*/ GiftController.delete);
+gifts.delete("/:listId/:giftId", GiftController.delete);
 
 export default gifts;
