@@ -30,7 +30,7 @@
 - [x] ~~**[Listes]** Supprimer : Modal de confirmation~~
 - [x] ~~**[Listes]** Modal Supprimer : Connecter à l'action du store correspondante~~
 - [x] ~~**[Listes]** CTA : Redirige vers la page de création de listes : /app/lists/new~~
-- [ ] **[Listes partagées]** CTA : Ouvre un popup pour rentrer un nouveau code de partage
+- [x] ~~**[Listes partagées]** CTA : Ouvre un popup pour rentrer un nouveau code de partage~~
 
 ### Paramètres de la liste
 - [ ] Créer des tabs : Général, Visibilité

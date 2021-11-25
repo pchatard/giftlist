@@ -91,10 +91,13 @@ export default defineComponent({
 				});
 		};
 
+		const fullname = computed(() => getters.fullName);
+		const cta = computed(() => currentRoute.value.meta.navbarCta);
+
 		return {
-			fullname: computed(() => getters.fullName),
+			fullname,
 			logout,
-			cta: computed(() => currentRoute.value.meta.navbarCta),
+			cta,
 		};
 	},
 });
