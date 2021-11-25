@@ -1,12 +1,14 @@
-import express/*, { NextFunction, Request, Response }*/ from "express";
+import express from "express";
 import helmet from "helmet";
 import cookies from "cookie-parser";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { Auth, getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { Database } from "@firebase/database";
 import firebaseConfig from "./config/firebase";
+
+import jwt from "express-jwt";
+import jwks from "jwks-rsa";
 
 import router from "./routes";
 import errorHandler from "./middlewares/error";
@@ -20,27 +22,12 @@ const app: express.Application = express();
 
 const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
 const database: Database = getDatabase(firebaseApp);
-const auth: Auth = getAuth(firebaseApp);
 
 app.use(express.json());
 app.use(helmet());
 app.use(cookies());
 
-// Pass firebase instances to the requests
-// app.use((req: Request, _: Response, next: NextFunction): void => {
-// 	req.database = database;
-// 	req.auth = auth;
-// 	next();
-// });
-
-/*
-app.use((_req: Request, res: Response, next: NextFunction): void => {
-	res.set("Access-Control-Expose-Headers", jwtConfig.API_TOKEN_NAME);
-	next()
-})
-*/
 app.set("database", database)
-app.set("auth", auth)
 
 app.use(
 	"/docs",
@@ -49,6 +36,19 @@ app.use(
 		explorer: true,
 	})
 );
+
+// Auth0
+app.use(jwt({
+	secret: jwks.expressJwtSecret({
+		cache: true,
+		rateLimit: true,
+		jwksRequestsPerMinute: 5,
+		jwksUri: 'https://giftlist-app.eu.auth0.com/.well-known/jwks.json'
+	}),
+	audience: 'https://giftlist-api',
+	issuer: 'https://giftlist-app.eu.auth0.com/',
+	algorithms: ['RS256']
+}));
 
 // Routes and Error handler
 app.use(router);
