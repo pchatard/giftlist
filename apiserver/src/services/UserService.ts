@@ -1,7 +1,7 @@
 import { User } from "@firebase/auth";
 import { Database, DatabaseReference, ref } from "@firebase/database";
 import { get, query } from "firebase/database";
-import UserDoesNotExistsError from "../errors/AuthErrors/UserDoesNotExistsError";
+import APIError from "../errors/APIError";
 
 class UserService {
 	/**
@@ -14,7 +14,7 @@ class UserService {
 		const reference: DatabaseReference = ref(db, `users/${userId}`);
 		let user: User | null = (await get(query(reference))).val();
 		if (!user) {
-			throw new UserDoesNotExistsError();
+			throw new APIError("UnknownUser", "This user doesn't exist on database");
 		}
 		return user;
 	}
