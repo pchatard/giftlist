@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(cookies());
 
-app.set("database", database)
+app.set("database", database);
 
 app.use(
 	"/docs",
@@ -38,17 +38,19 @@ app.use(
 );
 
 // Auth0
-app.use(jwt({
-	secret: jwks.expressJwtSecret({
-		cache: true,
-		rateLimit: true,
-		jwksRequestsPerMinute: 5,
-		jwksUri: 'https://giftlist-app.eu.auth0.com/.well-known/jwks.json'
-	}),
-	audience: 'https://giftlist-api',
-	issuer: 'https://giftlist-app.eu.auth0.com/',
-	algorithms: ['RS256']
-}));
+app.use(
+	jwt({
+		secret: jwks.expressJwtSecret({
+			cache: true,
+			rateLimit: true,
+			jwksRequestsPerMinute: 5,
+			jwksUri: "https://giftlist-app.eu.auth0.com/.well-known/jwks.json",
+		}),
+		audience: "https://giftlist-api",
+		issuer: "https://giftlist-app.eu.auth0.com/",
+		algorithms: ["RS256"],
+	})
+);
 
 // Routes and Error handler
 app.use(router);

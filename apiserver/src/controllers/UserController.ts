@@ -12,7 +12,7 @@ class UserController {
 	 * @returns {Object} - User object
 	 */
 	static async me(req: Request, res: Response): Promise<void> {
-		const userId = req.user["https://giftlist-api/email"]
+		const userId = req.user["https://giftlist-api/email"];
 		const user = await UserService.getOne(req.app.get("database"), userId);
 		if (user) {
 			res.status(200).send({ user });

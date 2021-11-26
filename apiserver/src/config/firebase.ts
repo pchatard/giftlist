@@ -1,6 +1,6 @@
-var suffix: string = ""
+var suffix: string = "";
 if (process.env.NODE_ENV) {
-	suffix = "_" + process.env.NODE_ENV
+	suffix = "_" + process.env.NODE_ENV;
 }
 
 export default {
