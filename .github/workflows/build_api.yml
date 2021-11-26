@@ -7,13 +7,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - './apiserver/**/*'
   pull_request:
     branches:
       - "*"
-    paths:
-      - './apiserver/**/*'
 
 jobs:
   build:
