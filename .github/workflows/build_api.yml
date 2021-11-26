@@ -5,12 +5,15 @@ name: Build API
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
     paths:
-    - "./apiserver/**/*"
+      - './apiserver/**/*'
   pull_request:
+    branches:
+      - "*"
     paths:
-    - "./apiserver/**/*"
+      - './apiserver/**/*'
 
 jobs:
   build:
