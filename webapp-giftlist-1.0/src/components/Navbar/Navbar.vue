@@ -1,13 +1,12 @@
 <template>
 	<nav id="nav" class="h-full w-full px-6 flex flex-row justify-between items-center bg-white">
-		<logged-in-navbar v-if="loggedIn" />
+		<logged-in-navbar v-if="isAuthenticated" />
 		<logged-out-navbar v-else />
 	</nav>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
-import { useStore } from "vuex";
+import { defineComponent, inject, ref } from "vue";
 import LoggedInNavbar from "./LoggedInNavbar.vue";
 import LoggedOutNavbar from "./LoggedOutNavbar.vue";
 
@@ -18,10 +17,12 @@ export default defineComponent({
 		LoggedOutNavbar,
 	},
 	setup() {
-		const store = useStore();
+		const auth = ref(inject("Auth") as any);
+
+		const isAuthenticated = auth.value.isAuthenticated;
 
 		return {
-			loggedIn: computed(() => store.state.auth.loggedIn),
+			isAuthenticated,
 		};
 	},
 });

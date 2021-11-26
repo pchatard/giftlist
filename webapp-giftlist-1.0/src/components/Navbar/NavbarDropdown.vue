@@ -20,7 +20,7 @@
 					"
 				>
 					<UserCircleIcon class="h-5 w-5 mr-2 text-gray-400" />
-					{{ fullname }}
+					{{ auth.user.name }}
 					<ChevronDownIcon class="w-5 h-5 ml-4 -mr-1 text-black" aria-hidden="true" />
 				</MenuButton>
 			</div>
@@ -92,11 +92,13 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { CogIcon, UserCircleIcon, LogoutIcon, UserIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { useRouter } from "vue-router";
+import { ref } from "@vue/reactivity";
+import { inject } from "@vue/runtime-core";
 
 export default {
 	name: "NavbarDropdown",
@@ -119,6 +121,7 @@ export default {
 	},
 	setup() {
 		const router = useRouter();
+		const auth = ref(inject("Auth") as any);
 
 		const redirectToProfile = () => {
 			router.push("/app/profile");
@@ -129,6 +132,7 @@ export default {
 		};
 
 		return {
+			auth,
 			redirectToProfile,
 			redirectToSettings,
 		};

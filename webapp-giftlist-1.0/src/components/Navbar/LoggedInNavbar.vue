@@ -1,6 +1,6 @@
 <template>
 	<div class="flex flex-row items-center">
-		<router-link to="/app">
+		<router-link to="/app/lists">
 			<span class="bg-yellow-400 rounded-md py-2 px-6 mr-4 font-bold italic text-lg"
 				>GIFTLIST</span
 			>
@@ -32,14 +32,11 @@
 			{{ cta.name }}
 		</Button>
 		<NavbarDropdown :fullname="fullname" @logout="logout" />
-		<!-- <NavbarDropdown :fullname="fullname" @logout="logout" /> -->
 	</div>
 </template>
 
 <script lang="ts">
-import { SnackbarState } from "@/store/snackbar";
-import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -63,32 +60,15 @@ export default defineComponent({
 		UserGroupIconOutline,
 	},
 	setup() {
-		const { getters, dispatch } = useStore();
+		const { getters } = useStore();
 		const router = useRouter();
 		const currentRoute = router.currentRoute;
+		const auth = ref(inject("Auth") as any);
 
-		const logout = async () => {
-			const snack: SnackbarState = {
-				message: "",
-				type: SnackbarEventEnum.ERROR,
-			};
-
-			dispatch("logout")
-				.then(() => {
-					console.debug("LoggedInNavbar - logout - Logout successful");
-					console.debug("LoggedInNavbar - logout - Redirecting to homepage");
-					router.push("/");
-
-					snack.message = "Déconnection réussie";
-					snack.type = SnackbarEventEnum.SUCCESS;
-				})
-				.catch((error: Error) => {
-					console.error(error.message);
-					snack.message = error.message;
-				})
-				.finally(() => {
-					dispatch("showSnackbar", snack);
-				});
+		const logout = () => {
+			auth.value.logout({
+				returnTo: window.location.origin,
+			});
 		};
 
 		const fullname = computed(() => getters.fullName);

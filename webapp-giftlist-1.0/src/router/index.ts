@@ -1,8 +1,5 @@
-import { createRouter, createWebHistory, NavigationGuard, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
-import Register from "../views/Register.vue";
-import Login from "../views/Login.vue";
-import Dashboard from "../views/Dashboard.vue";
 import List from "../views/List.vue";
 import Profile from "../views/Profile.vue";
 import Settings from "../views/Settings.vue";
@@ -10,20 +7,12 @@ import SharedList from "../views/SharedList.vue";
 import Lists from "../views/Lists.vue";
 import ListSettings from "../views/ListSettings.vue";
 import SharedLists from "../views/SharedLists.vue";
-import store from "@/store/index";
 
 import { listsNavbarCta } from "../views/Lists.vue";
 import { listNavbarCta } from "../views/List.vue";
 import { sharedListsNavbarCta } from "../views/SharedLists.vue";
 
-const checkConnectionGuard: NavigationGuard = (to, from, next) => {
-    // TODO : Add a notification banner ?
-    if (store.state.auth.loggedIn) {
-        next();
-    } else {
-        next(from);
-    }
-};
+import Auth0 from "@/auth";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -32,38 +21,22 @@ const routes: Array<RouteRecordRaw> = [
         component: Home,
     },
     {
-        path: "/login",
-        name: "Connexion",
-        component: Login,
-    },
-    {
-        path: "/register",
-        name: "Inscription",
-        component: Register,
-    },
-    {
-        path: "/app",
-        name: "Dashboard",
-        component: Dashboard,
-        beforeEnter: checkConnectionGuard,
-    },
-    {
         path: "/app/profile",
         name: "Mon compte",
         component: Profile,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/settings",
         name: "Mes préférences",
         component: Settings,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/lists",
         name: "Mes listes",
         component: Lists,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
         meta: {
             navbarCta: {
                 action: listsNavbarCta,
@@ -75,13 +48,13 @@ const routes: Array<RouteRecordRaw> = [
         path: "/app/lists/new",
         name: "Nouvelle liste",
         component: Lists,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/lists/:id",
         name: "Liste",
         component: List,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
         meta: {
             navbarCta: {
                 action: listNavbarCta,
@@ -93,25 +66,25 @@ const routes: Array<RouteRecordRaw> = [
         path: "/app/lists/:id/settings",
         name: "Paramètres de la liste",
         component: ListSettings,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/lists/:id/new-gift",
         name: "Nouveau cadeau",
         component: List,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/lists/:id/gift/:giftId",
         name: "Cadeau",
         component: List,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/shared",
         name: "Mes listes partagées",
         component: SharedLists,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
         meta: {
             navbarCta: {
                 action: sharedListsNavbarCta,
@@ -123,13 +96,13 @@ const routes: Array<RouteRecordRaw> = [
         path: "/app/shared/new",
         name: "Nouvelle liste partagée",
         component: SharedLists,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/shared/:code",
         name: "Liste partagée",
         component: SharedList,
-        beforeEnter: checkConnectionGuard,
+        beforeEnter: Auth0.routeGuard,
     },
 ];
 

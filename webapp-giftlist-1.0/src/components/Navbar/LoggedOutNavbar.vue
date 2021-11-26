@@ -6,18 +6,20 @@
 			>
 		</router-link>
 		<ul class="flex flex-row items-center justify-between">
-			<router-link to="/login">
-				<Button class="mx-1" btnStyle="secondary">Connexion</Button>
-			</router-link>
-			<router-link to="/register">
-				<Button class="mx-1">Inscription</Button>
-			</router-link>
+			<Button
+				v-if="!auth.loading && !auth.isAuthenticated"
+				@click="login"
+				class="mx-1"
+				btnStyle="secondary"
+			>
+				Connexion
+			</Button>
 		</ul>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, inject, ref } from "vue";
 
 import Button from "@/components/Styled/Button.vue";
 
@@ -25,6 +27,17 @@ export default defineComponent({
 	name: "LoggedOutNavbar",
 	components: {
 		Button,
+	},
+	setup() {
+		const auth = ref(inject("Auth") as any);
+		const login = () => {
+			auth.value.loginWithRedirect();
+		};
+
+		return {
+			auth,
+			login,
+		};
 	},
 });
 </script>

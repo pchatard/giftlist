@@ -2,15 +2,6 @@
 
 ## Pages publiques
 ### Accueil
-### Connexion
-- [ ] Formulaire
-- [ ] Mot de passe oublié
-- [ ] Différents choix de mode de connexion
-                        
-### Inscription
-- [ ] Formulaire
-- [ ] Champs : Prénom*, Nom*, Date de naissance, email*, mdp
-- [ ] Différents choix de mode d'inscription
 
 ## Pages privées
 ### Ma liste, Ma liste partagée
@@ -62,9 +53,7 @@
 
 ## Général
 ### Fonctions générales
-- [ ] Créer une classe AuthUtils :
-    - [x] Créer la base de la classe
-    - [ ] Compléter la classe en fonction de la méthode d'authentification choisie
+- [x] ~~Configurer Auth0~~~
 - [x] Créer des datas en dur pour créer les pages
 - [ ] Customiser le clic droit
 - [ ] Ecrire des tests
