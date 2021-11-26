@@ -7,15 +7,18 @@ on:
   push:
     branches: [ master ]
     paths:
-    - "./apiserver"
+    - "./apiserver/**/*"
   pull_request:
     paths:
-    - "./apiserver"
+    - "./apiserver/**/*"
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+       working-directory: ./apiserver
 
     strategy:
       matrix:
