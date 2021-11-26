@@ -7,10 +7,10 @@ on:
   push:
     branches: [ master ]
     paths:
-    - "apiserver"
+    - "./apiserver"
   pull_request:
     paths:
-    - "apiserver"
+    - "./apiserver"
 
 jobs:
   build:
