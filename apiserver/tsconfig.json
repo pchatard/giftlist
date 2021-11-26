@@ -28,8 +28,5 @@
       "emitDecoratorMetadata": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"],
-  "files": [
-    "./src/types/customRequest.d.ts"
-  ]
+  "exclude": ["node_modules"]
 }

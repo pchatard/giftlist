@@ -120,11 +120,12 @@ class GiftController {
 	static async book(req: Request, res: Response, next: Function) {
 		try {
 			let booked = {};
+			const userId = req.user["https://giftlist-api/email"]
 			if (req.body.booked && req.body.name) {
 				// Use an object with id and name
-				booked = { id: req.app.get("uid"), name: req.body.name };
+				booked = { id: userId, name: req.body.name };
 			} else if (req.body.booked && !req.body.name) {
-				booked = { id: req.app.get("uid") };
+				booked = { id: userId };
 			}
 			const updatedGift = await Gift.updateBookedState(req.app.get("database"), req.params.giftId, booked);
 			res.send(updatedGift);

@@ -31,7 +31,8 @@ class ListController {
 	 * @param {Response} res - Express response object
 	 */
 	static async findMine(req: Request, res: Response): Promise<void> {
-		const { mine, shared } = (await List.getMine(req.app.get("database"), req.app.get("uid") || "")) as {
+		const userId = req.user["https://giftlist-api/email"]
+		const { mine, shared } = (await List.getMine(req.app.get("database"), userId)) as {
 			mine: string;
 			shared: string;
 		};
@@ -63,9 +64,10 @@ class ListController {
 	 */
 	static async create(req: Request, res: Response, next: Function) {
 		try {
-			const { displayName } = await User.getOne(req.app.get("database"), req.app.get("uid") || "");
+			const userId = req.user["https://giftlist-api/email"]
+			const { displayName } = await User.getOne(req.app.get("database"), userId);
 
-			if (!(await checkListNameAvailability(req.app.get("database"), req.app.get("uid") || "", req.body.name))) {
+			if (!(await checkListNameAvailability(req.app.get("database"), userId, req.body.name))) {
 				throw new ListNameAlreadyUsedError();
 			}
 
@@ -73,7 +75,7 @@ class ListController {
 				name: req.body.name,
 				created_at: Date(),
 				modified_at: Date(),
-				ownerId: req.app.get("uid"),
+				ownerId: userId,
 				owner: displayName,
 				public: false,
 			};
@@ -93,7 +95,8 @@ class ListController {
 	 */
 	static update(req: Request, res: Response, next: Function) {
 		try {
-			if (!checkListNameAvailability(req.app.get("database"), req.app.get("uid") || "", req.body.name)) {
+			const userId = req.user["https://giftlist-api/email"]
+			if (!checkListNameAvailability(req.app.get("database"), userId, req.body.name)) {
 				throw new ListNameAlreadyUsedError();
 			}
 
@@ -138,7 +141,7 @@ class ListController {
 				code = uuidv4();
 			}
 			// Add them to the list in DB
-			const list = await List.share(req.app.get("database"), listId, code);
+			const list = List.share(req.app.get("database"), listId, code);
 			// Return
 			res.send({ list });
 		} catch (error) {
@@ -179,9 +182,10 @@ class ListController {
 				sharedWith: Array<any>;
 			};
 
+			const userId = req.user["https://giftlist-api/email"]
 			// Add the user to the list's sharedWith property if not already done
-			if (!sharedList.sharedWith.includes(req.app.get("uid"))) {
-				List.addUserToList(req.app.get("database"), req.app.get("uid") || "", sharedList.id);
+			if (!sharedList.sharedWith.includes(userId)) {
+				List.addUserToList(req.app.get("database"), userId, sharedList.id);
 			}
 
 			res.send(sharedList);

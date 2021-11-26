@@ -8,7 +8,7 @@ export async function preventOwner(req: Request, _: Response, next: Function) {
 		const response = await List.getSharedList(req.app.get("database"), req.params.sharingCode);
 		if (response) {
 			const { ownerId } = response as { ownerId: string };
-			const userId = req.app.get("uid");
+			const userId = req.user["https://giftlist-api/email"];
 			if (ownerId === userId) {
 				throw new SharedListAccessError();
 			}
