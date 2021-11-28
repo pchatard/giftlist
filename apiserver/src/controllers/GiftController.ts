@@ -11,7 +11,7 @@ class GiftController {
 	 */
 	static async findAll(req: Request, res: Response, next: Function) {
 		try {
-			const lists = await Gift.getAll(req.database);
+			const lists = await Gift.getAll(req.app.get("database"));
 			res.send(lists);
 		} catch (error) {
 			next(error);
@@ -27,7 +27,7 @@ class GiftController {
 	 */
 	static async findGiftsFromList(req: Request, res: Response, next: Function) {
 		try {
-			const listItems = await Gift.getFromList(req.database, req.params.listId);
+			const listItems = await Gift.getFromList(req.app.get("database"), req.params.listId);
 			res.send(listItems);
 		} catch (error) {
 			next(error);
@@ -43,7 +43,7 @@ class GiftController {
 	 */
 	static async findOne(req: Request, res: Response, next: Function) {
 		try {
-			const list = await Gift.getOne(req.database, req.params.giftId);
+			const list = await Gift.getOne(req.app.get("database"), req.params.giftId);
 			res.send(list);
 		} catch (error) {
 			next(error);
@@ -65,7 +65,7 @@ class GiftController {
 				created_at: Date(),
 				modified_at: Date(),
 			};
-			const createdItem = await Gift.create(req.database, gift);
+			const createdItem = await Gift.create(req.app.get("database"), gift);
 			res.send(createdItem);
 		} catch (error) {
 			next(error);
@@ -82,7 +82,7 @@ class GiftController {
 	static async update(req: Request, res: Response, next: Function) {
 		try {
 			const gift = req.body;
-			const updatedItem = await Gift.update(req.database, req.params.giftId, gift);
+			const updatedItem = await Gift.update(req.app.get("database"), req.params.giftId, gift);
 			res.send(updatedItem);
 		} catch (error) {
 			next(error);
@@ -100,7 +100,7 @@ class GiftController {
 		try {
 			const newState = req.body.newState;
 			const newFavState = await Gift.updateFavoriteState(
-				req.database,
+				req.app.get("database"),
 				req.params.giftId,
 				newState
 			);
@@ -120,13 +120,18 @@ class GiftController {
 	static async book(req: Request, res: Response, next: Function) {
 		try {
 			let booked = {};
+			const userId = req.user["https://giftlist-api/email"];
 			if (req.body.booked && req.body.name) {
 				// Use an object with id and name
-				booked = { id: req.uid, name: req.body.name };
+				booked = { id: userId, name: req.body.name };
 			} else if (req.body.booked && !req.body.name) {
-				booked = { id: req.uid };
+				booked = { id: userId };
 			}
-			const updatedGift = await Gift.updateBookedState(req.database, req.params.giftId, booked);
+			const updatedGift = await Gift.updateBookedState(
+				req.app.get("database"),
+				req.params.giftId,
+				booked
+			);
 			res.send(updatedGift);
 		} catch (error) {
 			next(error);
@@ -142,7 +147,7 @@ class GiftController {
 	 */
 	static async delete(req: Request, res: Response, next: Function) {
 		try {
-			await Gift.delete(req.database, req.params.giftId);
+			await Gift.delete(req.app.get("database"), req.params.giftId);
 			res.send(true);
 		} catch (error) {
 			next(error);

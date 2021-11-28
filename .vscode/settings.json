@@ -1,0 +1,11 @@
+{
+  "mocha.files.glob": "tests/**/*",
+  "mocha.subdirectory": "./apiserver",
+  "mocha.env": {
+    "NODE_ENV": "DEV"
+  },
+  "mocha.requires": [
+    "ts-node/register",
+    "dotenv/config"
+  ]
+}

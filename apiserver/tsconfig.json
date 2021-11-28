@@ -29,7 +29,7 @@
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"],
-  "files": [
-    "./src/types/customRequest.d.ts"
-  ]
+  "ts-node": {
+    "files": true
+  }
 }
