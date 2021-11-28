@@ -15,7 +15,6 @@ import errorHandler from "./middlewares/error";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./config/swagger.json";
-// import jwtConfig from './config/token';
 
 const PORT = process.env.API_PORT;
 const app: express.Application = express();
