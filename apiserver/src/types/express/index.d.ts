@@ -1,9 +1,9 @@
-interface Test {
+interface Auth0User {
 	"https://giftlist-api/email": string;
 }
 
 declare namespace Express {
 	interface Request {
-		user: Test;
+		user: Auth0User;
 	}
 }

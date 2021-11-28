@@ -35,6 +35,7 @@ describe("Test", () => {
       chai.request(server)
           .post(baseUrl + "/")
           .send(info)
+          .set({ "Authorization": `Bearer ${token}` })
           .end(function (err, res) {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
