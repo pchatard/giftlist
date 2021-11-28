@@ -6,13 +6,14 @@ import server from "../src/index"
 
 chai.use(chaiHttp)
 
-const options = { method: 'POST',
-  url: 'https://giftlist-app.eu.auth0.com/oauth/token',
+const options = {
+  method: 'POST',
+  url: process.env.AUTH0_TOKEN_URL,
   headers: { 'content-type': 'application/json' },
   body: JSON.stringify({
-    "client_id": "ByRAZpSlP13t4h0Lxl4CCGWSY71hmq2m",
-    "client_secret": "_snhXvzpp9rR5UOSBEJpkZFsSn-tIfWeNCMz4WvI-w6MvbSlGOsPKJzmfbRrKldJ",
-    "audience": "https://giftlist-api",
+    "client_id": process.env.AUTH0_CLIENT_ID,
+    "client_secret": process.env.AUTH0_CLIENT_SECRET,
+    "audience": process.env.AUTH0_AUDIENCE,
     "grant_type": "client_credentials"
   })
 };

@@ -43,10 +43,10 @@ app.use(
 			cache: true,
 			rateLimit: true,
 			jwksRequestsPerMinute: 5,
-			jwksUri: "https://giftlist-app.eu.auth0.com/.well-known/jwks.json",
+			jwksUri: process.env.AUTH0_JWKS_URI || "",
 		}),
-		audience: "https://giftlist-api",
-		issuer: "https://giftlist-app.eu.auth0.com/",
+		audience: process.env.AUTH0_AUDIENCE,
+		issuer: process.env.AUTH0_ISSUER,
 		algorithms: ["RS256"],
 	})
 );
