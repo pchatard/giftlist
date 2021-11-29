@@ -150,6 +150,7 @@ export default defineComponent({
 		cancelText: {
 			type: String,
 			required: false,
+			default: "Annuler",
 		},
 	},
 	emits: ["open", "close", "confirm"],

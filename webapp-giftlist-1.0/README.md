@@ -5,14 +5,15 @@
 
 ## Pages privées
 ### Ma liste, Ma liste partagée
-- [ ] **[Liste]** Gestion du status de la liste => Créer un lien vers une page dédiée /app/lists/:id/settings
+- [x] ~~**[Liste]** Gestion du status de la liste => Créer un lien vers une page dédiée /app/lists/:id/settings~~
 - [ ] **[Liste partagée]** Afficher les détails de la liste (propriétaire, échéance, etc)
+- [x] ~~Connecter les boutons aux bonnes actions du store~~ :
+    - [x] ~~**[Liste]** Favori / Pas favori~~
+    - [x] ~~**[Liste]** Supprimer~~
+    - [x] ~~**[Liste partagée]** Détails~~
+    - [x] ~~**[Liste partagée]** Réserver~~
 - [ ] Revoir le design des Gift en grid
-- [ ] Connecter les boutons aux bonnes actions du store :
-    - [ ] **[Liste]** Favori / Pas favori
-    - [ ] **[Liste]** Supprimer
-    - [ ] **[Liste partagée]** Détails
-    - [ ] **[Liste partagée]** Réserver
+- [ ] Connecter les boutons aux actions du store (vue grille)
 
 ### Mes listes, mes Listes partagées
 - [ ] Connecter les options aux actions du stores :
@@ -46,7 +47,7 @@
 - [ ] RGPD : Télécharger mes données personnelles
 
 ### Préférences
-- [ ] Vue liste / grille
+- [x] Vue liste / grille
 - [ ] Montrer aux autres que je réserve : on/off
 - [ ] Nom apparent lors des réservations
 - [ ] Gestion du thème sombre

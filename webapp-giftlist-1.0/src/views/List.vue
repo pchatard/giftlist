@@ -23,19 +23,30 @@
 				class="cursor-pointer hover:bg-gray-50"
 				@click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)"
 			>
-				<GiftList :gift="gift" />
+				<GiftList :gift="gift" @delete="handleDeleteModal" />
 			</tr>
 		</Table>
+
+		<Modal
+			:show="modal.showModal"
+			:title="modal.title"
+			:confirmText="modal.confirmText"
+			@close="modal.showModal = false"
+			@confirm="modal.confirm"
+			type="danger"
+		>
+		</Modal>
 	</DefaultLayout>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
+import { computed, ComputedRef, defineComponent, onMounted, ref } from "vue";
 import router from "@/router";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 import Gift from "@/types/Gift";
+import Modal from "@/components/Styled/Modal.vue";
 
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
@@ -54,8 +65,9 @@ export default defineComponent({
 		DefaultLayout,
 		GiftGrid,
 		GiftList,
-		Table,
 		ListGridToggleButton,
+		Modal,
+		Table,
 	},
 	setup() {
 		const { dispatch, state, getters } = useStore();
@@ -77,6 +89,28 @@ export default defineComponent({
 			dispatch("toggleListDisplayMode");
 		};
 
+		const handleDeleteModal = (gift: Gift) => {
+			console.debug("List - handleDeleteModal - Opening delete gift modal");
+			modal.value.title = "Supprimer " + gift.id;
+			modal.value.showModal = true;
+			modal.value.confirm = handleDeleteConfirm;
+			modal.value.gift = gift;
+		};
+
+		const handleDeleteConfirm = () => {
+			console.debug("List - handleDeleteConfirm - Deleting gift");
+			dispatch("deleteGift");
+			modal.value.showModal = false;
+		};
+
+		const modal = ref({
+			showModal: false,
+			title: "Supprimer",
+			confirmText: "Supprimer",
+			confirm: handleDeleteConfirm,
+			gift: {} as Gift,
+		});
+
 		onMounted(() => {
 			dispatch("initializeLists");
 			dispatch("initializeGifts", listId);
@@ -85,7 +119,9 @@ export default defineComponent({
 		return {
 			isGridView: computed(() => state.preferences.listDisplayModeIsGrid),
 			gifts,
+			handleDeleteModal,
 			list,
+			modal,
 			router,
 			tableHeaders,
 			toggleDisplayMode,
