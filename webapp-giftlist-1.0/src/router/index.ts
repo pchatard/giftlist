@@ -7,6 +7,9 @@ import SharedList from "../views/SharedList.vue";
 import Lists from "../views/Lists.vue";
 import ListSettings from "../views/ListSettings.vue";
 import SharedLists from "../views/SharedLists.vue";
+import NewList from "../views/NewList.vue";
+import NewGift from "../views/NewGift.vue";
+import Gift from "../views/Gift.vue";
 
 import { listsNavbarCta } from "../views/Lists.vue";
 import { listNavbarCta } from "../views/List.vue";
@@ -47,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/app/lists/new",
         name: "Nouvelle liste",
-        component: Lists,
+        component: NewList,
         beforeEnter: Auth0.routeGuard,
     },
     {
@@ -71,13 +74,13 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/app/lists/:id/new-gift",
         name: "Nouveau cadeau",
-        component: List,
+        component: NewGift,
         beforeEnter: Auth0.routeGuard,
     },
     {
         path: "/app/lists/:id/gift/:giftId",
         name: "Cadeau",
-        component: List,
+        component: Gift,
         beforeEnter: Auth0.routeGuard,
     },
     {

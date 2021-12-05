@@ -5,6 +5,7 @@
 			'bg-indigo-600 text-white hover:bg-indigo-700': btnStyle === 'primary',
 			'border border-indigo-600 text-indigo-600 hover:border-indigo-700 hover:text-indigo-700':
 				btnStyle === 'secondary',
+			'bg-red-600 text-white hover:bg-red-700': btnStyle === 'danger',
 		}"
 	>
 		<span :class="{ 'h-5 w-5': hasIcon }">

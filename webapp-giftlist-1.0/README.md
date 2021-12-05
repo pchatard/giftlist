@@ -28,18 +28,35 @@
 - [ ] Créer des tabs : Général, Visibilité
 
 ### Nouvelle liste
-- [ ] Formulaire
-- [ ] Champs : Nom de la liste, échéance, visibilité (ajouter mes amis directement ?)
-- [ ] CTA : Créer la liste (Retour vers la liste)
-- [ ] CTA : Ajouter des cadeaux (Page d'ajout de cadeaux)
-- [ ] Annuler
+- [x] ~~Créer la page~~
+- [x] ~~CTA : Créer la liste (Retour vers la liste)~~
+- [x] ~~Annuler~~
+- [x] ~~Créer un stepper~~
+- [ ] Step 1
+    - [ ] Formulaire basique : Nom, description, échéance
+    - [x] ~~CTA : Aller directement sur ma page liste -> visibilité privée par défault~~
+    - [x] ~~CTA : Aller à l'étape 2~~
+- [ ] Step 2 : 
+    - [ ] Options de visibilité
+    - [x] ~~CTA : Aller directement sur ma page liste -> cadeaux vides par défault~~
+    - [x] ~~CTA : Aller à l'étape 3~~
+- [ ] Step 3 :
+    - [ ] Optionel : Ajout de cadeaux
+- [ ] Connecter les actions du store
 
 ### Nouveau cadeau
+- [x] ~~Créer la page~~
 - [ ] Formulaire
 - [ ] Champs : Titre*, lien, prix, marque, taille, couleur, type
 - [ ] CTA : Créer le cadeau (Retour vers la liste)
 - [ ] CTA : Ajouter un autre cadeau (Page d'ajout de cadeaux)
 - [ ] Annuler
+
+### Cadeau (Détail)
+- [x] ~~Créer la page~~
+- [ ] Formulaire pour modifier le cadeau
+- [ ] CTA : Enregistrer les modifications
+- [ ] CTA : Supprimer le cadeau
 
 ### Profil
 - [ ] Afficher mes informations
