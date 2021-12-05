@@ -16,9 +16,9 @@
 - [ ] Connecter les boutons aux actions du store (vue grille)
 
 ### Mes listes, mes Listes partagées
-- [ ] Connecter les options aux actions du stores :
+- [x] ~~Connecter les options aux actions du stores :~~
     - [x] ~~**[Listes]** Modifier / Gérer la visibilité : Page dédiée /app/lists/:id/settings~~
-    - [ ] **[Listes partagées]** Détails : Modal ou page dédiée
+    - [x] ~~**[Listes partagées]** Détails : Modal ou page dédiée~~
 - [x] ~~**[Listes]** Supprimer : Modal de confirmation~~
 - [x] ~~**[Listes]** Modal Supprimer : Connecter à l'action du store correspondante~~
 - [x] ~~**[Listes]** CTA : Redirige vers la page de création de listes : /app/lists/new~~
@@ -47,8 +47,9 @@
 - [ ] RGPD : Télécharger mes données personnelles
 
 ### Préférences
-- [x] Vue liste / grille
-- [ ] Montrer aux autres que je réserve : on/off
+- [x] ~~Stocker les préférences dans les metadatas Auth0~~
+- [x] ~~Vue liste / grille~~
+- [x] ~~Montrer aux autres que je réserve : on/off~~
 - [ ] Nom apparent lors des réservations
 - [ ] Gestion du thème sombre
 
@@ -56,6 +57,7 @@
 ### Fonctions générales
 - [x] ~~Configurer Auth0~~~
 - [x] Créer des datas en dur pour créer les pages
+- [ ] Gérer la redirection après la connexion
 - [ ] Customiser le clic droit
 - [ ] Ecrire des tests
 - [ ] Compléter les classes / interfaces des différents Types :

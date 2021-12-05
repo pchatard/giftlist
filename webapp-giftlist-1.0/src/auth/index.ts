@@ -1,3 +1,5 @@
+// Source : https://github.com/alexeyzimarev/auth0-vue3-ts
+
 import createAuth0Client, {
     Auth0Client,
     GetIdTokenClaimsOptions,
@@ -84,7 +86,8 @@ const routeGuard: NavigationGuardWithThis<undefined> = (to: any, from: any, next
         }
 
         // Otherwise, log in
-        await loginWithRedirect({ appState: { targetUrl: to.fullPath } });
+        // await loginWithRedirect({ appState: { targetUrl: to.fullPath }, redirect_uri: "http://localhost:8080" + to.path });
+        await loginWithRedirect({ appState: { targetUrl: to.fullPath }, redirect_uri: "http://localhost:8080" + "/app/profile" });
     }
 
     // If loading has already finished, check our auth state using `fn()`
@@ -111,8 +114,6 @@ interface Auth0PluginOptions {
 
 async function init(options: Auth0PluginOptions): Promise<Plugin> {
     client = await createAuth0Client({
-        // domain: process.env.VUE_APP_AUTH0_DOMAIN,
-        // client_id: process.env.VUE_APP_AUTH0_CLIENT_KEY,
         domain: options.domain,
         client_id: options.clientId,
         audience: options.audience,

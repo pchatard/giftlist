@@ -29,7 +29,7 @@
 	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 		<button
 			v-show="shared"
-			@click.stop=""
+			@click.stop="$emit('details', list)"
 			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
 		>
 			<span class="flex items-center">
@@ -82,7 +82,7 @@ export default defineComponent({
 		TrashIcon,
 		ViewListIcon,
 	},
-	emits: ["delete"],
+	emits: ["delete", "details"],
 	props: {
 		list: {
 			type: Object as PropType<List>,

@@ -45,6 +45,7 @@ export const list: Module<ListState, RootState> = {
                     id: `${i}`,
                     name: `Liste ${i + 1}`,
                     public: i % 2 == 0,
+                    sharingCode: `${i}`
                 };
                 lists.push(list);
             }

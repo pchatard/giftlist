@@ -113,12 +113,6 @@ export default {
 		UserCircleIcon,
 		UserIcon,
 	},
-	props: {
-		fullname: {
-			type: String,
-			required: true,
-		},
-	},
 	setup() {
 		const router = useRouter();
 		const auth = ref(inject("Auth") as any);

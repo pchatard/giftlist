@@ -1,11 +1,11 @@
 <template>
 	<DefaultLayout title="La liste de mon copain">
 		<template v-slot:commands>
-			<ListGridToggleButton :isGridView="isGridView" class="w-28" @change="toggleDisplayMode" />
+			<ListGridToggleButton :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
 		</template>
 
 		<div
-			v-if="isGridView"
+			v-if="!isListView"
 			class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-row gap-x-4 gap-y-8"
 		>
 			<GiftGrid v-for="gift in gifts" :key="gift.id" :gift="gift" :shared="true" />
@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onMounted, ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -65,6 +65,11 @@ export default defineComponent({
 		const { dispatch, state } = useStore();
 		const router = useRouter();
 		const listCode = router.currentRoute.value.params.code;
+		const auth = ref(inject("Auth") as any);
+
+		onMounted(() => {
+			dispatch("initializePreferences", auth.value.user.sub);
+		});
 
 		const tableHeaders = ref([
 			{ title: "Favori", width: "w-10 text-center" },
@@ -77,7 +82,8 @@ export default defineComponent({
 		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
 
 		const toggleDisplayMode = () => {
-			dispatch("toggleListDisplayMode");
+			console.log("Grid mode is disabled for now");
+			// dispatch("toggleListDisplayMode");
 		};
 
 		const openLinkInNewTab = () => {
@@ -132,7 +138,13 @@ export default defineComponent({
 		});
 
 		return {
-			isGridView: computed(() => state.preferences.listDisplayModeIsGrid),
+			isListView: computed(() => {
+				if (state.preferences.displayList === undefined) {
+					return true;
+				} else {
+					return state.preferences.displayList;
+				}
+			}),
 			gifts,
 			handleBookModal,
 			handleDetailsModal,

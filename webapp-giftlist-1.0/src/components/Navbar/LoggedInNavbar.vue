@@ -31,7 +31,7 @@
 			</template>
 			{{ cta.name }}
 		</Button>
-		<NavbarDropdown :fullname="fullname" @logout="logout" />
+		<NavbarDropdown @logout="logout" />
 	</div>
 </template>
 
@@ -60,7 +60,6 @@ export default defineComponent({
 		UserGroupIconOutline,
 	},
 	setup() {
-		const { getters } = useStore();
 		const router = useRouter();
 		const currentRoute = router.currentRoute;
 		const auth = ref(inject("Auth") as any);
@@ -70,12 +69,9 @@ export default defineComponent({
 				returnTo: window.location.origin,
 			});
 		};
-
-		const fullname = computed(() => getters.fullName);
 		const cta = computed(() => currentRoute.value.meta.navbarCta);
 
 		return {
-			fullname,
 			logout,
 			cta,
 		};

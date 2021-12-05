@@ -7,11 +7,11 @@
 				</template>
 				Paramètres
 			</Button>
-			<ListGridToggleButton :isGridView="isGridView" class="w-28" @change="toggleDisplayMode" />
+			<ListGridToggleButton :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
 		</template>
 
 		<div
-			v-if="isGridView"
+			v-if="!isListView"
 			class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-row gap-x-4 gap-y-8"
 		>
 			<GiftGrid v-for="gift in gifts" :key="gift.id" :gift="gift" />
@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onMounted, ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "vue";
 import router from "@/router";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -73,6 +73,7 @@ export default defineComponent({
 		const { dispatch, state, getters } = useStore();
 		const router = useRouter();
 		const listId = router.currentRoute.value.params.id;
+		const auth = ref(inject("Auth") as any);
 
 		const tableHeaders = ref([
 			{ title: "Favori", width: "w-10 text-center" },
@@ -86,7 +87,8 @@ export default defineComponent({
 		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
 
 		const toggleDisplayMode = () => {
-			dispatch("toggleListDisplayMode");
+			console.log("Grid mode is disabled for now");
+			// dispatch("toggleListDisplayMode");
 		};
 
 		const handleDeleteModal = (gift: Gift) => {
@@ -112,12 +114,19 @@ export default defineComponent({
 		});
 
 		onMounted(() => {
+			dispatch("initializePreferences", auth.value.user.sub);
 			dispatch("initializeLists");
 			dispatch("initializeGifts", listId);
 		});
 
 		return {
-			isGridView: computed(() => state.preferences.listDisplayModeIsGrid),
+			isListView: computed(() => {
+				if (state.preferences.displayList === undefined) {
+					return true;
+				} else {
+					return state.preferences.displayList;
+				}
+			}),
 			gifts,
 			handleDeleteModal,
 			list,

@@ -119,14 +119,14 @@
 				</RadioGroup>
 			</div>
 		</section>
-		<section class="my-4 hidden">
-			<Button>Sauvegarder</Button>
+		<section class="my-4">
+			<Button @click="savePreferences">Sauvegarder</Button>
 		</section>
 	</DefaultLayout>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, watch } from "vue";
+import { defineComponent, inject, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 
 import Button from "@/components/Styled/Button.vue";
@@ -141,6 +141,7 @@ import {
 	RadioGroupOption,
 } from "@headlessui/vue";
 import { CheckCircleIcon } from "@heroicons/vue/outline";
+import { PreferencesState } from "@/store/preferences";
 
 export default defineComponent({
 	name: "Settings",
@@ -155,24 +156,33 @@ export default defineComponent({
 		Subtitle,
 	},
 	setup() {
-		const { state, dispatch } = useStore();
+		const { dispatch, state } = useStore();
+		const auth = ref(inject("Auth") as any);
 
-		const displayList = computed(() => state.preferences.listDisplayModeIsGrid);
-		const bookingShowOthers = computed(() => state.preferences.bookingShowOthers);
+		const selectedDisplayList = ref();
+		const selectedBookingShowOthers = ref();
+
+		onMounted(async () => {
+			dispatch("initializePreferences", auth.value.user.sub).then((data: PreferencesState) => {
+				selectedDisplayList.value = displayListOptions.find(
+					(opt) => opt.value === data.displayList
+				);
+				selectedBookingShowOthers.value = bookingShowOthersOptions.find(
+					(opt) => opt.value === data.bookingShowOthers
+				);
+			});
+		});
 
 		const displayListOptions = [
 			{
-				title: "Grille",
+				title: "Liste",
 				value: true,
 			},
 			{
-				title: "Liste",
+				title: "Grille",
 				value: false,
 			},
 		];
-		const selectedDisplayList = ref(
-			displayListOptions.find((opt) => opt.value === displayList.value)
-		);
 
 		const bookingShowOthersOptions = [
 			{
@@ -187,22 +197,36 @@ export default defineComponent({
 				value: false,
 			},
 		];
-		const selectedBookingShowOthers = ref(
-			bookingShowOthersOptions.find((opt) => opt.value === bookingShowOthers.value)
-		);
 
 		watch(selectedDisplayList, () => {
-			dispatch("toggleListDisplayMode");
+			console.log("Grid mode is disabled for now");
+
+			const metadata = {
+				...state.preferences,
+				displayList: selectedDisplayList.value?.value,
+			};
+
+			dispatch("changePreferences", metadata);
 		});
+
 		watch(selectedBookingShowOthers, () => {
-			dispatch("toggleBookingShowOthers");
+			const metadata = {
+				...state.preferences,
+				bookingShowOthers: selectedBookingShowOthers.value?.value,
+			};
+			dispatch("changePreferences", metadata);
 		});
+
+		const savePreferences = async () => {
+			dispatch("savePreferences", auth.value.user.sub);
+		};
 
 		return {
 			selectedDisplayList,
 			displayListOptions,
 			selectedBookingShowOthers,
 			bookingShowOthersOptions,
+			savePreferences,
 		};
 	},
 });

@@ -3,11 +3,11 @@
 		<Table :headers="tableHeaders">
 			<tr
 				v-for="list in lists"
-				:key="list.id"
+				:key="list.sharingCode"
 				class="cursor-pointer hover:bg-gray-50"
-				@click="router.push(`/app/shared/${list.id}`)"
+				@click="router.push(`/app/shared/${list.sharingCode}`)"
 			>
-				<ListItem :list="list" :shared="true" />
+				<ListItem :list="list" :shared="true" @details="handleDetailsModal" />
 			</tr>
 		</Table>
 
@@ -24,11 +24,21 @@
 				{{ sharingCodeInputErrorMessage }}
 			</p>
 		</Modal>
+
+		<Modal
+			:show="detailsModal.show"
+			@close="handleDetailsModal"
+			@confirm="openList"
+			title="Titre de la liste"
+			confirmText="Ouvrir"
+		>
+			<p>Détails de la liste</p>
+		</Modal>
 	</DefaultLayout>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onMounted, onUpdated, ref, watch } from "vue";
+import { computed, ComputedRef, defineComponent, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import router from "@/router";
@@ -90,11 +100,30 @@ export default defineComponent({
 
 		const sharingCodeInputErrorMessage = ref("");
 
+		const detailsModal = ref({
+			show: false,
+			list: {} as List,
+		});
+
+		const handleDetailsModal = (list?: List) => {
+			detailsModal.value.show = !detailsModal.value.show;
+			if (list) {
+				detailsModal.value.list = list;
+			}
+		};
+
+		const openList = () => {
+			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
+		};
+
 		onMounted(() => {
 			dispatch("initializeLists");
 		});
 
 		return {
+			detailsModal,
+			handleDetailsModal,
+			openList,
 			newSharingCodeModalIsOpen,
 			closeNewSharingCodeModal,
 			confirmNewSharingCode,

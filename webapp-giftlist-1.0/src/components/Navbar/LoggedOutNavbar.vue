@@ -22,6 +22,7 @@
 import { defineComponent, inject, ref } from "vue";
 
 import Button from "@/components/Styled/Button.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "LoggedOutNavbar",
@@ -29,9 +30,12 @@ export default defineComponent({
 		Button,
 	},
 	setup() {
+		const { dispatch } = useStore();
 		const auth = ref(inject("Auth") as any);
-		const login = () => {
-			auth.value.loginWithRedirect();
+		const login = async () => {
+			await auth.value.loginWithRedirect({
+				redirect_uri: window.location.origin + "/app/lists",
+			});
 		};
 
 		return {
