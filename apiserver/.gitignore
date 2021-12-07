@@ -1,3 +1,6 @@
 nodes_modules
 
 build
+
+src/config/ormconfig.ts
+src/config/certs/root.crt

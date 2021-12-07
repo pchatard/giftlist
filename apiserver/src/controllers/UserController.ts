@@ -2,8 +2,20 @@ import { Request, Response } from "express";
 import { Get, Route } from "tsoa";
 import UserService from "../services/UserService";
 
-@Route("test")
+@Route("users")
 class UserController {
+	/**
+	 * Create a new user during sign up. Even if users are managed by Auth0,
+	 * we manage a user database to store preferences, friends and much more.
+	 * @param req
+	 * @param res
+	 */
+	static async create(req: Request, res: Response): Promise<void> {
+		const userMail = req.user["https://giftlist-api/email"];
+		await UserService.create(userMail);
+		res.status(200).json();
+	}
+
 	/**
 	 * Gets logged in user's information
 	 * @function

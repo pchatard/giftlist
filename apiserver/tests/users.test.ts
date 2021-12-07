@@ -7,8 +7,7 @@ import server from "../src/index"
 chai.use(chaiHttp)
 
 const options = {
-  method: 'POST',
-  url: process.env.AUTH0_TOKEN_URL,
+  url: process.env.AUTH0_TOKEN_URL as string,
   headers: { 'content-type': 'application/json' },
   body: JSON.stringify({
     "client_id": process.env.AUTH0_CLIENT_ID,
@@ -19,22 +18,24 @@ const options = {
 };
 
 describe("Test", () => {
-  const baseUrl = "/"
+  const baseUrl = "/users"
   
   var token: string = ""
 
-  before(() => {
-    request(options, function(error, _response, body) {
+  before((done) => {
+    request.post(options, function(error, _response, body) {
       if (error)
         throw new Error(error)
       token = JSON.parse(body)["access_token"]
+      done()
     })
   })
-  describe("POST /", () => {
+
+  describe("PUT /", () => {
     it("Returns 200 status-code", (done) => {
-      const info = { }
+      const info: any = { email: "test@test.fr"}
       chai.request(server)
-          .post(baseUrl + "/")
+          .put(baseUrl + "/")
           .send(info)
           .set({ "Authorization": `Bearer ${token}` })
           .end(function (err, res) {

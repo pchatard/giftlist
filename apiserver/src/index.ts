@@ -1,6 +1,10 @@
 import express from "express";
 import helmet from "helmet";
 import cookies from "cookie-parser";
+import { createConnection } from "typeorm";
+import cockroachDBOptions from "./config/ormconfig";
+
+import { User } from "./models/User";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
@@ -43,7 +47,7 @@ app.use(
 			cache: true,
 			rateLimit: true,
 			jwksRequestsPerMinute: 5,
-			jwksUri: process.env.AUTH0_JWKS_URI || "",
+			jwksUri: process.env.AUTH0_JWKS_URI || "",
 		}),
 		audience: process.env.AUTH0_AUDIENCE,
 		issuer: process.env.AUTH0_ISSUER,
@@ -55,8 +59,8 @@ app.use(
 app.use(router);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-	console.info("API Server is listening on " + PORT);
+app.listen(PORT, async () => {
+	await createConnection({ ...cockroachDBOptions, entities: [User] });
 });
 
 export default app;
