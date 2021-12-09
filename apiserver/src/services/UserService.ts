@@ -10,13 +10,13 @@ class UserService {
 	/**
 	 * Create a new user during sign up. Even if users are managed by Auth0,
 	 * we manage a user database to store preferences, friends and much more.
-	 * @param db
-	 * @param userId
-	 * @returns
+	 * @param {string} email user mail
+	 * @param {string} displayName user name to display
+	 * @returns {Promise<User>} the created user
 	 */
-	static async create(userMail: string): Promise<User> {
+	static async create(email: string, displayName: string): Promise<User> {
 		const userRepository: Repository<User> = getRepository(User);
-		const user: User = userRepository.create({ email: userMail || "test" });
+		const user: User = userRepository.create({ email, displayName });
 		return await userRepository.save(user);
 	}
 

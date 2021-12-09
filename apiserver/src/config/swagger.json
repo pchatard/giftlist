@@ -6,37 +6,51 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"UserDTO": {
+			"Pick_User.email-or-displayName_": {
 				"properties": {
+					"email": {
+						"type": "string",
+						"default": ""
+					},
 					"displayName": {
-						"type": "string"
+						"type": "string",
+						"default": ""
 					}
 				},
-				"required": [
-					"displayName"
-				],
 				"type": "object",
-				"additionalProperties": false
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"UserDTO": {
+				"$ref": "#/components/schemas/Pick_User.email-or-displayName_"
+			},
+			"CreateUserDTO": {
+				"$ref": "#/components/schemas/Pick_User.email-or-displayName_"
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
 	},
 	"info": {
-		"title": "apiserver",
+		"title": "Giftlist API",
 		"version": "1.0.0",
 		"license": {
-			"name": "ISC"
+			"name": "MIT"
 		},
 		"contact": {}
 	},
 	"openapi": "3.0.0",
 	"paths": {
 		"/users": {
-			"get": {
-				"operationId": "Test",
+			"put": {
+				"operationId": "Create",
 				"responses": {
 					"200": {
-						"description": "Ok",
+						"description": "the created user",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -46,8 +60,27 @@
 						}
 					}
 				},
-				"security": [],
-				"parameters": []
+				"description": "Create a new user during sign up. Even if users are authenticated and\ncreated by Auth0, we manage a user database to store preferences,\nfriends and much more.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "data to create a user",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserDTO"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

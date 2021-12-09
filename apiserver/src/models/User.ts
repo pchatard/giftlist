@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity("UserTable")
+@Entity("User")
 export class User {
 	@PrimaryGeneratedColumn()
 	public id: number = 0;
@@ -8,16 +8,12 @@ export class User {
 	@Column()
 	public email: string = "";
 
+	@Column()
+	public displayName: string = "";
+
 	@ManyToMany(() => User)
 	@JoinTable()
 	public friends?: User[];
-
-	//@ManyToMany(() => User, (user: User) => user.following)
-	//@JoinTable()
-	//followers: User[] = [];
-	//
-	//@ManyToMany(() => User, (user: User) => user.followers)
-	//following: User[] = [];
 }
 
 export default User;

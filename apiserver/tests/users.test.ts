@@ -32,8 +32,8 @@ describe("Test", () => {
   })
 
   describe("PUT /", () => {
-    it("Returns 200 status-code", (done) => {
-      const info: any = { email: "test@test.fr"}
+    it("Returns 200 status-code if all data are provided", (done) => {
+      const info: any = { email: "test1@test.fr", displayName: "TestUser1" }
       chai.request(server)
           .put(baseUrl + "/")
           .send(info)
@@ -43,6 +43,24 @@ describe("Test", () => {
             expect(res).to.have.status(200);
             done();
          })
+    })
+    it("Returns JSON with fields if all data are provided", (done) => {
+      const info: any = { email: "test2@test.fr", displayName: "TestUser2" }
+      chai.request(server)
+          .put(baseUrl + "/")
+          .send(info)
+          .set({ "Authorization": `Bearer ${token}` })
+          .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.property("body").to.be.deep.equal(info);
+            done();
+         })
+    })
+    it("Returns 400 status-code, with custom error message, if email is already used", () => {
+    })
+    it("Returns 400 status-code, with custom error message, if email is malformed", () => {
+    })
+    it("Returns 400 status-code, with custom error message, if one of fields is empty", () => {
     })
   })
 })
