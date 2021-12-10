@@ -45,14 +45,15 @@ describe("Test", () => {
          })
     })
     it("Returns JSON with fields if all data are provided", (done) => {
-      const info: any = { email: "test2@test.fr", displayName: "TestUser2" }
+      const infoCreate: any = { email: "test2@test.fr", displayName: "TestUser2" }
+      const infoReturned: any = { email: "test2@test.fr", displayName: "TestUser2" }
       chai.request(server)
           .put(baseUrl + "/")
-          .send(info)
+          .send(infoCreate)
           .set({ "Authorization": `Bearer ${token}` })
           .end(function (err, res) {
             expect(err).to.be.null;
-            expect(res).to.have.property("body").to.be.deep.equal(info);
+            expect(res).to.have.property("body").to.be.deep.equal(infoReturned);
             done();
          })
     })
