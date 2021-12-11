@@ -84,6 +84,22 @@
 - [ ] Connecter l'API
 - [ ] Gestion des erreurs
 
+### Inputs
+- [ ] Créer les composants génériques Input :
+    - [ ] Texte
+    - [ ] Numérique
+    - [ ] Select
+    - [ ] Checkbox
+    - [ ] URL ?
+- [ ] Style 
+    - [ ] Normal
+    - [ ] Hover, Focus
+    - [ ] Erreur
+    - [ ] Responsive
+- [ ] Gérer le contenu avec le state
+- [ ] Gérer les erreurs
+- [ ] Ecrire des tests
+
 ### Style
 - [ ] Responsive everything
 - [ ] Ajouter un thème sombre
