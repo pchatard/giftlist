@@ -1,0 +1,109 @@
+<template>
+	<DefaultLayout title="Mes listes">
+		<Table :headers="tableHeaders">
+			<tr
+				v-for="list in lists"
+				:key="list.id"
+				class="cursor-pointer hover:bg-gray-50"
+				@click="router.push(`/app/lists/${list.id}`)"
+			>
+				<ListItem :list="list" @delete="openDeleteModal" />
+			</tr>
+		</Table>
+
+		<Modal
+			:show="deleteModalIsOpen"
+			@confirm="deleteList"
+			@close="closeDeleteModal"
+			type="danger"
+			:title="`Supprimer la liste ${listToDelete?.name} ?`"
+			confirmText="Supprimer"
+			cancelText="Annuler"
+		>
+			<p class="text-sm text-gray-500">Êtes-vous sûr de vouloir supprimer cette liste ?</p>
+			<p class="text-sm text-gray-500">Cette action est irréversible.</p>
+		</Modal>
+	</DefaultLayout>
+</template>
+
+<script lang="ts">
+import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
+import router from "@/router";
+import { List } from "@/types/List";
+
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import Table from "@/components/Styled/Table.vue";
+import ListItem from "@/components/Styled/ListItem.vue";
+import Modal from "@/components/Styled/Modal.vue";
+
+export default defineComponent({
+	name: "Lists",
+	components: {
+		DefaultLayout,
+		ListItem,
+		Table,
+		Modal,
+	},
+	setup() {
+		const { dispatch, state } = useStore();
+		const router = useRouter();
+
+		const tableHeaders = [
+			{ title: "", width: "w-8" },
+			{ title: "Nom" },
+			{ title: "Propriétaire" },
+			{ title: "Status" },
+			{ title: "Dernière modification" },
+		];
+
+		const lists: ComputedRef<List[]> = computed(() => state.list.mine);
+
+		const deleteModalIsOpen = ref(false);
+		const listToDelete: Ref<List | undefined> = ref();
+
+		const openDeleteModal = (list: List) => {
+			listToDelete.value = list;
+			deleteModalIsOpen.value = true;
+		};
+		const closeDeleteModal = () => {
+			deleteModalIsOpen.value = false;
+		};
+
+		const deleteList = async () => {
+			dispatch("deleteList", listToDelete.value?.id)
+				.then(() => {
+					console.debug(
+						"Lists - deleteList - Successfully deleted list " + listToDelete.value?.id
+					);
+					closeDeleteModal();
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+		};
+
+		onMounted(() => {
+			dispatch("initializeLists");
+		});
+
+		return {
+			deleteModalIsOpen,
+			listToDelete,
+			openDeleteModal,
+			closeDeleteModal,
+			deleteList,
+			lists,
+			router,
+			tableHeaders,
+		};
+	},
+});
+
+export const listsNavbarCta = (): void => {
+	console.debug("Lists - listsNavbarCta - Redirecting to new list page");
+	router.push("/app/lists/new");
+};
+</script>
