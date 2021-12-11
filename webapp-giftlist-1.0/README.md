@@ -85,11 +85,12 @@
 - [ ] Gestion des erreurs
 
 ### Inputs
-- [ ] Créer les composants génériques Input :
-    - [ ] Texte
-    - [ ] Numérique
+- [x] Créer les composants génériques Input :
+    - [x] Texte
+    - [x] Numérique
     - [ ] Select
     - [ ] Checkbox
+    - [ ] Date
     - [ ] URL ?
 - [ ] Style 
     - [ ] Normal
