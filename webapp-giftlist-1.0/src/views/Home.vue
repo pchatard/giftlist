@@ -18,6 +18,22 @@
 						>HeadlessUI</a
 					>
 				</li>
+				<li>
+					<a
+						href="https://auth0.com/docs/api/management/v2#!/Users/get_users"
+						rel="noreferrer noopener"
+						class="text-blue-500"
+						>Auth0 Management API Docs</a
+					>
+				</li>
+				<li>
+					<a
+						href="https://auth0.com/docs/security/tokens/access-tokens/get-management-api-access-tokens-for-production"
+						rel="noreferrer noopener"
+						class="text-blue-500"
+						>Auth0 Management API Get Token</a
+					>
+				</li>
 			</ul>
 		</div>
 	</DefaultLayout>

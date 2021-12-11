@@ -1,4 +1,4 @@
 export enum ModalTypeEnum {
-    NORMAL = "normal",
-    DANGER = "danger"
+	NORMAL = "normal",
+	DANGER = "danger",
 }

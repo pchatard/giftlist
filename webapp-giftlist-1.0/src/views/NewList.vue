@@ -1,6 +1,6 @@
 <template>
 	<DefaultLayout title="Nouvelle liste">
-		<Stepper :step="step" :maxSteps="maxStep" />
+		<Stepper :step="step" :maxSteps="maxStep" @changeStep="handleChangeStepFromStepper" />
 		<component class="border p-4 my-4 rounded-md" :is="currentComponent" @confirm="skipToList">
 		</component>
 		<div class="flex justify-between">
@@ -58,6 +58,11 @@ export default defineComponent({
 			router.push("/app/lists");
 		};
 
+		const handleChangeStepFromStepper = (newStep: number) => {
+			// Check if we can go forward in steps
+			step.value = newStep;
+		};
+
 		const nextAction = () => {
 			if (step.value !== maxStep) {
 				step.value++;
@@ -78,6 +83,7 @@ export default defineComponent({
 		return {
 			cancel,
 			currentComponent,
+			handleChangeStepFromStepper,
 			step,
 			nextAction,
 			maxStep,
