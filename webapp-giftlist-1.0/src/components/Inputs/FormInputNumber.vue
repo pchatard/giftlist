@@ -14,7 +14,7 @@
 				:max="max"
 				:disabled="disabled"
 				:placeholder="placeholder"
-				class="outline-none px-3 py-2"
+				class="outline-none px-3 py-2 flex-1"
 				@focus="onFocus"
 				@blur="onBlur"
 			/>

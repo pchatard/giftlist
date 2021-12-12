@@ -88,10 +88,10 @@
 - [x] Créer les composants génériques Input :
     - [x] Texte
     - [x] Numérique
+    - [x] URL
     - [ ] Select
     - [ ] Checkbox
     - [ ] Date
-    - [ ] URL ?
 - [ ] Style 
     - [x] Normal
     - [x] Hover, Focus

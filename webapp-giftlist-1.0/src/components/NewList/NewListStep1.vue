@@ -11,6 +11,7 @@
 					:isError="text === 'error'"
 					errorMessage="Error"
 					copy
+					class="w-full"
 				/>
 				<FormInputText
 					:value="text"
@@ -30,11 +31,32 @@
 					:isError="number === 666"
 					errorMessage="Error"
 					copy
+					class="w-full"
 				/>
 				<FormInputNumber
 					:value="number"
 					label="Label Error"
 					@change="(value) => (number = value)"
+					helperText="Some helper text"
+					isError
+					errorMessage="Error message"
+				/>
+			</div>
+			<div class="flex justify-start gap-4">
+				<FormInputLink
+					:value="url"
+					label="Label"
+					@change="(value) => (url = value)"
+					helperText="Some helper text"
+					:isError="urlError"
+					errorMessage="Lien invalide"
+					copy
+					class="w-full"
+				/>
+				<FormInputLink
+					:value="url"
+					label="Label Error"
+					@change="(value) => (url = value)"
 					helperText="Some helper text"
 					isError
 					errorMessage="Error message"
@@ -46,26 +68,38 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 
 import Subtitle from "@/components/Styled/Subtitle.vue";
 import FormInputText from "@/components/Inputs/FormInputText.vue";
 import FormInputNumber from "@/components/Inputs/FormInputNumber.vue";
+import FormInputLink from "@/components/Inputs/FormInputLink.vue";
 
 export default defineComponent({
 	name: "NewListStep1",
 	components: {
 		FormInputText,
 		FormInputNumber,
+		FormInputLink,
 		Subtitle,
 	},
 	setup() {
 		const text = ref("Text");
 		const number = ref(10);
+		const url = ref("https://www.google.fr");
+		const urlError = ref(false);
+
+		watch(url, (value: string) => {
+			const urlRegex =
+				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+			urlError.value = !value.match(urlRegex);
+		});
 
 		return {
 			text,
 			number,
+			url,
+			urlError,
 		};
 	},
 	emits: ["confirm"],

@@ -184,13 +184,6 @@ describe("FormInputText.vue", () => {
         expect(setupData.refValue.value).toBe(props.value);
     });
 
-    it("emits a change event", () => {
-        wrapper.vm.$emit("change");
-        wrapper.vm.$nextTick();
-
-        expect(wrapper.emitted("change")).toBeTruthy();
-    });
-
     it("displays label prop content in label tag", () => {
         const label = wrapper.find("label");
         expect(label.text()).toBe(props.label);
