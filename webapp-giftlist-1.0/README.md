@@ -85,23 +85,23 @@
 - [ ] Gestion des erreurs
 
 ### Inputs
-- [x] Créer les composants génériques Input :
-    - [x] Texte
-    - [x] Numérique
-    - [x] URL
+- [x] ~~Créer les composants génériques Input :~~
+    - [x] ~~Texte~~
+    - [x] ~~Numérique~~
+    - [x] ~~URL~~
     - [ ] Select
     - [ ] Checkbox
     - [ ] Date
-- [ ] Style 
-    - [x] Normal
-    - [x] Hover, Focus
-    - [x] Erreur
-    - [x] Responsive
-- [x] Gérer le contenu avec le state
-- [x] Gérer les erreurs
-- [x] Option "Copy to clipboard"
+- [x] ~~Style~~ 
+    - [x] ~~Normal~~
+    - [x] ~~Hover, Focus~~
+    - [x] ~~Erreur~~
+    - [x] ~~Responsive~~
+- [x] ~~Gérer le contenu avec le state~~
+- [x] ~~Gérer les erreurs~~
+- [x] ~~Option "Copy to clipboard"~~
 - [ ] Option Icon
-- [x] Ecrire des tests
+- [x] ~~Ecrire des tests~~
 
 ### Style
 - [ ] Responsive everything
