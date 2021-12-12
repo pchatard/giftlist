@@ -93,13 +93,15 @@
     - [ ] Date
     - [ ] URL ?
 - [ ] Style 
-    - [ ] Normal
-    - [ ] Hover, Focus
-    - [ ] Erreur
-    - [ ] Responsive
-- [ ] Gérer le contenu avec le state
-- [ ] Gérer les erreurs
-- [ ] Ecrire des tests
+    - [x] Normal
+    - [x] Hover, Focus
+    - [x] Erreur
+    - [x] Responsive
+- [x] Gérer le contenu avec le state
+- [x] Gérer les erreurs
+- [x] Option "Copy to clipboard"
+- [ ] Option Icon
+- [x] Ecrire des tests
 
 ### Style
 - [ ] Responsive everything

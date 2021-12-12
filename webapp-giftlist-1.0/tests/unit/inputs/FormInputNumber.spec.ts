@@ -16,7 +16,8 @@ describe("FormInputNumber.vue", () => {
             disabled: false,
             isError: false,
             helperText: "Helper text",
-            errorMessage: "Error message"
+            errorMessage: "Error message",
+            copy: true
         };
         wrapper = shallowMount(FormInputNumber, { props });
     });
@@ -173,6 +174,25 @@ describe("FormInputNumber.vue", () => {
         expect(propIsRequired).toBeFalsy();
     });
 
+    it("has a boolean \"copy\" prop", () => {
+        const propType = wrapper.vm.$options.props.copy.type.name;
+        const propIsRequired = wrapper.vm.$options.props.copy.required;
+        const propValue = wrapper.props().copy;
+
+        expect(propValue).toBe(props.copy);
+        expect(propType).toBe("Boolean");
+        expect(propIsRequired).toBeFalsy();
+    });
+
+    it("has a boolean \"copy\" prop which defaults to false", async () => {
+        await wrapper.setProps({
+            ...props,
+            copy: undefined
+        });
+
+        expect(wrapper.props().copy).toBe(false);
+    });
+
     it("has a refValue equal to value prop", () => {
         const setupData = wrapper.vm.$options.setup(props);
         expect(setupData.refValue.value).toBe(props.value);
@@ -238,6 +258,22 @@ describe("FormInputNumber.vue", () => {
         expect(inputHelperSpan.text()).toBe(props.errorMessage);
     });
 
+    it("doesn't render any button when copy prop is set to false", async () => {
+        await wrapper.setProps({
+            ...props,
+            copy: false
+        });
+        expect(wrapper.find("button").exists()).toBeFalsy();
+    });
+
+    it("renders a button when copy prop is set to true", async () => {
+        await wrapper.setProps({
+            ...props,
+            copy: true
+        });
+        expect(wrapper.find("button").exists()).toBeTruthy();
+    });
+
     it("show error state when isError prop is true", async () => {
         await wrapper.setProps({
             ...props,
@@ -245,11 +281,11 @@ describe("FormInputNumber.vue", () => {
         });
 
         const label = wrapper.find("label");
-        const input = wrapper.find("input");
+        const inputContainer = wrapper.find(".input-container");
         const helperText = wrapper.find("span.input-helper");
 
         expect(label.classes()).toContain("text-red-600");
-        expect(input.classes()).toContain("border-red-600");
+        expect(inputContainer.classes()).toContain("border-red-600");
         expect(helperText.classes()).toContain("text-red-600");
         expect(helperText.text()).toBe(props.errorMessage);
     });
@@ -261,12 +297,13 @@ describe("FormInputNumber.vue", () => {
         });
 
         const label = wrapper.find("label");
+        const inputContainer = wrapper.find(".input-container");
         const input = wrapper.find("input");
         await input.element.blur();
         const helperText = wrapper.find("span.input-helper");
 
         expect(label.classes()).toContain("text-gray-600");
-        expect(input.classes()).toContain("border-gray-300");
+        expect(inputContainer.classes()).toContain("border-gray-300");
         expect(helperText.classes()).toContain("text-gray-500");
         expect(helperText.text()).toBe("");
     });
@@ -278,13 +315,28 @@ describe("FormInputNumber.vue", () => {
         });
 
         const label = wrapper.find("label");
+        const inputContainer = wrapper.find(".input-container");
         const input = wrapper.find("input");
         await input.element.focus();
         const helperText = wrapper.find("span.input-helper");
 
         expect(label.classes()).toContain("text-indigo-600");
-        expect(input.classes()).toContain("border-indigo-600");
+        expect(inputContainer.classes()).toContain("border-indigo-600");
         expect(helperText.classes()).toContain("text-gray-500");
         expect(helperText.text()).toBe(props.helperText);
+    });
+
+    it("copies input content to clipboard when button is clicked", async () => {
+        await wrapper.setProps({
+            ...props,
+            copy: true
+        });
+
+        document.execCommand = jest.fn();
+
+        const button = wrapper.find("button");
+        await button.element.click();
+
+        expect(document.execCommand).toHaveBeenCalledWith("copy");
     });
 });

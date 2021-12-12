@@ -10,6 +10,7 @@
 					helperText="Some helper text"
 					:isError="text === 'error'"
 					errorMessage="Error"
+					copy
 				/>
 				<FormInputText
 					:value="text"
@@ -28,6 +29,7 @@
 					helperText="Some helper text"
 					:isError="number === 666"
 					errorMessage="Error"
+					copy
 				/>
 				<FormInputNumber
 					:value="number"
