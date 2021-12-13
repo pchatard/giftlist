@@ -194,8 +194,7 @@ describe("FormInputNumber.vue", () => {
     });
 
     it("has a refValue equal to value prop", () => {
-        const setupData = wrapper.vm.$options.setup(props);
-        expect(setupData.refValue.value).toBe(props.value);
+        expect(wrapper.vm.refValue).toBe(props.value);
     });
 
     it("displays label prop content in label tag", () => {
@@ -331,5 +330,11 @@ describe("FormInputNumber.vue", () => {
         await button.element.click();
 
         expect(document.execCommand).toHaveBeenCalledWith("copy");
+    });
+
+    it("emits a change event when refValue changes", async () => {
+        wrapper.vm.refValue = 36;
+        await wrapper.vm.$nextTick();
+        expect(wrapper.emitted("change")).toBeTruthy();
     });
 });

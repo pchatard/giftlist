@@ -1,70 +1,71 @@
 <template>
 	<div>
 		<Subtitle>Informations de la liste</Subtitle>
-		<div class="flex flex-col gap-4">
-			<div class="flex justify-start gap-4">
-				<FormInputText
-					:value="text"
-					label="Label"
-					@change="(value) => (text = value)"
-					helperText="Some helper text"
-					:isError="text === 'error'"
-					errorMessage="Error"
-					copy
-					class="w-full"
-				/>
-				<FormInputText
-					:value="text"
-					label="Label Error"
-					@change="(value) => (text = value)"
-					helperText="Some helper text"
-					isError
-					errorMessage="Error message"
-				/>
-			</div>
-			<div class="flex justify-start gap-4">
-				<FormInputNumber
-					:value="number"
-					label="Label"
-					@change="(value) => (number = value)"
-					helperText="Some helper text"
-					:isError="number === 666"
-					errorMessage="Error"
-					copy
-					class="w-full"
-				/>
-				<FormInputNumber
-					:value="number"
-					label="Label Error"
-					@change="(value) => (number = value)"
-					helperText="Some helper text"
-					isError
-					errorMessage="Error message"
-				/>
-			</div>
-			<div class="flex justify-start gap-4">
-				<FormInputLink
-					:value="url"
-					label="Label"
-					@change="(value) => (url = value)"
-					helperText="Some helper text"
-					:isError="urlError"
-					errorMessage="Lien invalide"
-					copy
-					class="w-full"
-				/>
-				<FormInputLink
-					:value="url"
-					label="Label Error"
-					@change="(value) => (url = value)"
-					helperText="Some helper text"
-					isError
-					errorMessage="Error message"
-				/>
-			</div>
-			<FormInputToggle :value="check" label="Toggle" helperText="Helper text" />
+		<div class="grid grid-cols-3 gap-4">
+			<FormInputText
+				:value="text"
+				label="Label"
+				@change="(value) => (text = value)"
+				helperText="Some helper text"
+				:isError="text === 'error'"
+				errorMessage="Error"
+				copy
+				class="col-span-2"
+			/>
+			<FormInputText
+				:value="text"
+				label="Label Error"
+				@change="(value) => (text = value)"
+				helperText="Some helper text"
+				isError
+				errorMessage="Error message"
+			/>
+			<FormInputNumber
+				:value="number"
+				label="Label"
+				@change="(value) => (number = value)"
+				helperText="Some helper text"
+				:isError="number === 666"
+				errorMessage="Error"
+				copy
+			/>
+			<FormInputNumber
+				:value="number"
+				label="Label Error"
+				@change="(value) => (number = value)"
+				helperText="Some helper text"
+				isError
+				errorMessage="Error message"
+			/>
+			<FormInputToggle
+				:value="check"
+				@change="(newCheck) => (check = newCheck)"
+				label="Toggle"
+				helperText="Helper text"
+			/>
+			<FormInputLink
+				:value="url"
+				label="Label"
+				@change="(value) => (url = value)"
+				helperText="Some helper text"
+				:isError="urlError"
+				errorMessage="Lien invalide"
+				copy
+				class="col-span-full"
+			/>
+			<FormInputLink
+				:value="url"
+				label="Label Error"
+				@change="(value) => (url = value)"
+				helperText="Some helper text"
+				isError
+				errorMessage="Error message"
+				class="col-span-full"
+			/>
 		</div>
-		<button @click="$emit('confirm')">Continuer vers ma liste</button>
+		<button @click="$emit('confirm')" class="text-indigo-600 my-4">
+			Continuer vers ma liste
+		</button>
 	</div>
 </template>
 
