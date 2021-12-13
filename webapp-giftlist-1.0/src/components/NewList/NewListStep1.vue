@@ -62,6 +62,7 @@
 					errorMessage="Error message"
 				/>
 			</div>
+			<FormInputToggle :value="check" label="Toggle" helperText="Helper text" />
 		</div>
 		<button @click="$emit('confirm')">Continuer vers ma liste</button>
 	</div>
@@ -74,6 +75,7 @@ import Subtitle from "@/components/Styled/Subtitle.vue";
 import FormInputText from "@/components/Inputs/FormInputText.vue";
 import FormInputNumber from "@/components/Inputs/FormInputNumber.vue";
 import FormInputLink from "@/components/Inputs/FormInputLink.vue";
+import FormInputToggle from "@/components/Inputs/FormInputToggle.vue";
 
 export default defineComponent({
 	name: "NewListStep1",
@@ -81,6 +83,7 @@ export default defineComponent({
 		FormInputText,
 		FormInputNumber,
 		FormInputLink,
+		FormInputToggle,
 		Subtitle,
 	},
 	setup() {
@@ -88,6 +91,7 @@ export default defineComponent({
 		const number = ref(10);
 		const url = ref("https://www.google.fr");
 		const urlError = ref(false);
+		const check = ref(false);
 
 		watch(url, (value: string) => {
 			const urlRegex =
@@ -100,6 +104,7 @@ export default defineComponent({
 			number,
 			url,
 			urlError,
+			check,
 		};
 	},
 	emits: ["confirm"],

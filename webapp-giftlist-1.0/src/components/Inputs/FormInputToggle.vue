@@ -1,0 +1,74 @@
+<template>
+	<fieldset>
+		<SwitchGroup>
+			<div class="flex flex-col">
+				<SwitchLabel>{{ label }}</SwitchLabel>
+				<Switch
+					v-model="refValue"
+					:class="refValue ? 'bg-indigo-600 hover:bg-indigo-600' : 'bg-gray-200'"
+					class="
+						relative
+						inline-flex
+						items-center
+						h-6
+						transition-colors
+						rounded-full
+						w-11
+						my-1
+						focus:outline-none
+						hover:bg-gray-300
+					"
+				>
+					<span
+						:class="refValue ? 'translate-x-6' : 'translate-x-1'"
+						class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
+					/>
+				</Switch>
+				<span class="input-helper text-xs text-gray-500">{{ helperText || "&nbsp;" }}</span>
+			</div>
+		</SwitchGroup>
+	</fieldset>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, watch } from "vue";
+import { SwitchGroup, Switch, SwitchLabel } from "@headlessui/vue";
+
+export default defineComponent({
+	name: "FormInputToggle",
+	components: {
+		SwitchGroup,
+		Switch,
+		SwitchLabel,
+	},
+	props: {
+		value: {
+			type: Boolean,
+			required: true,
+		},
+		label: {
+			type: String,
+			required: true,
+		},
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
+		helperText: {
+			type: String,
+		},
+	},
+	setup(props, context) {
+		const refValue = ref(props.value);
+
+		watch(refValue, (value: boolean) => {
+			context.emit("change", value);
+		});
+
+		return {
+			refValue,
+		};
+	},
+	emits: ["change"],
+});
+</script>
