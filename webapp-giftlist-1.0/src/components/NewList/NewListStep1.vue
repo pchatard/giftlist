@@ -37,12 +37,21 @@
 				isError
 				errorMessage="Error message"
 			/>
-			<FormInputToggle
-				:value="check"
-				@change="(newCheck) => (check = newCheck)"
-				label="Toggle"
-				helperText="Helper text"
-			/>
+			<div class="flex items-center justify-between">
+				<FormInputToggle
+					:value="check"
+					@change="(newCheck) => (check = newCheck)"
+					label="Toggle"
+					helperText="Helper text"
+				/>
+				<FormInputToggle
+					:value="check"
+					@change="(newCheck) => (check = newCheck)"
+					label="Inline Toggle"
+					helperText="Helper text"
+					inline
+				/>
+			</div>
 			<FormInputLink
 				:value="url"
 				label="Label"

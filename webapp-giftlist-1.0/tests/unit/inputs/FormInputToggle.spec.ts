@@ -12,6 +12,7 @@ describe("FormInputToggle.vue", () => {
             label: "Label",
             disabled: false,
             helperText: "Helper text",
+            inline: false
         };
         wrapper = shallowMount(FormInputToggle, {
             props,
@@ -77,6 +78,23 @@ describe("FormInputToggle.vue", () => {
         expect(propType).toBe("String");
         expect(propIsRequired).toBeFalsy();
     });
+
+    it("has a boolean \"inline\" prop which defaults to false", async () => {
+        const propType = wrapper.vm.$options.props.inline.type.name;
+        const propIsRequired = wrapper.vm.$options.props.inline.required;
+
+        expect(wrapper.props().inline).toBe(props.inline);
+        expect(propType).toBe("Boolean");
+        expect(propIsRequired).toBeFalsy();
+
+        const propsWithoutInline = {
+            ...props,
+            inline: undefined
+        };
+
+        await wrapper.setProps(propsWithoutInline);
+        expect(wrapper.props().inline).toBe(false);
+    })
 
     it("has a refValue equal to value prop", () => {
         expect(wrapper.vm.refValue).toBe(props.value);

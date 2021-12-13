@@ -89,8 +89,8 @@
     - [x] ~~Texte~~
     - [x] ~~Numérique~~
     - [x] ~~URL~~
+    - [x] Checkbox/Toggle
     - [ ] Select
-    - [ ] Checkbox
     - [ ] Date
 - [x] ~~Style~~ 
     - [x] ~~Normal~~
