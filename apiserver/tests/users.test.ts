@@ -6,6 +6,7 @@ import server from "../src/index"
 import FieldIsMissingError from '../src/errors/FieldIsMissingError';
 import MailAlreadyUsedError from '../src/errors/UserErrors/MailAlreadyUsedError';
 import MailIsInvalidError from '../src/errors/UserErrors/MailIsInvalidError';
+import { User } from './../src/models/User';
 
 chai.use(chaiHttp)
 
@@ -20,10 +21,13 @@ const options = {
   })
 };
 
-describe("Test", () => {
+describe("Users", () => {
   const baseUrl = "/users"
-  
   var token: string = ""
+  
+  const User1: Omit<User, "id" | "friends"> = { email: "test1@test.fr", displayName: "TestUser1" };
+  const User2: Omit<User, "id" | "friends"> = { email: "test2@test.fr", displayName: "TestUser2" };
+  var User2_Id: string = ""  
 
   before((done) => {
     request.post(options, function(error, _response, body) {
@@ -36,10 +40,9 @@ describe("Test", () => {
 
   describe("PUT /", () => {
     it("Returns 200 status-code if all data are provided", (done) => {
-      const info: any = { email: "test1@test.fr", displayName: "TestUser1" }
       chai.request(server)
           .put(baseUrl + "/")
-          .send(info)
+          .send(User1)
           .set({ "Authorization": `Bearer ${token}` })
           .end(function (err, res) {
             expect(err).to.be.null;
@@ -48,25 +51,23 @@ describe("Test", () => {
          })
     })
     it("Returns JSON with fields if all data are provided", (done) => {
-      const infoCreate: any = { email: "test2@test.fr", displayName: "TestUser2" }
-      const infoReturned: any = { email: "test2@test.fr", displayName: "TestUser2" }
       chai.request(server)
           .put(baseUrl + "/")
-          .send(infoCreate)
+          .send(User2)
           .set({ "Authorization": `Bearer ${token}` })
           .end(function (err, res) {
             expect(err).to.be.null;
-            expect(res).to.have.property("body").to.be.deep.equal(infoReturned);
+            expect(res).to.have.property("body").to.have.property("id").to.be.a.string;
+            User2_Id = res.body.id
             done();
          })
     })
     it("Returns 500 status-code, with custom error message, if email is already used", (done) => {
-      const infoCreate: any = { email: "test2@test.fr", displayName: "TestUser2" }
       const error = new MailAlreadyUsedError()
       const errorReturned = { name: error.name, message: error.message};
       chai.request(server)
           .put(baseUrl + "/")
-          .send(infoCreate)
+          .send(User2)
           .set({ "Authorization": `Bearer ${token}` })
           .end(function (err, res) {
             expect(err).to.be.null;

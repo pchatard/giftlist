@@ -1,15 +1,11 @@
 import { User } from "./../models/User";
-import { getRepository, Repository } from "typeorm";
-
-import { User as FUser } from "@firebase/auth";
-import { Database, DatabaseReference, ref } from "@firebase/database";
-import { get, query } from "firebase/database";
-import APIError from "../errors/APIError";
+import { DeleteResult, getRepository, Repository } from "typeorm";
 
 class UserService {
 	/**
-	 * Create a new user during sign up. Even if users are managed by Auth0,
-	 * we manage a user database to store preferences, friends and much more.
+	 * Create a new user during sign up. Even if users are authenticated and
+	 * created by Auth0, we manage a user database to store preferences,
+	 * friends and much more.
 	 * @param {string} email user mail
 	 * @param {string} displayName user name to display
 	 * @returns {Promise<User>} the created user
@@ -21,18 +17,22 @@ class UserService {
 	}
 
 	/**
-	 * Returns a given user from the database.
-	 * @param {Database} db - Database connection
-	 * @param {String} userId - User's database id
-	 * @returns {Object} The user matching the userId parameter.
+	 * Delete a user from Database.
+	 * @param {string} userId id of user to delete, uuid v4 formatted
 	 */
-	static async getOne(db: Database, userId: string): Promise<FUser> {
-		const reference: DatabaseReference = ref(db, `users/${userId}`);
-		let user: FUser | null = (await get(query(reference))).val();
-		if (!user) {
-			throw new APIError("UnknownUser", "This user doesn't exist on database");
-		}
-		return user;
+	static async delete(userId: string): Promise<DeleteResult> {
+		const userRepository: Repository<User> = getRepository(User);
+		return await userRepository.delete({ id: userId });
+	}
+
+	/**
+	 * Return a user from Database.
+	 * @param {string} userId id of user to get, uuid v4 formatted
+	 * @returns {Promise<User>} The user matching the userId parameter.
+	 */
+	static async get(userId: string): Promise<User | undefined> {
+		const userRepository: Repository<User> = getRepository(User);
+		return await userRepository.findOne({ id: userId })
 	}
 }
 

@@ -1,7 +1,9 @@
-import express from "express";
 import {
 	Body,
 	Controller,
+	Delete,
+	Get,
+	Path,
 	Put,
 	Response,
 	Route,
@@ -14,9 +16,10 @@ import User from "../models/User";
 import MailAlreadyUsedError from "../errors/UserErrors/MailAlreadyUsedError";
 import MailIsInvalidError from "../errors/UserErrors/MailIsInvalidError";
 import FieldIsMissingError from "../errors/FieldIsMissingError";
+import UserNotFoundError from "../errors/UserErrors/UserNotFoundError";
 
 type CreateUserDTO = Omit<User, "id" | "friends">;
-type UserDTO = Omit<User, "id" | "friends">;
+type UserDTO = Pick<User, "id">;
 
 const EMAIL_REGEX =
 	/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -43,11 +46,11 @@ class UserController extends Controller {
 			throw new MailIsInvalidError();
 		}
 		try {
-			const { id, friends, ...userDTO }: User = await UserService.create(
+			const { id }: User = await UserService.create(
 				body.email,
 				body.displayName
 			);
-			return userDTO as UserDTO;
+			return { id } as UserDTO;
 		} catch (err: any) {
 			if ((err.code = "23505" && /^Key \(email\)=\('.*'\) already exists\./.test(err.detail))) {
 				throw new MailAlreadyUsedError();
@@ -57,19 +60,24 @@ class UserController extends Controller {
 	}
 
 	/**
-	 * Gets logged in user's information
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
+	 * Delete logged user.
+	 */
+	@Delete("/{userId}")
+	static async delete(@Path() userId: string): Promise<void> {
+		await UserService.delete(userId);
+	}
+
+	/**
+	 * Gets logged user's data.
 	 * @returns {Object} - User object
 	 */
-	static async me(req: express.Request, res: express.Response): Promise<void> {
-		const userId = req.user["https://giftlist-api/email"];
-		const user = await UserService.getOne(req.app.get("database"), userId);
-		if (user) {
-			res.status(200).send({ user });
+	@Get("/{userId}")
+	static async get(@Path() userId: string): Promise<User> {
+		const user: User | undefined = await UserService.get(userId)
+		if (!user) {
+			throw new UserNotFoundError();
 		} else {
-			throw Error("User not logged-in");
+			return user;
 		}
 	}
 }

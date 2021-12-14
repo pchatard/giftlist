@@ -65,7 +65,6 @@ class ListController {
 	static async create(req: Request, res: Response, next: Function) {
 		try {
 			const userId = req.user["https://giftlist-api/email"];
-			const { displayName } = await User.getOne(req.app.get("database"), userId);
 
 			if (!(await checkListNameAvailability(req.app.get("database"), userId, req.body.name))) {
 				throw new ListNameAlreadyUsedError();
@@ -76,7 +75,7 @@ class ListController {
 				created_at: Date(),
 				modified_at: Date(),
 				ownerId: userId,
-				owner: displayName,
+				owner: (await User.get(userId))?.displayName,
 				public: false,
 			};
 			const createdList = await List.create(req.app.get("database"), list);

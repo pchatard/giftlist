@@ -7,7 +7,10 @@ const users = express.Router();
 /** Create a new user in Database */
 users.put("/", controllerWrap(UserController.create));
 
-/** Gets current user information */
-users.get("/me", UserController.me);
+/** Delete a user */
+users.delete("/:userId", controllerWrap(UserController.delete));
+
+/** Get user data */
+users.get("/:userId", controllerWrap(UserController.get))
 
 export default users;
