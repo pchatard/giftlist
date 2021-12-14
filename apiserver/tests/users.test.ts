@@ -3,6 +3,9 @@ import chai, { expect } from "chai"
 import chaiHttp from "chai-http"
 import request from "request"
 import server from "../src/index"
+import FieldIsMissingError from '../src/errors/FieldIsMissingError';
+import MailAlreadyUsedError from '../src/errors/UserErrors/MailAlreadyUsedError';
+import MailIsInvalidError from '../src/errors/UserErrors/MailIsInvalidError';
 
 chai.use(chaiHttp)
 
@@ -57,11 +60,82 @@ describe("Test", () => {
             done();
          })
     })
-    it("Returns 400 status-code, with custom error message, if email is already used", () => {
+    it("Returns 500 status-code, with custom error message, if email is already used", (done) => {
+      const infoCreate: any = { email: "test2@test.fr", displayName: "TestUser2" }
+      const error = new MailAlreadyUsedError()
+      const errorReturned = { name: error.name, message: error.message};
+      chai.request(server)
+          .put(baseUrl + "/")
+          .send(infoCreate)
+          .set({ "Authorization": `Bearer ${token}` })
+          .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
+            done();
+         })
     })
-    it("Returns 400 status-code, with custom error message, if email is malformed", () => {
+    it("Returns 500 status-code, with custom error message, if email is malformed", (done) => {
+      let infoCreate: any = { email: "test", displayName: "TestUser2" }
+      const error = new MailIsInvalidError()
+      const errorReturned = { name: error.name, message: error.message};
+      chai.request(server)
+          .put(baseUrl + "/")
+          .send(infoCreate)
+          .set({ "Authorization": `Bearer ${token}` })
+          .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
+         })
+      infoCreate = { email: "test@test", displayName: "TestUser2" }
+      chai.request(server)
+          .put(baseUrl + "/")
+          .send(infoCreate)
+          .set({ "Authorization": `Bearer ${token}` })
+          .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
+          })
+      infoCreate = { email: "test@15483.cdc.d", displayName: "TestUser2" }
+      chai.request(server)
+          .put(baseUrl + "/")
+          .send(infoCreate)
+          .set({ "Authorization": `Bearer ${token}` })
+          .end(function (err, res) {
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
+            done();
+        })
     })
-    it("Returns 400 status-code, with custom error message, if one of fields is empty", () => {
+    it("Returns 500 status-code, with custom error message, if one of fields is empty", (done) => {
+      let infoCreate: any = { displayName: "TestUser2" }
+      chai.request(server)
+      .put(baseUrl + "/")
+      .send(infoCreate)
+          .set({ "Authorization": `Bearer ${token}` })
+          .end(function (err, res) {
+            let error = new FieldIsMissingError("email")
+            let errorReturned = { name: error.name, message: error.message};
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
+         })
+      infoCreate = { email: "test@test" }
+      chai.request(server)
+          .put(baseUrl + "/")
+          .send(infoCreate)
+          .set({ "Authorization": `Bearer ${token}` })
+          .end(function (err, res) {
+            let error = new FieldIsMissingError("displayName")
+            let errorReturned = { name: error.name, message: error.message};
+            expect(err).to.be.null;
+            expect(res).to.have.status(500);
+            expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
+            done();
+        })
     })
   })
 })

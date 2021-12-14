@@ -1,11 +1,12 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { v4 as uuidv4 } from "uuid";
 
 @Entity("User")
 export class User {
-	@PrimaryGeneratedColumn()
-	public id: number = 0;
+	@PrimaryGeneratedColumn("uuid")
+	public id: string = uuidv4();
 
-	@Column()
+	@Column({ unique: true })
 	public email: string = "";
 
 	@Column()

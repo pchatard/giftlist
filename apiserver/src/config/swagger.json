@@ -23,6 +23,25 @@
 			"UserDTO": {
 				"$ref": "#/components/schemas/Pick_User.email-or-displayName_"
 			},
+			"Error": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CreateUserDTO": {
 				"$ref": "#/components/schemas/Pick_User.email-or-displayName_"
 			}
@@ -50,11 +69,21 @@
 				"operationId": "Create",
 				"responses": {
 					"200": {
-						"description": "the created user",
+						"description": "",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/UserDTO"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
 								}
 							}
 						}
