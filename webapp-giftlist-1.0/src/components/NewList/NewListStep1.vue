@@ -71,11 +71,18 @@
 			<FormSelect
 				:value="selectValue"
 				:options="selectOptions"
-				label="Select Example"
+				label="Select Example with Search"
 				@change="(value) => (selectValue = value)"
 				writable
 			/>
-			<div></div>
+			<FormDatePicker
+				label="Date Picker"
+				:value="date"
+				@change="(value) => (date = value)"
+				helperText="Helper text"
+				:isError="false"
+				errorMessage="Error Message"
+			/>
 			<FormInputLink
 				:value="url"
 				label="Label Error"
@@ -101,6 +108,7 @@ import FormInputNumber from "@/components/Inputs/FormInputNumber.vue";
 import FormInputLink from "@/components/Inputs/FormInputLink.vue";
 import FormInputToggle from "@/components/Inputs/FormInputToggle.vue";
 import FormSelect from "@/components/Inputs/FormSelect.vue";
+import FormDatePicker from "@/components/Inputs/FormDatePicker.vue";
 
 export default defineComponent({
 	name: "NewListStep1",
@@ -110,6 +118,7 @@ export default defineComponent({
 		FormInputLink,
 		FormInputToggle,
 		FormSelect,
+		FormDatePicker,
 		Subtitle,
 	},
 	setup() {
@@ -118,6 +127,7 @@ export default defineComponent({
 		const url = ref("https://www.google.fr");
 		const urlError = ref(false);
 		const check = ref(false);
+		const date = ref("1997-05-01");
 
 		const selectOptions = [
 			{ id: 0, name: "Zero" },
@@ -141,6 +151,7 @@ export default defineComponent({
 			check,
 			selectOptions,
 			selectValue,
+			date,
 		};
 	},
 	emits: ["confirm"],

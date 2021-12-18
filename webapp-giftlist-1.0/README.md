@@ -89,9 +89,9 @@
     - [x] ~~Texte~~
     - [x] ~~Numérique~~
     - [x] ~~URL~~
-    - [x] Checkbox/Toggle
-    - [ ] Select
-    - [ ] Date
+    - [x] ~~Checkbox/Toggle~~
+    - [x] ~~Select~~
+    - [x] ~~Date~~
 - [x] ~~Style~~ 
     - [x] ~~Normal~~
     - [x] ~~Hover, Focus~~
@@ -100,8 +100,10 @@
 - [x] ~~Gérer le contenu avec le state~~
 - [x] ~~Gérer les erreurs~~
 - [x] ~~Option "Copy to clipboard"~~
-- [ ] Option Icon
 - [x] ~~Ecrire des tests~~
+- [ ] Ajouter un Date Picker custom
+- [ ] Option Icon
+- [ ] Ajouter un bouton de reset
 
 ### Style
 - [ ] Responsive everything
