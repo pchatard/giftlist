@@ -102,6 +102,7 @@
 - [x] ~~Option "Copy to clipboard"~~
 - [x] ~~Ecrire des tests~~
 - [ ] Ajouter un Date Picker custom
+- [ ] Ajouter un bouton Ouvrir sur l'input URL
 - [ ] Option Icon
 - [ ] Ajouter un bouton de reset
 
