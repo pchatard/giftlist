@@ -6,22 +6,17 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"Pick_User.email-or-displayName_": {
+			"Pick_User.id_": {
 				"properties": {
-					"email": {
-						"type": "string",
-						"default": ""
-					},
-					"displayName": {
-						"type": "string",
-						"default": ""
+					"id": {
+						"type": "string"
 					}
 				},
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
 			},
-			"UserDTO": {
-				"$ref": "#/components/schemas/Pick_User.email-or-displayName_"
+			"UserIdDTO": {
+				"$ref": "#/components/schemas/Pick_User.id_"
 			},
 			"Error": {
 				"properties": {
@@ -42,8 +37,43 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Pick_User.Exclude_keyofUser.id-or-friends__": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"default": ""
+					},
+					"displayName": {
+						"type": "string",
+						"default": ""
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_User.id-or-friends_": {
+				"$ref": "#/components/schemas/Pick_User.Exclude_keyofUser.id-or-friends__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
 			"CreateUserDTO": {
-				"$ref": "#/components/schemas/Pick_User.email-or-displayName_"
+				"$ref": "#/components/schemas/Omit_User.id-or-friends_"
+			},
+			"Pick_User.displayName-or-email_": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"default": ""
+					},
+					"displayName": {
+						"type": "string",
+						"default": ""
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"UserDTO": {
+				"$ref": "#/components/schemas/Pick_User.displayName-or-email_"
 			}
 		},
 		"securitySchemes": {
@@ -73,7 +103,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserDTO"
+									"$ref": "#/components/schemas/UserIdDTO"
 								}
 							}
 						}
@@ -110,6 +140,97 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "the user",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets all user's data.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/users/{userId}": {
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete logged user.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "the user",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets logged user's data.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},

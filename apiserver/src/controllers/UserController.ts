@@ -19,7 +19,8 @@ import FieldIsMissingError from "../errors/FieldIsMissingError";
 import UserNotFoundError from "../errors/UserErrors/UserNotFoundError";
 
 type CreateUserDTO = Omit<User, "id" | "friends">;
-type UserDTO = Pick<User, "id">;
+type UserIdDTO = Pick<User, "id">;
+type UserDTO = Pick<User, "displayName" | "email">;
 
 const EMAIL_REGEX =
 	/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -38,7 +39,7 @@ class UserController extends Controller {
 	@SuccessResponse(200)
 	@Response<Error>(400)
 	@Put("/")
-	static async create(@Body() body: CreateUserDTO): Promise<UserDTO> {
+	static async create(@Body() body: CreateUserDTO): Promise<UserIdDTO> {
 		if (!body.email || !body.displayName) {
 			throw new FieldIsMissingError(!body.email ? "email" : "displayName");
 		}
@@ -46,11 +47,8 @@ class UserController extends Controller {
 			throw new MailIsInvalidError();
 		}
 		try {
-			const { id }: User = await UserService.create(
-				body.email,
-				body.displayName
-			);
-			return { id } as UserDTO;
+			const { id }: User = await UserService.create(body.email, body.displayName);
+			return { id } as UserIdDTO;
 		} catch (err: any) {
 			if ((err.code = "23505" && /^Key \(email\)=\('.*'\) already exists\./.test(err.detail))) {
 				throw new MailAlreadyUsedError();
@@ -61,6 +59,7 @@ class UserController extends Controller {
 
 	/**
 	 * Delete logged user.
+	 * @param {string} userID the GUID of user
 	 */
 	@Delete("/{userId}")
 	static async delete(@Path() userId: string): Promise<void> {
@@ -68,12 +67,26 @@ class UserController extends Controller {
 	}
 
 	/**
+	 * Gets all user's data.
+	 * @returns {Promise<User>} the user
+	 */
+	@Get("/")
+	static async getAll(): Promise<UserDTO[]> {
+		const users: User[] = await UserService.getAll();
+		return users.map((user) => {
+			const { id, friends, ...rest } = user;
+			return { ...rest } as UserDTO;
+		});
+	}
+
+	/**
 	 * Gets logged user's data.
-	 * @returns {Object} - User object
+	 * @param {string} userID the GUID of user
+	 * @returns {Promise<User>} the user
 	 */
 	@Get("/{userId}")
-	static async get(@Path() userId: string): Promise<User> {
-		const user: User | undefined = await UserService.get(userId)
+	static async get(@Path() userId: string): Promise<UserDTO> {
+		const user: User | undefined = await UserService.get(userId);
 		if (!user) {
 			throw new UserNotFoundError();
 		} else {

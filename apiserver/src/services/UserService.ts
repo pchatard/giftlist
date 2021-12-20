@@ -26,13 +26,22 @@ class UserService {
 	}
 
 	/**
+	 * Return all users from Database.
+	 * @returns {Promise<User[]>} The user matching the userId parameter.
+	 */
+	static async getAll(): Promise<User[]> {
+		const userRepository: Repository<User> = getRepository(User);
+		return await userRepository.find();
+	}
+
+	/**
 	 * Return a user from Database.
 	 * @param {string} userId id of user to get, uuid v4 formatted
 	 * @returns {Promise<User>} The user matching the userId parameter.
 	 */
 	static async get(userId: string): Promise<User | undefined> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.findOne({ id: userId })
+		return await userRepository.findOne({ id: userId });
 	}
 }
 
