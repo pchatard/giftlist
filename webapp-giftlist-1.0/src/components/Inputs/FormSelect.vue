@@ -59,6 +59,7 @@
 						<ListboxOptions
 							class="
 								absolute
+								z-10
 								w-full
 								py-1
 								mt-1
