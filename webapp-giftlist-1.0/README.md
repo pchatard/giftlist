@@ -84,6 +84,28 @@
 - [ ] Connecter l'API
 - [ ] Gestion des erreurs
 
+### Inputs
+- [x] ~~Créer les composants génériques Input :~~
+    - [x] ~~Texte~~
+    - [x] ~~Numérique~~
+    - [x] ~~URL~~
+    - [x] ~~Checkbox/Toggle~~
+    - [x] ~~Select~~
+    - [x] ~~Date~~
+- [x] ~~Style~~ 
+    - [x] ~~Normal~~
+    - [x] ~~Hover, Focus~~
+    - [x] ~~Erreur~~
+    - [x] ~~Responsive~~
+- [x] ~~Gérer le contenu avec le state~~
+- [x] ~~Gérer les erreurs~~
+- [x] ~~Option "Copy to clipboard"~~
+- [x] ~~Ecrire des tests~~
+- [ ] Ajouter un Date Picker custom
+- [ ] Ajouter un bouton Ouvrir sur l'input URL
+- [ ] Option Icon
+- [ ] Ajouter un bouton de reset
+
 ### Style
 - [ ] Responsive everything
 - [ ] Ajouter un thème sombre
