@@ -148,7 +148,7 @@ describe("Users", () => {
 			expect(response).to.have.property("body").to.eql(result);
 		});
 		it("Returns 500, with custom error, if path param is not UUID", async () => {
-			const wrongUUID: string = "toto"
+			const wrongUUID: string = "toto";
 			const response = await chai
 				.request(server)
 				.get(baseUrl + "/" + wrongUUID)

@@ -1,4 +1,4 @@
-import { UUID } from './../types/express/UUID';
+import { UUID } from "./../types/express/UUID";
 import { User } from "./../models/User";
 import { DeleteResult, getRepository, Repository } from "typeorm";
 

@@ -1,4 +1,4 @@
-import { UUID } from './../types/express/UUID';
+import { UUID } from "./../types/express/UUID";
 import {
 	Body,
 	Controller,
@@ -18,7 +18,7 @@ import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
 import MailIsInvalidError from "./../errors/UserErrors/MailIsInvalidError";
 import FieldIsMissingError from "./../errors/FieldIsMissingError";
 import UserNotFoundError from "./../errors/UserErrors/UserNotFoundError";
-import NotUUIDError from '../errors/NotUUIDError';
+import NotUUIDError from "../errors/NotUUIDError";
 import { isValidEmail, isValidUUID } from "./../helpers/validators";
 
 type CreateUserDTO = Omit<User, "id" | "friends" | "createdDate">;
@@ -98,7 +98,7 @@ export class UserController extends Controller {
 		if (!user) {
 			throw new UserNotFoundError();
 		} else {
-			const { id, createdDate, ...rest} = user;
+			const { id, createdDate, ...rest } = user;
 			return rest;
 		}
 	}
