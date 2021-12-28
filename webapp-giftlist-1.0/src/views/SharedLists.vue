@@ -118,10 +118,6 @@ export default defineComponent({
 			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
 		};
 
-		onMounted(() => {
-			dispatch("initializeLists");
-		});
-
 		return {
 			detailsModal,
 			handleDetailsModal,
