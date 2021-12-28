@@ -45,7 +45,7 @@ import router from "@/router";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import Gift from "@/types/Gift";
+import { Gift } from "@/types/api/Gift";
 import Modal from "@/components/Styled/Modal.vue";
 
 import Button from "@/components/Styled/Button.vue";
@@ -92,15 +92,13 @@ export default defineComponent({
 		};
 
 		const handleDeleteModal = (gift: Gift) => {
-			console.debug("List - handleDeleteModal - Opening delete gift modal");
-			modal.value.title = "Supprimer " + gift.id;
+			modal.value.title = "Supprimer " + gift.title;
 			modal.value.showModal = true;
 			modal.value.confirm = handleDeleteConfirm;
 			modal.value.gift = gift;
 		};
 
 		const handleDeleteConfirm = () => {
-			console.debug("List - handleDeleteConfirm - Deleting gift");
 			dispatch("deleteGift");
 			modal.value.showModal = false;
 		};
@@ -115,7 +113,6 @@ export default defineComponent({
 
 		onMounted(() => {
 			dispatch("initializePreferences", auth.value.user.sub);
-			dispatch("initializeLists");
 			dispatch("initializeGifts", listId);
 		});
 
@@ -140,7 +137,6 @@ export default defineComponent({
 
 export const listNavbarCta = (): void => {
 	const listId = router.currentRoute.value.params.id;
-	console.debug("List - listNavbarCta - CTA for list " + listId);
 	router.push(`/app/lists/${listId}/new-gift`);
 };
 </script>

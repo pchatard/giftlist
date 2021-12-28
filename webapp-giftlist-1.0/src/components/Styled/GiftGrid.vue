@@ -54,7 +54,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import Gift from "@/types/Gift";
+import { Gift } from "@/types/api/Gift";
 
 import Button from "@/components/Styled/Button.vue";
 import { ExternalLinkIcon, PencilIcon, ShoppingCartIcon, TrashIcon } from "@heroicons/vue/outline";

@@ -5,8 +5,10 @@
 	<TableData>
 		<div class="flex items-center">
 			<div>
-				<div class="text-sm font-medium text-gray-900 whitespace-normal">{{ list.name }}</div>
-				<div v-if="shared" class="text-sm text-gray-500">12 idées cadeaux</div>
+				<div class="text-sm font-medium text-gray-900 whitespace-normal">{{ list.title }}</div>
+				<div v-if="shared" class="text-sm text-gray-500">
+					{{ list.gifts.length }} idées cadeaux
+				</div>
 				<div v-else class="text-sm text-gray-500">Sous-titre</div>
 			</div>
 		</div>
@@ -18,11 +20,11 @@
 		<span
 			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
 			:class="{
-				'bg-red-100 text-red-800': !list.public,
-				'bg-green-100 text-green-800': list.public,
+				'bg-red-100 text-red-800': !list.isShared,
+				'bg-green-100 text-green-800': list.isShared,
 			}"
 		>
-			{{ list.public ? "Public" : "Private" }}
+			{{ list.isShared ? "Public" : "Private" }}
 		</span>
 	</TableData>
 	<TableData class="text-sm text-gray-500" content="Aujourd'hui" />
@@ -70,7 +72,7 @@ import {
 	ViewListIcon,
 	InformationCircleIcon,
 } from "@heroicons/vue/outline";
-import { List } from "@/types/List";
+import { List } from "@/types/api/List";
 import { useRouter } from "vue-router";
 
 export default defineComponent({

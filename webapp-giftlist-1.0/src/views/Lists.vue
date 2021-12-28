@@ -16,7 +16,7 @@
 			@confirm="deleteList"
 			@close="closeDeleteModal"
 			type="danger"
-			:title="`Supprimer la liste ${listToDelete?.name} ?`"
+			:title="`Supprimer la liste ${listToDelete?.title} ?`"
 			confirmText="Supprimer"
 			cancelText="Annuler"
 		>
@@ -32,7 +32,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 import router from "@/router";
-import { List } from "@/types/List";
+import { List } from "@/types/api/List";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Table from "@/components/Styled/Table.vue";
@@ -56,7 +56,7 @@ export default defineComponent({
 			{ title: "Nom" },
 			{ title: "Propriétaire" },
 			{ title: "Status" },
-			{ title: "Dernière modification" },
+			{ title: "Date d'échéance" },
 		];
 
 		const lists: ComputedRef<List[]> = computed(() => state.list.mine);
@@ -75,9 +75,6 @@ export default defineComponent({
 		const deleteList = async () => {
 			dispatch("deleteList", listToDelete.value?.id)
 				.then(() => {
-					console.debug(
-						"Lists - deleteList - Successfully deleted list " + listToDelete.value?.id
-					);
 					closeDeleteModal();
 				})
 				.catch((error) => {
@@ -85,9 +82,9 @@ export default defineComponent({
 				});
 		};
 
-		onMounted(() => {
-			dispatch("initializeLists");
-		});
+		// onMounted(() => {
+		// 	dispatch("initializeLists");
+		// });
 
 		return {
 			deleteModalIsOpen,
@@ -103,7 +100,6 @@ export default defineComponent({
 });
 
 export const listsNavbarCta = (): void => {
-	console.debug("Lists - listsNavbarCta - Redirecting to new list page");
 	router.push("/app/lists/new");
 };
 </script>

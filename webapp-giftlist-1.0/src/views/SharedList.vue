@@ -15,7 +15,7 @@
 				v-for="gift in gifts"
 				:key="gift.id"
 				class="cursor-pointer hover:bg-gray-50"
-				@click="openLinkInNewTab"
+				@click="handleDetailsModal(gift)"
 			>
 				<GiftList
 					:gift="gift"
@@ -42,7 +42,7 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import Gift from "@/types/Gift";
+import { Gift } from "@/types/api/Gift";
 import Modal from "@/components/Styled/Modal.vue";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
@@ -68,6 +68,7 @@ export default defineComponent({
 		const auth = ref(inject("Auth") as any);
 
 		onMounted(() => {
+			dispatch("initializeGifts", listCode);
 			dispatch("initializePreferences", auth.value.user.sub);
 		});
 
@@ -88,40 +89,35 @@ export default defineComponent({
 
 		const openLinkInNewTab = () => {
 			const link = "https://www.google.com";
-			console.debug("SharedList - openLinkInNewTab - Opening " + link);
 			window.open(link, "_blank");
 			self.focus();
 		};
 
 		const handleBookModal = (gift: Gift) => {
-			console.debug("SharedList - handleBookConfirm - Opening book gift modal");
-			modal.value.title = "Réserver " + gift.id;
+			modal.value.title = "Réserver " + gift.title;
 			modal.value.confirmText = "Réserver";
 			modal.value.cancelText = "Annuler";
 			modal.value.showModal = true;
 			modal.value.confirm = handleBookConfirm;
-			modal.value.gift = gift;
+			// modal.value.gift = gift;
 		};
 
 		const handleBookConfirm = () => {
-			console.debug("SharedList - handleBookConfirm - Booking gift");
 			dispatch("bookGift");
 			modal.value.showModal = false;
 		};
 
 		const handleDetailsModal = (gift: Gift) => {
-			console.debug("SharedList - handleDetailsModal - Opening gift details modal");
-			modal.value.title = "Détails de " + gift.id;
+			modal.value.title = "Détails de " + gift.title;
 			modal.value.confirmText = "Réserver";
 			modal.value.cancelText = "Fermer";
 			modal.value.showModal = true;
 			modal.value.confirm = handleDetailsConfirm;
-			modal.value.gift = gift;
+			// modal.value.gift = gift;
 		};
 
 		const handleDetailsConfirm = () => {
-			console.debug("SharedList - handleDetailsConfirm - Opening book gift modal");
-			handleBookModal(modal.value.gift);
+			handleBookModal(gifts.value[0]);
 		};
 
 		const modal = ref({
@@ -130,11 +126,6 @@ export default defineComponent({
 			confirmText: "",
 			cancelText: "",
 			confirm: handleDetailsConfirm,
-			gift: {} as Gift,
-		});
-
-		onMounted(() => {
-			dispatch("initializeGifts", listCode);
 		});
 
 		return {
