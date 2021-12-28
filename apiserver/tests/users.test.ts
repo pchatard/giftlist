@@ -7,6 +7,7 @@ import FieldIsMissingError from "../src/errors/FieldIsMissingError";
 import MailAlreadyUsedError from "../src/errors/UserErrors/MailAlreadyUsedError";
 import MailIsInvalidError from "../src/errors/UserErrors/MailIsInvalidError";
 import { User } from "./../src/models/User";
+import NotUUIDError from "../src/errors/NotUUID";
 
 chai.use(chaiHttp);
 
@@ -27,7 +28,7 @@ describe("Users", () => {
 
 	const User1: Omit<User, "id" | "friends"> = { email: "test1@test.fr", displayName: "TestUser1" };
 	const User2: Omit<User, "id" | "friends"> = { email: "test2@test.fr", displayName: "TestUser2" };
-	//var User1_Id: string = ""
+	var User1_Id: string = "";
 
 	before((done) => {
 		request.post(options, function (error, _response, body) {
@@ -51,13 +52,14 @@ describe("Users", () => {
 					.send(User2)
 					.set({ Authorization: `Bearer ${token}` }),
 			];
-			responses.forEach((response) => {
+			responses.forEach((response, index) => {
 				expect(response).to.have.property("error").to.eql(false);
 				expect(response).to.have.status(200);
 				expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
+				if (index == 0) User1_Id = response.body.id;
 			});
 		});
-		it("Returns 500 status-code, with custom error message, if email is already used", async () => {
+		it("Returns 500, with custom error, if email is already used", async () => {
 			const error = new MailAlreadyUsedError();
 			const errorReturned = { name: error.name, message: error.message };
 			const response = await chai
@@ -69,7 +71,7 @@ describe("Users", () => {
 			expect(response).to.have.status(500);
 			expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
 		});
-		it("Returns 500 status-code, with custom error message, if email is malformed", async () => {
+		it("Returns 500, with custom error, if email is malformed", async () => {
 			const error = new MailIsInvalidError();
 			const errorReturned = { name: error.name, message: error.message };
 			const responses = [
@@ -95,7 +97,7 @@ describe("Users", () => {
 				expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
 			});
 		});
-		it("Returns 500 status-code, with custom error message, if one of fields is empty", async () => {
+		it("Returns 500, with custom error, if one of fields is empty", async () => {
 			const responses = [
 				{
 					error: new FieldIsMissingError("email"),
@@ -132,6 +134,30 @@ describe("Users", () => {
 			expect(response).to.have.property("error").to.eql(false);
 			expect(response).to.have.status(200);
 			expect(response).to.have.property("body").to.eql(result);
+		});
+	});
+	describe("GET /:userId", () => {
+		it("Returns 200 with user informations", async () => {
+			const result: any = User1;
+			const response = await chai
+				.request(server)
+				.get(baseUrl + "/" + User1_Id)
+				.set({ Authorization: `Bearer ${token}` });
+			expect(response).to.have.property("error").to.eql(false);
+			expect(response).to.have.status(200);
+			expect(response).to.have.property("body").to.eql(result);
+		});
+		it("Returns 500, with custom error, if path param is not UUID", async () => {
+			const wrongUUID: string = "toto"
+			const response = await chai
+				.request(server)
+				.get(baseUrl + "/" + wrongUUID)
+				.set({ Authorization: `Bearer ${token}` });
+			const error = new NotUUIDError(wrongUUID);
+			const errorReturned = { name: error.name, message: error.message };
+			expect(response).to.have.property("error").to.not.eql(false);
+			expect(response).to.have.status(500);
+			expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
 		});
 	});
 });

@@ -12,7 +12,7 @@
     "start": "NODE_ENV=DEV node -r ts-node/register -r dotenv/config ./build/index.js",
     "start:watch": "nodemon",
     "start:watch:dev": "nodemon",
-    "swagger": "tsoa spec",
+    "swagger": "tsoa spec-and-routes",
     "test": "NODE_ENV=DEV mocha -r ts-node/register -r dotenv/config --exit ./tests/**/*.ts"
   },
   "keywords": [],

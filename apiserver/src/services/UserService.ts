@@ -1,3 +1,4 @@
+import { UUID } from './../types/express/UUID';
 import { User } from "./../models/User";
 import { DeleteResult, getRepository, Repository } from "typeorm";
 
@@ -18,9 +19,9 @@ class UserService {
 
 	/**
 	 * Delete a user from Database.
-	 * @param {string} userId id of user to delete, uuid v4 formatted
+	 * @param {UUID} userId id of user to delete, uuid v4 formatted
 	 */
-	static async delete(userId: string): Promise<DeleteResult> {
+	static async delete(userId: UUID): Promise<DeleteResult> {
 		const userRepository: Repository<User> = getRepository(User);
 		return await userRepository.delete({ id: userId });
 	}
@@ -39,9 +40,9 @@ class UserService {
 	 * @param {string} userId id of user to get, uuid v4 formatted
 	 * @returns {Promise<User>} The user matching the userId parameter.
 	 */
-	static async get(userId: string): Promise<User | undefined> {
+	static async get(userId: UUID): Promise<User | undefined> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.findOne({ id: userId });
+		return await userRepository.findOne(userId);
 	}
 }
 

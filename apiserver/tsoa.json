@@ -13,5 +13,9 @@
         "bearerFormat": "JWT"
       }
     }
+  },
+  "routes": {
+    "routesDir": "./src",
+    "authenticationModule": "./src/middlewares/authenticate.ts"
   }
 }

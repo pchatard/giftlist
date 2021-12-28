@@ -4,3 +4,6 @@ build
 
 src/config/ormconfig.ts
 src/config/certs/root.crt
+
+# Temporary
+src/routers
