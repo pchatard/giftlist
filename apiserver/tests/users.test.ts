@@ -38,122 +38,100 @@ describe("Users", () => {
 	});
 
 	describe("PUT /", () => {
-		it("Returns 200 with ID if all data are provided", (done) => {
-			chai
-				.request(server)
-				.put(baseUrl + "/")
-				.send(User1)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					expect(err).to.be.null;
-					expect(res).to.have.status(200);
-					expect(res).to.have.property("body").to.have.property("id").to.be.a.string;
-					//User1_Id = res.body.id
-					//done();
-				});
-			chai
-				.request(server)
-				.put(baseUrl + "/")
-				.send(User2)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(() => done());
+		it("Returns 200 with ID if all data are provided", async () => {
+			const responses = [
+				await chai
+					.request(server)
+					.put(baseUrl + "/")
+					.send(User1)
+					.set({ Authorization: `Bearer ${token}` }),
+				await chai
+					.request(server)
+					.put(baseUrl + "/")
+					.send(User2)
+					.set({ Authorization: `Bearer ${token}` }),
+			];
+			responses.forEach((response) => {
+				expect(response).to.have.property("error").to.eql(false);
+				expect(response).to.have.status(200);
+				expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
+			});
 		});
-		it("Returns 500 status-code, with custom error message, if email is already used", (done) => {
+		it("Returns 500 status-code, with custom error message, if email is already used", async () => {
 			const error = new MailAlreadyUsedError();
 			const errorReturned = { name: error.name, message: error.message };
-			chai
+			const response = await chai
 				.request(server)
 				.put(baseUrl + "/")
 				.send(User1)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					expect(err).to.be.null;
-					expect(res).to.have.status(500);
-					expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
-					done();
-				});
+				.set({ Authorization: `Bearer ${token}` });
+			expect(response).to.have.property("error").to.not.eql(false);
+			expect(response).to.have.status(500);
+			expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
 		});
-		it("Returns 500 status-code, with custom error message, if email is malformed", (done) => {
-			let infoCreate: any = { email: "test", displayName: "TestUser2" };
+		it("Returns 500 status-code, with custom error message, if email is malformed", async () => {
 			const error = new MailIsInvalidError();
 			const errorReturned = { name: error.name, message: error.message };
-			chai
-				.request(server)
-				.put(baseUrl + "/")
-				.send(infoCreate)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					expect(err).to.be.null;
-					expect(res).to.have.status(500);
-					expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
-				});
-			infoCreate = { email: "test@test", displayName: "TestUser2" };
-			chai
-				.request(server)
-				.put(baseUrl + "/")
-				.send(infoCreate)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					expect(err).to.be.null;
-					expect(res).to.have.status(500);
-					expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
-				});
-			infoCreate = { email: "test@15483.cdc.d", displayName: "TestUser2" };
-			chai
-				.request(server)
-				.put(baseUrl + "/")
-				.send(infoCreate)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					expect(err).to.be.null;
-					expect(res).to.have.status(500);
-					expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
-					done();
-				});
+			const responses = [
+				await chai
+					.request(server)
+					.put(baseUrl + "/")
+					.send({ email: "test", displayName: "TestUser2" })
+					.set({ Authorization: `Bearer ${token}` }),
+				await chai
+					.request(server)
+					.put(baseUrl + "/")
+					.send({ email: "test@test", displayName: "TestUser2" })
+					.set({ Authorization: `Bearer ${token}` }),
+				await chai
+					.request(server)
+					.put(baseUrl + "/")
+					.send({ email: "test@15483.cdc.d", displayName: "TestUser2" })
+					.set({ Authorization: `Bearer ${token}` }),
+			];
+			responses.forEach((response) => {
+				expect(response).to.have.property("error").to.not.eql(false);
+				expect(response).to.have.status(500);
+				expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
+			});
 		});
-		it("Returns 500 status-code, with custom error message, if one of fields is empty", (done) => {
-			let infoCreate: any = { displayName: "TestUser2" };
-			chai
-				.request(server)
-				.put(baseUrl + "/")
-				.send(infoCreate)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					let error = new FieldIsMissingError("email");
-					let errorReturned = { name: error.name, message: error.message };
-					expect(err).to.be.null;
-					expect(res).to.have.status(500);
-					expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
-				});
-			infoCreate = { email: "test@test" };
-			chai
-				.request(server)
-				.put(baseUrl + "/")
-				.send(infoCreate)
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					let error = new FieldIsMissingError("displayName");
-					let errorReturned = { name: error.name, message: error.message };
-					expect(err).to.be.null;
-					expect(res).to.have.status(500);
-					expect(res).to.have.property("body").to.be.deep.equal(errorReturned);
-					done();
-				});
+		it("Returns 500 status-code, with custom error message, if one of fields is empty", async () => {
+			const responses = [
+				{
+					error: new FieldIsMissingError("email"),
+					response: await chai
+						.request(server)
+						.put(baseUrl + "/")
+						.send({ displayName: "TestUser2" })
+						.set({ Authorization: `Bearer ${token}` }),
+				},
+				{
+					error: new FieldIsMissingError("displayName"),
+					response: await chai
+						.request(server)
+						.put(baseUrl + "/")
+						.send({ email: "test@test" })
+						.set({ Authorization: `Bearer ${token}` }),
+				},
+			];
+			responses.forEach(({ error, response }) => {
+				const errorReturned = { name: error.name, message: error.message };
+				expect(response).to.have.property("error").to.not.eql(false);
+				expect(response).to.have.status(500);
+				expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
+			});
 		});
 	});
 	describe("GET /", () => {
-		it("Returns 200 with all users", (done) => {
+		it("Returns 200 with all users as an array", async () => {
 			const result: any = [User1, User2];
-			chai
+			const response = await chai
 				.request(server)
 				.get(baseUrl + "/")
-				.set({ Authorization: `Bearer ${token}` })
-				.end(function (err, res) {
-					expect(err).to.be.null;
-					expect(res).to.have.status(200);
-					expect(res).to.have.property("body").to.eql(result);
-					done();
-				});
+				.set({ Authorization: `Bearer ${token}` });
+			expect(response).to.have.property("error").to.eql(false);
+			expect(response).to.have.status(200);
+			expect(response).to.have.property("body").to.eql(result);
 		});
 	});
 });

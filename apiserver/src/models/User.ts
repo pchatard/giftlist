@@ -1,7 +1,14 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinTable,
+	ManyToMany,
+	PrimaryGeneratedColumn,
+} from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
-@Entity("User")
+@Entity("User", { orderBy: { createdDate: "ASC" } })
 export class User {
 	@PrimaryGeneratedColumn("uuid")
 	public id: string = uuidv4();
@@ -15,6 +22,9 @@ export class User {
 	@ManyToMany(() => User)
 	@JoinTable()
 	public friends?: User[];
+
+	@CreateDateColumn()
+	createdDate?: Date;
 }
 
 export default User;

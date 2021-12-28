@@ -18,7 +18,7 @@ import MailIsInvalidError from "../errors/UserErrors/MailIsInvalidError";
 import FieldIsMissingError from "../errors/FieldIsMissingError";
 import UserNotFoundError from "../errors/UserErrors/UserNotFoundError";
 
-type CreateUserDTO = Omit<User, "id" | "friends">;
+type CreateUserDTO = Omit<User, "id" | "friends" | "createdDate">;
 type UserIdDTO = Pick<User, "id">;
 type UserDTO = Pick<User, "displayName" | "email">;
 
@@ -74,7 +74,7 @@ class UserController extends Controller {
 	static async getAll(): Promise<UserDTO[]> {
 		const users: User[] = await UserService.getAll();
 		return users.map((user) => {
-			const { id, friends, ...rest } = user;
+			const { id, friends, createdDate, ...rest } = user;
 			return { ...rest } as UserDTO;
 		});
 	}
