@@ -18,26 +18,26 @@ export const preferences: Module<PreferencesState, RootState> = {
 	},
 	actions: {
 		async initializePreferences(context, userId: string) {
-			return new Promise<PreferencesState>((resolve, reject) => {
-				fetch(
-					"https://giftlist-app.eu.auth0.com/api/v2/users/" + userId + "?fields=user_metadata",
-					{
-						headers: {
-							Authorization: `Bearer ${managementToken}`,
-						},
-					}
-				)
-					.then((response) => {
-						return response.json();
-					})
-					.then((userMetadataResponse) => {
-						context.commit("SET_PREFERENCES", userMetadataResponse.user_metadata);
-						resolve(context.state);
-					})
-					.catch((error) => {
-						reject(error);
-					});
-			});
+			// return new Promise<PreferencesState>((resolve, reject) => {
+			// 	fetch(
+			// 		"https://giftlist-app.eu.auth0.com/api/v2/users/" + userId + "?fields=user_metadata",
+			// 		{
+			// 			headers: {
+			// 				Authorization: `Bearer ${managementToken}`,
+			// 			},
+			// 		}
+			// 	)
+			// 		.then((response) => {
+			// 			return response.json();
+			// 		})
+			// 		.then((userMetadataResponse) => {
+			// 			context.commit("SET_PREFERENCES", userMetadataResponse.user_metadata);
+			// 			resolve(context.state);
+			// 		})
+			// 		.catch((error) => {
+			// 			reject(error);
+			// 		});
+			// });
 		},
 		changePreferences(context, metadata) {
 			context.commit("SET_PREFERENCES", metadata);
@@ -47,26 +47,26 @@ export const preferences: Module<PreferencesState, RootState> = {
 			return context.dispatch("savePreferences", metadataPayload.userId);
 		},
 		async savePreferences(context, userId: string) {
-			return new Promise<PreferencesState>((resolve, reject) => {
-				fetch("https://giftlist-app.eu.auth0.com/api/v2/users/" + userId, {
-					method: "PATCH",
-					headers: {
-						Authorization: `Bearer ${managementToken}`,
-						"content-type": "application/json",
-					},
-					body: JSON.stringify({ user_metadata: context.state }),
-				})
-					.then((response) => {
-						return response.json();
-					})
-					.then((updatedUser) => {
-						context.commit("SET_PREFERENCES", updatedUser.user_metadata);
-						resolve(context.state);
-					})
-					.catch((error) => {
-						reject(error);
-					});
-			});
+			// return new Promise<PreferencesState>((resolve, reject) => {
+			// 	fetch("https://giftlist-app.eu.auth0.com/api/v2/users/" + userId, {
+			// 		method: "PATCH",
+			// 		headers: {
+			// 			Authorization: `Bearer ${managementToken}`,
+			// 			"content-type": "application/json",
+			// 		},
+			// 		body: JSON.stringify({ user_metadata: context.state }),
+			// 	})
+			// 		.then((response) => {
+			// 			return response.json();
+			// 		})
+			// 		.then((updatedUser) => {
+			// 			context.commit("SET_PREFERENCES", updatedUser.user_metadata);
+			// 			resolve(context.state);
+			// 		})
+			// 		.catch((error) => {
+			// 			reject(error);
+			// 		});
+			// });
 		},
 	},
 };

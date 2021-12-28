@@ -29,10 +29,12 @@
 			:show="detailsModal.show"
 			@close="handleDetailsModal"
 			@confirm="openList"
-			title="Titre de la liste"
+			:title="detailsModal.list.title || ''"
 			confirmText="Ouvrir"
 		>
 			<p>Détails de la liste</p>
+			<p>Propriétaire(s):</p>
+			<p>Nombre de cadeaux disponibles / réservés</p>
 		</Modal>
 	</DefaultLayout>
 </template>
@@ -43,7 +45,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import router from "@/router";
 
-import { List } from "@/types/List";
+import { List } from "@/types/api/List";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Modal from "@/components/Styled/Modal.vue";
@@ -66,7 +68,7 @@ export default defineComponent({
 			{ title: "", width: "w-8" },
 			{ title: "Nom" },
 			{ title: "Propriétaire" },
-			{ title: "Date de création" },
+			{ title: "Date d'échéance" },
 		];
 
 		const lists: ComputedRef<List[]> = computed(() => state.list.shared);
@@ -115,10 +117,6 @@ export default defineComponent({
 		const openList = () => {
 			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
 		};
-
-		onMounted(() => {
-			dispatch("initializeLists");
-		});
 
 		return {
 			detailsModal,
