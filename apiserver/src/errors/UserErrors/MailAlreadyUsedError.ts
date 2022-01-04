@@ -1,9 +1,9 @@
 import APIError from "../APIError";
 
-class ListNameAlreadyUsedError extends APIError {
+class MailAlreadyUsedError extends APIError {
 	constructor() {
 		super("MailAlreadyUsedError", "Mail already used.");
 	}
 }
 
-export default ListNameAlreadyUsedError;
+export default MailAlreadyUsedError;

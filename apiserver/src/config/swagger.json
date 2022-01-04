@@ -12,19 +12,7 @@
 				"description": "Stringified UUIDv4.\nSee [RFC 4112](https://tools.ietf.org/html/rfc4122)",
 				"pattern": "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"
 			},
-			"Pick_User.id_": {
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					}
-				},
-				"type": "object",
-				"description": "From T, pick a set of properties whose keys are in the union K"
-			},
-			"UserIdDTO": {
-				"$ref": "#/components/schemas/Pick_User.id_"
-			},
-			"Error": {
+			"FieldIsMissingError": {
 				"properties": {
 					"name": {
 						"type": "string"
@@ -43,28 +31,45 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Pick_User.Exclude_keyofUser.id-or-friends-or-createdDate__": {
+			"MailIsInvalidError": {
 				"properties": {
-					"email": {
-						"type": "string",
-						"default": ""
+					"name": {
+						"type": "string"
 					},
-					"displayName": {
-						"type": "string",
-						"default": ""
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
 					}
 				},
+				"required": [
+					"name",
+					"message"
+				],
 				"type": "object",
-				"description": "From T, pick a set of properties whose keys are in the union K"
+				"additionalProperties": false
 			},
-			"Omit_User.id-or-friends-or-createdDate_": {
-				"$ref": "#/components/schemas/Pick_User.Exclude_keyofUser.id-or-friends-or-createdDate__",
-				"description": "Construct a type with the properties of T except for those in type K."
+			"MailAlreadyUsedError": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
 			},
 			"CreateUserDTO": {
-				"$ref": "#/components/schemas/Omit_User.id-or-friends-or-createdDate_"
-			},
-			"Pick_User.displayName-or-email_": {
 				"properties": {
 					"email": {
 						"type": "string",
@@ -76,10 +81,73 @@
 					}
 				},
 				"type": "object",
-				"description": "From T, pick a set of properties whose keys are in the union K"
+				"additionalProperties": false
+			},
+			"NotUUIDError": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_UserDTO_": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"default": ""
+					},
+					"displayName": {
+						"type": "string",
+						"default": ""
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"UserNotFoundError": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
 			},
 			"UserDTO": {
-				"$ref": "#/components/schemas/Pick_User.displayName-or-email_"
+				"properties": {
+					"email": {
+						"type": "string",
+						"default": ""
+					},
+					"displayName": {
+						"type": "string",
+						"default": ""
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -101,7 +169,7 @@
 	"openapi": "3.0.0",
 	"paths": {
 		"/users": {
-			"put": {
+			"post": {
 				"operationId": "Create",
 				"responses": {
 					"200": {
@@ -109,17 +177,27 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserIdDTO"
+									"$ref": "#/components/schemas/UUID"
 								}
 							}
 						}
 					},
 					"400": {
-						"description": "",
+						"description": "If one field is missing, mail is invalid or already used",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/Error"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/FieldIsMissingError"
+										},
+										{
+											"$ref": "#/components/schemas/MailIsInvalidError"
+										},
+										{
+											"$ref": "#/components/schemas/MailAlreadyUsedError"
+										}
+									]
 								}
 							}
 						}
@@ -151,7 +229,7 @@
 				"operationId": "GetAll",
 				"responses": {
 					"200": {
-						"description": "the user",
+						"description": "",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -177,11 +255,77 @@
 			}
 		},
 		"/users/{userId}": {
+			"put": {
+				"operationId": "Edit",
+				"responses": {
+					"200": {
+						"description": ""
+					},
+					"400": {
+						"description": "If userId is not a UUID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NotUUIDError"
+								}
+							}
+						}
+					}
+				},
+				"description": "Edit a user.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of user",
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "data to edit a user",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_UserDTO_"
+							}
+						}
+					}
+				}
+			},
 			"delete": {
 				"operationId": "Delete",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": ""
+					},
+					"400": {
+						"description": "If userId is incorrect or not a UUID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/NotUUIDError"
+										},
+										{
+											"$ref": "#/components/schemas/UserNotFoundError"
+										}
+									]
+								}
+							}
+						}
 					}
 				},
 				"description": "Delete logged user.",
@@ -195,11 +339,12 @@
 				],
 				"parameters": [
 					{
+						"description": "the GUID of user",
 						"in": "path",
 						"name": "userId",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"$ref": "#/components/schemas/UUID"
 						}
 					}
 				]
@@ -208,11 +353,28 @@
 				"operationId": "Get",
 				"responses": {
 					"200": {
-						"description": "the user",
+						"description": "",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/UserDTO"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "If userId is incorrect or not a UUID",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/NotUUIDError"
+										},
+										{
+											"$ref": "#/components/schemas/UserNotFoundError"
+										}
+									]
 								}
 							}
 						}
@@ -229,11 +391,12 @@
 				],
 				"parameters": [
 					{
+						"description": "the GUID of user",
 						"in": "path",
 						"name": "userId",
 						"required": true,
 						"schema": {
-							"type": "string"
+							"$ref": "#/components/schemas/UUID"
 						}
 					}
 				]

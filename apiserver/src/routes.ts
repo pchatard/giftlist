@@ -17,17 +17,7 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"string","validators":{"pattern":{"value":"[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_User.id_": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"ref":"UUID"}},"validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserIdDTO": {
-        "dataType": "refAlias",
-        "type": {"ref":"Pick_User.id_","validators":{}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Error": {
+    "FieldIsMissingError": {
         "dataType": "refObject",
         "properties": {
             "name": {"dataType":"string","required":true},
@@ -37,29 +27,67 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_User.Exclude_keyofUser.id-or-friends-or-createdDate__": {
-        "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"email":{"dataType":"string","default":""},"displayName":{"dataType":"string","default":""}},"validators":{}},
+    "MailIsInvalidError": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "message": {"dataType":"string","required":true},
+            "stack": {"dataType":"string"},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Omit_User.id-or-friends-or-createdDate_": {
-        "dataType": "refAlias",
-        "type": {"ref":"Pick_User.Exclude_keyofUser.id-or-friends-or-createdDate__","validators":{}},
+    "MailAlreadyUsedError": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "message": {"dataType":"string","required":true},
+            "stack": {"dataType":"string"},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateUserDTO": {
-        "dataType": "refAlias",
-        "type": {"ref":"Omit_User.id-or-friends-or-createdDate_","validators":{}},
+        "dataType": "refObject",
+        "properties": {
+            "email": {"dataType":"string","default":""},
+            "displayName": {"dataType":"string","default":""},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_User.displayName-or-email_": {
+    "NotUUIDError": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "message": {"dataType":"string","required":true},
+            "stack": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Partial_UserDTO_": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"email":{"dataType":"string","default":""},"displayName":{"dataType":"string","default":""}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserNotFoundError": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "message": {"dataType":"string","required":true},
+            "stack": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserDTO": {
-        "dataType": "refAlias",
-        "type": {"ref":"Pick_User.displayName-or-email_","validators":{}},
+        "dataType": "refObject",
+        "properties": {
+            "email": {"dataType":"string","default":""},
+            "displayName": {"dataType":"string","default":""},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -72,7 +100,7 @@ export function RegisterRoutes(app: express.Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.put('/users',
+        app.post('/users',
             authenticateMiddleware([{"auth0":[]}]),
 
             function UserController_create(request: any, response: any, next: any) {
@@ -96,12 +124,37 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/users/:userId',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function UserController_edit(request: any, response: any, next: any) {
+            const args = {
+                    userId: {"in":"path","name":"userId","required":true,"ref":"UUID"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_UserDTO_"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new UserController();
+
+
+              const promise = controller.edit.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.delete('/users/:userId',
             authenticateMiddleware([{"auth0":[]}]),
 
             function UserController_delete(request: any, response: any, next: any) {
             const args = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
+                    userId: {"in":"path","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -148,7 +201,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function UserController_get(request: any, response: any, next: any) {
             const args = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
+                    userId: {"in":"path","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

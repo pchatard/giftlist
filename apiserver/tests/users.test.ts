@@ -7,7 +7,6 @@ import FieldIsMissingError from "../src/errors/FieldIsMissingError";
 import MailAlreadyUsedError from "../src/errors/UserErrors/MailAlreadyUsedError";
 import MailIsInvalidError from "../src/errors/UserErrors/MailIsInvalidError";
 import { User } from "./../src/models/User";
-import NotUUIDError from "../src/errors/NotUUID";
 
 chai.use(chaiHttp);
 
@@ -29,6 +28,7 @@ describe("Users", () => {
 	const User1: Omit<User, "id" | "friends"> = { email: "test1@test.fr", displayName: "TestUser1" };
 	const User2: Omit<User, "id" | "friends"> = { email: "test2@test.fr", displayName: "TestUser2" };
 	var User1_Id: string = "";
+	var User2_Id: string = "";
 
 	before((done) => {
 		request.post(options, function (error, _response, body) {
@@ -38,17 +38,17 @@ describe("Users", () => {
 		});
 	});
 
-	describe("PUT /", () => {
+	describe("POST /", () => {
 		it("Returns 200 with ID if all data are provided", async () => {
 			const responses = [
 				await chai
 					.request(server)
-					.put(baseUrl + "/")
+					.post(baseUrl + "/")
 					.send(User1)
 					.set({ Authorization: `Bearer ${token}` }),
 				await chai
 					.request(server)
-					.put(baseUrl + "/")
+					.post(baseUrl + "/")
 					.send(User2)
 					.set({ Authorization: `Bearer ${token}` }),
 			];
@@ -57,6 +57,7 @@ describe("Users", () => {
 				expect(response).to.have.status(200);
 				expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
 				if (index == 0) User1_Id = response.body.id;
+				if (index == 1) User2_Id = response.body.id;
 			});
 		});
 		it("Returns 500, with custom error, if email is already used", async () => {
@@ -64,7 +65,7 @@ describe("Users", () => {
 			const errorReturned = { name: error.name, message: error.message };
 			const response = await chai
 				.request(server)
-				.put(baseUrl + "/")
+				.post(baseUrl + "/")
 				.send(User1)
 				.set({ Authorization: `Bearer ${token}` });
 			expect(response).to.have.property("error").to.not.eql(false);
@@ -77,17 +78,17 @@ describe("Users", () => {
 			const responses = [
 				await chai
 					.request(server)
-					.put(baseUrl + "/")
+					.post(baseUrl + "/")
 					.send({ email: "test", displayName: "TestUser2" })
 					.set({ Authorization: `Bearer ${token}` }),
 				await chai
 					.request(server)
-					.put(baseUrl + "/")
+					.post(baseUrl + "/")
 					.send({ email: "test@test", displayName: "TestUser2" })
 					.set({ Authorization: `Bearer ${token}` }),
 				await chai
 					.request(server)
-					.put(baseUrl + "/")
+					.post(baseUrl + "/")
 					.send({ email: "test@15483.cdc.d", displayName: "TestUser2" })
 					.set({ Authorization: `Bearer ${token}` }),
 			];
@@ -103,7 +104,7 @@ describe("Users", () => {
 					error: new FieldIsMissingError("email"),
 					response: await chai
 						.request(server)
-						.put(baseUrl + "/")
+						.post(baseUrl + "/")
 						.send({ displayName: "TestUser2" })
 						.set({ Authorization: `Bearer ${token}` }),
 				},
@@ -111,7 +112,7 @@ describe("Users", () => {
 					error: new FieldIsMissingError("displayName"),
 					response: await chai
 						.request(server)
-						.put(baseUrl + "/")
+						.post(baseUrl + "/")
 						.send({ email: "test@test" })
 						.set({ Authorization: `Bearer ${token}` }),
 				},
@@ -153,11 +154,51 @@ describe("Users", () => {
 				.request(server)
 				.get(baseUrl + "/" + wrongUUID)
 				.set({ Authorization: `Bearer ${token}` });
-			const error = new NotUUIDError(wrongUUID);
-			const errorReturned = { name: error.name, message: error.message };
 			expect(response).to.have.property("error").to.not.eql(false);
-			expect(response).to.have.status(500);
-			expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
+			expect(response).to.have.status(422);
+			expect(response)
+				.to.have.property("body")
+				.to.have.property("message")
+				.to.be.eql("Validation Failed");
+			expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
+		});
+	});
+	describe("DELETE /:userId", () => {
+		it("Returns 200 and user is no more present", async () => {
+			const response = await chai
+				.request(server)
+				.delete(baseUrl + "/" + User1_Id)
+				.set({ Authorization: `Bearer ${token}` });
+			expect(response).to.have.property("error").to.eql(false);
+			expect(response).to.have.status(204);
+			let list = await chai
+				.request(server)
+				.get(baseUrl + "/")
+				.set({ Authorization: `Bearer ${token}` });
+			expect(list).to.have.property("body").to.eql([User2]);
+			await chai
+				.request(server)
+				.delete(baseUrl + "/" + User2_Id)
+				.set({ Authorization: `Bearer ${token}` });
+			list = await chai
+				.request(server)
+				.get(baseUrl + "/")
+				.set({ Authorization: `Bearer ${token}` });
+			expect(list).to.have.property("body").to.eql([]);
+		});
+		it("Returns 500, with custom error, if path param is not UUID", async () => {
+			const wrongUUID: string = "toto";
+			const response = await chai
+				.request(server)
+				.delete(baseUrl + "/" + wrongUUID)
+				.set({ Authorization: `Bearer ${token}` });
+			expect(response).to.have.property("error").to.not.eql(false);
+			expect(response).to.have.status(422);
+			expect(response)
+				.to.have.property("body")
+				.to.have.property("message")
+				.to.be.eql("Validation Failed");
+			expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
 		});
 	});
 });
