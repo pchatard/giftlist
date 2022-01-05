@@ -11,7 +11,7 @@ import { getDatabase } from "firebase/database";
 import { Database } from "@firebase/database";
 import firebaseConfig from "./config/firebase";
 
-import { errorHandler, notFoundHandler } from "./middlewares/error";
+import { errorHandler, notFoundHandler, tokenHandler } from "./middlewares/error";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./config/swagger.json";
@@ -40,6 +40,7 @@ app.use(
 
 // Routes and Error handler
 RegisterRoutes(app);
+app.use(tokenHandler);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

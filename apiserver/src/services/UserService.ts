@@ -1,4 +1,4 @@
-import { UUID } from "./../types/express/UUID";
+import { UUID } from "../types/UUID";
 import { User } from "./../models/User";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
 
@@ -25,7 +25,7 @@ class UserService {
 	 */
 	static async edit(userId: UUID, userNewProps: Partial<User>): Promise<UpdateResult> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.update(userId, userNewProps);
+		return await userRepository.update(userId, { ...userNewProps });
 	}
 
 	/**

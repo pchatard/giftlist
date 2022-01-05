@@ -1,4 +1,3 @@
-import { UUID } from "./../types/express/UUID";
 import {
 	Body,
 	Controller,
@@ -15,11 +14,13 @@ import {
 } from "@tsoa/runtime";
 import UserService from "./../services/UserService";
 import User from "./../models/User";
+import { UUID } from "../types/UUID";
 import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
 import MailIsInvalidError from "./../errors/UserErrors/MailIsInvalidError";
 import FieldIsMissingError from "./../errors/FieldIsMissingError";
 import UserNotFoundError from "./../errors/UserErrors/UserNotFoundError";
 import { isValidEmail } from "./../helpers/validators";
+import { cleanObject } from "../helpers/cleanObjects";
 
 // TODO: Follow https://github.com/lukeautry/tsoa/issues/911 to remove this workaround
 type Expand<T> = { [K in keyof T]: T[K] };
@@ -68,10 +69,10 @@ export class UserController extends Controller {
 	 * @param {UUID} userId the GUID of user
 	 * @param {UserDTO} body data to edit a user
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(204)
 	@Put("{userId}")
 	async edit(@Path() userId: UUID, @Body() body: Partial<UserDTO>): Promise<void> {
-		await UserService.edit(userId, body);
+		await UserService.edit(userId, cleanObject(body));
 	}
 
 	/**

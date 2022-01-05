@@ -18,8 +18,18 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
 }
 
 export function notFoundHandler(_req: Request, res: Response) {
-	// TODO: Test if it's really useful
 	res.status(404).send({
 		message: "Not Found",
 	});
+}
+
+export function tokenHandler(req: Request, res: Response, next: NextFunction) {
+	const token = req.headers["authorization"];
+	if (!token) {
+		res.status(401).send({
+			message: "Unauthorized",
+		});
+	} else {
+		next();
+	}
 }

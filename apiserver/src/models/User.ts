@@ -1,4 +1,3 @@
-import { UUID } from "./../types/express/UUID";
 import {
 	Column,
 	CreateDateColumn,
@@ -8,6 +7,8 @@ import {
 	PrimaryGeneratedColumn,
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
+import { UUID } from "../types/UUID";
+import { email } from "../types/email";
 
 @Entity("User", { orderBy: { createdDate: "ASC" } })
 export class User {
@@ -15,7 +16,7 @@ export class User {
 	public id: UUID = uuidv4();
 
 	@Column({ unique: true })
-	public email: string = "";
+	public email: email = "";
 
 	@Column()
 	public displayName: string = "";
