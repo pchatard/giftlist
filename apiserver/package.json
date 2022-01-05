@@ -7,13 +7,13 @@
     "build": "tsc",
     "clean": "rm -rf ./build/*",
     "lint": "eslint -c ./.eslintrc.json './src/**/*.ts'",
-    "prettier:check": "prettier --config .prettierrc.json --check 'src/**/*.ts'",
-    "prettier:write": "prettier --config .prettierrc.json --write 'src/**/*.ts'",
+    "prettier:check": "prettier --config .prettierrc.json --check '{src,tests}/**/*.ts' '!src/routes.ts'",
+    "prettier:write": "prettier --config .prettierrc.json --write '{src,tests}/**/*.ts' '!src/routes.ts'",
     "start": "NODE_ENV=DEV node -r ts-node/register -r dotenv/config ./build/index.js",
     "start:watch": "nodemon",
     "start:watch:dev": "nodemon",
-    "swagger": "tsoa spec",
-    "test": "NODE_ENV=DEV mocha -r ts-node/register -r dotenv/config --exit ./tests/*.ts"
+    "swagger": "tsoa spec-and-routes",
+    "test": "NODE_ENV=DEV mocha -r ts-node/register -r dotenv/config --exit ./tests/**/*.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,9 +28,11 @@
     "luxon": "^2.1.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.14",
+    "pg": "^8.7.1",
     "remove": "^0.1.5",
     "swagger-ui-express": "^4.1.6",
     "tsoa": "^3.14.0",
+    "typeorm": "^0.2.41",
     "typescript": "^4.4.4"
   },
   "devDependencies": {
@@ -73,7 +75,8 @@
   "nodemonConfig": {
     "ignore": [
       ".git",
-      "node_modules"
+      "node_modules",
+      "./src/routes.ts"
     ],
     "watch": [
       "./src"

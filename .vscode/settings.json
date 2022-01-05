@@ -1,6 +1,7 @@
 {
-  "mocha.files.glob": "tests/**/*",
+  "mocha.files.glob": "tests/**/*.test.ts",
   "mocha.subdirectory": "./apiserver",
+  "mocha.nycPath": "./apiserver/node_modules/nyc",
   "mocha.env": {
     "NODE_ENV": "DEV"
   },
