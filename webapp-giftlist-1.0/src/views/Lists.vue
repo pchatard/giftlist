@@ -98,8 +98,4 @@ export default defineComponent({
 		};
 	},
 });
-
-export const listsNavbarCta = (): void => {
-	router.push("/app/lists/new");
-};
 </script>

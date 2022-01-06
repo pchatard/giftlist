@@ -27,6 +27,8 @@
 				:errorMessage="newSharingCodeData.errorMessage"
 				:placeholder="newSharingCodeData.placeholder"
 				@change="(newCode) => (newSharingCodeData.code = newCode)"
+				focus
+				@keydown.enter="confirmNewSharingCode"
 			/>
 		</Modal>
 
@@ -110,7 +112,10 @@ export default defineComponent({
 			if (!newSharingCodeModalIsOpen.value) {
 				setTimeout(() => {
 					newSharingCodeData.value.errorMessage = "";
+					newSharingCodeData.value.isError = false;
 				}, 500);
+			} else {
+				newSharingCodeData.value.code = "";
 			}
 		});
 

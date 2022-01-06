@@ -11,11 +11,25 @@ import NewList from "../views/NewList.vue";
 import NewGift from "../views/NewGift.vue";
 import Gift from "../views/Gift.vue";
 
-import { listsNavbarCta } from "../views/Lists.vue";
-import { listNavbarCta } from "../views/List.vue";
-import { sharedListsNavbarCta } from "../views/SharedLists.vue";
+// import { listsNavbarCta } from "../views/Lists.vue";
+// import { listNavbarCta } from "../views/List.vue";
+// import { sharedListsNavbarCta } from "../views/SharedLists.vue";
 
 import Auth0 from "@/auth";
+
+const sharedListsNavbarCta = (): void => {
+	console.debug("SharedLists - sharedListsNavbarCta - Opening new sharing code modal");
+	router.push("/app/shared/new");
+};
+
+const listNavbarCta = (): void => {
+	const listId = router.currentRoute.value.params.id;
+	router.push(`/app/lists/${listId}/new-gift`);
+};
+
+const listsNavbarCta = (): void => {
+	router.push("/app/lists/new");
+};
 
 const routes: Array<RouteRecordRaw> = [
 	{
