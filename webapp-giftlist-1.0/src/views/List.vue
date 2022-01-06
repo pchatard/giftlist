@@ -134,9 +134,4 @@ export default defineComponent({
 		};
 	},
 });
-
-export const listNavbarCta = (): void => {
-	const listId = router.currentRoute.value.params.id;
-	router.push(`/app/lists/${listId}/new-gift`);
-};
 </script>

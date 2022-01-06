@@ -15,14 +15,21 @@
 			:show="newSharingCodeModalIsOpen"
 			@confirm="confirmNewSharingCode"
 			@close="closeNewSharingCodeModal"
-			title="Nouveau code de partage"
+			title="Entrer un nouveau code de partage"
 			confirmText="Valider"
 			cancelText="Annuler"
 		>
-			<p class="text-sm text-gray-500">Add an input here</p>
-			<p class="text-sm text-red-500">
-				{{ sharingCodeInputErrorMessage }}
-			</p>
+			<FormInputText
+				:label="newSharingCodeData.label"
+				:value="newSharingCodeData.code"
+				:helperText="newSharingCodeData.helperText"
+				:isError="newSharingCodeData.isError"
+				:errorMessage="newSharingCodeData.errorMessage"
+				:placeholder="newSharingCodeData.placeholder"
+				@change="(newCode) => (newSharingCodeData.code = newCode)"
+				focus
+				@keydown.enter="confirmNewSharingCode"
+			/>
 		</Modal>
 
 		<Modal
@@ -40,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onMounted, ref, watch } from "vue";
+import { computed, ComputedRef, defineComponent, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import router from "@/router";
@@ -51,6 +58,7 @@ import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Modal from "@/components/Styled/Modal.vue";
 import ListItem from "@/components/Styled/ListItem.vue";
 import Table from "@/components/Styled/Table.vue";
+import FormInputText from "@/components/Inputs/FormInputText.vue";
 
 export default defineComponent({
 	name: "SharedLists",
@@ -59,10 +67,12 @@ export default defineComponent({
 		Modal,
 		ListItem,
 		Table,
+		FormInputText,
 	},
 	setup() {
 		const router = useRouter();
 		const { dispatch, state } = useStore();
+		const lists: ComputedRef<List[]> = computed(() => state.list.shared);
 
 		const tableHeaders = [
 			{ title: "", width: "w-8" },
@@ -71,17 +81,41 @@ export default defineComponent({
 			{ title: "Date d'échéance" },
 		];
 
-		const lists: ComputedRef<List[]> = computed(() => state.list.shared);
+		const openList = () => {
+			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
+		};
 
+		// NEW CODE MODAL
+		const newSharingCodeData = ref({
+			code: "",
+			errorMessage: "",
+			isError: false,
+			helperText: "Le code que vous a transmis votre ami(e)",
+			label: "Code de partage",
+			placeholder: "abcd-efgh-ijkl",
+		});
 		const newSharingCodeModalIsOpen = computed(
 			() => router.currentRoute.value.path === "/app/shared/new"
+		);
+
+		watch(
+			() => newSharingCodeData.value.code,
+			(val, old) => {
+				if (val !== old) {
+					newSharingCodeData.value.isError = false;
+					newSharingCodeData.value.errorMessage = "";
+				}
+			}
 		);
 
 		watch(newSharingCodeModalIsOpen, () => {
 			if (!newSharingCodeModalIsOpen.value) {
 				setTimeout(() => {
-					sharingCodeInputErrorMessage.value = "";
+					newSharingCodeData.value.errorMessage = "";
+					newSharingCodeData.value.isError = false;
 				}, 500);
+			} else {
+				newSharingCodeData.value.code = "";
 			}
 		});
 
@@ -90,18 +124,17 @@ export default defineComponent({
 		};
 
 		const confirmNewSharingCode = () => {
-			const sharingCode = "sharingCode";
-			dispatch("getSharedList", sharingCode)
+			dispatch("getSharedList", newSharingCodeData.value.code)
 				.then(() => {
-					router.push(`/app/shared/${sharingCode}`);
+					router.push(`/app/shared/${newSharingCodeData.value.code}`);
 				})
 				.catch((error) => {
-					sharingCodeInputErrorMessage.value = error.message;
+					newSharingCodeData.value.isError = true;
+					newSharingCodeData.value.errorMessage = error.message;
 				});
 		};
 
-		const sharingCodeInputErrorMessage = ref("");
-
+		// DETAILS MODAL
 		const detailsModal = ref({
 			show: false,
 			list: {} as List,
@@ -114,21 +147,17 @@ export default defineComponent({
 			}
 		};
 
-		const openList = () => {
-			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
-		};
-
 		return {
-			detailsModal,
-			handleDetailsModal,
+			router,
+			lists,
 			openList,
+			tableHeaders,
+			newSharingCodeData,
 			newSharingCodeModalIsOpen,
 			closeNewSharingCodeModal,
 			confirmNewSharingCode,
-			sharingCodeInputErrorMessage,
-			lists,
-			router,
-			tableHeaders,
+			detailsModal,
+			handleDetailsModal,
 		};
 	},
 });

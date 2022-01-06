@@ -63,6 +63,20 @@ export const list: Module<ListState, RootState> = {
 		},
 	},
 	actions: {
+		async getSharedList({ commit, state }, sharingCode) {
+			return new Promise<void>((resolve, reject) => {
+				try {
+					if (!sharingCode) {
+						throw new Error("Veuillez entrer un code de partage.");
+					}
+					// Call server here and update necessary state
+					console.log(sharingCode);
+					resolve();
+				} catch (error) {
+					reject(error);
+				}
+			});
+		},
 		async deleteList({ commit, state }, listId) {
 			return new Promise<void>((resolve, reject) => {
 				try {
