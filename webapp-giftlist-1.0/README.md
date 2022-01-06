@@ -33,15 +33,15 @@
 - [x] ~~Annuler~~
 - [x] ~~Créer un stepper~~
 - [ ] Step 1
-    - [ ] Formulaire basique : Nom, description, échéance
+    - [ ] Informations générales de la liste : Nom*, description, échéance
     - [x] ~~CTA : Aller directement sur ma page liste -> visibilité privée par défault~~
     - [x] ~~CTA : Aller à l'étape 2~~
 - [ ] Step 2 : 
-    - [ ] Options de visibilité
+    - [ ] Options de partages et de visibilité : Ajouter directement des personnes, Option Liste Commune avec un ami, Rendre visible directement
     - [x] ~~CTA : Aller directement sur ma page liste -> cadeaux vides par défault~~
     - [x] ~~CTA : Aller à l'étape 3~~
 - [ ] Step 3 :
-    - [ ] Optionel : Ajout de cadeaux
+    - [ ] Optionel : Ajout de cadeaux rapides
 - [ ] Connecter les actions du store
 
 ### Nouveau cadeau
