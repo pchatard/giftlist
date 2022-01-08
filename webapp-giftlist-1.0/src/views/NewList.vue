@@ -1,15 +1,52 @@
 <template>
 	<DefaultLayout title="Nouvelle liste">
-		<Stepper :step="step" :maxSteps="maxStep" @changeStep="handleChangeStepFromStepper" />
-		<component class="border p-4 my-4 rounded-md" :is="currentComponent" @confirm="skipToList">
+		<Stepper
+			:step="step"
+			:maxSteps="maxStep"
+			:title="stepTitle"
+			@changeStep="handleChangeStepFromStepper"
+		/>
+
+		<component
+			class="p-4 my-4 mx-12 rounded-md"
+			:is="currentComponent"
+			:values="listInformation['step' + step]"
+			@change="handleListInformationChange"
+		>
 		</component>
+
 		<div class="flex justify-between">
-			<Button btnStyle="danger" @click="cancel">Annuler</Button>
 			<div class="flex gap-4">
-				<Button btnStyle="secondary" v-show="step > 1" @click="step--">Précédent</Button>
-				<Button btnStyle="primary" @click="nextAction">{{
-					step === maxStep ? "Confirmer" : "Suivant"
-				}}</Button>
+				<Button btnStyle="danger" hasIcon @click="cancel">
+					<template v-slot:icon>
+						<XIcon />
+					</template>
+					Annuler
+				</Button>
+				<Button btnStyle="secondary" hasIcon v-show="step > 1" @click="step--">
+					<template v-slot:icon>
+						<ArrowLeftIcon />
+					</template>
+					Précédent
+				</Button>
+			</div>
+			<div class="flex gap-4">
+				<Button
+					:btnStyle="step === maxStep ? 'primary' : 'secondary'"
+					hasIcon
+					@click="skipToList"
+				>
+					<template v-slot:icon>
+						<CheckIcon />
+					</template>
+					Créer ma liste
+				</Button>
+				<Button btnStyle="primary" hasIcon v-show="step != maxStep" @click="nextAction">
+					<template v-slot:icon>
+						<ArrowRightIcon />
+					</template>
+					{{ nextButtonText }}
+				</Button>
 			</div>
 		</div>
 	</DefaultLayout>
@@ -25,6 +62,7 @@ import NewListStep1 from "@/components/NewList/NewListStep1.vue";
 import NewListStep2 from "@/components/NewList/NewListStep2.vue";
 import NewListStep3 from "@/components/NewList/NewListStep3.vue";
 import Stepper from "@/components/Styled/Stepper.vue";
+import { XIcon, CheckIcon, ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "NewList",
@@ -35,6 +73,10 @@ export default defineComponent({
 		NewListStep2,
 		NewListStep3,
 		Stepper,
+		XIcon,
+		CheckIcon,
+		ArrowLeftIcon,
+		ArrowRightIcon,
 	},
 	setup() {
 		const router = useRouter();
@@ -53,6 +95,38 @@ export default defineComponent({
 					return "NewListStep1";
 			}
 		});
+
+		let date = new Date();
+		const offset = date.getTimezoneOffset();
+		date = new Date(date.getTime() - offset * 60 * 1000);
+		console.log(date.toISOString().split("T")[0]);
+
+		const listInformation = ref({
+			step1: {
+				title: "",
+				description: "",
+				activateTermDate: false,
+				termDate: date.toISOString().split("T")[0],
+			},
+			step2: {},
+			step3: {},
+		});
+
+		const handleListInformationChange = (values: any) => {
+			switch (step.value) {
+				case 1:
+					listInformation.value.step1 = values;
+					return;
+				case 2:
+					listInformation.value.step2 = values;
+					return;
+				case 3:
+					listInformation.value.step3 = values;
+					return;
+				default:
+					return;
+			}
+		};
 
 		const cancel = () => {
 			router.push("/app/lists");
@@ -74,7 +148,32 @@ export default defineComponent({
 			}
 		};
 
+		const nextButtonText = computed(() => {
+			switch (step.value) {
+				case 1:
+					return "Etape 2 : Options de partage";
+				case 2:
+					return "Etape 3 : Ajouter des cadeaux";
+				default:
+					return "Suivant";
+			}
+		});
+
+		const stepTitle = computed(() => {
+			switch (step.value) {
+				case 1:
+					return "Informations générales";
+				case 2:
+					return "Options de partage";
+				case 3:
+					return "Ajouter des cadeaux";
+				default:
+					return "";
+			}
+		});
+
 		const skipToList = () => {
+			// Make verifications
 			// Call Store action
 			// Redirect to new list or new gift
 			router.push("/app/lists");
@@ -85,9 +184,13 @@ export default defineComponent({
 			currentComponent,
 			handleChangeStepFromStepper,
 			step,
+			stepTitle,
 			nextAction,
+			nextButtonText,
 			maxStep,
 			skipToList,
+			listInformation,
+			handleListInformationChange,
 		};
 	},
 });
