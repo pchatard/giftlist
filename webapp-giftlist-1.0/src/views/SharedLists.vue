@@ -28,6 +28,7 @@
 				:placeholder="newSharingCodeData.placeholder"
 				@change="(newCode) => (newSharingCodeData.code = newCode)"
 				focus
+				reset
 				@keydown.enter="confirmNewSharingCode"
 			/>
 		</Modal>
@@ -161,9 +162,4 @@ export default defineComponent({
 		};
 	},
 });
-
-export const sharedListsNavbarCta = (): void => {
-	console.debug("SharedLists - sharedListsNavbarCta - Opening new sharing code modal");
-	router.push("/app/shared/new");
-};
 </script>

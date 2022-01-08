@@ -81,7 +81,7 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 
-		const step = ref(1);
+		const step = ref(2);
 		const maxStep = 3;
 		const currentComponent = computed(() => {
 			switch (step.value) {
@@ -99,7 +99,6 @@ export default defineComponent({
 		let date = new Date();
 		const offset = date.getTimezoneOffset();
 		date = new Date(date.getTime() - offset * 60 * 1000);
-		console.log(date.toISOString().split("T")[0]);
 
 		const listInformation = ref({
 			step1: {
@@ -108,7 +107,14 @@ export default defineComponent({
 				activateTermDate: false,
 				termDate: date.toISOString().split("T")[0],
 			},
-			step2: {},
+			step2: {
+				shared: false,
+				owners: [{ id: 1, name: "Marion" }],
+				authorizedUsers: [
+					{ id: 12, name: "Nicolas" },
+					{ id: 13, name: "Marion" },
+				],
+			},
 			step3: {},
 		});
 
