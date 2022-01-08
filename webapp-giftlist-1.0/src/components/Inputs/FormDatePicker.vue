@@ -3,6 +3,7 @@
 		:label="label"
 		:isError="isError"
 		:errorMessage="errorMessage"
+		:selected="selected"
 		:helperText="helperText"
 	>
 		<input
@@ -38,7 +39,7 @@ export default defineComponent({
 		value: {
 			type: String,
 			validator: (value: string) => {
-				return /[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(value);
+				return /[0-9a]{4}-[0-9m]{2}-[0-9j]{2}/.test(value);
 			},
 			required: true,
 		},
@@ -72,7 +73,12 @@ export default defineComponent({
 			context.emit("change", value);
 		});
 
+		watch(props, (value) => {
+			dateValue.value = value.value;
+		});
+
 		return {
+			selected,
 			dateValue,
 			onBlur,
 			onFocus,

@@ -32,8 +32,8 @@
 - [x] ~~CTA : Créer la liste (Retour vers la liste)~~
 - [x] ~~Annuler~~
 - [x] ~~Créer un stepper~~
-- [ ] Step 1
-    - [ ] Informations générales de la liste : Nom*, description, échéance
+- [x] Step 1
+    - [x] ~~Informations générales de la liste : Nom*, description, échéance~~
     - [x] ~~CTA : Aller directement sur ma page liste -> visibilité privée par défault~~
     - [x] ~~CTA : Aller à l'étape 2~~
 - [ ] Step 2 : 
@@ -74,6 +74,8 @@
 ### Fonctions générales
 - [x] ~~Configurer Auth0~~~
 - [x] Créer des datas en dur pour créer les pages
+- [ ] Externaliser tous les messages, titres, labels dans des fichiers JSON
+- [ ] Accessibilité (tabindex, etc)
 - [ ] Gérer la redirection après la connexion
 - [ ] Customiser le clic droit
 - [ ] Ecrire des tests
@@ -104,7 +106,7 @@
 - [ ] Ajouter un Date Picker custom
 - [ ] Ajouter un bouton Ouvrir sur l'input URL
 - [ ] Option Icon
-- [ ] Ajouter un bouton de reset
+- [x] ~~Ajouter un bouton de reset~~
 
 ### Style
 - [ ] Responsive everything

@@ -9,7 +9,7 @@
 						:class="{
 							'bg-indigo-600 hover:bg-indigo-600': refValue,
 							'bg-gray-200': !refValue,
-							'mx-2': inline,
+							'ml-4': inline,
 						}"
 						class="
 							relative
@@ -38,8 +38,8 @@
 						/>
 					</Switch>
 				</div>
-				<span class="input-helper text-xs text-gray-500">{{ helperText || "&nbsp;" }}</span>
 			</div>
+			<span class="input-helper text-xs text-gray-500">{{ helperText || "&nbsp;" }}</span>
 		</SwitchGroup>
 	</fieldset>
 </template>
