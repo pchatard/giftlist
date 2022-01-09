@@ -65,6 +65,7 @@ import NewListStep2 from "@/components/NewList/NewListStep2.vue";
 import NewListStep3 from "@/components/NewList/NewListStep3.vue";
 import Stepper from "@/components/Styled/Stepper.vue";
 import { XIcon, CheckIcon, ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/outline";
+import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "NewList",
@@ -82,8 +83,9 @@ export default defineComponent({
 	},
 	setup() {
 		const router = useRouter();
+		const { dispatch } = useStore();
 
-		const step = ref(2);
+		const step = ref(1);
 		const maxStep = 3;
 		const currentComponent = computed(() => {
 			switch (step.value) {
@@ -185,6 +187,7 @@ export default defineComponent({
 		const skipToList = () => {
 			// Make verifications
 			// Call Store action
+			dispatch("createList", listInformation.value);
 			// Redirect to new list or new gift
 			router.push("/app/lists");
 		};
