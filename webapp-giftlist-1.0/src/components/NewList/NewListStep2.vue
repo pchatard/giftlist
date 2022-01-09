@@ -1,7 +1,15 @@
 <template>
 	<div class="grid grid-cols-3 gap-4 divide-y">
 		<div class="col-span-full grid grid-cols-3">
-			<FormInputText class="col-span-1" label="Propriétaires" helperText="Test" />
+			<FormSelect
+				class="col-span-1 py-4"
+				label="Propriétaires"
+				:value="ownersSelectValue"
+				:options="ownersSelectOptions"
+				writable
+				helperText="Ajouter des propriétaires"
+				@change="handleSelectOwner"
+			/>
 			<div class="col-span-full flex items-center">
 				<span>Propriétaires :</span>
 				<div class="flex py-2 ml-4">
@@ -24,16 +32,21 @@
 				:value="values.shared"
 				@change="handleSharedChange"
 				inline
-				helperText="En activant cette option, votre liste sera visible pour les personnes définies ci-dessous ou celles disposant du lien ou du code de partage."
+				helperText="En activant cette option, votre liste sera visible pour les personnes de votre choix ou celles disposant du lien ou du code de partage."
 			/>
 
-			<FormInputText
-				class="col-span-1 pt-4"
+			<FormSelect
+				v-show="values.shared"
+				class="col-span-1 py-4"
 				label="Ajouter des personnes"
-				helperText="Test"
+				helperText="Partager cette liste avec de nouvelles personnes"
+				writable
 				:disabled="!values.shared"
+				:value="authorizedUsersSelectValue"
+				:options="authorizedUsersSelectOptions"
+				@change="handleSelectAuthorized"
 			/>
-			<div class="col-span-full flex items-center">
+			<div class="col-span-full flex items-center" v-show="values.shared">
 				<span>Invités :</span>
 				<div class="flex py-2 ml-4">
 					<PersonTag
@@ -46,15 +59,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-span-full">{{ values }}</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 
-import FormInputText from "@/components/Inputs/FormInputText.vue";
 import FormInputToggle from "@/components/Inputs/FormInputToggle.vue";
+import FormSelect from "@/components/Inputs/FormSelect.vue";
 import PersonTag from "@/components/Styled/PersonTag.vue";
 
 export default defineComponent({
@@ -65,7 +77,7 @@ export default defineComponent({
 		},
 	},
 	components: {
-		FormInputText,
+		FormSelect,
 		FormInputToggle,
 		PersonTag,
 	},
@@ -74,6 +86,16 @@ export default defineComponent({
 			const values = {
 				...props.values,
 				shared,
+			};
+			context.emit("change", values);
+		};
+
+		const handleSelectOwner = (selectedOwner: any) => {
+			const owners = [...props.values?.owners];
+			owners.push(selectedOwner);
+			const values = {
+				...props.values,
+				owners,
 			};
 			context.emit("change", values);
 		};
@@ -91,6 +113,16 @@ export default defineComponent({
 			context.emit("change", values);
 		};
 
+		const handleSelectAuthorized = (selectedUser: any) => {
+			const authorizedUsers = [...props.values?.authorizedUsers];
+			authorizedUsers.push(selectedUser);
+			const values = {
+				...props.values,
+				authorizedUsers,
+			};
+			context.emit("change", values);
+		};
+
 		const handleAuthorizedDelete = (id: any) => {
 			const authorizedUsers = [...props.values?.authorizedUsers];
 			authorizedUsers.splice(
@@ -104,10 +136,33 @@ export default defineComponent({
 			context.emit("change", values);
 		};
 
+		const ownersSelectValue = ref({});
+		const ownersSelectOptions = computed(() => {
+			return props.values?.friends.filter(
+				(friend: any) => props.values?.owners.findIndex((o: any) => o.id === friend.id) < 0
+			);
+		});
+
+		const authorizedUsersSelectValue = ref({});
+		const authorizedUsersSelectOptions = computed(() => {
+			// Only keep friends that are not already added or in the owners list.
+			return props.values?.friends.filter(
+				(friend: any) =>
+					props.values?.authorizedUsers.findIndex((au: any) => au.id === friend.id) < 0 &&
+					props.values?.owners.findIndex((o: any) => o.id === friend.id) < 0
+			);
+		});
+
 		return {
 			handleSharedChange,
+			handleSelectOwner,
 			handleOwnersDelete,
+			handleSelectAuthorized,
 			handleAuthorizedDelete,
+			ownersSelectValue,
+			ownersSelectOptions,
+			authorizedUsersSelectValue,
+			authorizedUsersSelectOptions,
 		};
 	},
 	emits: ["change"],

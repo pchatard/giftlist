@@ -32,6 +32,7 @@
 				helperText="Grâce à la date d'échéance, vos amis pourront juger de l'imminence de votre évènement."
 			/>
 			<FormDatePicker
+				v-show="values.activateTermDate"
 				:disabled="!values.activateTermDate"
 				class="col-span-1"
 				label="Date d'échéance de votre liste"

@@ -1,52 +1,54 @@
 <template>
 	<DefaultLayout title="Nouvelle liste">
-		<Stepper
-			:step="step"
-			:maxSteps="maxStep"
-			:title="stepTitle"
-			@changeStep="handleChangeStepFromStepper"
-		/>
+		<div class="flex flex-col h-full">
+			<Stepper
+				:step="step"
+				:maxSteps="maxStep"
+				:title="stepTitle"
+				@changeStep="handleChangeStepFromStepper"
+			/>
 
-		<component
-			class="p-4 my-4 mx-12 rounded-md"
-			:is="currentComponent"
-			:values="listInformation['step' + step]"
-			@change="handleListInformationChange"
-		>
-		</component>
+			<component
+				class="p-4 my-4 rounded-md"
+				:is="currentComponent"
+				:values="listInformation['step' + step]"
+				@change="handleListInformationChange"
+			>
+			</component>
 
-		<div class="flex justify-between">
-			<div class="flex gap-4">
-				<Button btnStyle="danger" hasIcon @click="cancel">
-					<template v-slot:icon>
-						<XIcon />
-					</template>
-					Annuler
-				</Button>
-				<Button btnStyle="secondary" hasIcon v-show="step > 1" @click="step--">
-					<template v-slot:icon>
-						<ArrowLeftIcon />
-					</template>
-					Précédent
-				</Button>
-			</div>
-			<div class="flex gap-4">
-				<Button
-					:btnStyle="step === maxStep ? 'primary' : 'secondary'"
-					hasIcon
-					@click="skipToList"
-				>
-					<template v-slot:icon>
-						<CheckIcon />
-					</template>
-					Créer ma liste
-				</Button>
-				<Button btnStyle="primary" hasIcon v-show="step != maxStep" @click="nextAction">
-					<template v-slot:icon>
-						<ArrowRightIcon />
-					</template>
-					{{ nextButtonText }}
-				</Button>
+			<div class="flex justify-between">
+				<div class="flex gap-4">
+					<Button btnStyle="danger" hasIcon @click="cancel">
+						<template v-slot:icon>
+							<XIcon />
+						</template>
+						Annuler
+					</Button>
+					<Button btnStyle="secondary" hasIcon v-show="step > 1" @click="step--">
+						<template v-slot:icon>
+							<ArrowLeftIcon />
+						</template>
+						Précédent
+					</Button>
+				</div>
+				<div class="flex gap-4">
+					<Button
+						:btnStyle="step === maxStep ? 'primary' : 'secondary'"
+						hasIcon
+						@click="skipToList"
+					>
+						<template v-slot:icon>
+							<CheckIcon />
+						</template>
+						Créer ma liste
+					</Button>
+					<Button btnStyle="primary" hasIcon v-show="step != maxStep" @click="nextAction">
+						<template v-slot:icon>
+							<ArrowRightIcon />
+						</template>
+						{{ nextButtonText }}
+					</Button>
+				</div>
 			</div>
 		</div>
 	</DefaultLayout>
@@ -109,11 +111,13 @@ export default defineComponent({
 			},
 			step2: {
 				shared: false,
-				owners: [{ id: 1, name: "Marion" }],
-				authorizedUsers: [
-					{ id: 12, name: "Nicolas" },
-					{ id: 13, name: "Marion" },
+				friends: [
+					{ id: 1, name: "Marion L." },
+					{ id: 12, name: "Nicolas D." },
+					{ id: 13, name: "Marion L." },
 				],
+				owners: [],
+				authorizedUsers: [],
 			},
 			step3: {},
 		});

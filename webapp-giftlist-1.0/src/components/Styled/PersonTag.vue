@@ -1,6 +1,6 @@
 <template>
 	<span class="flex items-center justify-around bg-indigo-100 px-3 py-2 rounded-md">
-		<span class="text-indigo-600">
+		<span class="text-indigo-600 text-sm">
 			{{ text }}
 		</span>
 		<XIcon
