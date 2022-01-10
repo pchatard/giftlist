@@ -11,10 +11,6 @@ import NewList from "../views/NewList.vue";
 import NewGift from "../views/NewGift.vue";
 import Gift from "../views/Gift.vue";
 
-// import { listsNavbarCta } from "../views/Lists.vue";
-// import { listNavbarCta } from "../views/List.vue";
-// import { sharedListsNavbarCta } from "../views/SharedLists.vue";
-
 import Auth0 from "@/auth";
 
 const sharedListsNavbarCta = (): void => {

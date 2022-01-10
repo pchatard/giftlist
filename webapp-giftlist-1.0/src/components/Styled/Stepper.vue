@@ -25,11 +25,10 @@
 				{{ i }}
 			</span>
 		</div>
+
 		<span
 			class="
-				border border-1
-				h-2
-				border-indigo-100
+				h-1
 				rounded-full
 				self-stretch
 				flex
@@ -54,14 +53,19 @@
 				:class="stepperWidth"
 			></span>
 		</span>
+		<Subtitle class="text-gray-700">{{ title }}</Subtitle>
 	</div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
+import Subtitle from "@/components/Styled/Subtitle.vue";
 
 export default defineComponent({
 	name: "Stepper",
+	components: {
+		Subtitle,
+	},
 	props: {
 		step: {
 			type: Number,
@@ -69,6 +73,10 @@ export default defineComponent({
 		},
 		maxSteps: {
 			type: Number,
+			required: true,
+		},
+		title: {
+			type: String,
 			required: true,
 		},
 	},
@@ -80,7 +88,7 @@ export default defineComponent({
 		const stepperWidth = computed(() => {
 			switch (props.step) {
 				case 1:
-					return "";
+					return "translate-x-2";
 				case 2:
 					return "translate-x-1/2";
 				case 3:

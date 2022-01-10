@@ -6,6 +6,7 @@
 		:helperText="helperText"
 		:selected="selected"
 		:copied="copied"
+		:mandatory="mandatory"
 	>
 		<input
 			v-model="refValue"
@@ -15,6 +16,12 @@
 			class="outline-none px-3 py-2 flex-1"
 			@focus="onFocus"
 			@blur="onBlur"
+			:tabindex="tab"
+		/>
+		<XIcon
+			v-if="reset"
+			class="text-gray-400 hover:text-gray-500 h-5 w-5 cursor-pointer self-center mr-2"
+			@click="onResetText"
 		/>
 		<button
 			v-if="copy"
@@ -69,13 +76,13 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from "vue";
-import { ClipboardCopyIcon, ClipboardCheckIcon } from "@heroicons/vue/outline";
+import { ClipboardCopyIcon, ClipboardCheckIcon, XIcon } from "@heroicons/vue/outline";
 import { TransitionRoot } from "@headlessui/vue";
 import FormWrapper from "@/components/Inputs/FormWrapper.vue";
 
 export default defineComponent({
 	name: "FormInputText",
-	components: { ClipboardCopyIcon, ClipboardCheckIcon, TransitionRoot, FormWrapper },
+	components: { ClipboardCopyIcon, ClipboardCheckIcon, XIcon, TransitionRoot, FormWrapper },
 	props: {
 		value: {
 			type: String,
@@ -113,6 +120,17 @@ export default defineComponent({
 			type: Boolean,
 			default: false,
 		},
+		reset: {
+			type: Boolean,
+			default: false,
+		},
+		mandatory: {
+			type: Boolean,
+			default: false,
+		},
+		tab: {
+			type: Number,
+		},
 	},
 	setup(props, context) {
 		const refValue = ref(props.value);
@@ -143,6 +161,10 @@ export default defineComponent({
 			selected.value = false;
 		};
 
+		const onResetText = () => {
+			refValue.value = "";
+		};
+
 		return {
 			copied,
 			copyToClipboard,
@@ -150,6 +172,7 @@ export default defineComponent({
 			onFocus,
 			onBlur,
 			selected,
+			onResetText,
 		};
 	},
 	emits: ["change"],

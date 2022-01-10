@@ -32,17 +32,17 @@
 - [x] ~~CTA : Créer la liste (Retour vers la liste)~~
 - [x] ~~Annuler~~
 - [x] ~~Créer un stepper~~
-- [ ] Step 1
-    - [ ] Formulaire basique : Nom, description, échéance
+- [x] ~~Step 1~~
+    - [x] ~~Informations générales de la liste : Nom*, description, échéance~~
     - [x] ~~CTA : Aller directement sur ma page liste -> visibilité privée par défault~~
     - [x] ~~CTA : Aller à l'étape 2~~
-- [ ] Step 2 : 
-    - [ ] Options de visibilité
+- [x] ~~Step 2~~
+    - [x] ~~Options de partages et de visibilité : Ajouter directement des personnes, Option Liste Commune avec un ami, Rendre visible directement~~
     - [x] ~~CTA : Aller directement sur ma page liste -> cadeaux vides par défault~~
     - [x] ~~CTA : Aller à l'étape 3~~
-- [ ] Step 3 :
-    - [ ] Optionel : Ajout de cadeaux
-- [ ] Connecter les actions du store
+- [ ] Step 3
+    - [ ] Optionel : Ajout de cadeaux rapides
+- [x] ~~Connecter les actions du store~~
 
 ### Nouveau cadeau
 - [x] ~~Créer la page~~
@@ -74,6 +74,8 @@
 ### Fonctions générales
 - [x] ~~Configurer Auth0~~~
 - [x] Créer des datas en dur pour créer les pages
+- [ ] Externaliser tous les messages, titres, labels dans des fichiers JSON
+- [ ] Accessibilité (tabindex, etc)
 - [ ] Gérer la redirection après la connexion
 - [ ] Customiser le clic droit
 - [ ] Ecrire des tests
@@ -104,7 +106,7 @@
 - [ ] Ajouter un Date Picker custom
 - [ ] Ajouter un bouton Ouvrir sur l'input URL
 - [ ] Option Icon
-- [ ] Ajouter un bouton de reset
+- [x] ~~Ajouter un bouton de reset~~
 
 ### Style
 - [ ] Responsive everything

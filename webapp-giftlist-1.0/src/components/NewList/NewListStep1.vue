@@ -1,159 +1,127 @@
 <template>
-	<div>
-		<Subtitle>Informations de la liste</Subtitle>
-		<div class="grid grid-cols-3 gap-4">
+	<div class="grid grid-cols-3 gap-4 divide-y">
+		<div class="col-span-full grid grid-cols-3">
 			<FormInputText
-				:value="text"
-				label="Label"
-				@change="(value) => (text = value)"
-				helperText="Some helper text"
-				:isError="text === 'error'"
-				errorMessage="Error"
-				copy
-				class="col-span-2"
+				class="col-span-1"
+				:label="values.title.label"
+				:value="values.title.value"
+				@change="handleTitleChange"
+				:helperText="values.title.helperText"
+				:placeholder="values.title.placeholder"
+				:isError="values.title.errorMessage !== ''"
+				:errorMessage="values.title.errorMessage"
+				:mandatory="values.title.required"
+				reset
 			/>
 			<FormInputText
-				:value="text"
-				label="Label Error"
-				@change="(value) => (text = value)"
-				helperText="Some helper text"
-				isError
-				errorMessage="Error message"
-			/>
-			<FormInputNumber
-				:value="number"
-				label="Label"
-				@change="(value) => (number = value)"
-				helperText="Some helper text"
-				:isError="number === 666"
-				errorMessage="Error"
-				copy
-			/>
-			<FormInputNumber
-				:value="number"
-				label="Label Error"
-				@change="(value) => (number = value)"
-				helperText="Some helper text"
-				isError
-				errorMessage="Error message"
-			/>
-			<div class="flex items-center justify-between">
-				<FormInputToggle
-					:value="check"
-					@change="(newCheck) => (check = newCheck)"
-					label="Toggle"
-					helperText="Helper text"
-				/>
-				<FormInputToggle
-					:value="check"
-					@change="(newCheck) => (check = newCheck)"
-					label="Inline Toggle"
-					helperText="Helper text"
-					inline
-				/>
-			</div>
-			<FormInputLink
-				:value="url"
-				label="Label"
-				@change="(value) => (url = value)"
-				helperText="Some helper text"
-				:isError="urlError"
-				errorMessage="Lien invalide"
-				copy
-				class="col-span-full"
-			/>
-			<FormSelect
-				:value="selectValue"
-				:options="selectOptions"
-				label="Select Example"
-				@change="(value) => (selectValue = value)"
-			/>
-			<FormSelect
-				:value="selectValue"
-				:options="selectOptions"
-				label="Select Example with Search"
-				@change="(value) => (selectValue = value)"
-				writable
-			/>
-			<FormDatePicker
-				label="Date Picker"
-				:value="date"
-				@change="(value) => (date = value)"
-				helperText="Helper text"
-				:isError="false"
-				errorMessage="Error Message"
-			/>
-			<FormInputLink
-				:value="url"
-				label="Label Error"
-				@change="(value) => (url = value)"
-				helperText="Some helper text"
-				isError
-				errorMessage="Error message"
-				class="col-span-full"
+				class="col-span-3 pt-4"
+				:label="values.description.label"
+				:value="values.description.value"
+				:helperText="values.description.helperText"
+				:placeholder="values.description.placeholder"
+				:isError="values.description.errorMessage !== ''"
+				:errorMessage="values.description.errorMessage"
+				:mandatory="values.description.required"
+				reset
+				@change="handleDescriptionChange"
 			/>
 		</div>
-		<button @click="$emit('confirm')" class="text-indigo-600 my-4">
-			Continuer vers ma liste
-		</button>
+
+		<div class="col-span-full grid grid-rows-2 grid-cols-3 pt-4">
+			<FormInputToggle
+				class="col-span-full"
+				label="Ajouter une date d'échéance ?"
+				:value="values.activateTermDate"
+				@change="handleActivateTermDateChange"
+				inline
+				helperText="Grâce à la date d'échéance, vos amis pourront juger de l'imminence de votre évènement."
+			/>
+			<FormDatePicker
+				v-show="values.activateTermDate"
+				:disabled="!values.activateTermDate"
+				class="col-span-1"
+				:label="values.termDate.label"
+				:value="values.termDate.value"
+				:helperText="values.termDate.helperText"
+				:isError="values.termDate.errorMessage !== ''"
+				:errorMessage="values.termDate.errorMessage"
+				mandatory
+				@change="handleTermDateChange"
+			/>
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
-
-import Subtitle from "@/components/Styled/Subtitle.vue";
+import { defineComponent } from "vue";
 import FormInputText from "@/components/Inputs/FormInputText.vue";
-import FormInputNumber from "@/components/Inputs/FormInputNumber.vue";
-import FormInputLink from "@/components/Inputs/FormInputLink.vue";
-import FormInputToggle from "@/components/Inputs/FormInputToggle.vue";
-import FormSelect from "@/components/Inputs/FormSelect.vue";
 import FormDatePicker from "@/components/Inputs/FormDatePicker.vue";
+import FormInputToggle from "@/components/Inputs/FormInputToggle.vue";
 
 export default defineComponent({
 	name: "NewListStep1",
 	components: {
 		FormInputText,
-		FormInputNumber,
-		FormInputLink,
-		FormInputToggle,
-		FormSelect,
 		FormDatePicker,
-		Subtitle,
+		FormInputToggle,
 	},
-	setup() {
-		const text = ref("Text");
-		const number = ref(10);
-		const url = ref("https://www.google.fr");
-		const urlError = ref(false);
-		const check = ref(false);
-		const date = ref("1997-05-01");
+	props: {
+		values: {
+			type: Object,
+		},
+	},
+	setup(props, context) {
+		const handleTitleChange = (title: string) => {
+			const values = {
+				...props.values,
+				title: {
+					...props.values?.title,
+					errorMessage: "",
+					value: title,
+				},
+			};
+			context.emit("change", values);
+		};
 
-		const selectOptions = [
-			{ id: 0, name: "Zero" },
-			{ id: 1, name: "One" },
-			{ id: 2, name: "Two" },
-			{ id: 3, name: "Three" },
-		];
-		const selectValue = ref(selectOptions[2]);
+		const handleDescriptionChange = (description: string) => {
+			const values = {
+				...props.values,
+				description: {
+					...props.values?.description,
+					errorMessage: "",
+					value: description,
+				},
+			};
+			context.emit("change", values);
+		};
 
-		watch(url, (value: string) => {
-			const urlRegex =
-				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-			urlError.value = !value.match(urlRegex);
-		});
+		const handleActivateTermDateChange = (activateTermDate: boolean) => {
+			const values = {
+				...props.values,
+				activateTermDate,
+			};
+			context.emit("change", values);
+		};
+
+		const handleTermDateChange = (termDate: string) => {
+			const values = {
+				...props.values,
+				termDate: {
+					...props.values?.termDate,
+					errorMessage: "",
+					value: termDate,
+				},
+			};
+			context.emit("change", values);
+		};
 
 		return {
-			text,
-			number,
-			url,
-			urlError,
-			check,
-			selectOptions,
-			selectValue,
-			date,
+			handleTitleChange,
+			handleDescriptionChange,
+			handleActivateTermDateChange,
+			handleTermDateChange,
 		};
 	},
-	emits: ["confirm"],
+	emits: ["change"],
 });
 </script>

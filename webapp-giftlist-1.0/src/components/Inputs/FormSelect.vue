@@ -10,7 +10,6 @@
 						text-left
 						bg-white
 						rounded-lg
-						shadow-md
 						cursor-default
 						focus:outline-none
 						focus-visible:ring-2
@@ -20,6 +19,7 @@
 						focus-visible:ring-offset-2
 						focus-visible:border-indigo-500
 						sm:text-sm
+						border border-indigo-400
 					"
 					:class="writable ? '' : 'py-2 pl-3 pr-10'"
 				>
@@ -75,6 +75,22 @@
 							"
 							static
 						>
+							<ListboxOption as="template" v-if="!filteredOptions.length">
+								<li
+									class="
+										cursor-pointer
+										text-gray-900
+										hover:bg-gray-100
+										select-none
+										relative
+										py-2
+										pl-10
+										pr-4
+									"
+								>
+									<span class="font-normal block truncate">Aucune option disponible</span>
+								</li>
+							</ListboxOption>
 							<ListboxOption
 								v-slot="{ active, selected }"
 								v-for="opt in filteredOptions"
@@ -178,8 +194,16 @@ export default defineComponent({
 		const filteredOptions = ref(props.options);
 
 		watch(selectedOption, (value) => {
-			inputSelect.value = value.name;
-			context.emit("change", value);
+			if (selectedOption.value.id) {
+				inputSelect.value = value.name;
+				context.emit("change", value);
+			}
+		});
+
+		watch(props, (value) => {
+			filteredOptions.value = value.options;
+			inputSelect.value = "";
+			selectedOption.value = value.value;
 		});
 
 		const openOrHideOptions = () => {

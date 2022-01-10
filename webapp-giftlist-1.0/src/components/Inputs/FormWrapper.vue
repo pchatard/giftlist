@@ -2,6 +2,7 @@
 	<fieldset class="flex flex-col items-start transition-all">
 		<label class="text-sm font-semibold transition-all" :class="computedLabelClass">
 			{{ label }}
+			<span v-if="mandatory" class="text-red-600">*</span>
 		</label>
 		<div
 			class="
@@ -52,6 +53,10 @@ export default defineComponent({
 		copied: {
 			type: Boolean,
 			required: false,
+		},
+		mandatory: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	setup(props) {
