@@ -11,15 +11,12 @@ import {
 	Security,
 	SuccessResponse,
 	Tags,
-} from "@tsoa/runtime";
+} from "tsoa";
 import UserService from "./../services/UserService";
 import User from "./../models/User";
 import { UUID } from "../types/UUID";
 import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
-import MailIsInvalidError from "./../errors/UserErrors/MailIsInvalidError";
-import FieldIsMissingError from "./../errors/FieldIsMissingError";
 import UserNotFoundError from "./../errors/UserErrors/UserNotFoundError";
-import { isValidEmail } from "./../helpers/validators";
 import { cleanObject } from "../helpers/cleanObjects";
 
 // TODO: Follow https://github.com/lukeautry/tsoa/issues/911 to remove this workaround
@@ -40,18 +37,9 @@ export class UserController extends Controller {
 	 * @returns {Promise<UUID>} UUID of the created user
 	 */
 	@SuccessResponse(200)
-	@Response<FieldIsMissingError | MailIsInvalidError | MailAlreadyUsedError>(
-		400,
-		"If one field is missing, mail is invalid or already used"
-	)
+	@Response<MailAlreadyUsedError>(400, "If mail is already used")
 	@Post()
 	async create(@Body() body: CreateUserDTO): Promise<UserIdDTO> {
-		if (!body.email || !body.displayName) {
-			throw new FieldIsMissingError(!body.email ? "email" : "displayName");
-		}
-		if (!isValidEmail(body.email)) {
-			throw new MailIsInvalidError();
-		}
 		try {
 			const { id }: User = await UserService.create(body.email, body.displayName);
 			return { id } as UserIdDTO;
@@ -65,7 +53,6 @@ export class UserController extends Controller {
 
 	/**
 	 * Edit a user.
-	 * @returns {Promise<UUID>} UUID of the created user
 	 * @param {UUID} userId the GUID of user
 	 * @param {UserDTO} body data to edit a user
 	 */

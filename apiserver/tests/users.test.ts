@@ -3,9 +3,7 @@ import chai, { expect } from "chai";
 import chaiHttp from "chai-http";
 import request from "request";
 import server from "../src/index";
-import FieldIsMissingError from "../src/errors/FieldIsMissingError";
 import MailAlreadyUsedError from "../src/errors/UserErrors/MailAlreadyUsedError";
-import MailIsInvalidError from "../src/errors/UserErrors/MailIsInvalidError";
 import { User } from "./../src/models/User";
 
 chai.use(chaiHttp);
@@ -72,9 +70,7 @@ describe("Users", () => {
 			expect(response).to.have.status(500);
 			expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
 		});
-		it("Returns 500, with custom error, if email is malformed", async () => {
-			const error = new MailIsInvalidError();
-			const errorReturned = { name: error.name, message: error.message };
+		it("Returns 422, with validation error, if email is malformed", async () => {
 			const responses = [
 				await chai
 					.request(server)
@@ -86,42 +82,40 @@ describe("Users", () => {
 					.post(baseUrl + "/")
 					.send({ email: "test@test", displayName: "TestUser2" })
 					.set({ Authorization: `Bearer ${token}` }),
-				await chai
-					.request(server)
-					.post(baseUrl + "/")
-					.send({ email: "test@15483.cdc.d", displayName: "TestUser2" })
-					.set({ Authorization: `Bearer ${token}` }),
 			];
 			responses.forEach((response) => {
 				expect(response).to.have.property("error").to.not.eql(false);
-				expect(response).to.have.status(500);
-				expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
+				expect(response).to.have.status(422);
+				expect(response)
+					.to.have.property("body")
+					.to.have.property("message")
+					.to.be.eql("Validation Failed");
+				expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
 			});
 		});
-		it("Returns 500, with custom error, if one of fields is empty", async () => {
+		it("Returns 422, with validation error, if one of fields is empty", async () => {
 			const responses = [
-				{
-					error: new FieldIsMissingError("email"),
-					response: await chai
-						.request(server)
-						.post(baseUrl + "/")
-						.send({ displayName: "TestUser2" })
-						.set({ Authorization: `Bearer ${token}` }),
-				},
-				{
-					error: new FieldIsMissingError("displayName"),
-					response: await chai
-						.request(server)
-						.post(baseUrl + "/")
-						.send({ email: "test@test" })
-						.set({ Authorization: `Bearer ${token}` }),
-				},
+				await chai
+					.request(server)
+					.post(baseUrl + "/")
+					.send({ displayName: "TestUser2" })
+					.set({ Authorization: `Bearer ${token}` }),
+				,
+				await chai
+					.request(server)
+					.post(baseUrl + "/")
+					.send({ email: "test@test" })
+					.set({ Authorization: `Bearer ${token}` }),
+				,
 			];
-			responses.forEach(({ error, response }) => {
-				const errorReturned = { name: error.name, message: error.message };
+			responses.forEach((response) => {
 				expect(response).to.have.property("error").to.not.eql(false);
-				expect(response).to.have.status(500);
-				expect(response).to.have.property("body").to.be.deep.equal(errorReturned);
+				expect(response).to.have.status(422);
+				expect(response)
+					.to.have.property("body")
+					.to.have.property("message")
+					.to.be.eql("Validation Failed");
+				expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
 			});
 		});
 	});

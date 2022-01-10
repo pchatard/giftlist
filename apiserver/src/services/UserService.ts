@@ -1,5 +1,5 @@
 import { UUID } from "../types/UUID";
-import { User } from "./../models/User";
+import User from "./../models/User";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
 
 class UserService {

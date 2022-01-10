@@ -4,9 +4,10 @@
  * @param obj the object to clean
  * @returns the cleaned object
  */
-export function cleanObject(obj: any): any {
+export function cleanObject<T>(obj: T): T {
 	let res: any = {};
 	for (var propName in obj) {
+		// @ts-ignore
 		if (obj[propName] !== null && obj[propName] !== undefined && obj[propName] !== "") {
 			res[propName] = obj[propName];
 		}
