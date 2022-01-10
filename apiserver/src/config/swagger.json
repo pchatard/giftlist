@@ -12,50 +12,37 @@
 				"description": "Stringified UUIDv4.\nSee [RFC 4112](https://tools.ietf.org/html/rfc4122)",
 				"pattern": "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"
 			},
+			"Boolean": {
+				"properties": {},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_ListDTO_": {
+				"properties": {
+					"title": {
+						"type": "string",
+						"default": ""
+					},
+					"isShared": {
+						"$ref": "#/components/schemas/Boolean"
+					},
+					"sharingCode": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"closureDate": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
 			"UserIdDTO": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
 					}
 				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"FieldIsMissingError": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"stack": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name",
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MailIsInvalidError": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"stack": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name",
-					"message"
-				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -161,6 +148,232 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/lists": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": ""
+					}
+				},
+				"description": "Creates a new list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": ""
+					}
+				},
+				"description": "Gets all user's lists data.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/lists/{_listId}": {
+			"put": {
+				"operationId": "Edit",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Edit a list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "_listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_ListDTO_"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Delete a list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "_listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": ""
+					}
+				},
+				"description": "Sends back a list in the response based on its id.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "_listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{_listId}/share": {
+			"put": {
+				"operationId": "Share",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Creates a sharing code for a list to make it public.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "_listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{_listId}/unshare": {
+			"put": {
+				"operationId": "Private",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Makes a list private.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "_listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/invite/{_sharingCode}": {
+			"get": {
+				"operationId": "GetFromSharingCode",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Get a list from its sharing code.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "_sharingCode",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
 		"/users": {
 			"post": {
 				"operationId": "Create",
@@ -176,21 +389,11 @@
 						}
 					},
 					"400": {
-						"description": "If one field is missing, mail is invalid or already used",
+						"description": "If mail is already used",
 						"content": {
 							"application/json": {
 								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/FieldIsMissingError"
-										},
-										{
-											"$ref": "#/components/schemas/MailIsInvalidError"
-										},
-										{
-											"$ref": "#/components/schemas/MailAlreadyUsedError"
-										}
-									]
+									"$ref": "#/components/schemas/MailAlreadyUsedError"
 								}
 							}
 						}

@@ -17,5 +17,6 @@
   "routes": {
     "routesDir": "./src",
     "authenticationModule": "./src/middlewares/authenticate.ts"
-  }
+  },
+  "controllerPathGlobs": ["./src/controllers/*.ts"]
 }

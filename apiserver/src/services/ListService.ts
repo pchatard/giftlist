@@ -1,8 +1,21 @@
 import Gift from "./GiftService";
 import { Database, DatabaseReference, push, ref, remove, set, update } from "@firebase/database";
 import { get, query } from "firebase/database";
+import List from "../models/List";
+import { getRepository, Repository } from "typeorm";
+import { cleanObject } from "../helpers/cleanObjects";
 
 class ListService {
+	/**
+	 * Create a new list.
+	 * @returns {Promise<List>} the created list
+	 */
+	static async create(listInfos: Partial<List>): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = listRepository.create(cleanObject(listInfos));
+		return await listRepository.save(list);
+	}
+
 	/**
 	 * Returns all the lists of the database.
 	 * @function
@@ -64,19 +77,6 @@ class ListService {
 		const sharedWith = result.sharedWith ? Object.values(result.sharedWith) : [];
 		result.sharedWith = sharedWith;
 		return result;
-	}
-
-	/**
-	 * Creates a list in the database and returns its representation
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {Object} list - The list object you want to add to the database
-	 * @returns {Object} The list's representation in the database.
-	 */
-	static async create(db: Database, list: object): Promise<object> {
-		const reference: DatabaseReference = ref(db, "lists");
-		const newList = push(reference, list);
-		return await ListService.getOne(db, newList.key || "");
 	}
 
 	/**
