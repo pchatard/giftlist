@@ -21,7 +21,8 @@ import { cleanObject } from "../helpers/cleanObjects";
 
 // TODO: Follow https://github.com/lukeautry/tsoa/issues/911 to remove this workaround
 type Expand<T> = { [K in keyof T]: T[K] };
-interface CreateUserDTO extends Expand<Omit<User, "id" | "friends" | "createdDate">> {}
+interface CreateUserDTO
+	extends Expand<Omit<User, "id" | "friends" | "lists" | "friendLists" | "createdDate">> {}
 interface UserIdDTO extends Expand<Pick<User, "id">> {}
 interface UserDTO extends Expand<Pick<User, "displayName" | "email">> {}
 
