@@ -12,7 +12,7 @@
 			/>
 			<div class="col-span-full flex items-center">
 				<span>Propriétaires :</span>
-				<div class="flex py-2 ml-4">
+				<div class="flex flex-wrap gap-y-2 py-2 ml-4">
 					<PersonTag text="Moi" class="px-4" hideDelete />
 					<PersonTag
 						class="ml-2"
@@ -48,7 +48,7 @@
 			/>
 			<div class="col-span-full flex items-center" v-show="values.shared">
 				<span>Invités :</span>
-				<div class="flex py-2 ml-4">
+				<div class="flex py-2 ml-4" v-if="values.authorizedUsers.length">
 					<PersonTag
 						class="ml-2"
 						v-for="person in values.authorizedUsers"
@@ -57,6 +57,7 @@
 						@delete="handleAuthorizedDelete(person.id)"
 					/>
 				</div>
+				<div v-else class="text-gray-600">&nbsp; Personne n'a encore été ajouté...</div>
 			</div>
 		</div>
 	</div>
@@ -92,9 +93,17 @@ export default defineComponent({
 
 		const handleSelectOwner = (selectedOwner: any) => {
 			const owners = [...props.values?.owners];
+			const authorizedUsers = [...props.values?.authorizedUsers];
 			owners.push(selectedOwner);
+			const selectedOwnerIndex = props.values?.authorizedUsers.findIndex(
+				(user: any) => user.id === selectedOwner.id
+			);
+			if (selectedOwnerIndex >= 0) {
+				authorizedUsers.splice(selectedOwnerIndex, 1);
+			}
 			const values = {
 				...props.values,
+				authorizedUsers,
 				owners,
 			};
 			context.emit("change", values);
@@ -110,6 +119,7 @@ export default defineComponent({
 				...props.values,
 				owners,
 			};
+			ownersSelectValue.value = {};
 			context.emit("change", values);
 		};
 

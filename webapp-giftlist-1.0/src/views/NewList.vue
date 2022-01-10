@@ -134,9 +134,14 @@ export default defineComponent({
 			step2: {
 				shared: false,
 				friends: [
-					{ id: 1, name: "Marion L." },
-					{ id: 12, name: "Nicolas D." },
-					{ id: 13, name: "Marion L." },
+					{ id: 1, name: "Arnold A." },
+					{ id: 12, name: "Ben 10" },
+					{ id: 13, name: "Carl Os" },
+					{ id: 14, name: "Denis D." },
+					{ id: 15, name: "Elliot E." },
+					{ id: 25, name: "Fabrice L." },
+					{ id: 54, name: "Guéric G." },
+					{ id: 47, name: "Hans H." },
 				],
 				owners: [],
 				authorizedUsers: [],

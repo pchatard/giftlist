@@ -194,7 +194,7 @@ export default defineComponent({
 		const filteredOptions = ref(props.options);
 
 		watch(selectedOption, (value) => {
-			if (value) {
+			if (selectedOption.value.id) {
 				inputSelect.value = value.name;
 				context.emit("change", value);
 			}
@@ -203,6 +203,7 @@ export default defineComponent({
 		watch(props, (value) => {
 			filteredOptions.value = value.options;
 			inputSelect.value = "";
+			selectedOption.value = value.value;
 		});
 
 		const openOrHideOptions = () => {
