@@ -32,15 +32,15 @@
 - [x] ~~CTA : Créer la liste (Retour vers la liste)~~
 - [x] ~~Annuler~~
 - [x] ~~Créer un stepper~~
-- [x] Step 1
+- [x] ~~Step 1~~
     - [x] ~~Informations générales de la liste : Nom*, description, échéance~~
     - [x] ~~CTA : Aller directement sur ma page liste -> visibilité privée par défault~~
     - [x] ~~CTA : Aller à l'étape 2~~
-- [ ] Step 2 : 
+- [x] ~~Step 2~~
     - [x] ~~Options de partages et de visibilité : Ajouter directement des personnes, Option Liste Commune avec un ami, Rendre visible directement~~
     - [x] ~~CTA : Aller directement sur ma page liste -> cadeaux vides par défault~~
     - [x] ~~CTA : Aller à l'étape 3~~
-- [ ] Step 3 :
+- [ ] Step 3
     - [ ] Optionel : Ajout de cadeaux rapides
 - [x] ~~Connecter les actions du store~~
 

@@ -101,15 +101,35 @@ export default defineComponent({
 		});
 
 		let date = new Date();
+		date.setDate(date.getDate() + 1);
 		const offset = date.getTimezoneOffset();
 		date = new Date(date.getTime() - offset * 60 * 1000);
 
 		const listInformation = ref({
 			step1: {
-				title: "",
-				description: "",
+				title: {
+					label: "Titre",
+					value: "",
+					errorMessage: "",
+					helperText: "Le titre de votre nouvelle liste",
+					placeholder: "Mes 18 ans",
+					required: true,
+				},
+				description: {
+					label: "Description",
+					value: "",
+					placeholder: "La wishlist de la majorité",
+					helperText: "Une rapide description de votre liste",
+					errorMessage: "",
+					required: false,
+				},
 				activateTermDate: false,
-				termDate: date.toISOString().split("T")[0],
+				termDate: {
+					label: "Date d'échéance de votre liste",
+					value: date.toISOString().split("T")[0],
+					helperText: "La date avant laquelle on doit vous offrir vos cadeaux",
+					errorMessage: "",
+				},
 			},
 			step2: {
 				shared: false,
@@ -145,13 +165,16 @@ export default defineComponent({
 		};
 
 		const handleChangeStepFromStepper = (newStep: number) => {
-			// Check if we can go forward in steps
-			step.value = newStep;
+			if (checkStep(newStep - 1)) {
+				step.value = newStep;
+			}
 		};
 
 		const nextAction = () => {
 			if (step.value !== maxStep) {
-				step.value++;
+				if (checkStep(step.value)) {
+					step.value++;
+				}
 				return;
 			} else {
 				// Call Store action
@@ -186,10 +209,53 @@ export default defineComponent({
 
 		const skipToList = () => {
 			// Make verifications
+
 			// Call Store action
 			dispatch("createList", listInformation.value);
 			// Redirect to new list or new gift
 			router.push("/app/lists");
+		};
+
+		const checkStep = (step: number): boolean => {
+			switch (step) {
+				case 1:
+					return checkStep1();
+				case 2:
+					return checkStep2();
+				case 3:
+					return checkStep3();
+				default:
+					return false;
+			}
+		};
+
+		const checkStep1 = (): boolean => {
+			let validateStep1 = true;
+			// Check that title is filled
+			if (!listInformation.value.step1.title.value) {
+				listInformation.value.step1.title.errorMessage = "Le titre est obligatoire";
+				validateStep1 = false;
+			}
+
+			// Check that date is not in the past
+			const dateIsInPast = new Date(listInformation.value.step1.termDate.value) <= new Date();
+			if (dateIsInPast) {
+				listInformation.value.step1.termDate.errorMessage =
+					"La date renseigné est dans le passé";
+				validateStep1 = false;
+			}
+			console.log();
+
+			return validateStep1;
+		};
+
+		const checkStep2 = (): boolean => {
+			let validateStep2 = true;
+			return validateStep2;
+		};
+		const checkStep3 = (): boolean => {
+			let validateStep3 = true;
+			return validateStep3;
 		};
 
 		return {

@@ -3,22 +3,27 @@
 		<div class="col-span-full grid grid-cols-3">
 			<FormInputText
 				class="col-span-1"
-				label="Titre"
-				:value="values.title"
+				:label="values.title.label"
+				:value="values.title.value"
 				@change="handleTitleChange"
-				helperText="Le titre de votre nouvelle liste"
-				placeholder="Mes 18 ans"
+				:helperText="values.title.helperText"
+				:placeholder="values.title.placeholder"
+				:isError="values.title.errorMessage !== ''"
+				:errorMessage="values.title.errorMessage"
+				:mandatory="values.title.required"
 				reset
-				:mandatory="true"
 			/>
 			<FormInputText
 				class="col-span-3 pt-4"
-				label="Description"
-				:value="values.description"
-				@change="handleDescriptionChange"
-				helperText="Une rapide description de votre liste"
-				placeholder="La wishlist de la majorité"
+				:label="values.description.label"
+				:value="values.description.value"
+				:helperText="values.description.helperText"
+				:placeholder="values.description.placeholder"
+				:isError="values.description.errorMessage !== ''"
+				:errorMessage="values.description.errorMessage"
+				:mandatory="values.description.required"
 				reset
+				@change="handleDescriptionChange"
 			/>
 		</div>
 
@@ -35,10 +40,13 @@
 				v-show="values.activateTermDate"
 				:disabled="!values.activateTermDate"
 				class="col-span-1"
-				label="Date d'échéance de votre liste"
-				:value="values.termDate"
+				:label="values.termDate.label"
+				:value="values.termDate.value"
+				:helperText="values.termDate.helperText"
+				:isError="values.termDate.errorMessage !== ''"
+				:errorMessage="values.termDate.errorMessage"
+				mandatory
 				@change="handleTermDateChange"
-				helperText="La date avant laquelle on doit vous offrir vos cadeaux"
 			/>
 		</div>
 	</div>
@@ -66,7 +74,11 @@ export default defineComponent({
 		const handleTitleChange = (title: string) => {
 			const values = {
 				...props.values,
-				title,
+				title: {
+					...props.values?.title,
+					errorMessage: "",
+					value: title,
+				},
 			};
 			context.emit("change", values);
 		};
@@ -74,7 +86,11 @@ export default defineComponent({
 		const handleDescriptionChange = (description: string) => {
 			const values = {
 				...props.values,
-				description,
+				description: {
+					...props.values?.description,
+					errorMessage: "",
+					value: description,
+				},
 			};
 			context.emit("change", values);
 		};
@@ -90,7 +106,11 @@ export default defineComponent({
 		const handleTermDateChange = (termDate: string) => {
 			const values = {
 				...props.values,
-				termDate,
+				termDate: {
+					...props.values?.termDate,
+					errorMessage: "",
+					value: termDate,
+				},
 			};
 			context.emit("change", values);
 		};

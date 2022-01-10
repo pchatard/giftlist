@@ -88,7 +88,7 @@
 										pr-4
 									"
 								>
-									<span class="font-normal block truncate">Aucune option</span>
+									<span class="font-normal block truncate">Aucune option disponible</span>
 								</li>
 							</ListboxOption>
 							<ListboxOption

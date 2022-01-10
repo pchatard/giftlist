@@ -107,8 +107,8 @@ export const list: Module<ListState, RootState> = {
 
                     const list: List = {
                         id: id1,
-                        title: listInformation.step1.title,
-                        termDate: listInformation.step1.termDate,
+                        title: listInformation.step1.title.value,
+                        termDate: listInformation.step1.termDate.value,
                         isShared: listInformation.step2.shared,
                         sharingCode: `${id1}-${id2}`,
                         gifts: [],
