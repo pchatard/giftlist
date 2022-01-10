@@ -7,6 +7,7 @@
     "build": "tsc",
     "clean": "rm -rf ./build/*",
     "lint": "eslint -c ./.eslintrc.json './src/**/*.ts'",
+    "typeorm:dropschema": "node -r ts-node/register ./node_modules/typeorm/cli.js -f ./src/config/ormconfig.ts schema:drop",
     "prettier:check": "prettier --config .prettierrc.json --check '{src,tests}/**/*.ts' '!src/routes.ts'",
     "prettier:write": "prettier --config .prettierrc.json --write '{src,tests}/**/*.ts' '!src/routes.ts'",
     "start": "NODE_ENV=DEV node -r ts-node/register -r dotenv/config ./build/index.js",
