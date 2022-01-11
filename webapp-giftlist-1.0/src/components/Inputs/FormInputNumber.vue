@@ -12,6 +12,7 @@
 			type="number"
 			:min="min"
 			:max="max"
+			step="any"
 			:disabled="disabled"
 			:placeholder="placeholder"
 			class="outline-none px-3 py-2 flex-1"
@@ -70,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { ClipboardCopyIcon, ClipboardCheckIcon } from "@heroicons/vue/outline";
 import { TransitionRoot } from "@headlessui/vue";
 import FormWrapper from "@/components/Inputs/FormWrapper.vue";
@@ -140,6 +141,10 @@ export default defineComponent({
 				refValue.value = 0;
 			}
 			copied.value = false;
+		});
+
+		watch(props, (value) => {
+			refValue.value = value.value;
 		});
 
 		const onFocus = () => {

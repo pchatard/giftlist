@@ -46,11 +46,11 @@
 
 ### Nouveau cadeau
 - [x] ~~Créer la page~~
-- [ ] Formulaire
-- [ ] Champs : Titre*, lien, prix, marque, taille, couleur, type
+- [x] ~~Formulaire~~
+- [x] ~~Champs : Titre*, lien, prix, marque, taille, couleur, type~~
 - [ ] CTA : Créer le cadeau (Retour vers la liste)
 - [ ] CTA : Ajouter un autre cadeau (Page d'ajout de cadeaux)
-- [ ] Annuler
+- [x] ~~Annuler~~
 
 ### Cadeau (Détail)
 - [x] ~~Créer la page~~

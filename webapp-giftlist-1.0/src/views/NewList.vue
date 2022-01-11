@@ -1,6 +1,6 @@
 <template>
 	<DefaultLayout title="Nouvelle liste">
-		<div class="flex flex-col h-full">
+		<div class="flex flex-col">
 			<Stepper
 				:step="step"
 				:maxSteps="maxStep"
