@@ -40,15 +40,13 @@ export const gift: Module<GiftState, RootState> = {
             commit("POPULATE_GIFTS", gifts);
             return state.gifts;
         },
-        async createGift({ commit, state }, giftInformation) {
+        async createGift({ commit, state }, gift: Gift) {
             return new Promise<void>((resolve, reject) => {
                 try {
-                    // Formalize gift
-
                     // Create on backend
 
                     // Add to state
-                    // commit("ADD_GIFT", gift);
+                    commit("ADD_GIFT", gift);
                     resolve();
                 } catch (error) {
                     reject(error);

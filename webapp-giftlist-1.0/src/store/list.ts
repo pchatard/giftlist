@@ -27,7 +27,7 @@ for (let i = 0; i < 5; i++) {
         gifts,
         owners: [],
     };
-    list.gifts.forEach((gift) => gift.lists.push(list));
+    list.gifts.forEach((gift) => gift.lists?.push(list));
     lists.push(list);
 }
 

@@ -1,97 +1,97 @@
 <template>
 	<DefaultLayout title="Nouveau cadeau">
 		<div class="flex flex-col">
-			<form class="grid grid-cols-3 gap-4 my-4">
-				<div class="col-span-1">
-					<FormInputText
-						:label="giftInformation.title.label"
-						:value="giftInformation.title.value"
-						:placeholder="giftInformation.title.placeholder"
-						:helperText="giftInformation.title.helperText"
-						:errorMessage="giftInformation.title.errorMessage"
-						:mandatory="giftInformation.title.required"
-						reset
-						@change="(value) => handleGiftInformationChange('title', value)"
-					/>
-				</div>
-				<div class="col-span-1 self-center justify-self-center">
-					<FormInputToggle
-						:label="giftInformation.isFavorite.label"
-						:value="giftInformation.isFavorite.value"
-						:helperText="giftInformation.isFavorite.helperText"
-						inline
-						@change="(value) => handleGiftInformationChange('isFavorite', value)"
-					/>
-				</div>
-				<div class="col-start-1">
-					<FormSelect
-						:label="giftInformation.category.label"
-						:value="giftInformation.category.value"
-						:options="giftInformation.category.options"
-						:helperText="giftInformation.category.helperText"
-						:errorMessage="giftInformation.category.errorMessage"
-						@change="(value) => handleGiftInformationChange('category', value)"
-					/>
-				</div>
-				<div class="col-start-1">
-					<FormInputNumber
-						:label="giftInformation.price.label"
-						:value="giftInformation.price.value"
-						:placeholder="giftInformation.price.placeholder"
-						:helperText="giftInformation.price.helperText"
-						:errorMessage="giftInformation.price.errorMessage"
-						@change="(value) => handleGiftInformationChange('price', value)"
-					/>
-				</div>
-				<div class="col-span-full">
-					<FormInputLink
-						:label="giftInformation.link.label"
-						:value="giftInformation.link.value"
-						:placeholder="giftInformation.link.placeholder"
-						:helperText="giftInformation.link.helperText"
-						:errorMessage="giftInformation.link.errorMessage"
-						reset
-						@change="(value) => handleGiftInformationChange('link', value)"
-					/>
-				</div>
-				<div class="col-span-full grid grid-cols-3 gap-4">
-					<div>
-						<FormInputText
-							:label="giftInformation.brand.label"
-							:value="giftInformation.brand.value"
-							:placeholder="giftInformation.brand.placeholder"
-							:helperText="giftInformation.brand.helperText"
-							:errorMessage="giftInformation.brand.errorMessage"
-							:mandatory="giftInformation.brand.required"
-							reset
-							@change="(value) => handleGiftInformationChange('brand', value)"
-						/>
-					</div>
-					<div>
-						<FormInputText
-							:label="giftInformation.size.label"
-							:value="giftInformation.size.value"
-							:placeholder="giftInformation.size.placeholder"
-							:helperText="giftInformation.size.helperText"
-							:errorMessage="giftInformation.size.errorMessage"
-							:mandatory="giftInformation.size.required"
-							reset
-							@change="(value) => handleGiftInformationChange('size', value)"
-						/>
-					</div>
-					<div>
-						<FormInputText
-							:label="giftInformation.color.label"
-							:value="giftInformation.color.value"
-							:placeholder="giftInformation.color.placeholder"
-							:helperText="giftInformation.color.helperText"
-							:errorMessage="giftInformation.color.errorMessage"
-							:mandatory="giftInformation.color.required"
-							reset
-							@change="(value) => handleGiftInformationChange('color', value)"
-						/>
-					</div>
-				</div>
+			<form class="grid grid-cols-3 gap-3 my-4">
+				<FormInputText
+					class="col-span-1"
+					:label="giftInformation.title.label"
+					:value="giftInformation.title.value"
+					:placeholder="giftInformation.title.placeholder"
+					:helperText="giftInformation.title.helperText"
+					:errorMessage="giftInformation.title.errorMessage"
+					:mandatory="giftInformation.title.required"
+					reset
+					@change="(value) => handleGiftInformationChange('title', value)"
+				/>
+
+				<FormSelect
+					class="col-start-1"
+					:label="giftInformation.category.label"
+					:value="giftInformation.category.value"
+					:options="giftInformation.category.options"
+					:helperText="giftInformation.category.helperText"
+					:errorMessage="giftInformation.category.errorMessage"
+					@change="(value) => handleGiftInformationChange('category', value)"
+				/>
+				<FormInputToggle
+					class="self-center justify-self-center"
+					:label="giftInformation.isFavorite.label"
+					:value="giftInformation.isFavorite.value"
+					:helperText="giftInformation.isFavorite.helperText"
+					@change="(value) => handleGiftInformationChange('isFavorite', value)"
+				/>
+
+				<FormInputNumber
+					class="col-start-1"
+					:label="giftInformation.price.label"
+					:value="giftInformation.price.value"
+					:placeholder="giftInformation.price.placeholder"
+					:helperText="giftInformation.price.helperText"
+					:errorMessage="giftInformation.price.errorMessage"
+					@change="(value) => handleGiftInformationChange('price', value)"
+				/>
+
+				<FormInputLink
+					class="col-span-full"
+					:label="giftInformation.link.label"
+					:value="giftInformation.link.value"
+					:placeholder="giftInformation.link.placeholder"
+					:helperText="giftInformation.link.helperText"
+					:errorMessage="giftInformation.link.errorMessage"
+					reset
+					@change="(value) => handleGiftInformationChange('link', value)"
+				/>
+				<FormInputText
+					:label="giftInformation.brand.label"
+					:value="giftInformation.brand.value"
+					:placeholder="giftInformation.brand.placeholder"
+					:helperText="giftInformation.brand.helperText"
+					:errorMessage="giftInformation.brand.errorMessage"
+					:mandatory="giftInformation.brand.required"
+					reset
+					@change="(value) => handleGiftInformationChange('brand', value)"
+				/>
+				<FormInputText
+					:label="giftInformation.size.label"
+					:value="giftInformation.size.value"
+					:placeholder="giftInformation.size.placeholder"
+					:helperText="giftInformation.size.helperText"
+					:errorMessage="giftInformation.size.errorMessage"
+					:mandatory="giftInformation.size.required"
+					reset
+					@change="(value) => handleGiftInformationChange('size', value)"
+				/>
+				<FormInputText
+					:label="giftInformation.color.label"
+					:value="giftInformation.color.value"
+					:placeholder="giftInformation.color.placeholder"
+					:helperText="giftInformation.color.helperText"
+					:errorMessage="giftInformation.color.errorMessage"
+					:mandatory="giftInformation.color.required"
+					reset
+					@change="(value) => handleGiftInformationChange('color', value)"
+				/>
+				<FormInputText
+					class="col-span-full"
+					:label="giftInformation.comments.label"
+					:value="giftInformation.comments.value"
+					:placeholder="giftInformation.comments.placeholder"
+					:helperText="giftInformation.comments.helperText"
+					:errorMessage="giftInformation.comments.errorMessage"
+					:mandatory="giftInformation.comments.required"
+					reset
+					@change="(value) => handleGiftInformationChange('comments', value)"
+				/>
 			</form>
 			<div class="flex justify-between">
 				<Button btnStyle="danger" hasIcon @click="cancel">
@@ -126,6 +126,7 @@ import { XIcon, CheckIcon } from "@heroicons/vue/outline";
 import { GiftCategory } from "@/types/api/GiftCategory";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { Gift } from "@/types/api/Gift";
 
 export default defineComponent({
 	name: "NewGift",
@@ -212,6 +213,14 @@ export default defineComponent({
 				errorMessage: "",
 				required: false,
 			},
+			comments: {
+				label: "Commentaires",
+				value: "",
+				placeholder: "Commentaires",
+				helperText: "Ajouter des précisions supplémentaires",
+				errorMessage: "",
+				required: false,
+			},
 		});
 
 		const cancel = () => {
@@ -221,15 +230,37 @@ export default defineComponent({
 		const createGift = () => {
 			const listId = router.currentRoute.value.params.id;
 			// Validate fields
+			if (!validateGiftFields()) {
+				return;
+			}
+
+			// Format giftInformation
+			const gift: Gift = {
+				title: giftInformation.value.title.value,
+				isFavorite: giftInformation.value.isFavorite.value,
+				category: giftInformation.value.category.value,
+				price: giftInformation.value.price.value,
+				link: giftInformation.value.link.value,
+				brand: giftInformation.value.brand.value,
+				color: giftInformation.value.color.value,
+				size: giftInformation.value.size.value,
+				comments: giftInformation.value.comments.value,
+				isBooked: false,
+			};
+
 			// Call store action
-			dispatch("createGift", giftInformation.value)
+			dispatch("createGift", gift)
 				.then(() => {
+					// Redirect to list
 					router.push("/app/lists/" + listId);
 				})
 				.catch((error) => {
 					console.log(error);
 				});
-			// Redirect to list
+		};
+
+		const validateGiftFields = (): boolean => {
+			return true;
 		};
 
 		const handleGiftInformationChange = (field: string, value: any) => {
@@ -257,6 +288,9 @@ export default defineComponent({
 					return;
 				case "color":
 					giftInformation.value.color.value = value;
+					return;
+				case "comments":
+					giftInformation.value.comments.value = value;
 					return;
 				default:
 					return;
