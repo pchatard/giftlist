@@ -25,7 +25,8 @@
 - [x] ~~**[Listes partagées]** CTA : Ouvre un popup pour rentrer un nouveau code de partage~~
 
 ### Paramètres de la liste
-- [ ] Créer des tabs : Général, Visibilité
+- [x] ~~Créer des tabs : Général, Visibilité~~~
+- [ ] Récupérer les datas existantes de la liste
 
 ### Nouvelle liste
 - [x] ~~Créer la page~~
@@ -45,7 +46,7 @@
 - [x] ~~Créer la page~~
 - [x] ~~Formulaire~~
 - [x] ~~Champs : Titre*, lien, prix, marque, taille, couleur, type~~
-- [ ] CTA : Créer le cadeau (Retour vers la liste)
+- [x] ~~CTA : Créer le cadeau (Retour vers la liste)~~
 - [ ] CTA : Ajouter un autre cadeau (Page d'ajout de cadeaux)
 - [x] ~~Annuler~~
 

@@ -45,7 +45,7 @@
 			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
 		>
 			<span class="flex items-center">
-				<DotsHorizontalIcon class="h-4 w-4 mr-2" />
+				<CogIcon class="h-4 w-4 mr-2" />
 				Options
 			</span>
 		</button>
@@ -66,23 +66,18 @@
 import { defineComponent, PropType } from "vue";
 
 import TableData from "@/components/Styled/TableData.vue";
-import {
-	DotsHorizontalIcon,
-	TrashIcon,
-	ViewListIcon,
-	InformationCircleIcon,
-} from "@heroicons/vue/outline";
+import { TrashIcon, ViewListIcon, InformationCircleIcon, CogIcon } from "@heroicons/vue/outline";
 import { List } from "@/types/api/List";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
 	name: "ListItem",
 	components: {
-		DotsHorizontalIcon,
 		InformationCircleIcon,
 		TableData,
 		TrashIcon,
 		ViewListIcon,
+		CogIcon,
 	},
 	emits: ["delete", "details"],
 	props: {
