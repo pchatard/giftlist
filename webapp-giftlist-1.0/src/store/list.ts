@@ -6,14 +6,14 @@ import { RootState } from ".";
 const lists: List[] = [];
 const gifts: Gift[] = [];
 
-for (let i = 0; i < 12; i++) {
+for (let i = 0; i < 6; i++) {
     const gift: Gift = {
         id: i.toString(),
         title: `Cadeau ${i + 1}`,
         isBooked: i % 3 === 0,
-        isFavorite: i < 4,
+        isFavorite: i < 1,
         lists: [],
-        category: { id: "1", title: "Demo" },
+        category: { id: "1", name: "Demo" },
     };
     gifts.push(gift);
 }
@@ -27,7 +27,7 @@ for (let i = 0; i < 5; i++) {
         gifts,
         owners: [],
     };
-    list.gifts.forEach((gift) => gift.lists.push(list));
+    list.gifts.forEach((gift) => gift.lists?.push(list));
     lists.push(list);
 }
 
@@ -122,7 +122,7 @@ export const list: Module<ListState, RootState> = {
                     reject(error);
                 }
             });
-        }
+        },
     },
 };
 

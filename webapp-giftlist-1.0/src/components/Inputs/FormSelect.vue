@@ -96,6 +96,7 @@
 								v-for="opt in filteredOptions"
 								:key="opt.id"
 								:value="opt"
+								:disabled="opt.id === 'x'"
 								as="template"
 							>
 								<li

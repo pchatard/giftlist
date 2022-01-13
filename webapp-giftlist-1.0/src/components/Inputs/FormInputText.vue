@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { ClipboardCopyIcon, ClipboardCheckIcon, XIcon } from "@heroicons/vue/outline";
 import { TransitionRoot } from "@headlessui/vue";
 import FormWrapper from "@/components/Inputs/FormWrapper.vue";

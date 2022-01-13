@@ -16,6 +16,11 @@
 			@focus="onFocus"
 			@blur="onBlur"
 		/>
+		<XIcon
+			v-if="reset"
+			class="text-gray-400 hover:text-gray-500 h-5 w-5 cursor-pointer self-center mr-2"
+			@click="onResetText"
+		/>
 		<button
 			v-if="copy"
 			@click="copyToClipboard"
@@ -69,13 +74,13 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import { ClipboardCopyIcon, ClipboardCheckIcon } from "@heroicons/vue/outline";
+import { ClipboardCopyIcon, ClipboardCheckIcon, XIcon } from "@heroicons/vue/outline";
 import { TransitionRoot } from "@headlessui/vue";
 import FormWrapper from "@/components/Inputs/FormWrapper.vue";
 
 export default defineComponent({
 	name: "FormInputLink",
-	components: { ClipboardCopyIcon, ClipboardCheckIcon, TransitionRoot, FormWrapper },
+	components: { ClipboardCopyIcon, ClipboardCheckIcon, TransitionRoot, FormWrapper, XIcon },
 	props: {
 		value: {
 			type: String,
@@ -113,6 +118,10 @@ export default defineComponent({
 			type: Boolean,
 			default: false,
 		},
+		reset: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup(props, context) {
 		const refValue = ref(props.value);
@@ -139,6 +148,10 @@ export default defineComponent({
 			selected.value = false;
 		};
 
+		const onResetText = () => {
+			refValue.value = "";
+		};
+
 		return {
 			copied,
 			copyToClipboard,
@@ -146,6 +159,7 @@ export default defineComponent({
 			onFocus,
 			onBlur,
 			selected,
+			onResetText,
 		};
 	},
 	emits: ["change"],
