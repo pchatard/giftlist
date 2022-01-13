@@ -1,20 +1,19 @@
 <template>
 	<DefaultLayout title="Nouvelle liste">
 		<div class="flex flex-col">
-			<Stepper
-				:step="step"
-				:maxSteps="maxStep"
-				:title="stepTitle"
-				@changeStep="handleChangeStepFromStepper"
-			/>
+			<div class="relative my-4 flex flex-col border rounded-lg">
+				<Subtitle class="absolute top-0 left-4 transform -translate-y-1/2 bg-white px-4">{{
+					stepTitle
+				}}</Subtitle>
 
-			<component
-				class="p-4 my-4 rounded-md"
-				:is="currentComponent"
-				:values="listInformation['step' + step]"
-				@change="handleListInformationChange"
-			>
-			</component>
+				<component
+					class="p-4 my-4 rounded-md"
+					:is="currentComponent"
+					:values="listInformation['step' + step]"
+					@change="handleListInformationChange"
+				>
+				</component>
+			</div>
 
 			<div class="flex justify-between">
 				<div class="flex gap-4">
@@ -62,8 +61,8 @@ import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import NewListStep1 from "@/components/NewList/NewListStep1.vue";
 import NewListStep2 from "@/components/NewList/NewListStep2.vue";
-import NewListStep3 from "@/components/NewList/NewListStep3.vue";
-import Stepper from "@/components/Styled/Stepper.vue";
+import Subtitle from "@/components/Styled/Subtitle.vue";
+// import NewListStep3 from "@/components/NewList/NewListStep3.vue";
 import { XIcon, CheckIcon, ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/outline";
 import { useStore } from "vuex";
 
@@ -71,11 +70,10 @@ export default defineComponent({
 	name: "NewList",
 	components: {
 		Button,
+		Subtitle,
 		DefaultLayout,
 		NewListStep1,
 		NewListStep2,
-		NewListStep3,
-		Stepper,
 		XIcon,
 		CheckIcon,
 		ArrowLeftIcon,
@@ -86,15 +84,13 @@ export default defineComponent({
 		const { dispatch } = useStore();
 
 		const step = ref(1);
-		const maxStep = 3;
+		const maxStep = 2;
 		const currentComponent = computed(() => {
 			switch (step.value) {
 				case 1:
 					return "NewListStep1";
 				case 2:
 					return "NewListStep2";
-				case 3:
-					return "NewListStep3";
 				default:
 					return "NewListStep1";
 			}
@@ -146,7 +142,6 @@ export default defineComponent({
 				owners: [],
 				authorizedUsers: [],
 			},
-			step3: {},
 		});
 
 		const handleListInformationChange = (values: any) => {
@@ -156,9 +151,6 @@ export default defineComponent({
 					return;
 				case 2:
 					listInformation.value.step2 = values;
-					return;
-				case 3:
-					listInformation.value.step3 = values;
 					return;
 				default:
 					return;
@@ -189,11 +181,12 @@ export default defineComponent({
 		};
 
 		const nextButtonText = computed(() => {
+			if (step.value === 1) {
+				return "Etape 2 : Options de partage";
+			}
 			switch (step.value) {
 				case 1:
 					return "Etape 2 : Options de partage";
-				case 2:
-					return "Etape 3 : Ajouter des cadeaux";
 				default:
 					return "Suivant";
 			}
@@ -205,8 +198,6 @@ export default defineComponent({
 					return "Informations générales";
 				case 2:
 					return "Options de partage";
-				case 3:
-					return "Ajouter des cadeaux";
 				default:
 					return "";
 			}
@@ -227,8 +218,6 @@ export default defineComponent({
 					return checkStep1();
 				case 2:
 					return checkStep2();
-				case 3:
-					return checkStep3();
 				default:
 					return false;
 			}
@@ -249,7 +238,6 @@ export default defineComponent({
 					"La date renseigné est dans le passé";
 				validateStep1 = false;
 			}
-			console.log();
 
 			return validateStep1;
 		};
@@ -257,10 +245,6 @@ export default defineComponent({
 		const checkStep2 = (): boolean => {
 			let validateStep2 = true;
 			return validateStep2;
-		};
-		const checkStep3 = (): boolean => {
-			let validateStep3 = true;
-			return validateStep3;
 		};
 
 		return {
