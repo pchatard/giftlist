@@ -1,12 +1,27 @@
 <template>
 	<DefaultLayout title="Ma liste">
 		<template v-slot:commands>
-			<Button @click="router.push(`/app/lists/${list.id}/settings`)" class="mr-4">
+			<!-- <Button @click="router.push(`/app/lists/${list.id}/settings`)" class="mr-4">
 				<template v-slot:icon>
 					<CogIcon class="h-4 w-4 mr-2" />
 				</template>
 				Paramètres
-			</Button>
+			</Button> -->
+			<span
+				class="
+					flex
+					items-center
+					mr-4
+					text-indigo-600
+					font-medium
+					hover:text-indigo-900
+					cursor-pointer
+				"
+				@click="router.push(`/app/lists/${list.id}/settings`)"
+			>
+				<CogIcon class="h-4 w-4 mr-2" />
+				Options
+			</span>
 			<ListGridToggleButton :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
 		</template>
 
@@ -41,14 +56,12 @@
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "vue";
-import router from "@/router";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 import { Gift } from "@/types/api/Gift";
 import Modal from "@/components/Styled/Modal.vue";
 
-import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import GiftGrid from "@/components/Styled/GiftGrid.vue";
 import GiftList from "@/components/Styled/GiftList.vue";
@@ -60,7 +73,6 @@ import { CogIcon } from "@heroicons/vue/outline";
 export default defineComponent({
 	name: "List",
 	components: {
-		Button,
 		CogIcon,
 		DefaultLayout,
 		GiftGrid,

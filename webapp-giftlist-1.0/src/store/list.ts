@@ -123,6 +123,16 @@ export const list: Module<ListState, RootState> = {
                 }
             });
         },
+        async updateList() {
+            // TODO
+            return new Promise<void>((resolve, reject) => {
+                try {
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            })
+        }
     },
 };
 
