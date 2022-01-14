@@ -36,7 +36,10 @@
 						static
 						class="px-4 pt-4 pb-2 text-sm text-black"
 					>
-						<NewListStep1 :values="test" />
+						<NewListStep1
+							:values="generalInformation"
+							@change="handleGeneralInformationChange"
+						/>
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
@@ -71,14 +74,14 @@
 					enter-to-class="transform opacity-100"
 				>
 					<DisclosurePanel v-show="openShare" static class="px-4 pt-4 pb-2 text-sm text-black">
-						<NewListStep2 :values="test2" />
+						<NewListStep2 :values="sharingOptions" @change="handleSharingOptionsChange" />
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
 
 			<div class="flex justify-end gap-4 mt-4">
-				<Button btnStyle="danger">Retour</Button>
-				<Button btnStyle="primary">Enregistrer les changements</Button>
+				<Button btnStyle="danger" @click="cancel">Retour</Button>
+				<Button btnStyle="primary" @click="saveChanges">Enregistrer les changements</Button>
 			</div>
 		</div>
 	</DefaultLayout>
@@ -93,6 +96,8 @@ import NewListStep1 from "@/components/NewList/NewListStep1.vue";
 import NewListStep2 from "@/components/NewList/NewListStep2.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/solid";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "ListSettings",
@@ -107,12 +112,19 @@ export default defineComponent({
 		NewListStep2,
 	},
 	setup() {
-		let date = new Date();
-		date.setDate(date.getDate() + 1);
-		const offset = date.getTimezoneOffset();
-		date = new Date(date.getTime() - offset * 60 * 1000);
+		const router = useRouter();
+		const { dispatch } = useStore();
 
-		const test = ref({
+		const initializeDate = () => {
+			let date = new Date();
+			date.setDate(date.getDate() + 1);
+			const offset = date.getTimezoneOffset();
+			date = new Date(date.getTime() - offset * 60 * 1000);
+			return date;
+		};
+
+		// TODO: Fill with list data
+		const generalInformation = ref({
 			title: {
 				label: "Titre",
 				value: "",
@@ -132,13 +144,14 @@ export default defineComponent({
 			activateTermDate: false,
 			termDate: {
 				label: "Date d'échéance de votre liste",
-				value: date.toISOString().split("T")[0],
+				value: initializeDate().toISOString().split("T")[0],
 				helperText: "La date avant laquelle on doit vous offrir vos cadeaux",
 				errorMessage: "",
 			},
 		});
 
-		const test2 = ref({
+		// TODO: Fill with list data
+		const sharingOptions = ref({
 			shared: false,
 			friends: [
 				{ id: 1, name: "Arnold A." },
@@ -160,18 +173,53 @@ export default defineComponent({
 		const handleOpen = (tab: string) => {
 			if (tab === "general") {
 				openGeneral.value = !openGeneral.value;
-				// setTimeout(() => {
-				// openShare.value = !openShare.value;
-				// }, 0);
-			} else {
+			} else if (tab === "share") {
 				openShare.value = !openShare.value;
-				// setTimeout(() => {
-				// openGeneral.value = !openGeneral.value;
-				// }, 0);
 			}
 		};
 
-		return { test, test2, openGeneral, openShare, handleOpen };
+		const handleGeneralInformationChange = (values: any) => {
+			generalInformation.value = values;
+		};
+
+		const handleSharingOptionsChange = (values: any) => {
+			sharingOptions.value = values;
+		};
+
+		const cancel = () => {
+			router.go(-1);
+		};
+
+		const saveChanges = () => {
+			if (validateListData()) {
+				dispatch("updateList")
+					.then(() => {
+						router.go(-1);
+						// Update data if necessary
+					})
+					.catch((err) => {
+						// TODO
+					});
+			}
+		};
+
+		const validateListData = (): boolean => {
+			// TODO
+			let validate = true;
+			return validate;
+		};
+
+		return {
+			generalInformation,
+			handleGeneralInformationChange,
+			handleSharingOptionsChange,
+			sharingOptions,
+			openGeneral,
+			openShare,
+			handleOpen,
+			cancel,
+			saveChanges,
+		};
 	},
 });
 </script>

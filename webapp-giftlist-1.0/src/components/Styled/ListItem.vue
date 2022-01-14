@@ -32,9 +32,9 @@
 		<button
 			v-show="shared"
 			@click.stop="$emit('details', list)"
-			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
+			class="mx-2 text-indigo-600 font-medium hover:text-indigo-900"
 		>
-			<span class="flex items-center">
+			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<InformationCircleIcon class="h-4 w-4 mr-2" />
 				Détails
 			</span>
@@ -42,9 +42,9 @@
 		<button
 			v-show="!shared"
 			@click.stop="router.push(`/app/lists/${list.id}/settings`)"
-			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
+			class="mx-2 text-indigo-600 font-medium hover:text-indigo-900"
 		>
-			<span class="flex items-center">
+			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<CogIcon class="h-4 w-4 mr-2" />
 				Options
 			</span>
@@ -52,9 +52,9 @@
 		<button
 			v-show="!shared"
 			@click.stop="$emit('delete', list)"
-			class="ml-4 text-red-600 font-medium hover:text-red-900"
+			class="ml-2 text-red-600 font-medium hover:text-red-900"
 		>
-			<span class="flex items-center">
+			<span class="flex items-center px-2 py-1 hover:bg-red-100 rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />
 				Supprimer
 			</span>
