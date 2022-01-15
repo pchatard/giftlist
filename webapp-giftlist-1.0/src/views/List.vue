@@ -1,12 +1,6 @@
 <template>
 	<DefaultLayout title="Ma liste">
 		<template v-slot:commands>
-			<!-- <Button @click="router.push(`/app/lists/${list.id}/settings`)" class="mr-4">
-				<template v-slot:icon>
-					<CogIcon class="h-4 w-4 mr-2" />
-				</template>
-				Paramètres
-			</Button> -->
 			<span
 				class="
 					flex

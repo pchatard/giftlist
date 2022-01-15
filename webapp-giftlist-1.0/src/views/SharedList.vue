@@ -17,12 +17,7 @@
 				class="cursor-pointer hover:bg-gray-50"
 				@click="handleDetailsModal(gift)"
 			>
-				<GiftList
-					:gift="gift"
-					:shared="true"
-					@book="handleBookModal"
-					@details="handleDetailsModal"
-				/>
+				<GiftList :gift="gift" :shared="true" @book="handleBookModal" />
 			</tr>
 		</Table>
 
@@ -33,7 +28,9 @@
 			:cancelText="modal.cancelText"
 			@close="modal.showModal = false"
 			@confirm="modal.confirm"
-		></Modal>
+		>
+			<GiftDetails v-if="selectedGift" :gift="selectedGift" />
+		</Modal>
 	</DefaultLayout>
 </template>
 
@@ -48,6 +45,7 @@ import Modal from "@/components/Styled/Modal.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import GiftGrid from "@/components/Styled/GiftGrid.vue";
 import GiftList from "@/components/Styled/GiftList.vue";
+import GiftDetails from "@/components/Gift/GiftDetails.vue";
 import ListGridToggleButton from "@/components/Styled/ListGridToggleButton.vue";
 import Table from "@/components/Styled/Table.vue";
 
@@ -55,6 +53,7 @@ export default defineComponent({
 	name: "SharedList",
 	components: {
 		DefaultLayout,
+		GiftDetails,
 		GiftGrid,
 		GiftList,
 		ListGridToggleButton,
@@ -82,6 +81,8 @@ export default defineComponent({
 		]);
 		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
 
+		const selectedGift = ref();
+
 		const toggleDisplayMode = () => {
 			console.log("Grid mode is disabled for now");
 			// dispatch("toggleListDisplayMode");
@@ -99,7 +100,7 @@ export default defineComponent({
 			modal.value.cancelText = "Annuler";
 			modal.value.showModal = true;
 			modal.value.confirm = handleBookConfirm;
-			// modal.value.gift = gift;
+			selectedGift.value = null;
 		};
 
 		const handleBookConfirm = () => {
@@ -108,16 +109,16 @@ export default defineComponent({
 		};
 
 		const handleDetailsModal = (gift: Gift) => {
-			modal.value.title = "Détails de " + gift.title;
+			modal.value.title = gift.title;
 			modal.value.confirmText = "Réserver";
 			modal.value.cancelText = "Fermer";
 			modal.value.showModal = true;
 			modal.value.confirm = handleDetailsConfirm;
-			// modal.value.gift = gift;
+			selectedGift.value = gift;
 		};
 
 		const handleDetailsConfirm = () => {
-			handleBookModal(gifts.value[0]);
+			handleBookModal(selectedGift.value);
 		};
 
 		const modal = ref({
@@ -144,6 +145,7 @@ export default defineComponent({
 			router,
 			tableHeaders,
 			toggleDisplayMode,
+			selectedGift,
 		};
 	},
 });

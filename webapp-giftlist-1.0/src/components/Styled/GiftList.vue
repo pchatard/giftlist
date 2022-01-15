@@ -41,51 +41,36 @@
 	<TableData>
 		<div class="text-sm text-gray-500">13.00€</div>
 	</TableData>
-	<td v-if="shared" class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-		<button
-			@click.stop="openGiftDetails"
-			class="ml-4 text-indigo-600 font-medium hover:text-indigo-900"
-		>
-			<span class="flex items-center">
-				<InformationCircleIcon class="h-4 w-4 mr-2" />
-				Détails
-			</span>
-		</button>
+	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 		<button
 			@click.stop="openLinkInNewTab"
 			class="ml-4 text-indigo-600 font-medium hover:text-indigo-900"
 		>
-			<span class="flex items-center">
+			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<ExternalLinkIcon class="h-4 w-4 mr-2" />
 				Ouvrir
 			</span>
 		</button>
 		<button
+			v-if="shared"
 			@click.stop="openBookGiftModal"
 			class="ml-4 font-medium"
 			:class="!gift.isBooked ? 'text-red-600 hover:text-red-900' : 'text-gray-400 line-through'"
 		>
-			<span class="flex items-center">
+			<span
+				class="flex items-center px-2 py-1 rounded-md"
+				:class="!gift.isBooked ? 'hover:bg-red-100' : 'hover:bg-gray-100'"
+			>
 				<TicketIcon class="h-4 w-4 mr-2" />
 				Réserver
 			</span>
 		</button>
-	</td>
-	<td v-else class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 		<button
-			@click.stop="openLinkInNewTab"
-			class="mx-4 text-indigo-600 font-medium hover:text-indigo-900"
-		>
-			<span class="flex items-center">
-				<ExternalLinkIcon class="h-4 w-4 mr-2" />
-				Ouvrir
-			</span>
-		</button>
-		<button
+			v-else
 			@click.stop="openDeleteGiftModal"
 			class="ml-4 items-center text-red-600 font-medium hover:text-red-900"
 		>
-			<span class="flex items-center">
+			<span class="flex items-center px-2 py-1 hover:bg-red-100 rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />
 				Supprimer
 			</span>
@@ -103,7 +88,6 @@ import TableData from "@/components/Styled/TableData.vue";
 import {
 	ExternalLinkIcon,
 	HeartIcon as HeartIconOutline,
-	InformationCircleIcon,
 	ShoppingCartIcon,
 	TicketIcon,
 	TrashIcon,
@@ -115,7 +99,6 @@ export default defineComponent({
 	name: "GiftList",
 	components: {
 		ExternalLinkIcon,
-		InformationCircleIcon,
 		HeartIcon,
 		HeartIconOutline,
 		ShoppingCartIcon,
@@ -151,10 +134,6 @@ export default defineComponent({
 			emit("delete", gift.value);
 		};
 
-		const openGiftDetails = () => {
-			emit("details", gift.value);
-		};
-
 		const openLinkInNewTab = () => {
 			const link = "https://www.google.com";
 			window.open(link, "_blank");
@@ -170,7 +149,6 @@ export default defineComponent({
 		return {
 			openBookGiftModal,
 			openDeleteGiftModal,
-			openGiftDetails,
 			openLinkInNewTab,
 			random,
 			toggleFavoriteStatus,
