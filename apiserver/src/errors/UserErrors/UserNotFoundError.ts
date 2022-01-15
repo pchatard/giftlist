@@ -1,8 +1,8 @@
-import APIError from "../APIError";
+import NotFoundError from "../NotFoundError";
 
-class UserNotFoundError extends APIError {
+class UserNotFoundError extends NotFoundError {
 	constructor() {
-		super("UserNotFoundError", "User is not found in database.");
+		super("User");
 	}
 }
 

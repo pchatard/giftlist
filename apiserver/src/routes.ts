@@ -19,6 +19,33 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"string","validators":{"pattern":{"value":"[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ListIdDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"ref":"UUID"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "email": {
+        "dataType": "refAlias",
+        "type": {"dataType":"string","validators":{"pattern":{"value":"(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"}}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "User": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"ref":"UUID"},
+            "email": {"ref":"email","default":""},
+            "displayName": {"dataType":"string","default":""},
+            "friends": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
+            "lists": {"dataType":"array","array":{"dataType":"refObject","ref":"List"}},
+            "friendLists": {"dataType":"array","array":{"dataType":"refObject","ref":"List"}},
+            "createdDate": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Boolean": {
         "dataType": "refObject",
         "properties": {
@@ -26,9 +53,53 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "List": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"ref":"UUID"},
+            "title": {"dataType":"string","default":""},
+            "closureDate": {"dataType":"datetime"},
+            "owners": {"dataType":"array","array":{"dataType":"refObject","ref":"User"},"required":true},
+            "isShared": {"ref":"Boolean","default":false},
+            "sharingCode": {"ref":"UUID"},
+            "grantedUsers": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
+            "createdDate": {"dataType":"datetime"},
+            "updatedDate": {"dataType":"datetime"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateListDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "title": {"dataType":"string","default":""},
+            "closureDate": {"dataType":"datetime"},
+            "owners": {"dataType":"array","array":{"dataType":"refObject","ref":"User"},"required":true},
+            "isShared": {"ref":"Boolean","default":false},
+            "grantedUsers": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_ListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string","default":""},"isShared":{"ref":"Boolean","default":false},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string","default":""},"closureDate":{"dataType":"datetime"},"isShared":{"ref":"Boolean","default":false}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ListDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "sharingCode": {"ref":"UUID"},
+            "title": {"dataType":"string","default":""},
+            "closureDate": {"dataType":"datetime"},
+            "isShared": {"ref":"Boolean","default":false},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SelectKindList": {
+        "dataType": "refEnum",
+        "enums": ["all","owned","granted"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserIdDTO": {
@@ -47,11 +118,6 @@ const models: TsoaRoute.Models = {
             "stack": {"dataType":"string"},
         },
         "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "email": {
-        "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"pattern":{"value":"(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateUserDTO": {
@@ -102,8 +168,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_create(request: any, response: any, next: any) {
             const args = {
-                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
-                    _body: {"in":"body","name":"_body","required":true,"dataType":"any"},
+                    body: {"in":"body","name":"body","required":true,"ref":"CreateListDTO"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -122,13 +187,14 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/lists/:_listId',
+        app.put('/lists/:listId',
             authenticateMiddleware([{"auth0":[]}]),
 
             function ListController_edit(request: any, response: any, next: any) {
             const args = {
-                    _listId: {"in":"path","name":"_listId","required":true,"ref":"UUID"},
-                    _body: {"in":"body","name":"_body","required":true,"ref":"Partial_ListDTO_"},
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_ListDTO_"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -147,12 +213,13 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/lists/:_listId',
+        app.delete('/lists/:listId',
             authenticateMiddleware([{"auth0":[]}]),
 
             function ListController_delete(request: any, response: any, next: any) {
             const args = {
-                    _listId: {"in":"path","name":"_listId","required":true,"ref":"UUID"},
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -176,6 +243,8 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_getAll(request: any, response: any, next: any) {
             const args = {
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+                    select: {"in":"query","name":"select","required":true,"ref":"SelectKindList"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -194,12 +263,13 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/lists/:_listId',
+        app.get('/lists/:listId',
             authenticateMiddleware([{"auth0":[]}]),
 
             function ListController_get(request: any, response: any, next: any) {
             const args = {
-                    _listId: {"in":"path","name":"_listId","required":true,"ref":"UUID"},
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -218,12 +288,13 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/lists/:_listId/share',
+        app.put('/lists/:listId/share',
             authenticateMiddleware([{"auth0":[]}]),
 
             function ListController_share(request: any, response: any, next: any) {
             const args = {
-                    _listId: {"in":"path","name":"_listId","required":true,"ref":"UUID"},
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -242,12 +313,13 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/lists/:_listId/unshare',
+        app.put('/lists/:listId/unshare',
             authenticateMiddleware([{"auth0":[]}]),
 
             function ListController_private(request: any, response: any, next: any) {
             const args = {
-                    _listId: {"in":"path","name":"_listId","required":true,"ref":"UUID"},
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -266,12 +338,13 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/lists/invite/:_sharingCode',
+        app.get('/lists/invite/:sharingCode',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function ListController_getFromSharingCode(request: any, response: any, next: any) {
+            function ListController_accessFromSharingCode(request: any, response: any, next: any) {
             const args = {
-                    _sharingCode: {"in":"path","name":"_sharingCode","required":true,"ref":"UUID"},
+                    sharingCode: {"in":"path","name":"sharingCode","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -283,7 +356,7 @@ export function RegisterRoutes(app: express.Router) {
                 const controller = new ListController();
 
 
-              const promise = controller.getFromSharingCode.apply(controller, validatedArgs as any);
+              const promise = controller.accessFromSharingCode.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);

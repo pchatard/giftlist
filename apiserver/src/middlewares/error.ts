@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ValidateError } from "tsoa";
+import OwnershipError from "../errors/UserErrors/OwnershipError";
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
 	if (err instanceof ValidateError) {
@@ -7,6 +8,10 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
 		res.json({
 			message: "Validation Failed",
 			details: err?.fields,
+		});
+	} else if (err instanceof OwnershipError) {
+		res.status(401).send({
+			message: "Unauthorized",
 		});
 	} else {
 		res.status(500);

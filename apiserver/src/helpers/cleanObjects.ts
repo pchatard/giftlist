@@ -1,7 +1,7 @@
 /**
  * Remove blank property from object.
  * TODO: Do we really need it ? With Partial<T> add blank property in our case
- * @param obj the object to clean
+ * @param {T} obj the object to clean
  * @returns the cleaned object
  */
 export function cleanObject<T>(obj: T): T {

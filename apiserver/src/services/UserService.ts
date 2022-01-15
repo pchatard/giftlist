@@ -1,6 +1,8 @@
 import { UUID } from "../types/UUID";
 import User from "./../models/User";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
+import List from "../models/List";
+import { SelectKindList } from './../types/SelectKindList';
 
 class UserService {
 	/**
@@ -19,8 +21,8 @@ class UserService {
 
 	/**
 	 * Edit user properties.
-	 * @param userId id of user to update, uuid v4 formatted
-	 * @param userNewProps new props of user to apply
+	 * @param {UUID} userId id of user to update, uuid v4 formatted
+	 * @param {Partial<User>} userNewProps new props of user to apply
 	 * @returns {Promise<UpdateResult>}
 	 */
 	static async edit(userId: UUID, userNewProps: Partial<User>): Promise<UpdateResult> {
@@ -55,6 +57,30 @@ class UserService {
 	static async get(userId: UUID): Promise<User | undefined> {
 		const userRepository: Repository<User> = getRepository(User);
 		return await userRepository.findOne(userId);
+	}
+
+	/**
+	 * 
+	 * @param {UUID} userId 
+	 * @param {} select 
+	 */
+	static async getUserLists(userId: UUID, select: SelectKindList): Promise<List[]> {
+		const userRepository: Repository<User> = getRepository(User);
+		const user: User | undefined = await userRepository.findOne(userId);
+		let res: List[] = [];
+		switch (select) {
+			case SelectKindList.OWNED:
+				res = user?.lists || [];
+				break;
+			case SelectKindList.GRANTED:
+				res = user?.friendLists || [];
+				break;
+			case SelectKindList.ALL:
+			default:
+				res = (user?.lists || []).concat(user?.friendLists || [])
+				break;
+		}
+		return res;
 	}
 }
 
