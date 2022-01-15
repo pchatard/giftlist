@@ -7,7 +7,7 @@
 - [ ] Profil : Modifier mdp, RGPD
 - [ ] Mes amis
 - [ ] Détails d'un cadeau
-- [ ] Modifier un cadeau
+- [x] Modifier un cadeau
 - [ ] (Synthèse de liste)
 - [ ] (Import des cadeaux)
 
@@ -29,7 +29,7 @@
 - [ ] Compléter les formulaires avec des slots pour ajouter du texte
 
 ## Pages existantes
-- [ ] Nouveau cadeau : Bouton "Valider et créer un nouveau"
+- [x] Nouveau cadeau : Bouton "Valider et créer un nouveau"
 - [ ] Préférences : Préférences de réservation (Oui/Non, Nom choisi, Thème)
 
 

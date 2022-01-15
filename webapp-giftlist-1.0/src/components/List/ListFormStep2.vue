@@ -71,7 +71,7 @@ import FormSelect from "@/components/Inputs/FormSelect.vue";
 import PersonTag from "@/components/Styled/PersonTag.vue";
 
 export default defineComponent({
-	name: "NewListStep2",
+	name: "ListFormStep2",
 	props: {
 		values: {
 			type: Object,

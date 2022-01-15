@@ -53,6 +53,19 @@ export const gift: Module<GiftState, RootState> = {
                 }
             });
         },
+        async updateGift() {
+            return new Promise<void>((resolve, reject) => {
+                try {
+                    // Create on backend
+
+                    // Add to state
+                    // commit("UPDATE_GIFT", gift);
+                    resolve();
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        },
         async favoritizeGift() {
             console.debug("gift.ts - favoritizeGift");
         },
