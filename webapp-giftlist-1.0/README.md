@@ -6,7 +6,7 @@
 - [ ] Mentions Légales, etc
 - [ ] Profil : Modifier mdp, RGPD
 - [ ] Mes amis
-- [ ] Détails d'un cadeau
+- [x] Détails d'un cadeau
 - [x] Modifier un cadeau
 - [ ] (Synthèse de liste)
 - [ ] (Import des cadeaux)
