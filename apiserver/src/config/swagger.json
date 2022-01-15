@@ -589,7 +589,7 @@
 			}
 		},
 		"/lists/invite/{sharingCode}": {
-			"get": {
+			"put": {
 				"operationId": "AccessFromSharingCode",
 				"responses": {
 					"204": {
