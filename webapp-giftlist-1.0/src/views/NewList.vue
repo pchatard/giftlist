@@ -59,10 +59,9 @@ import { useRouter } from "vue-router";
 
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
-import NewListStep1 from "@/components/NewList/NewListStep1.vue";
-import NewListStep2 from "@/components/NewList/NewListStep2.vue";
+import ListFormStep1 from "@/components/List/ListFormStep1.vue";
+import ListFormStep2 from "@/components/List/ListFormStep2.vue";
 import Subtitle from "@/components/Styled/Subtitle.vue";
-// import NewListStep3 from "@/components/NewList/NewListStep3.vue";
 import { XIcon, CheckIcon, ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/outline";
 import { useStore } from "vuex";
 
@@ -72,8 +71,8 @@ export default defineComponent({
 		Button,
 		Subtitle,
 		DefaultLayout,
-		NewListStep1,
-		NewListStep2,
+		ListFormStep1,
+		ListFormStep2,
 		XIcon,
 		CheckIcon,
 		ArrowLeftIcon,
@@ -88,11 +87,11 @@ export default defineComponent({
 		const currentComponent = computed(() => {
 			switch (step.value) {
 				case 1:
-					return "NewListStep1";
+					return "ListFormStep1";
 				case 2:
-					return "NewListStep2";
+					return "ListFormStep2";
 				default:
-					return "NewListStep1";
+					return "ListFormStep1";
 			}
 		});
 

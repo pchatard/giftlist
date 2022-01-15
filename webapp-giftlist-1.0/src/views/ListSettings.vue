@@ -36,7 +36,7 @@
 						static
 						class="px-4 pt-4 pb-2 text-sm text-black"
 					>
-						<NewListStep1
+						<ListFormStep1
 							:values="generalInformation"
 							@change="handleGeneralInformationChange"
 						/>
@@ -74,7 +74,7 @@
 					enter-to-class="transform opacity-100"
 				>
 					<DisclosurePanel v-show="openShare" static class="px-4 pt-4 pb-2 text-sm text-black">
-						<NewListStep2 :values="sharingOptions" @change="handleSharingOptionsChange" />
+						<ListFormStep2 :values="sharingOptions" @change="handleSharingOptionsChange" />
 					</DisclosurePanel>
 				</transition>
 			</Disclosure>
@@ -92,8 +92,8 @@ import { defineComponent, ref } from "vue";
 
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
-import NewListStep1 from "@/components/NewList/NewListStep1.vue";
-import NewListStep2 from "@/components/NewList/NewListStep2.vue";
+import ListFormStep1 from "@/components/List/ListFormStep1.vue";
+import ListFormStep2 from "@/components/List/ListFormStep2.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/solid";
 import { useRouter } from "vue-router";
@@ -108,8 +108,8 @@ export default defineComponent({
 		Disclosure,
 		DisclosureButton,
 		DisclosurePanel,
-		NewListStep1,
-		NewListStep2,
+		ListFormStep1,
+		ListFormStep2,
 	},
 	setup() {
 		const router = useRouter();

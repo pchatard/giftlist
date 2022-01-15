@@ -59,7 +59,7 @@ import FormDatePicker from "@/components/Inputs/FormDatePicker.vue";
 import FormInputToggle from "@/components/Inputs/FormInputToggle.vue";
 
 export default defineComponent({
-	name: "NewListStep1",
+	name: "ListFormStep1",
 	components: {
 		FormInputText,
 		FormDatePicker,
