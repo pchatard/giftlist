@@ -53,7 +53,9 @@
 						>
 					</div>
 					<div class="pl-1">12 amis</div>
-					<router-link to="/" class="ml-1 mt-4 text-indigo-600">Gérer mes amis</router-link>
+					<router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600"
+						>Gérer mes amis</router-link
+					>
 				</div>
 				<div class="w-1/4">
 					<div class="flex items-center justify-between mb-4">
@@ -84,9 +86,9 @@
 					<div class="pb-5">
 						<Subtitle>Modifier mon adresse email</Subtitle>
 						<p class="mt-2 mb-4">
-							Votre adresse email actuelle est {{ auth.user.email }}. Vous pouvez la modifier
-							en cliquant sur le bouton ci-dessous qui vous redirigera vers la page de notre
-							gestionnaire.
+							Votre adresse email actuelle est <strong>{{ auth.user.email }}</strong
+							>. Vous pouvez la modifier en cliquant sur le bouton ci-dessous qui vous
+							redirigera vers la page de notre gestionnaire.
 						</p>
 						<Button btnStyle="secondary" class="w-1/2" @click="changeEmail"
 							>Modifier mon email</Button

@@ -67,6 +67,18 @@
 									active ? 'bg-gray-50 text-indigo-600' : 'text-black',
 									'group flex rounded-md items-center w-full px-4 py-3 text-sm',
 								]"
+								@click="redirectToFriends"
+							>
+								<UsersIcon class="w-5 h-5 mr-2" />
+								Mes amis
+							</button>
+						</MenuItem>
+						<MenuItem v-slot="{ active }">
+							<button
+								:class="[
+									active ? 'bg-gray-50 text-indigo-600' : 'text-black',
+									'group flex rounded-md items-center w-full px-4 py-3 text-sm',
+								]"
 								@click="redirectToSettings"
 							>
 								<CogIcon class="w-5 h-5 mr-2" />
@@ -94,7 +106,7 @@
 
 <script lang="ts">
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
-import { CogIcon, UserCircleIcon, LogoutIcon, UserIcon } from "@heroicons/vue/outline";
+import { CogIcon, UserCircleIcon, LogoutIcon, UserIcon, UsersIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { useRouter } from "vue-router";
 import { ref } from "@vue/reactivity";
@@ -112,6 +124,7 @@ export default {
 		MenuItem,
 		UserCircleIcon,
 		UserIcon,
+		UsersIcon,
 	},
 	setup() {
 		const router = useRouter();
@@ -121,6 +134,10 @@ export default {
 			router.push("/app/profile");
 		};
 
+		const redirectToFriends = () => {
+			router.push("/app/profile/friends");
+		};
+
 		const redirectToSettings = () => {
 			router.push("/app/settings");
 		};
@@ -128,6 +145,7 @@ export default {
 		return {
 			auth,
 			redirectToProfile,
+			redirectToFriends,
 			redirectToSettings,
 		};
 	},

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
 import List from "../views/List.vue";
 import Profile from "../views/Profile.vue";
+import Friends from "../views/Friends.vue";
 import Settings from "../views/Settings.vue";
 import SharedList from "../views/SharedList.vue";
 import Lists from "../views/Lists.vue";
@@ -37,6 +38,12 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/app/profile",
 		name: "Mon compte",
 		component: Profile,
+		beforeEnter: Auth0.routeGuard,
+	},
+	{
+		path: "/app/profile/friends",
+		name: "Mes amis",
+		component: Friends,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
