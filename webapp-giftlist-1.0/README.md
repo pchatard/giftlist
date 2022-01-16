@@ -5,7 +5,7 @@
 - [ ] Homepage
 - [ ] Mentions Légales, etc
 - [x] Profil
-- [ ] Mes amis
+- [x] Mes amis
 - [x] Détails d'un cadeau
 - [x] Modifier un cadeau
 - [ ] (Synthèse de liste)
@@ -54,7 +54,7 @@
 ### v1
 - [ ] Ajouter des tris par colonnes sur les listes
 - [ ] Nouvelle page : les cadeaux que j'ai réservé
-- [ ] Ajouter des amis
+- [x] Ajouter des amis
 
 ### Plus tard
 - [ ] Récupérer le prix à partir d'un lien sur les cadeaux

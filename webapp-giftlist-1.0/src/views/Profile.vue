@@ -86,9 +86,9 @@
 					<div class="pb-5">
 						<Subtitle>Modifier mon adresse email</Subtitle>
 						<p class="mt-2 mb-4">
-							Votre adresse email actuelle est {{ auth.user.email }}. Vous pouvez la modifier
-							en cliquant sur le bouton ci-dessous qui vous redirigera vers la page de notre
-							gestionnaire.
+							Votre adresse email actuelle est <strong>{{ auth.user.email }}</strong
+							>. Vous pouvez la modifier en cliquant sur le bouton ci-dessous qui vous
+							redirigera vers la page de notre gestionnaire.
 						</p>
 						<Button btnStyle="secondary" class="w-1/2" @click="changeEmail"
 							>Modifier mon email</Button
