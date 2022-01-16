@@ -1,4 +1,4 @@
 export interface GiftCategory {
-    id: string;
-    name: string;
+	id: string;
+	name: string;
 }
