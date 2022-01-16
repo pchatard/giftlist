@@ -53,7 +53,9 @@
 						>
 					</div>
 					<div class="pl-1">12 amis</div>
-					<router-link to="/" class="ml-1 mt-4 text-indigo-600">Gérer mes amis</router-link>
+					<router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600"
+						>Gérer mes amis</router-link
+					>
 				</div>
 				<div class="w-1/4">
 					<div class="flex items-center justify-between mb-4">
