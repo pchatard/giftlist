@@ -1,83 +1,162 @@
 <template>
 	<DefaultLayout title="Mon compte">
-		<div>
-			<Subtitle>Informations personnelles</Subtitle>
-			<img :src="auth.user.picture" alt="Profile Icon" class="rounded-full" />
-			<p><strong>Nom</strong> : {{ auth.user.nickname }}</p>
-			<p><strong>Email</strong> : {{ auth.user.email }}</p>
-			<p><strong>Metadata</strong>: {{ user }}</p>
+		<div class="flex flex-col my-4">
+			<div class="flex items-center justify-between border rounded-lg px-4 my-4">
+				<img :src="auth.user.picture" alt="Profile Image" class="rounded-full m-4" />
+
+				<div class="mx-4 w-1/4">
+					<Subtitle>{{ auth.user.nickname }}</Subtitle>
+					<div>Email : {{ auth.user.email }}</div>
+					<button
+						v-if="!auth.user.email_verified"
+						class="text-indigo-600"
+						@click="verifyEmail"
+					>
+						Vérifier mon email
+					</button>
+				</div>
+				<div class="w-1/4">
+					<div class="flex">
+						<span
+							v-for="(friend, i) in friends"
+							:key="friend.id"
+							class="
+								w-12
+								h-12
+								bg-gray-300
+								rounded-full
+								grid
+								place-items-center
+								font-bold
+								text-sm text-black
+								border border-white
+								shadow-sm
+							"
+							:class="i > 0 ? '-ml-2' : null"
+							>{{ friend.name }}</span
+						>
+						<span
+							class="
+								w-12
+								h-12
+								bg-gray-300
+								rounded-full
+								grid
+								place-items-center
+								font-bold
+								text-sm text-black
+								border border-white
+								shadow-sm
+								-ml-2
+							"
+							>8+</span
+						>
+					</div>
+					<div class="pl-1">12 amis</div>
+					<router-link to="/" class="ml-1 mt-4 text-indigo-600">Gérer mes amis</router-link>
+				</div>
+				<div class="w-1/4">
+					<div class="flex items-center justify-between mb-4">
+						<div class="flex flex-col items-center">
+							<span>
+								<strong> 3 </strong>
+							</span>
+							<span class="text-center leading-tight">Listes créées</span>
+						</div>
+						<div class="flex flex-col items-center">
+							<span>
+								<strong> 12 </strong>
+							</span>
+							<span class="text-center leading-tight">Cadeaux créés</span>
+						</div>
+						<div class="flex flex-col items-center">
+							<span>
+								<strong> 5 </strong>
+							</span>
+							<span class="text-center leading-tight">Cadeaux offerts</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="flex items-stretch divide-x">
+				<div class="flex-1 p-8">
+					<div class="pb-5">
+						<Subtitle>Modifier mon adresse email</Subtitle>
+						<p class="mt-2 mb-4">
+							Votre adresse email actuelle est {{ auth.user.email }}. Vous pouvez la modifier
+							en cliquant sur le bouton ci-dessous qui vous redirigera vers la page de notre
+							gestionnaire.
+						</p>
+						<Button btnStyle="secondary" class="w-1/2" @click="changeEmail"
+							>Modifier mon email</Button
+						>
+					</div>
+					<div class="pt-5">
+						<Subtitle>Modifier mon mot de passe</Subtitle>
+						<p class="mt-2 mb-4">
+							Vous pouvez modifier votre mot de passe en cliquant sur le bouton ci-dessous.
+							Vous serez redirigé vers une page de notre gestionnaire.
+						</p>
+						<Button btnStyle="secondary" class="w-1/2" @click="changePassword"
+							>Modifier mon mot de passe</Button
+						>
+					</div>
+				</div>
+				<div class="flex-1 flex flex-col p-8">
+					<Subtitle>Télécharger mes données</Subtitle>
+					<p class="mt-2 mb-4">
+						Dans le cadre de la législation RGPD blablabla, vous pouvez télécharger l'ensemble
+						des données vous concernant dont Giftlist dispose.
+					</p>
+					<Button btnStyle="secondary" class="w-1/2" @click="downloadData"
+						>Télécharger mes données</Button
+					>
+				</div>
+			</div>
 		</div>
-		{{ testMgmtToken }}
-		<button @click="testFunction">Call Mgmt API</button>
 	</DefaultLayout>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, ref } from "vue";
+import { defineComponent, inject, ref } from "vue";
+
+import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Subtitle from "@/components/Styled/Subtitle.vue";
 
 export default defineComponent({
 	name: "Profile",
-	components: { DefaultLayout, Subtitle },
+	components: { Button, DefaultLayout, Subtitle },
 	setup() {
 		const auth = ref(inject("Auth") as any);
-		const user = ref();
+		const friends = [
+			{ id: 0, name: "ND" },
+			{ id: 1, name: "ML" },
+			{ id: 2, name: "PC" },
+			{ id: 3, name: "ML" },
+		];
 
-		const testToken = ref("");
-		let testMgmtToken = ref();
-
-		const token = process.env.VUE_APP_AUTH0_MANAGEMENT_API_TOKEN;
-
-		onMounted(async () => {
-			testToken.value = await auth.value.getTokenSilently();
-			fetch(
-				"https://giftlist-app.eu.auth0.com/api/v2/users/" +
-					auth.value.user.sub +
-					"?fields=user_metadata",
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			)
-				.then((response) => {
-					return response.json();
-				})
-				.then((data) => {
-					user.value = data;
-				});
-		});
-
-		const testFunction = async () => {
-			const newMetadata = {
-				user_metadata: {
-					test: "testModif",
-				},
-			};
-			// console.log(auth.value.user.user_id);
-			fetch("https://giftlist-app.eu.auth0.com/api/v2/users/" + auth.value.user.sub, {
-				method: "PATCH",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"content-type": "application/json",
-				},
-				body: JSON.stringify(newMetadata),
-			})
-				.then((response) => {
-					return response.json();
-				})
-				.then((data) => {
-					testMgmtToken.value = data;
-				});
+		const verifyEmail = () => {
+			console.log("Profile.vue - verifyEmail");
+		};
+		const changeEmail = () => {
+			console.log("Profile.vue - changeEmail");
+		};
+		const changePassword = () => {
+			console.log("Profile.vue - changePassword");
+		};
+		const downloadData = () => {
+			console.log("Profile.vue - downloadData");
 		};
 
 		return {
 			auth,
-			testToken,
-			testMgmtToken,
-			testFunction,
-			user,
+			friends,
+			verifyEmail,
+			changeEmail,
+			changePassword,
+			downloadData,
 		};
 	},
 });
