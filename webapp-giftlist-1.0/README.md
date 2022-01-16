@@ -4,7 +4,7 @@
 
 - [ ] Homepage
 - [ ] Mentions Légales, etc
-- [ ] Profil : Modifier mdp, RGPD
+- [x] Profil
 - [ ] Mes amis
 - [x] Détails d'un cadeau
 - [x] Modifier un cadeau
