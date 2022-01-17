@@ -14,17 +14,12 @@ import {
 } from "tsoa";
 import UserService from "./../services/UserService";
 import User from "./../models/User";
-import { UUID } from "../types/UUID";
+import { UUID } from "./../types/UUID";
 import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
-import UserNotFoundError from "./../errors/UserErrors/UserNotFoundError";
-import { cleanObject } from "../helpers/cleanObjects";
-
-// TODO: Follow https://github.com/lukeautry/tsoa/issues/911 to remove this workaround
-type Expand<T> = { [K in keyof T]: T[K] };
-interface CreateUserDTO
-	extends Expand<Omit<User, "id" | "friends" | "lists" | "friendLists" | "createdDate">> {}
-interface UserIdDTO extends Expand<Pick<User, "id">> {}
-interface UserDTO extends Expand<Pick<User, "displayName" | "email">> {}
+import { cleanObject } from "./../helpers/cleanObjects";
+import { CreateUserDTO, UserDTO, UserIdDTO } from "./../dto/users";
+import { SelectKindList } from "../types/SelectKindList";
+import { ListController } from "./ListController";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("users")
@@ -70,6 +65,10 @@ export class UserController extends Controller {
 	@SuccessResponse(204)
 	@Delete("{userId}")
 	async delete(@Path() userId: UUID): Promise<void> {
+		const listController: ListController = new ListController();
+		(await UserService.getUserLists(userId, SelectKindList.ALL)).forEach(async (list) =>
+			listController.delete(list.id, userId)
+		);
 		await UserService.delete(userId);
 	}
 
@@ -93,15 +92,10 @@ export class UserController extends Controller {
 	 * @returns {Promise<UserDTO>} the required user
 	 */
 	@SuccessResponse(200)
-	@Response<UserNotFoundError>(400, "If userId is incorrect")
 	@Get("{userId}")
 	async get(@Path() userId: UUID): Promise<UserDTO> {
-		const user: User | undefined = await UserService.get(userId);
-		if (!user) {
-			throw new UserNotFoundError();
-		} else {
-			const { id, createdDate, ...rest } = user;
-			return rest;
-		}
+		const user: User = await UserService.get(userId);
+		const { id, createdDate, ...rest } = user;
+		return rest;
 	}
 }

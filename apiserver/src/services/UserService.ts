@@ -1,8 +1,8 @@
-import { UUID } from "../types/UUID";
+import { UUID } from "./../types/UUID";
 import User from "./../models/User";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
-import List from "../models/List";
-import { SelectKindList } from './../types/SelectKindList';
+import List from "./../models/List";
+import { SelectKindList } from "./../types/SelectKindList";
 
 class UserService {
 	/**
@@ -54,30 +54,42 @@ class UserService {
 	 * @param {string} userId id of user to get, uuid v4 formatted
 	 * @returns {Promise<User | undefined >} The user matching the userId parameter
 	 */
-	static async get(userId: UUID): Promise<User | undefined> {
+	static async get(userId: UUID): Promise<User> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.findOne(userId);
+		return await userRepository.findOneOrFail(userId);
 	}
 
 	/**
-	 * 
-	 * @param {UUID} userId 
-	 * @param {} select 
+	 * Return a user from Database.
+	 * @param {string} userId id of user to get, uuid v4 formatted
+	 * @returns {Promise<User | undefined >} The user matching the userId parameter
+	 */
+	static async getMany(userIds: UUID[]): Promise<User[]> {
+		const userRepository: Repository<User> = getRepository(User);
+		return await userRepository.findByIds(userIds);
+	}
+
+	/**
+	 *
+	 * @param {UUID} userId
+	 * @param {} select
 	 */
 	static async getUserLists(userId: UUID, select: SelectKindList): Promise<List[]> {
 		const userRepository: Repository<User> = getRepository(User);
-		const user: User | undefined = await userRepository.findOne(userId);
+		const user: User = await userRepository.findOneOrFail(userId, {
+			relations: ["lists", "friendLists"],
+		});
 		let res: List[] = [];
 		switch (select) {
 			case SelectKindList.OWNED:
-				res = user?.lists || [];
+				res = user.lists || [];
 				break;
 			case SelectKindList.GRANTED:
-				res = user?.friendLists || [];
+				res = user.friendLists || [];
 				break;
 			case SelectKindList.ALL:
 			default:
-				res = (user?.lists || []).concat(user?.friendLists || [])
+				res = (user.lists || []).concat(user.friendLists || []);
 				break;
 		}
 		return res;

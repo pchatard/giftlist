@@ -7,8 +7,8 @@ import {
 	PrimaryGeneratedColumn,
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
-import { UUID } from "../types/UUID";
-import { email } from "../types/email";
+import { UUID } from "./../types/UUID";
+import { email } from "./../types/email";
 import List from "./List";
 
 @Entity("User", { orderBy: { createdDate: "ASC" } })

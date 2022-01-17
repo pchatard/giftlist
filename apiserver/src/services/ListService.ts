@@ -1,7 +1,7 @@
-import List from "../models/List";
+import List from "./../models/List";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
-import { cleanObject } from "../helpers/cleanObjects";
-import { UUID } from "../types/UUID";
+import { cleanObject } from "./../helpers/cleanObjects";
+import { UUID } from "./../types/UUID";
 
 class ListService {
 	/**
@@ -28,6 +28,7 @@ class ListService {
 	/**
 	 * Delete a list from Database.
 	 * @param {UUID} listId id of list to delete, uuid v4 formatted
+	 * @param {UUID} listId id of user which ask, uuid v4 formatted
 	 * @returns {Promise<DeleteResult>}
 	 */
 	static async delete(listId: UUID): Promise<DeleteResult> {
@@ -36,35 +37,63 @@ class ListService {
 	}
 
 	/**
+	 * Forget a list for a user from Database.
+	 * @param {UUID} listId id of list to delete, uuid v4 formatted
+	 * @param {UUID} listId id of user which ask, uuid v4 formatted
+	 * @returns {Promise<DeleteResult>}
+	 */
+	static async forget(listId: UUID, userId: UUID): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId);
+		list.owners = list.owners.filter((owner) => owner.id !== userId);
+		return await listRepository.save(list);
+	}
+
+	/**
 	 * Return a list from Database.
 	 * @param {string} listId id of list to get, uuid v4 formatted
-	 * @returns {Promise<List | undefined >} The list matching the listId parameter
+	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
-	static async get(listId: UUID): Promise<List | undefined> {
+	static async get(listId: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
-		return await listRepository.findOne(listId);
+		return await listRepository.findOneOrFail(listId, { relations: ["owners"] });
 	}
 
 	/**
 	 * Get a list from its sharing code.
 	 * @param {UUID} sharingCode sharing code of list to get, uuid v4 formatted
-	 * @returns {Promise<List | undefined >} The list matching the listId parameter
+	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
-	static async getFromSharingCode(sharingCode: UUID): Promise<List | undefined> {
+	static async getFromSharingCode(sharingCode: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
-		return await listRepository.findOne({ where: { sharingCode: sharingCode } });
+		return await listRepository.findOneOrFail({
+			where: { sharingCode: sharingCode },
+			relations: ["owners"],
+		});
 	}
 
 	/**
-	 * Check if the list is owned by the user
-	 * @param {UUID} listId id of list to check, uuid v4 formatted
-	 * @param {UUID} userId id of owner, uuid v4 formatted
+	 * List the list owners
+	 * @param {UUID} listId id of list, uuid v4 formatted
 	 * @returns
 	 */
-	static async checkOwnership(listId: UUID, userId: UUID): Promise<boolean> {
+	static async listOwners(listId: UUID): Promise<UUID[]> {
 		const listRepository: Repository<List> = getRepository(List);
-		const list: List | undefined = await listRepository.findOne(listId);
-		return list?.owners.map((u) => u.id == userId).includes(true) || false;
+		const list: List = await listRepository.findOneOrFail(listId, { relations: ["owners"] });
+		return list.owners.map((u) => u.id);
+	}
+
+	/**
+	 * List the list granted users
+	 * @param {UUID} listId id of list, uuid v4 formatted
+	 * @returns
+	 */
+	static async listGrantedUsers(listId: UUID): Promise<UUID[]> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["grantedUsers"],
+		});
+		return list.grantedUsers?.map((u) => u.id) || [];
 	}
 }
 

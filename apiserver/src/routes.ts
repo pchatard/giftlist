@@ -27,63 +27,21 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "email": {
-        "dataType": "refAlias",
-        "type": {"dataType":"string","validators":{"pattern":{"value":"(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"}}},
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "User": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"ref":"UUID"},
-            "email": {"ref":"email","default":""},
-            "displayName": {"dataType":"string","default":""},
-            "friends": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
-            "lists": {"dataType":"array","array":{"dataType":"refObject","ref":"List"}},
-            "friendLists": {"dataType":"array","array":{"dataType":"refObject","ref":"List"}},
-            "createdDate": {"dataType":"datetime"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Boolean": {
-        "dataType": "refObject",
-        "properties": {
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "List": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"ref":"UUID"},
-            "title": {"dataType":"string","default":""},
-            "closureDate": {"dataType":"datetime"},
-            "owners": {"dataType":"array","array":{"dataType":"refObject","ref":"User"},"required":true},
-            "isShared": {"ref":"Boolean","default":false},
-            "sharingCode": {"ref":"UUID"},
-            "grantedUsers": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
-            "createdDate": {"dataType":"datetime"},
-            "updatedDate": {"dataType":"datetime"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateListDTO": {
         "dataType": "refObject",
         "properties": {
             "title": {"dataType":"string","default":""},
             "closureDate": {"dataType":"datetime"},
-            "owners": {"dataType":"array","array":{"dataType":"refObject","ref":"User"},"required":true},
-            "isShared": {"ref":"Boolean","default":false},
-            "grantedUsers": {"dataType":"array","array":{"dataType":"refObject","ref":"User"}},
+            "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
+            "isShared": {"dataType":"boolean","default":false},
+            "grantedUsersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_ListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string","default":""},"closureDate":{"dataType":"datetime"},"isShared":{"ref":"Boolean","default":false}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string","default":""},"closureDate":{"dataType":"datetime"},"isShared":{"dataType":"boolean","default":false}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
@@ -92,7 +50,7 @@ const models: TsoaRoute.Models = {
             "sharingCode": {"ref":"UUID"},
             "title": {"dataType":"string","default":""},
             "closureDate": {"dataType":"datetime"},
-            "isShared": {"ref":"Boolean","default":false},
+            "isShared": {"dataType":"boolean","default":false},
         },
         "additionalProperties": false,
     },
@@ -120,6 +78,11 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "email": {
+        "dataType": "refAlias",
+        "type": {"dataType":"string","validators":{"pattern":{"value":"(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"}}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateUserDTO": {
         "dataType": "refObject",
         "properties": {
@@ -139,16 +102,6 @@ const models: TsoaRoute.Models = {
         "properties": {
             "email": {"ref":"email","default":""},
             "displayName": {"dataType":"string","default":""},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserNotFoundError": {
-        "dataType": "refObject",
-        "properties": {
-            "name": {"dataType":"string","required":true},
-            "message": {"dataType":"string","required":true},
-            "stack": {"dataType":"string"},
         },
         "additionalProperties": false,
     },

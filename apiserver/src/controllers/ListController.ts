@@ -12,24 +12,15 @@ import {
 	SuccessResponse,
 	Tags,
 } from "tsoa";
-import List from "../models/List";
-import User from "../models/User";
-import ListService from "../services/ListService";
-import UserService from "../services/UserService";
-import ListNotFoundError from "../errors/ListErrors/ListNotFoundError";
-import UserNotFoundError from "../errors/UserErrors/UserNotFoundError";
-import OwnershipError from "../errors/UserErrors/OwnershipError";
-import { UUID } from "../types/UUID";
-import { SelectKindList } from "../types/SelectKindList";
-import { cleanObject } from "../helpers/cleanObjects";
-
-// TODO: Follow https://github.com/lukeautry/tsoa/issues/911 to remove this workaround
-type Expand<T> = { [K in keyof T]: T[K] };
-interface CreateListDTO
-	extends Expand<Omit<List, "id" | "sharingCode" | "createdDate" | "updatedDate">> {}
-interface ListIdDTO extends Expand<Pick<List, "id">> {}
-interface ListDTO
-	extends Expand<Pick<List, "title" | "isShared" | "sharingCode" | "closureDate">> {}
+import List from "./../models/List";
+import User from "./../models/User";
+import ListService from "./../services/ListService";
+import UserService from "./../services/UserService";
+import OwnershipError from "./../errors/UserErrors/OwnershipError";
+import { UUID } from "./../types/UUID";
+import { SelectKindList } from "./../types/SelectKindList";
+import { cleanObject } from "./../helpers/cleanObjects";
+import { CreateListDTO, ListDTO, ListIdDTO } from "./../dto/lists";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("lists")
@@ -41,7 +32,8 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Post()
 	async create(@Body() body: CreateListDTO): Promise<ListIdDTO> {
-		const { id }: List = await ListService.create(body);
+		const users: User[] = await UserService.getMany(body.ownersIds);
+		const { id }: List = await ListService.create({ ...body, owners: users });
 		return { id } as ListIdDTO;
 	}
 
@@ -57,7 +49,7 @@ export class ListController extends Controller {
 		@Body() body: Partial<ListDTO>,
 		@Query() userId: UUID
 	): Promise<void> {
-		if (!(await ListService.checkOwnership(listId, userId))) {
+		if (!(await ListService.listOwners(listId)).includes(userId)) {
 			throw new OwnershipError();
 		}
 		await ListService.edit(listId, cleanObject(body));
@@ -70,10 +62,18 @@ export class ListController extends Controller {
 	@SuccessResponse(204)
 	@Delete("{listId}")
 	async delete(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		if (!(await ListService.checkOwnership(listId, userId))) {
+		const ownerIds: UUID[] = await ListService.listOwners(listId);
+		const grantedIds: UUID[] = await ListService.listGrantedUsers(listId);
+		// Last owner
+		if (ownerIds.length == 1 && ownerIds.includes(userId)) {
+			await ListService.delete(listId);
+			// One of owner or granted user
+		} else if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
+			await ListService.forget(listId, userId);
+			// None of that
+		} else {
 			throw new OwnershipError();
 		}
-		await ListService.delete(listId);
 	}
 
 	/**
@@ -83,7 +83,6 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Get()
 	async getAll(@Query() userId: UUID, @Query() select: SelectKindList): Promise<ListDTO[]> {
-
 		const lists: List[] = await UserService.getUserLists(userId, select);
 		return lists.map((list) => {
 			const { id, grantedUsers, owners, createdDate, updatedDate, ...rest } = list;
@@ -98,16 +97,12 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Get("{listId}")
 	async get(@Path() listId: UUID, @Query() userId: UUID): Promise<ListDTO> {
-		if (!(await ListService.checkOwnership(listId, userId))) {
+		if (!(await ListService.listOwners(listId)).includes(userId)) {
 			throw new OwnershipError();
 		}
-		const list: List | undefined = await ListService.get(listId);
-		if (!list) {
-			throw new ListNotFoundError();
-		} else {
-			const { id, grantedUsers, owners, createdDate, updatedDate, ...rest } = list;
-			return rest as ListDTO;
-		}
+		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
+			await ListService.get(listId);
+		return rest as ListDTO;
 	}
 
 	/**
@@ -117,10 +112,7 @@ export class ListController extends Controller {
 	@SuccessResponse(204)
 	@Put("{listId}/share")
 	async share(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		if (!(await ListService.checkOwnership(listId, userId))) {
-			throw new OwnershipError();
-		}
-		await ListService.edit(listId, { isShared: true });
+		this.edit(listId, { isShared: true }, userId);
 	}
 
 	/**
@@ -130,10 +122,7 @@ export class ListController extends Controller {
 	@SuccessResponse(204)
 	@Put("{listId}/unshare")
 	async private(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		if (!(await ListService.checkOwnership(listId, userId))) {
-			throw new OwnershipError();
-		}
-		await ListService.edit(listId, { isShared: false });
+		this.edit(listId, { isShared: false }, userId);
 	}
 
 	/**
@@ -141,16 +130,10 @@ export class ListController extends Controller {
 	 * @param {UUID} sharingCode the sharing code of the list
 	 */
 	@SuccessResponse(204)
-	@Get("invite/{sharingCode}")
+	@Put("invite/{sharingCode}")
 	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
-		const list: List | undefined = await ListService.getFromSharingCode(sharingCode);
-		const user: User | undefined = await UserService.get(userId);
-		if (!list) {
-			throw new ListNotFoundError();
-		} else if (!user) {
-			throw new UserNotFoundError();
-		} else {
-			await ListService.edit(list.id, { owners: [...list.owners, user] });
-		}
+		const list: List = await ListService.getFromSharingCode(sharingCode);
+		const user: User = await UserService.get(userId);
+		await ListService.edit(list.id, { owners: [...list.owners, user] });
 	}
 }

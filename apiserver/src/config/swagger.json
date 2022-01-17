@@ -21,101 +21,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"email": {
-				"type": "string",
-				"format": "email",
-				"description": "Stringified email.\nSee [Email Regex](https://emailregex.com/) and [RFC 5322](https://tools.ietf.org/html/rfc5322)",
-				"pattern": "(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"
-			},
-			"User": {
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					},
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
-					"displayName": {
-						"type": "string",
-						"default": ""
-					},
-					"friends": {
-						"items": {
-							"$ref": "#/components/schemas/User"
-						},
-						"type": "array"
-					},
-					"lists": {
-						"items": {
-							"$ref": "#/components/schemas/List"
-						},
-						"type": "array"
-					},
-					"friendLists": {
-						"items": {
-							"$ref": "#/components/schemas/List"
-						},
-						"type": "array"
-					},
-					"createdDate": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Boolean": {
-				"properties": {},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"List": {
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					},
-					"title": {
-						"type": "string",
-						"default": ""
-					},
-					"closureDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"owners": {
-						"items": {
-							"$ref": "#/components/schemas/User"
-						},
-						"type": "array"
-					},
-					"isShared": {
-						"$ref": "#/components/schemas/Boolean"
-					},
-					"sharingCode": {
-						"$ref": "#/components/schemas/UUID"
-					},
-					"grantedUsers": {
-						"items": {
-							"$ref": "#/components/schemas/User"
-						},
-						"type": "array"
-					},
-					"createdDate": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"updatedDate": {
-						"type": "string",
-						"format": "date-time"
-					}
-				},
-				"required": [
-					"owners"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"CreateListDTO": {
 				"properties": {
 					"title": {
@@ -126,24 +31,25 @@
 						"type": "string",
 						"format": "date-time"
 					},
-					"owners": {
+					"ownersIds": {
 						"items": {
-							"$ref": "#/components/schemas/User"
+							"$ref": "#/components/schemas/UUID"
 						},
 						"type": "array"
 					},
 					"isShared": {
-						"$ref": "#/components/schemas/Boolean"
+						"type": "boolean",
+						"default": false
 					},
-					"grantedUsers": {
+					"grantedUsersIds": {
 						"items": {
-							"$ref": "#/components/schemas/User"
+							"$ref": "#/components/schemas/UUID"
 						},
 						"type": "array"
 					}
 				},
 				"required": [
-					"owners"
+					"ownersIds"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -162,7 +68,8 @@
 						"format": "date-time"
 					},
 					"isShared": {
-						"$ref": "#/components/schemas/Boolean"
+						"type": "boolean",
+						"default": false
 					}
 				},
 				"type": "object",
@@ -182,7 +89,8 @@
 						"format": "date-time"
 					},
 					"isShared": {
-						"$ref": "#/components/schemas/Boolean"
+						"type": "boolean",
+						"default": false
 					}
 				},
 				"type": "object",
@@ -225,6 +133,12 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"email": {
+				"type": "string",
+				"format": "email",
+				"description": "Stringified email.\nSee [Email Regex](https://emailregex.com/) and [RFC 5322](https://tools.ietf.org/html/rfc5322)",
+				"pattern": "(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"
+			},
 			"CreateUserDTO": {
 				"properties": {
 					"email": {
@@ -261,25 +175,6 @@
 						"default": ""
 					}
 				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"UserNotFoundError": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"stack": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name",
-					"message"
-				],
 				"type": "object",
 				"additionalProperties": false
 			}
@@ -779,16 +674,6 @@
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/UserDTO"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "If userId is incorrect",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UserNotFoundError"
 								}
 							}
 						}

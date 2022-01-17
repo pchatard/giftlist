@@ -8,7 +8,7 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
-import { UUID } from "../types/UUID";
+import { UUID } from "./../types/UUID";
 import User from "./User";
 
 @Entity("List", { orderBy: { createdDate: "ASC" } })
@@ -19,22 +19,26 @@ export class List {
 	@Column()
 	public title: string = "";
 
-	@Column()
+	@Column({ nullable: true })
 	public closureDate?: Date;
 
 	@ManyToMany(() => User, (user) => user.lists)
 	@JoinTable({ name: "List_Owners" })
 	public owners!: User[];
 
-	@Column()
-	public isShared: Boolean = false;
+	public ownersIds!: UUID[];
 
-	@Column("uuid", { generated: "uuid", unique: true })
+	@Column()
+	public isShared: boolean = false;
+
+	@Column({ generated: "uuid", unique: true, update: false })
 	public sharingCode: UUID = uuidv4();
 
 	@ManyToMany(() => User, (user) => user.friendLists)
 	@JoinTable({ name: "List_GrantedUsers" })
 	public grantedUsers?: User[];
+
+	public grantedUsersIds?: UUID[];
 
 	@CreateDateColumn()
 	createdDate?: Date;
