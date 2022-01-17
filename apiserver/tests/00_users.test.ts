@@ -4,7 +4,7 @@ import chaiHttp from "chai-http";
 import request from "request";
 import server from "../src/index";
 import MailAlreadyUsedError from "../src/errors/UserErrors/MailAlreadyUsedError";
-import { User } from "./../src/models/User";
+import GlobalVars from "./globalVars";
 
 chai.use(chaiHttp);
 
@@ -23,10 +23,8 @@ describe("Users", () => {
 	const baseUrl = "/users";
 	var token: string = "";
 
-	const User1: Omit<User, "id" | "friends"> = { email: "test1@test.fr", displayName: "TestUser1" };
-	const User2: Omit<User, "id" | "friends"> = { email: "test2@test.fr", displayName: "TestUser2" };
-	var User1_Id: string = "";
-	var User2_Id: string = "";
+	GlobalVars.User1 = { email: "test1@test.fr", displayName: "TestUser1" };
+	GlobalVars.User2 = { email: "test2@test.fr", displayName: "TestUser2" };
 
 	before((done) => {
 		request.post(options, function (error, _response, body) {
@@ -42,20 +40,20 @@ describe("Users", () => {
 				await chai
 					.request(server)
 					.post(baseUrl + "/")
-					.send(User1)
+					.send(GlobalVars.User1)
 					.set({ Authorization: `Bearer ${token}` }),
 				await chai
 					.request(server)
 					.post(baseUrl + "/")
-					.send(User2)
+					.send(GlobalVars.User2)
 					.set({ Authorization: `Bearer ${token}` }),
 			];
 			responses.forEach((response, index) => {
 				expect(response).to.have.property("error").to.eql(false);
 				expect(response).to.have.status(200);
 				expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
-				if (index == 0) User1_Id = response.body.id;
-				if (index == 1) User2_Id = response.body.id;
+				if (index == 0) GlobalVars.User1_Id = response.body.id;
+				if (index == 1) GlobalVars.User2_Id = response.body.id;
 			});
 		});
 		it("Returns 500, with custom error, if email is already used", async () => {
@@ -64,7 +62,7 @@ describe("Users", () => {
 			const response = await chai
 				.request(server)
 				.post(baseUrl + "/")
-				.send(User1)
+				.send(GlobalVars.User1)
 				.set({ Authorization: `Bearer ${token}` });
 			expect(response).to.have.property("error").to.not.eql(false);
 			expect(response).to.have.status(500);
@@ -121,7 +119,7 @@ describe("Users", () => {
 	});
 	describe("GET /", () => {
 		it("Returns 200 with all users as an array", async () => {
-			const result: any = [User1, User2];
+			const result: any = [GlobalVars.User1, GlobalVars.User2];
 			const response = await chai
 				.request(server)
 				.get(baseUrl + "/")
@@ -133,10 +131,10 @@ describe("Users", () => {
 	});
 	describe("GET /:userId", () => {
 		it("Returns 200 with user informations", async () => {
-			const result: any = User1;
+			const result: any = GlobalVars.User1;
 			const response = await chai
 				.request(server)
-				.get(baseUrl + "/" + User1_Id)
+				.get(baseUrl + "/" + GlobalVars.User1_Id)
 				.set({ Authorization: `Bearer ${token}` });
 			expect(response).to.have.property("error").to.eql(false);
 			expect(response).to.have.status(200);
@@ -159,21 +157,21 @@ describe("Users", () => {
 	});
 	describe("PUT /:userId", () => {
 		it("Returns 204 with user informations", async () => {
+			const updated = { email: "new@new.fr" };
 			const response = await chai
 				.request(server)
-				.put(baseUrl + "/" + User1_Id)
-				.send({ email: "new@new.fr" })
+				.put(baseUrl + "/" + GlobalVars.User1_Id)
+				.send(updated)
 				.set({ Authorization: `Bearer ${token}` });
-			//console.log(response)
 			expect(response).to.have.property("error").to.eql(false);
 			expect(response).to.have.status(204);
 			const changedUser = await chai
 				.request(server)
-				.get(baseUrl + "/" + User1_Id)
+				.get(baseUrl + "/" + GlobalVars.User1_Id)
 				.set({ Authorization: `Bearer ${token}` });
 			expect(changedUser)
 				.to.have.property("body")
-				.to.eql({ email: "new@new.fr", displayName: "TestUser1" });
+				.to.eql({ ...GlobalVars.User1, ...updated });
 		});
 		it("Returns 422, with validation error, if path param is not UUID", async () => {
 			const wrongUUID: string = "toto";
@@ -194,7 +192,7 @@ describe("Users", () => {
 		it("Returns 204 and user is no more present", async () => {
 			const response = await chai
 				.request(server)
-				.delete(baseUrl + "/" + User1_Id)
+				.delete(baseUrl + "/" + GlobalVars.User1_Id)
 				.set({ Authorization: `Bearer ${token}` });
 			expect(response).to.have.property("error").to.eql(false);
 			expect(response).to.have.status(204);
@@ -202,10 +200,10 @@ describe("Users", () => {
 				.request(server)
 				.get(baseUrl + "/")
 				.set({ Authorization: `Bearer ${token}` });
-			expect(list).to.have.property("body").to.eql([User2]);
+			expect(list).to.have.property("body").to.eql([GlobalVars.User2]);
 			await chai
 				.request(server)
-				.delete(baseUrl + "/" + User2_Id)
+				.delete(baseUrl + "/" + GlobalVars.User2_Id)
 				.set({ Authorization: `Bearer ${token}` });
 			list = await chai
 				.request(server)
@@ -226,6 +224,19 @@ describe("Users", () => {
 				.to.have.property("message")
 				.to.be.eql("Validation Failed");
 			expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
+		});
+	});
+	describe("Final", () => {
+		it("Recreate User1 for further test (TODO: Remove)", async () => {
+			const response = await chai
+				.request(server)
+				.post(baseUrl + "/")
+				.send(GlobalVars.User1)
+				.set({ Authorization: `Bearer ${token}` });
+			expect(response).to.have.property("error").to.eql(false);
+			expect(response).to.have.status(200);
+			expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
+			GlobalVars.User1_Id = response.body.id;
 		});
 	});
 });
