@@ -12,7 +12,7 @@
 				:outline="true"
 				class="giftlist-navbar-item"
 			>
-				<CollectionIconOutline class="giftlist-navbar-item-icon h-4 w-4" />
+				<CollectionIcon class="giftlist-navbar-item-icon h-4 w-4" />
 			</NavbarItem>
 			<NavbarItem
 				path="/app/shared"
@@ -20,7 +20,15 @@
 				:outline="true"
 				class="giftlist-navbar-item"
 			>
-				<UserGroupIconOutline class="giftlist-navbar-item-icon h-4 w-4" />
+				<UserGroupIcon class="giftlist-navbar-item-icon h-4 w-4" />
+			</NavbarItem>
+			<NavbarItem
+				path="/app/booked"
+				text="Mes cadeaux réservés"
+				:outline="true"
+				class="giftlist-navbar-item"
+			>
+				<GiftIcon class="giftlist-navbar-item-icon h-4 w-4" />
 			</NavbarItem>
 		</ul>
 	</div>
@@ -38,16 +46,11 @@
 <script lang="ts">
 import { computed, defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
 
 import NavbarItem from "@/components/Styled/NavbarItem.vue";
 import NavbarDropdown from "./NavbarDropdown.vue";
 import Button from "@/components/Styled/Button.vue";
-import {
-	CollectionIcon as CollectionIconOutline,
-	PlusCircleIcon,
-	UserGroupIcon as UserGroupIconOutline,
-} from "@heroicons/vue/outline";
+import { CollectionIcon, PlusCircleIcon, UserGroupIcon, GiftIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "LoggedInNavbar",
@@ -55,9 +58,10 @@ export default defineComponent({
 		Button,
 		NavbarItem,
 		NavbarDropdown,
-		CollectionIconOutline,
+		CollectionIcon,
 		PlusCircleIcon,
-		UserGroupIconOutline,
+		UserGroupIcon,
+		GiftIcon,
 	},
 	setup() {
 		const router = useRouter();

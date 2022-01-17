@@ -53,7 +53,7 @@
 
 ### v1
 - [ ] Ajouter des tris par colonnes sur les listes
-- [ ] Nouvelle page : les cadeaux que j'ai réservé
+- [x] Nouvelle page : les cadeaux que j'ai réservé
 - [x] Ajouter des amis
 
 ### Plus tard

@@ -11,6 +11,7 @@ import SharedLists from "../views/SharedLists.vue";
 import NewList from "../views/NewList.vue";
 import NewGift from "../views/NewGift.vue";
 import Gift from "../views/Gift.vue";
+import BookedGifts from "../views/BookedGifts.vue";
 
 import Auth0 from "@/auth";
 
@@ -122,6 +123,12 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/app/shared/:code",
 		name: "Liste partagée",
 		component: SharedList,
+		beforeEnter: Auth0.routeGuard,
+	},
+	{
+		path: "/app/booked",
+		name: "Mes cadeaux réservés",
+		component: BookedGifts,
 		beforeEnter: Auth0.routeGuard,
 	},
 ];
