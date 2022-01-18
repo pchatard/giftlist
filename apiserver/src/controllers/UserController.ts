@@ -16,7 +16,6 @@ import UserService from "./../services/UserService";
 import User from "./../models/User";
 import { UUID } from "./../types/UUID";
 import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
-import { cleanObject } from "./../helpers/cleanObjects";
 import { CreateUserDTO, UserDTO, UserIdDTO } from "./../dto/users";
 import { SelectKindList } from "../types/SelectKindList";
 import { ListController } from "./ListController";
@@ -55,7 +54,7 @@ export class UserController extends Controller {
 	@SuccessResponse(204)
 	@Put("{userId}")
 	async edit(@Path() userId: UUID, @Body() body: Partial<UserDTO>): Promise<void> {
-		await UserService.edit(userId, cleanObject(body));
+		await UserService.edit(userId, body);
 	}
 
 	/**

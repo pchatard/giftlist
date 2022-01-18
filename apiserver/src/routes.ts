@@ -30,7 +30,7 @@ const models: TsoaRoute.Models = {
     "CreateListDTO": {
         "dataType": "refObject",
         "properties": {
-            "title": {"dataType":"string","default":""},
+            "title": {"dataType":"string","required":true},
             "closureDate": {"dataType":"datetime"},
             "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
             "isShared": {"dataType":"boolean","default":false},
@@ -41,14 +41,14 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_ListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string","default":""},"closureDate":{"dataType":"datetime"},"isShared":{"dataType":"boolean","default":false}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string"},"closureDate":{"dataType":"datetime"},"isShared":{"dataType":"boolean","default":false}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
         "dataType": "refObject",
         "properties": {
             "sharingCode": {"ref":"UUID"},
-            "title": {"dataType":"string","default":""},
+            "title": {"dataType":"string","required":true},
             "closureDate": {"dataType":"datetime"},
             "isShared": {"dataType":"boolean","default":false},
         },
@@ -86,22 +86,22 @@ const models: TsoaRoute.Models = {
     "CreateUserDTO": {
         "dataType": "refObject",
         "properties": {
-            "email": {"ref":"email","default":""},
-            "displayName": {"dataType":"string","default":""},
+            "email": {"ref":"email","required":true},
+            "displayName": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_UserDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"email":{"ref":"email","default":""},"displayName":{"dataType":"string","default":""}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"email":{"ref":"email"},"displayName":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserDTO": {
         "dataType": "refObject",
         "properties": {
-            "email": {"ref":"email","default":""},
-            "displayName": {"dataType":"string","default":""},
+            "email": {"ref":"email","required":true},
+            "displayName": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },

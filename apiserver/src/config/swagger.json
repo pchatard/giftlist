@@ -24,8 +24,7 @@
 			"CreateListDTO": {
 				"properties": {
 					"title": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					},
 					"closureDate": {
 						"type": "string",
@@ -49,6 +48,7 @@
 					}
 				},
 				"required": [
+					"title",
 					"ownersIds"
 				],
 				"type": "object",
@@ -60,8 +60,7 @@
 						"$ref": "#/components/schemas/UUID"
 					},
 					"title": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					},
 					"closureDate": {
 						"type": "string",
@@ -81,8 +80,7 @@
 						"$ref": "#/components/schemas/UUID"
 					},
 					"title": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					},
 					"closureDate": {
 						"type": "string",
@@ -93,6 +91,9 @@
 						"default": false
 					}
 				},
+				"required": [
+					"title"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -145,10 +146,13 @@
 						"$ref": "#/components/schemas/email"
 					},
 					"displayName": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					}
 				},
+				"required": [
+					"email",
+					"displayName"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -158,8 +162,7 @@
 						"$ref": "#/components/schemas/email"
 					},
 					"displayName": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					}
 				},
 				"type": "object",
@@ -171,10 +174,13 @@
 						"$ref": "#/components/schemas/email"
 					},
 					"displayName": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					}
 				},
+				"required": [
+					"email",
+					"displayName"
+				],
 				"type": "object",
 				"additionalProperties": false
 			}

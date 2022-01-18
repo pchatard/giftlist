@@ -226,17 +226,4 @@ describe("Users", () => {
 			expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
 		});
 	});
-	describe("Final", () => {
-		it("Recreate User1 for further test (TODO: Remove)", async () => {
-			const response = await chai
-				.request(server)
-				.post(baseUrl + "/")
-				.send(GlobalVars.User1)
-				.set({ Authorization: `Bearer ${token}` });
-			expect(response).to.have.property("error").to.eql(false);
-			expect(response).to.have.status(200);
-			expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
-			GlobalVars.User1_Id = response.body.id;
-		});
-	});
 });

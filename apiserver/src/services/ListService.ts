@@ -1,6 +1,5 @@
 import List from "./../models/List";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
-import { cleanObject } from "./../helpers/cleanObjects";
 import { UUID } from "./../types/UUID";
 
 class ListService {
@@ -10,7 +9,7 @@ class ListService {
 	 */
 	static async create(listInfos: Partial<List>): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
-		const list: List = listRepository.create(cleanObject(listInfos));
+		const list: List = listRepository.create(listInfos);
 		return await listRepository.save(list);
 	}
 

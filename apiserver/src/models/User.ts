@@ -17,10 +17,10 @@ export class User {
 	public id: UUID = uuidv4();
 
 	@Column({ unique: true })
-	public email: email = "";
+	public email!: email;
 
 	@Column()
-	public displayName: string = "";
+	public displayName!: string;
 
 	@ManyToMany(() => User)
 	@JoinTable({ name: "User_Friends" })

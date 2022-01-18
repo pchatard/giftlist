@@ -19,7 +19,6 @@ import UserService from "./../services/UserService";
 import OwnershipError from "./../errors/UserErrors/OwnershipError";
 import { UUID } from "./../types/UUID";
 import { SelectKindList } from "./../types/SelectKindList";
-import { cleanObject } from "./../helpers/cleanObjects";
 import { CreateListDTO, ListDTO, ListIdDTO } from "./../dto/lists";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
@@ -52,7 +51,7 @@ export class ListController extends Controller {
 		if (!(await ListService.listOwners(listId)).includes(userId)) {
 			throw new OwnershipError();
 		}
-		await ListService.edit(listId, cleanObject(body));
+		await ListService.edit(listId, body);
 	}
 
 	/**
@@ -64,13 +63,14 @@ export class ListController extends Controller {
 	async delete(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
 		const ownerIds: UUID[] = await ListService.listOwners(listId);
 		const grantedIds: UUID[] = await ListService.listGrantedUsers(listId);
-		// Last owner
-		if (ownerIds.length == 1 && ownerIds.includes(userId)) {
-			await ListService.delete(listId);
-			// One of owner or granted user
-		} else if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
+		// One of owner or granted user
+		if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
 			await ListService.forget(listId, userId);
-			// None of that
+			// Last Owner
+			if (ownerIds.length == 1 && ownerIds.includes(userId)) {
+				await ListService.delete(listId);
+			}
+		// None of that
 		} else {
 			throw new OwnershipError();
 		}

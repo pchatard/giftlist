@@ -17,7 +17,7 @@ export class List {
 	public id: UUID = uuidv4();
 
 	@Column()
-	public title: string = "";
+	public title!: string;
 
 	@Column({ nullable: true })
 	public closureDate?: Date;

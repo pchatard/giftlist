@@ -14,7 +14,7 @@
     "start:watch": "nodemon",
     "start:watch:dev": "nodemon",
     "swagger": "tsoa spec-and-routes",
-    "test": "NODE_ENV=DEV mocha -r ts-node/register -r dotenv/config --exit ./tests/**/*.ts"
+    "test": "NODE_ENV=DEV mocha -r ts-node/register -r dotenv/config --timeout 10000 --exit ./tests/**/*.ts"
   },
   "keywords": [],
   "author": "",
