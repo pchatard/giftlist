@@ -19,6 +19,7 @@ import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
 import { CreateUserDTO, UserDTO, UserIdDTO } from "./../dto/users";
 import { SelectKindList } from "../types/SelectKindList";
 import { ListController } from "./ListController";
+import { cleanObject } from "../helpers/cleanObjects";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("users")
@@ -81,7 +82,7 @@ export class UserController extends Controller {
 		const users: User[] = await UserService.getAll();
 		return users.map((user) => {
 			const { id, friends, createdDate, ...rest } = user;
-			return { ...rest } as UserDTO;
+			return cleanObject({ ...rest } as UserDTO);
 		});
 	}
 
@@ -95,6 +96,6 @@ export class UserController extends Controller {
 	async get(@Path() userId: UUID): Promise<UserDTO> {
 		const user: User = await UserService.get(userId);
 		const { id, createdDate, ...rest } = user;
-		return rest;
+		return cleanObject(rest);
 	}
 }

@@ -76,20 +76,18 @@ class UserService {
 	 */
 	static async getUserLists(userId: UUID, select: SelectKindList): Promise<List[]> {
 		const userRepository: Repository<User> = getRepository(User);
-		const user: User = await userRepository.findOneOrFail(userId, {
-			relations: ["lists", "friendLists"],
-		});
+		const user: User = await userRepository.findOneOrFail(userId);
 		let res: List[] = [];
 		switch (select) {
 			case SelectKindList.OWNED:
-				res = user.lists || [];
+				res = await user.lists || [];
 				break;
 			case SelectKindList.GRANTED:
-				res = user.friendLists || [];
+				res = await user.friendLists || [];
 				break;
 			case SelectKindList.ALL:
 			default:
-				res = (user.lists || []).concat(user.friendLists || []);
+				res = ((await user.lists) || []).concat(await user.friendLists || []);
 				break;
 		}
 		return res;

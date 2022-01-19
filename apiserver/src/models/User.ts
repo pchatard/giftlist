@@ -24,13 +24,13 @@ export class User {
 
 	@ManyToMany(() => User)
 	@JoinTable({ name: "User_Friends" })
-	public friends?: User[];
+	public friends?: Promise<User[]>;
 
 	@ManyToMany(() => List, (list) => list.owners)
-	public lists?: List[];
+	public lists?: Promise<List[]>;
 
 	@ManyToMany(() => List, (list) => list.grantedUsers)
-	public friendLists?: List[];
+	public friendLists?: Promise<List[]>;
 
 	@CreateDateColumn()
 	createdDate?: Date;

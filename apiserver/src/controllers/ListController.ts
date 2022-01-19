@@ -31,8 +31,12 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Post()
 	async create(@Body() body: CreateListDTO): Promise<ListIdDTO> {
-		const users: User[] = await UserService.getMany(body.ownersIds);
-		const { id }: List = await ListService.create({ ...body, owners: users });
+		const owners: Promise<User[]> = UserService.getMany(body.ownersIds);
+		let grantedUsers: Promise<User[]> = Promise.resolve([]);
+		if (body.grantedUsersIds) {
+			grantedUsers = UserService.getMany(body.grantedUsersIds);
+		}
+		const { id }: List = await ListService.create({ ...body, owners, grantedUsers });
 		return { id } as ListIdDTO;
 	}
 
@@ -63,14 +67,12 @@ export class ListController extends Controller {
 	async delete(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
 		const ownerIds: UUID[] = await ListService.listOwners(listId);
 		const grantedIds: UUID[] = await ListService.listGrantedUsers(listId);
-		// One of owner or granted user
 		if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
 			await ListService.forget(listId, userId);
-			// Last Owner
 			if (ownerIds.length == 1 && ownerIds.includes(userId)) {
+				grantedIds.forEach(async (grantedId) => await ListService.forget(listId, grantedId));
 				await ListService.delete(listId);
 			}
-		// None of that
 		} else {
 			throw new OwnershipError();
 		}
@@ -134,6 +136,6 @@ export class ListController extends Controller {
 	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
 		const list: List = await ListService.getFromSharingCode(sharingCode);
 		const user: User = await UserService.get(userId);
-		await ListService.edit(list.id, { owners: [...list.owners, user] });
+		await ListService.edit(list.id, { owners: Promise.resolve([ ...(await list.owners), user]) });
 	}
 }

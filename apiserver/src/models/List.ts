@@ -24,7 +24,7 @@ export class List {
 
 	@ManyToMany(() => User, (user) => user.lists)
 	@JoinTable({ name: "List_Owners" })
-	public owners!: User[];
+	public owners!: Promise<User[]>;
 
 	public ownersIds!: UUID[];
 
@@ -36,7 +36,7 @@ export class List {
 
 	@ManyToMany(() => User, (user) => user.friendLists)
 	@JoinTable({ name: "List_GrantedUsers" })
-	public grantedUsers?: User[];
+	public grantedUsers?: Promise<User[]>;
 
 	public grantedUsersIds?: UUID[];
 

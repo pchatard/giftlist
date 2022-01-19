@@ -13,4 +13,6 @@ export default class GlobalVars {
 
 	public static List1: CreateListDTO;
 	public static List2: CreateListDTO;
+	public static List1_Id: UUID = "";
+	public static List2_Id: UUID = "";
 }
