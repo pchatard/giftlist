@@ -1,8 +1,6 @@
-import List from "./../src/models/List";
 import { CreateUserDTO } from "./../src/dto/users";
 import { UUID } from "./../src/types/UUID";
-
-type CreateListDTO = Omit<List, "id" | "createDate" | "updateDate" | "sharingCode" | "owners">;
+import { CreateListDTO } from "../src/dto/lists";
 
 export default class GlobalVars {
 	public static User1: CreateUserDTO;

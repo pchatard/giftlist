@@ -7,4 +7,4 @@ export interface CreateListDTO
 	> {}
 export interface ListIdDTO extends Expand<Pick<List, "id">> {}
 export interface ListDTO
-	extends Expand<Pick<List, "title" | "isShared" | "sharingCode" | "closureDate">> {}
+	extends Expand<Pick<List, "title" | "isShared" | "sharingCode" | "closureDate" | "ownersIds">> {}

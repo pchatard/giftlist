@@ -44,8 +44,8 @@ class ListService {
 	static async forget(listId: UUID, userId: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
 		const list: List = await listRepository.findOneOrFail(listId);
-		list.owners = Promise.resolve((await list.owners).filter((owner) => owner.id !== userId));
-		list.grantedUsers = Promise.resolve((await list.grantedUsers || []).filter((user) => user.id !== userId));
+		list.owners = list.owners.filter((owner) => owner.id !== userId);
+		list.grantedUsers = (list.grantedUsers || []).filter((user) => user.id !== userId);
 		return await listRepository.save(list);
 	}
 
@@ -56,7 +56,9 @@ class ListService {
 	 */
 	static async get(listId: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
-		return await listRepository.findOneOrFail(listId);
+		return await listRepository.findOneOrFail(listId, {
+			relations: ["owners", "grantedUsers"],
+		});
 	}
 
 	/**
@@ -66,7 +68,10 @@ class ListService {
 	 */
 	static async getFromSharingCode(sharingCode: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
-		return await listRepository.findOneOrFail({ where: { sharingCode: sharingCode }});
+		return await listRepository.findOneOrFail({
+			where: { sharingCode: sharingCode },
+			relations: ["owners", "grantedUsers"],
+		});
 	}
 
 	/**
@@ -76,8 +81,8 @@ class ListService {
 	 */
 	static async listOwners(listId: UUID): Promise<UUID[]> {
 		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId);
-		return (await list.owners).map((u) => u.id);
+		const list: List = await listRepository.findOneOrFail(listId, { relations: ["owners"] });
+		return list.owners.map((u) => u.id);
 	}
 
 	/**
@@ -87,8 +92,10 @@ class ListService {
 	 */
 	static async listGrantedUsers(listId: UUID): Promise<UUID[]> {
 		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId);
-		return (await list.grantedUsers || []).map((u) => u.id) || [];
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["grantedUsers"],
+		});
+		return (list.grantedUsers || []).map((u) => u.id);
 	}
 }
 

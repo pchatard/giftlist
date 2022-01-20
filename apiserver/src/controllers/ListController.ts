@@ -31,10 +31,10 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Post()
 	async create(@Body() body: CreateListDTO): Promise<ListIdDTO> {
-		const owners: Promise<User[]> = UserService.getMany(body.ownersIds);
-		let grantedUsers: Promise<User[]> = Promise.resolve([]);
+		const owners: User[] = await UserService.getMany(body.ownersIds);
+		let grantedUsers: User[] = [];
 		if (body.grantedUsersIds) {
-			grantedUsers = UserService.getMany(body.grantedUsersIds);
+			grantedUsers = await UserService.getMany(body.grantedUsersIds);
 		}
 		const { id }: List = await ListService.create({ ...body, owners, grantedUsers });
 		return { id } as ListIdDTO;
@@ -87,7 +87,9 @@ export class ListController extends Controller {
 	async getAll(@Query() userId: UUID, @Query() select: SelectKindList): Promise<ListDTO[]> {
 		const lists: List[] = await UserService.getUserLists(userId, select);
 		return lists.map((list) => {
-			const { id, grantedUsers, owners, createdDate, updatedDate, ...rest } = list;
+			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
+				list;
+			rest.ownersIds = owners.map((u) => u.id);
 			return { ...rest } as ListDTO;
 		});
 	}
@@ -99,11 +101,16 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Get("{listId}")
 	async get(@Path() listId: UUID, @Query() userId: UUID): Promise<ListDTO> {
-		if (!(await ListService.listOwners(listId)).includes(userId)) {
+		if (
+			!(await ListService.listOwners(listId)).includes(userId) &&
+			!(await ListService.listGrantedUsers(listId)).includes(userId)
+		) {
 			throw new OwnershipError();
 		}
 		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
 			await ListService.get(listId);
+		rest.ownersIds = owners.map((u) => u.id);
+		rest.grantedUsersIds = grantedUsers?.map((u) => u.id) || [];
 		return rest as ListDTO;
 	}
 
@@ -136,6 +143,6 @@ export class ListController extends Controller {
 	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
 		const list: List = await ListService.getFromSharingCode(sharingCode);
 		const user: User = await UserService.get(userId);
-		await ListService.edit(list.id, { owners: Promise.resolve([ ...(await list.owners), user]) });
+		await ListService.edit(list.id, { owners: [...list.owners, user] });
 	}
 }

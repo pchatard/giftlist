@@ -4,6 +4,7 @@ import chaiHttp from "chai-http";
 import request from "request";
 import server from "./../src/index";
 import GlobalVars from "./globalVars";
+import { after } from "mocha";
 
 chai.use(chaiHttp);
 
@@ -23,27 +24,21 @@ describe("Lists", () => {
 	var token: string = "";
 
 	before((done) => {
-		request.post(options, function (error, _response, body) {
+		request.post(options, async function (error, _response, body) {
 			if (error) throw new Error(error);
 			token = JSON.parse(body)["access_token"];
-			done();
-		});
+			GlobalVars.List1 = {
+				title: "TestList1",
+				ownersIds: [],
+				isShared: false,
+			};
+			GlobalVars.List2 = {
+				title: "TestList2",
+				ownersIds: [],
+				grantedUsersIds: [],
+				isShared: true,
+			};
 
-		GlobalVars.List1 = {
-			title: "TestList1",
-			ownersIds: [GlobalVars.User1_Id],
-			isShared: false,
-		};
-		GlobalVars.List2 = {
-			title: "TestList2",
-			ownersIds: [GlobalVars.User1_Id],
-			grantedUsersIds: [GlobalVars.User2_Id],
-			isShared: true,
-		};
-	});
-
-	describe("POST /", () => {
-		it("Recreate Users for further test (TODO: Remove)", async () => {
 			const responses = [
 				await chai
 					.request(server)
@@ -60,10 +55,21 @@ describe("Lists", () => {
 				expect(response).to.have.property("error").to.eql(false);
 				expect(response).to.have.status(200);
 				expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
-				if (index == 0) GlobalVars.User1_Id = response.body.id;
-				if (index == 1) GlobalVars.User2_Id = response.body.id;
+				if (index == 0) {
+					GlobalVars.User1_Id = response.body.id;
+					GlobalVars.List1.ownersIds.push(GlobalVars.User1_Id);
+					GlobalVars.List2.ownersIds.push(GlobalVars.User1_Id);
+				}
+				if (index == 1) {
+					GlobalVars.User2_Id = response.body.id;
+					GlobalVars.List2.grantedUsersIds?.push(GlobalVars.User2_Id);
+				}
 			});
+			done();
 		});
+	});
+
+	describe("POST /", () => {
 		it("Returns 200 with ID if all data are provided", async () => {
 			const responses = [
 				await chai
@@ -108,15 +114,16 @@ describe("Lists", () => {
 				expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
 			});
 		});
-		// EDIT A LIST NOT OWNED NOT GRANTED -> Fail
-		// EDIT A LIST NOT OWNED BUT GRANTED -> Fail
-		// EDIT A LIST MULTIPLE OWNED -> Success
-		// EDIT A LIST SINGLE OWNED -> Success
-		// GET A LIST NOT OWNED NOT GRANTED -> Fail
+	});
+	// EDIT A LIST NOT OWNED NOT GRANTED -> Fail
+	// EDIT A LIST NOT OWNED BUT GRANTED -> Fail
+	// EDIT A LIST MULTIPLE OWNED -> Success
+	// EDIT A LIST SINGLE OWNED -> Success
+	describe("GET /:listId?userId", () => {
 		it("Returns 401 Unauthorized, if not owned not granted", async () => {
 			const response = await chai
 				.request(server)
-				.get(baseUrl + "/" + GlobalVars.List2_Id + "?userId=" + GlobalVars.User2_Id)
+				.get(baseUrl + "/" + GlobalVars.List1_Id + "?userId=" + GlobalVars.User2_Id)
 				.set({ Authorization: `Bearer ${token}` });
 			expect(response).to.have.property("error").to.not.eql(false);
 			expect(response).to.have.status(401);
@@ -125,77 +132,90 @@ describe("Lists", () => {
 				.to.have.property("message")
 				.to.be.eql("Unauthorized");
 		});
-		// GET A LIST NOT OWNED BUT GRANTED -> Success
 		it("Returns 200 with list informations, if not owned but granted", async () => {
-			const result: any = GlobalVars.List1;
+			const result: any = GlobalVars.List2;
 			const response = await chai
 				.request(server)
-				.get(baseUrl + "/" + GlobalVars.List1_Id + "?userId=" + GlobalVars.User2_Id)
+				.get(baseUrl + "/" + GlobalVars.List2_Id + "?userId=" + GlobalVars.User2_Id)
 				.set({ Authorization: `Bearer ${token}` });
-			//console.log(response);
 			expect(response).to.have.property("error").to.eql(false);
 			expect(response).to.have.status(200);
-			expect(response).to.have.property("body").to.eql(result);
+			expect(response).to.have.property("body").to.deep.include(result);
+			expect(response).to.have.property("body").to.have.property("sharingCode").to.be.a.string;
+			expect(response).to.have.property("body").to.have.property("closureDate");
 		});
-		// GET A LIST OWNED -> Success
 		it("Returns 200 with list informations, if owned", async () => {
 			const result: any = GlobalVars.List1;
 			const response = await chai
 				.request(server)
 				.get(baseUrl + "/" + GlobalVars.List1_Id + "?userId=" + GlobalVars.User1_Id)
 				.set({ Authorization: `Bearer ${token}` });
-			//console.log(response);
 			expect(response).to.have.property("error").to.eql(false);
 			expect(response).to.have.status(200);
-			expect(response).to.have.property("body").to.eql(result);
+			expect(response).to.have.property("body").to.deep.include(result);
+			expect(response).to.have.property("body").to.have.property("sharingCode").to.be.a.string;
+			expect(response).to.have.property("body").to.have.property("closureDate");
 		});
-		// GET ALL LISTS -> Success
+	});
+	describe("GET /", () => {
 		it("Returns 200 with list informations", async () => {
 			const result: any = [GlobalVars.List1, GlobalVars.List2];
 			const response = await chai
 				.request(server)
 				.get(baseUrl + "?userId=" + GlobalVars.User1_Id + "&select=all")
 				.set({ Authorization: `Bearer ${token}` });
-			//console.log(response);
 			expect(response).to.have.property("error").to.eql(false);
 			expect(response).to.have.status(200);
-			expect(response).to.have.property("body").to.eql(result);
+			expect(response).to.have.property("body").to.be.an("array");
+			(response.body as any[]).forEach((element, index) => {
+				expect(element).to.have.property("ownersIds").to.eql(result[index].ownersIds);
+				expect(element).to.have.property("isShared").to.be.a("boolean");
+				expect(element).to.have.property("sharingCode").to.be.a.string;
+				expect(element).to.have.property("closureDate");
+				expect(element).to.not.have.property("id");
+				expect(element).to.not.have.property("owners");
+				expect(element).to.not.have.property("grantedUsersIds");
+				expect(element).to.not.have.property("grantedUsers");
+				expect(element).to.not.have.property("createdDate");
+				expect(element).to.not.have.property("updatedDate");
+			});
 		});
-		// SHARE A UNSHARED LIST OWNED -> Success
-		// SHARE A UNSHARED LIST NOT OWNED -> Fail
-		// SHARE A GRANTED LIST OWNED -> Success
-		// SHARE A GRANTED LIST NOT OWNED -> Fail
-		// UNSHARE A UNSHARED LIST OWNED -> Success
-		// UNSHARE A UNSHARED LIST NOT OWNED -> Fail
-		// UNSHARE A GRANTED LIST OWNED -> Success
-		// UNSHARE A GRANTED LIST NOT OWNED -> Fail
-		// ADD A UNKNOWN LIST FROM SHARING CODE -> Success
-		// ADD A ALREADY ADDED LIST FROM SHARING CODE -> Success
-		// DELETE A LIST NOT OWNED NOT GRANTED -> Fail
-		// DELETE A LIST NOT OWNED BUT GRANTED -> Success Forget
-		// DELETE A LIST MULTIPLE OWNED -> Success Forget
-		// DELETE A LIST SINGLE OWNED -> Success Delete
-		//it("Delete Users again (TODO: Remove)", async () => {
-		//	const response = await chai
-		//		.request(server)
-		//		.delete("/users/" + GlobalVars.User1_Id)
-		//		.set({ Authorization: `Bearer ${token}` });
-		//	expect(response).to.have.property("error").to.eql(false);
-		//	expect(response).to.have.status(204);
-		//	let list = await chai
-		//		.request(server)
-		//		.get("/users/")
-		//		.set({ Authorization: `Bearer ${token}` });
-		//	expect(list).to.have.property("body").to.eql([GlobalVars.User2]);
-		//	await chai
-		//		.request(server)
-		//		.delete("/users/" + GlobalVars.User2_Id)
-		//		.set({ Authorization: `Bearer ${token}` });
-		//	list = await chai
-		//		.request(server)
-		//		.get("/users/")
-		//		.set({ Authorization: `Bearer ${token}` });
-		//	expect(list).to.have.property("body").to.eql([]);
-		//});
+	});
+	// SHARE A UNSHARED LIST OWNED -> Success
+	// SHARE A UNSHARED LIST NOT OWNED -> Fail
+	// SHARE A GRANTED LIST OWNED -> Success
+	// SHARE A GRANTED LIST NOT OWNED -> Fail
+	// UNSHARE A UNSHARED LIST OWNED -> Success
+	// UNSHARE A UNSHARED LIST NOT OWNED -> Fail
+	// UNSHARE A GRANTED LIST OWNED -> Success
+	// UNSHARE A GRANTED LIST NOT OWNED -> Fail
+	// ADD A UNKNOWN LIST FROM SHARING CODE -> Success
+	// ADD A ALREADY ADDED LIST FROM SHARING CODE -> Success
+	// DELETE A LIST NOT OWNED NOT GRANTED -> Fail
+	// DELETE A LIST NOT OWNED BUT GRANTED -> Success Forget
+	// DELETE A LIST MULTIPLE OWNED -> Success Forget
+	// DELETE A LIST SINGLE OWNED -> Success Delete
+
+	after(async () => {
+		const response = await chai
+			.request(server)
+			.delete("/users/" + GlobalVars.User1_Id)
+			.set({ Authorization: `Bearer ${token}` });
+		expect(response).to.have.property("error").to.eql(false);
+		expect(response).to.have.status(204);
+		let list = await chai
+			.request(server)
+			.get("/users/")
+			.set({ Authorization: `Bearer ${token}` });
+		expect(list).to.have.property("body").to.eql([GlobalVars.User2]);
+		await chai
+			.request(server)
+			.delete("/users/" + GlobalVars.User2_Id)
+			.set({ Authorization: `Bearer ${token}` });
+		list = await chai
+			.request(server)
+			.get("/users/")
+			.set({ Authorization: `Bearer ${token}` });
+		expect(list).to.have.property("body").to.eql([]);
 	});
 });
