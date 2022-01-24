@@ -4,7 +4,6 @@ import chaiHttp from "chai-http";
 import request from "request";
 import server from "./../src/index";
 import GlobalVars from "./globalVars";
-import { after } from "mocha";
 
 chai.use(chaiHttp);
 
