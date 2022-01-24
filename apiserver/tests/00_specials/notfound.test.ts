@@ -1,8 +1,9 @@
 import "mocha";
-import chai, { expect } from "chai";
+import chai from "chai";
 import chaiHttp from "chai-http";
 import server from "../../src/index";
 import { BaseUrl_NotFound, GlobalVar } from "../global";
+import { expectError } from "../helpers/errors";
 
 chai.use(chaiHttp);
 
@@ -26,13 +27,6 @@ export default function suite() {
 				.put(BaseUrl_NotFound + "/")
 				.set({ Authorization: `Bearer ${GlobalVar.Token}` }),
 		];
-		responses.forEach((response) => {
-			expect(response).to.have.property("error").to.not.eql(false);
-			expect(response).to.have.status(404);
-			expect(response)
-				.to.have.property("body")
-				.to.have.property("message")
-				.to.be.eql("Not Found");
-		});
+		responses.forEach((response) => expectError(response, 404, "Not Found"));
 	});
 }

@@ -3,6 +3,7 @@ import chai, { expect } from "chai";
 import chaiHttp from "chai-http";
 import server from "../../src/index";
 import { BaseUrl_Users, GlobalVar, User1, User2 } from "../global";
+import { expect200 } from "../helpers/success";
 
 chai.use(chaiHttp);
 
@@ -13,8 +14,7 @@ export default function suite() {
 			.request(server)
 			.get(BaseUrl_Users + "/")
 			.set({ Authorization: `Bearer ${GlobalVar.Token}` });
-		expect(response).to.have.property("error").to.eql(false);
-		expect(response).to.have.status(200);
+		expect200(response);
 		expect(response).to.have.property("body").to.eql(result);
 	});
 }

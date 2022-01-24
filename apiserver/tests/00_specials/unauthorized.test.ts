@@ -1,8 +1,9 @@
 import "mocha";
-import chai, { expect } from "chai";
+import chai from "chai";
 import chaiHttp from "chai-http";
 import server from "../../src/index";
 import { BaseUrl_Unauthorized } from "../global";
+import { expectError } from "../helpers/errors";
 
 chai.use(chaiHttp);
 
@@ -14,13 +15,6 @@ export default function suite() {
 			await chai.request(server).post(BaseUrl_Unauthorized + "/"),
 			await chai.request(server).put(BaseUrl_Unauthorized + "/"),
 		];
-		responses.forEach((response) => {
-			expect(response).to.have.property("error").to.not.eql(false);
-			expect(response).to.have.status(401);
-			expect(response)
-				.to.have.property("body")
-				.to.have.property("message")
-				.to.be.eql("Unauthorized");
-		});
+		responses.forEach((response) => expectError(response, 401, "Unauthorized"));
 	});
 }

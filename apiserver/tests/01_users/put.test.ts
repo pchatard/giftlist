@@ -3,6 +3,8 @@ import chai, { expect } from "chai";
 import chaiHttp from "chai-http";
 import server from "../../src/index";
 import { BaseUrl_Users, GlobalVar } from "../global";
+import { expectValidationFailed } from "../helpers/errors";
+import { expect204 } from "../helpers/success";
 
 chai.use(chaiHttp);
 
@@ -13,8 +15,7 @@ export default function suite() {
 			.put(BaseUrl_Users + "/" + GlobalVar.User1_Id)
 			.send({ email: "new@new.fr" })
 			.set({ Authorization: `Bearer ${GlobalVar.Token}` });
-		expect(response).to.have.property("error").to.eql(false);
-		expect(response).to.have.status(204);
+		expect204(response);
 		const changedUser = await chai
 			.request(server)
 			.get(BaseUrl_Users + "/" + GlobalVar.User1_Id)
@@ -29,12 +30,6 @@ export default function suite() {
 			.request(server)
 			.put(BaseUrl_Users + "/" + wrongUUID)
 			.set({ Authorization: `Bearer ${GlobalVar.Token}` });
-		expect(response).to.have.property("error").to.not.eql(false);
-		expect(response).to.have.status(422);
-		expect(response)
-			.to.have.property("body")
-			.to.have.property("message")
-			.to.be.eql("Validation Failed");
-		expect(response).to.have.property("body").to.have.property("details").to.be.not.null;
+		expectValidationFailed(response);
 	});
 }
