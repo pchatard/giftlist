@@ -1,31 +1,15 @@
 import "mocha";
-import chai from "chai";
-import chaiHttp from "chai-http";
-import server from "../../src/index";
-import { BaseUrl_NotFound, GlobalVar } from "../global";
+import { BaseUrl_NotFound } from "../global";
 import { expectError } from "../helpers/errors";
-
-chai.use(chaiHttp);
+import { del, get, post, put } from "../helpers/crud";
 
 export default function suite() {
 	it("Returns 404 Not Found", async () => {
 		const responses = [
-			await chai
-				.request(server)
-				.delete(BaseUrl_NotFound + "/")
-				.set({ Authorization: `Bearer ${GlobalVar.Token}` }),
-			await chai
-				.request(server)
-				.get(BaseUrl_NotFound + "/")
-				.set({ Authorization: `Bearer ${GlobalVar.Token}` }),
-			await chai
-				.request(server)
-				.post(BaseUrl_NotFound + "/")
-				.set({ Authorization: `Bearer ${GlobalVar.Token}` }),
-			await chai
-				.request(server)
-				.put(BaseUrl_NotFound + "/")
-				.set({ Authorization: `Bearer ${GlobalVar.Token}` }),
+			await del(BaseUrl_NotFound + "/"),
+			await get(BaseUrl_NotFound + "/"),
+			await post(BaseUrl_NotFound + "/"),
+			await put(BaseUrl_NotFound + "/"),
 		];
 		responses.forEach((response) => expectError(response, 404, "Not Found"));
 	});
