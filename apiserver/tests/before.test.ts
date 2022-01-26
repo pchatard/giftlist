@@ -28,20 +28,22 @@ before((done) => {
 			if (error) throw new Error(error);
 			const token = JSON.parse(body)["access_token"];
 			GlobalVar.Token = token;
-			fs.writeFileSync("./tests/.env", replaceToken(newValues, token))
+			fs.writeFileSync("./tests/.env", replaceToken(newValues, token));
 			done();
 		});
 	}
 });
 
-const getUnixTimestamp = (date: Date) => Math.floor(date.getTime() / 1000)
+const getUnixTimestamp = (date: Date) => Math.floor(date.getTime() / 1000);
 
 const replaceDate = (str: string) => {
-	const newDate =  "DATE=" + new Date().toISOString()
-	return str ? str.replace(/^DATE=.*$/gm, newDate) : str.concat(newDate + "\n")
-}
+	const newDate = "DATE=" + new Date().toISOString();
+	return str ? str.replace(/^DATE=.*$/gm, newDate) : str.concat(newDate + "\n");
+};
 
 const replaceToken = (str: string, token: string) => {
-	const newToken = "TOKEN=" + token
-	return str.split("TOKEN=").length > 1 ? str.replace(/^TOKEN=.*$/gm, newToken) : str.concat(newToken);
-}
+	const newToken = "TOKEN=" + token;
+	return str.split("TOKEN=").length > 1
+		? str.replace(/^TOKEN=.*$/gm, newToken)
+		: str.concat(newToken);
+};
