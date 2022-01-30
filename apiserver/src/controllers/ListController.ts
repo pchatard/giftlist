@@ -143,6 +143,6 @@ export class ListController extends Controller {
 	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
 		const list: List = await ListService.getFromSharingCode(sharingCode);
 		const user: User = await UserService.get(userId);
-		await ListService.edit(list.id, { owners: [...list.owners, user] });
+		await ListService.edit(list.id, { grantedUsers: [...(list.grantedUsers || []), user] });
 	}
 }
