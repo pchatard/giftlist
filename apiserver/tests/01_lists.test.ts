@@ -202,19 +202,19 @@ describe("Lists", () => {
 			.set({ Authorization: `Bearer ${token}` });
 		expect(response).to.have.property("error").to.eql(false);
 		expect(response).to.have.status(204);
-		let list = await chai
+		let users = await chai
 			.request(server)
 			.get("/users/")
 			.set({ Authorization: `Bearer ${token}` });
-		expect(list).to.have.property("body").to.eql([GlobalVars.User2]);
+		expect(users).to.have.property("body").to.eql([GlobalVars.User2]);
 		await chai
 			.request(server)
 			.delete("/users/" + GlobalVars.User2_Id)
 			.set({ Authorization: `Bearer ${token}` });
-		list = await chai
+		users = await chai
 			.request(server)
 			.get("/users/")
 			.set({ Authorization: `Bearer ${token}` });
-		expect(list).to.have.property("body").to.eql([]);
+		expect(users).to.have.property("body").to.eql([]);
 	});
 });

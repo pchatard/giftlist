@@ -43,7 +43,9 @@ class ListService {
 	 */
 	static async forget(listId: UUID, userId: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["owners", "grantedUsers"],
+		});
 		list.owners = list.owners.filter((owner) => owner.id !== userId);
 		list.grantedUsers = (list.grantedUsers || []).filter((user) => user.id !== userId);
 		return await listRepository.save(list);
