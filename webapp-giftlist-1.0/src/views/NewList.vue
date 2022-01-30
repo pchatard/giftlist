@@ -118,7 +118,7 @@ export default defineComponent({
 					errorMessage: "",
 					required: false,
 				},
-				activateTermDate: false,
+				activateTermDate: true,
 				termDate: {
 					label: "Date d'échéance de votre liste",
 					value: date.toISOString().split("T")[0],
@@ -234,7 +234,7 @@ export default defineComponent({
 			const dateIsInPast = new Date(listInformation.value.step1.termDate.value) <= new Date();
 			if (dateIsInPast) {
 				listInformation.value.step1.termDate.errorMessage =
-					"La date renseigné est dans le passé";
+					"La date renseignée est dans le passé";
 				validateStep1 = false;
 			}
 
