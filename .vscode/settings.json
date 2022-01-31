@@ -8,5 +8,22 @@
   "mocha.requires": [
     "ts-node/register",
     "dotenv/config"
+  ],
+  "sqltools.connections": [
+    {
+      "pgOptions": {
+        "ssl": {
+          "ca": "./apiserver/src/config/certs/root.crt"
+        }
+      },
+      "previewLimit": 50,
+      "server": "free-tier5.gcp-europe-west1.cockroachlabs.cloud",
+      "port": 26257,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "Cockroach",
+      "username": "giftlist",
+      "database": "giftlist-2305.giftlist"
+    }
   ]
 }
