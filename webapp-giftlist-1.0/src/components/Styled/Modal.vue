@@ -153,6 +153,6 @@ export default defineComponent({
 			default: "Annuler",
 		},
 	},
-	emits: ["open", "close", "confirm"],
+	emits: ["close", "confirm"],
 });
 </script>

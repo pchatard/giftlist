@@ -23,7 +23,7 @@
 - [ ] Réfléchir aux différentes règles de validation
 - [ ] Ajouter les validations sur tous les formulaires
 - [ ] Compléter les composants Inputs 
-    - [ ] DatePicker
+    - [x] DatePicker
     - [ ] Rendre le bouton et son action paramétrable (Open URL, Copy)
     - [ ] Ajouter une Icon optionnelle
 - [ ] Compléter les formulaires avec des slots pour ajouter du texte

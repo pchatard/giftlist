@@ -39,7 +39,7 @@
 			<FormDatePicker
 				v-show="values.activateTermDate"
 				:disabled="!values.activateTermDate"
-				class="col-span-1"
+				class="col-span-1 w-auto"
 				:label="values.termDate.label"
 				:value="values.termDate.value"
 				:helperText="values.termDate.helperText"
