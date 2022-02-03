@@ -76,10 +76,10 @@ export default defineComponent({
 		const lists: ComputedRef<List[]> = computed(() => state.list.shared);
 
 		const tableHeaders = [
-			{ title: "", width: "w-8" },
-			{ title: "Nom" },
-			{ title: "Propriétaire" },
-			{ title: "Date d'échéance" },
+			{ title: "", width: "w-8", sortable: false },
+			{ title: "Nom", sortable: true },
+			{ title: "Propriétaire", sortable: true },
+			{ title: "Date d'échéance", sortable: true },
 		];
 
 		const openList = () => {

@@ -72,12 +72,12 @@ export default defineComponent({
 		});
 
 		const tableHeaders = ref([
-			{ title: "Favori", width: "w-10 text-center" },
-			{ title: "Titre" },
-			{ title: "Type" },
-			{ title: "Status" },
-			{ title: "Date d'ajout" },
-			{ title: "Prix" },
+			{ title: "Favori", width: "w-10 text-center", sortable: true },
+			{ title: "Titre", sortable: true },
+			{ title: "Type", sortable: true },
+			{ title: "Status", sortable: true },
+			{ title: "Date d'ajout", sortable: true },
+			{ title: "Prix", sortable: true },
 		]);
 		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
 

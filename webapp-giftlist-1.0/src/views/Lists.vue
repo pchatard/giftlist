@@ -31,7 +31,6 @@ import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import router from "@/router";
 import { List } from "@/types/api/List";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
@@ -52,11 +51,11 @@ export default defineComponent({
 		const router = useRouter();
 
 		const tableHeaders = [
-			{ title: "", width: "w-8" },
-			{ title: "Nom" },
-			{ title: "Propriétaire" },
-			{ title: "Status" },
-			{ title: "Date d'échéance" },
+			{ title: "", width: "w-8", sortable: false },
+			{ title: "Nom", sortable: true },
+			{ title: "Propriétaire", sortable: true },
+			{ title: "Status", sortable: true },
+			{ title: "Date d'échéance", sortable: true },
 		];
 
 		const lists: ComputedRef<List[]> = computed(() => state.list.mine);

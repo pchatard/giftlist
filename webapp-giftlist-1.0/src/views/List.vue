@@ -82,11 +82,11 @@ export default defineComponent({
 		const auth = ref(inject("Auth") as any);
 
 		const tableHeaders = ref([
-			{ title: "Favori", width: "w-10 text-center" },
-			{ title: "Titre" },
-			{ title: "Type" },
-			{ title: "Date d'ajout" },
-			{ title: "Prix" },
+			{ title: "Favori", width: "w-10 text-center", sortable: true },
+			{ title: "Titre", sortable: true },
+			{ title: "Type", sortable: true },
+			{ title: "Date d'ajout", sortable: true },
+			{ title: "Prix", sortable: true },
 		]);
 
 		const list = computed(() => getters.getListById(listId));
