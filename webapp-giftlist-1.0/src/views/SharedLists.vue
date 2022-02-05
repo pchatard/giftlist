@@ -1,6 +1,6 @@
 <template>
 	<DefaultLayout title="Les listes de mes copains">
-		<Table :headers="tableHeaders">
+		<Table :headers="tableHeaders" @sort="handleSort">
 			<tr
 				v-for="list in lists"
 				:key="list.sharingCode"
@@ -75,12 +75,18 @@ export default defineComponent({
 		const { dispatch, state } = useStore();
 		const lists: ComputedRef<List[]> = computed(() => state.list.shared);
 
-		const tableHeaders = [
+		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
-			{ title: "Nom", sortable: true },
-			{ title: "Propriétaire", sortable: true },
-			{ title: "Date d'échéance", sortable: true },
-		];
+			{ title: "Nom", sortable: true, sorted: "none" },
+			{ title: "Propriétaire", sortable: true, sorted: "none" },
+			{ title: "Date d'échéance", sortable: true, sorted: "none" },
+		]);
+
+		const handleSort = (headers: Array<any>) => {
+			tableHeaders.value = headers;
+
+			// TODO : Sort displayed data depending on tableHeaders sorted properties
+		};
 
 		const openList = () => {
 			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
@@ -159,6 +165,7 @@ export default defineComponent({
 			confirmNewSharingCode,
 			detailsModal,
 			handleDetailsModal,
+			handleSort,
 		};
 	},
 });

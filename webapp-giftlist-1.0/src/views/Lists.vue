@@ -1,6 +1,6 @@
 <template>
 	<DefaultLayout title="Mes listes">
-		<Table :headers="tableHeaders">
+		<Table :headers="tableHeaders" @sort="handleSort">
 			<tr
 				v-for="list in lists"
 				:key="list.id"
@@ -38,6 +38,8 @@ import Table from "@/components/Styled/Table.vue";
 import ListItem from "@/components/Styled/ListItem.vue";
 import Modal from "@/components/Styled/Modal.vue";
 
+import { TableHeader as TableHeaderType } from "@/types/TableHeader";
+
 export default defineComponent({
 	name: "Lists",
 	components: {
@@ -50,13 +52,19 @@ export default defineComponent({
 		const { dispatch, state } = useStore();
 		const router = useRouter();
 
-		const tableHeaders = [
+		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
-			{ title: "Nom", sortable: true },
-			{ title: "Propriétaire", sortable: true },
-			{ title: "Status", sortable: true },
-			{ title: "Date d'échéance", sortable: true },
-		];
+			{ title: "Nom", sortable: true, sorted: "none" },
+			{ title: "Propriétaire", sortable: true, sorted: "none" },
+			{ title: "Status", sortable: true, sorted: "none" },
+			{ title: "Date d'échéance", sortable: true, sorted: "none" },
+		]);
+
+		const handleSort = (headers: Array<any>) => {
+			tableHeaders.value = headers;
+
+			// TODO : Sort displayed data depending on tableHeaders sorted properties
+		};
 
 		const lists: ComputedRef<List[]> = computed(() => state.list.mine);
 
@@ -94,6 +102,7 @@ export default defineComponent({
 			lists,
 			router,
 			tableHeaders,
+			handleSort,
 		};
 	},
 });
