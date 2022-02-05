@@ -10,7 +10,7 @@
 		>
 			<GiftGrid v-for="gift in gifts" :key="gift.id" :gift="gift" :shared="true" />
 		</div>
-		<Table v-else :headers="tableHeaders">
+		<Table v-else :headers="tableHeaders" @sort="handleSort">
 			<tr
 				v-for="gift in gifts"
 				:key="gift.id"
@@ -72,13 +72,20 @@ export default defineComponent({
 		});
 
 		const tableHeaders = ref([
-			{ title: "Favori", width: "w-10 text-center" },
-			{ title: "Titre" },
-			{ title: "Type" },
-			{ title: "Status" },
-			{ title: "Date d'ajout" },
-			{ title: "Prix" },
+			{ title: "Favori", width: "w-10 text-center", sortable: true, sorted: "none" },
+			{ title: "Titre", sortable: true, sorted: "none" },
+			{ title: "Type", sortable: true, sorted: "none" },
+			{ title: "Status", sortable: true, sorted: "none" },
+			{ title: "Date d'ajout", sortable: true, sorted: "none" },
+			{ title: "Prix", sortable: true, sorted: "none" },
 		]);
+
+		const handleSort = (headers: Array<any>) => {
+			tableHeaders.value = headers;
+
+			// TODO : Sort displayed data depending on tableHeaders sorted properties
+		};
+
 		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
 
 		const selectedGift = ref();
@@ -146,6 +153,7 @@ export default defineComponent({
 			tableHeaders,
 			toggleDisplayMode,
 			selectedGift,
+			handleSort,
 		};
 	},
 });

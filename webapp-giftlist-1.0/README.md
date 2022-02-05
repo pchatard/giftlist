@@ -52,7 +52,9 @@
 ## Nouvelles features 
 
 ### v1
-- [ ] Ajouter des tris par colonnes sur les listes
+- [ ] Ajouter des tris par colonnes sur les listes :
+    - [x] Créer les boutons et le système de tri
+    - [ ] Gérer les tris pour chaque composant 
 - [x] Nouvelle page : les cadeaux que j'ai réservé
 - [x] Ajouter des amis
 
