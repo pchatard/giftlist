@@ -1,4 +1,4 @@
-import "mocha";
+import "chai-http";
 import { expect } from "chai";
 import APIError from "../../src/errors/APIError";
 

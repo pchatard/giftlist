@@ -1,7 +1,7 @@
 import "mocha";
 import { expectError } from "./../helpers/error";
 import { del, get, post, put } from "./../helpers/crud";
-import { BaseUrl_NotFound } from "./../global/constants";
+import { BaseUrl_NotFound } from "./../global";
 
 export default function suite() {
 	it("Returns 404 Not Found", async () => {

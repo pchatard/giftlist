@@ -2,7 +2,7 @@ import "mocha";
 import chai from "chai";
 import { v4 } from "uuid";
 import server from "../../src/index";
-import { BaseUrl_Users } from "./../global/constants";
+import { BaseUrl_Users } from "./../global";
 import { expectError } from "../helpers/error";
 
 export default function suite() {

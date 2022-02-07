@@ -1,4 +1,3 @@
-import "mocha";
 import { expect } from "chai";
 
 function success(response: ChaiHttp.Response, successCode: number) {
