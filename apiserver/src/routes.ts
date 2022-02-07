@@ -41,7 +41,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_ListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string"},"closureDate":{"dataType":"datetime"},"isShared":{"dataType":"boolean","default":false}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},"isShared":{"dataType":"boolean","default":false}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
@@ -50,6 +50,7 @@ const models: TsoaRoute.Models = {
             "sharingCode": {"ref":"UUID"},
             "title": {"dataType":"string","required":true},
             "closureDate": {"dataType":"datetime"},
+            "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
             "isShared": {"dataType":"boolean","default":false},
         },
         "additionalProperties": false,

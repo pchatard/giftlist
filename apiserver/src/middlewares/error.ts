@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { JsonWebTokenError } from "jsonwebtoken";
 import { ValidateError } from "tsoa";
 import OwnershipError from "./../errors/UserErrors/OwnershipError";
 
@@ -9,7 +10,7 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
 			message: "Validation Failed",
 			details: err?.fields,
 		});
-	} else if (err instanceof OwnershipError) {
+	} else if (err instanceof OwnershipError || err instanceof JsonWebTokenError) {
 		res.status(401).send({
 			message: "Unauthorized",
 		});
@@ -26,15 +27,4 @@ export function notFoundHandler(_req: Request, res: Response) {
 	res.status(404).send({
 		message: "Not Found",
 	});
-}
-
-export function tokenHandler(req: Request, res: Response, next: NextFunction) {
-	const token = req.headers["authorization"];
-	if (!token) {
-		res.status(401).send({
-			message: "Unauthorized",
-		});
-	} else {
-		next();
-	}
 }

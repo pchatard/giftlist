@@ -66,6 +66,12 @@
 						"type": "string",
 						"format": "date-time"
 					},
+					"ownersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
+					},
 					"isShared": {
 						"type": "boolean",
 						"default": false
@@ -86,13 +92,20 @@
 						"type": "string",
 						"format": "date-time"
 					},
+					"ownersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
+					},
 					"isShared": {
 						"type": "boolean",
 						"default": false
 					}
 				},
 				"required": [
-					"title"
+					"title",
+					"ownersIds"
 				],
 				"type": "object",
 				"additionalProperties": false
