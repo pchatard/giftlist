@@ -1,4 +1,4 @@
-import { GlobalVar } from "./../global";
+import { GlobalVar, List3 } from "./../global";
 import { BaseUrl_Users, List1, List2, User1, User2 } from "./../global";
 import { post } from "./../helpers/crud";
 import { expect200 } from "./../helpers/success";
@@ -11,10 +11,12 @@ export default async function before(): Promise<void> {
 			GlobalVar.User1_Id = response.body.id;
 			List1.ownersIds.push(GlobalVar.User1_Id);
 			List2.ownersIds.push(GlobalVar.User1_Id);
+			List3.ownersIds.push(GlobalVar.User1_Id);
 		}
 		if (index == 1) {
 			GlobalVar.User2_Id = response.body.id;
 			List2.grantedUsersIds?.push(GlobalVar.User2_Id);
+			List3.ownersIds.push(GlobalVar.User2_Id);
 		}
 	});
 }

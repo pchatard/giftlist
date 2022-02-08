@@ -14,11 +14,19 @@ export const User2: CreateUserDTO = {
 export const List1: CreateListDTO = {
 	title: "TestList1",
 	ownersIds: [],
+	grantedUsersIds: [],
 	isShared: false,
 };
 
 export const List2: CreateListDTO = {
 	title: "TestList2",
+	ownersIds: [],
+	grantedUsersIds: [],
+	isShared: true,
+};
+
+export const List3: CreateListDTO = {
+	title: "TestList3",
 	ownersIds: [],
 	grantedUsersIds: [],
 	isShared: true,

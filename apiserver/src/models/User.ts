@@ -33,7 +33,7 @@ export class User {
 	public friendLists?: List[];
 
 	@CreateDateColumn()
-	createdDate?: Date;
+	createdDate!: Date;
 }
 
 export default User;

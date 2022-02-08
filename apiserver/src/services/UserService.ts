@@ -92,7 +92,7 @@ class UserService {
 				res = (user.lists || []).concat(user.friendLists || []);
 				break;
 		}
-		return res;
+		return res.sort((a, b) => a.createdDate.valueOf() - b.createdDate.valueOf());
 	}
 }
 

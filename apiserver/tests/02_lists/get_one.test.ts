@@ -18,7 +18,6 @@ export default function suite() {
 		expect200(response);
 		expect(response).to.have.property("body").to.deep.include(List2);
 		expect(response).to.have.property("body").to.have.property("sharingCode").to.be.a.string;
-		expect(response).to.have.property("body").to.have.property("closureDate");
 	});
 	it("Returns 200 with list informations, if owned", async () => {
 		const response = await get(

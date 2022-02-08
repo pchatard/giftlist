@@ -6,4 +6,5 @@ export default class {
 
 	public static List1_Id: string = "";
 	public static List2_Id: string = "";
+	public static List3_Id: string = "";
 }

@@ -92,6 +92,7 @@ export class ListController extends Controller {
 			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
 				list;
 			rest.ownersIds = owners.map((u) => u.id);
+			rest.closureDate = rest.closureDate || undefined;
 			return { ...rest } as ListDTO;
 		});
 	}

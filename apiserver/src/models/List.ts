@@ -41,10 +41,10 @@ export class List {
 	public grantedUsersIds?: UUID[];
 
 	@CreateDateColumn()
-	createdDate?: Date;
+	createdDate!: Date;
 
 	@UpdateDateColumn()
-	updatedDate?: Date;
+	updatedDate!: Date;
 }
 
 export default List;
