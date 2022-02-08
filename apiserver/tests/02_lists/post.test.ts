@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { BaseUrl_Lists, GlobalVar, List1, List2 } from "../global";
+import { BaseUrl_Lists, GlobalVar, List1, List2 } from "./../global";
 import { expect200 } from "./../helpers/success";
 import { expectValidationFailed } from "./../helpers/error";
 import { post } from "./../helpers/crud";

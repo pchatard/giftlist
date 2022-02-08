@@ -1,4 +1,4 @@
-import Gift from "../services/GiftService";
+import Gift from "./../services/GiftService";
 import { Request, Response } from "express";
 
 class GiftController {

@@ -17,7 +17,7 @@ import User from "./../models/User";
 import { UUID } from "./../types/UUID";
 import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
 import { CreateUserDTO, UserDTO, UserIdDTO } from "./../dto/users";
-import { SelectKindList } from "../types/SelectKindList";
+import { SelectKindList } from "./../types/SelectKindList";
 import { ListController } from "./ListController";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security

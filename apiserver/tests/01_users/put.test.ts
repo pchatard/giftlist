@@ -1,8 +1,8 @@
 import { expect } from "chai";
-import { BaseUrl_Users, GlobalVar } from "../global";
-import { expectValidationFailed } from "../helpers/error";
-import { expect204 } from "../helpers/success";
-import { get, put } from "../helpers/crud";
+import { BaseUrl_Users, GlobalVar } from "./../global";
+import { expectValidationFailed } from "./../helpers/error";
+import { expect204 } from "./../helpers/success";
+import { get, put } from "./../helpers/crud";
 
 export default function suite() {
 	it("Returns 204 with user informations", async () => {

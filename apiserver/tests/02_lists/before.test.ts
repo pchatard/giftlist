@@ -1,7 +1,7 @@
-import { GlobalVar } from "../global";
-import { BaseUrl_Users, List1, List2, User1, User2 } from "../global";
-import { post } from "../helpers/crud";
-import { expect200 } from "../helpers/success";
+import { GlobalVar } from "./../global";
+import { BaseUrl_Users, List1, List2, User1, User2 } from "./../global";
+import { post } from "./../helpers/crud";
+import { expect200 } from "./../helpers/success";
 
 export default async function before(): Promise<void> {
 	const responses = [await post(BaseUrl_Users, User1), await post(BaseUrl_Users, User2)];

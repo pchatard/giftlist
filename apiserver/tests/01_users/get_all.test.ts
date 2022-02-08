@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { BaseUrl_Users, User1, User2 } from "../global";
-import { expect200 } from "../helpers/success";
-import { get } from "../helpers/crud";
+import { BaseUrl_Users, User1, User2 } from "./../global";
+import { expect200 } from "./../helpers/success";
+import { get } from "./../helpers/crud";
 
 export default function suite() {
 	it("Returns 200 with all users as an array", async () => {

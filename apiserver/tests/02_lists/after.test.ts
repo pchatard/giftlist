@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { BaseUrl_Users, GlobalVar } from "../global";
-import { del, get } from "../helpers/crud";
-import { expect204 } from "../helpers/success";
+import { BaseUrl_Users, GlobalVar } from "./../global";
+import { del, get } from "./../helpers/crud";
+import { expect204 } from "./../helpers/success";
 
 export default async function after(): Promise<void> {
 	await del(BaseUrl_Users + "/" + GlobalVar.User2_Id);

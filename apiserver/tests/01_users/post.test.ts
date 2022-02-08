@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { BaseUrl_Users, GlobalVar, User1, User2 } from "../global";
+import { BaseUrl_Users, GlobalVar, User1, User2 } from "./../global";
 import MailAlreadyUsedError from "./../../src/errors/UserErrors/MailAlreadyUsedError";
 import { expect200 } from "./../helpers/success";
 import { expect500, expectValidationFailed } from "./../helpers/error";

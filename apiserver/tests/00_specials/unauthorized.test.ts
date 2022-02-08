@@ -1,9 +1,9 @@
 import "mocha";
 import chai from "chai";
 import { v4 } from "uuid";
-import server from "../../src/index";
+import server from "./../../src/index";
 import { BaseUrl_Users } from "./../global";
-import { expectError } from "../helpers/error";
+import { expectError } from "./../helpers/error";
 
 export default function suite() {
 	it("Returns 401 Unauthorized", async () => {

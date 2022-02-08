@@ -1,6 +1,6 @@
 import "chai-http";
 import { expect } from "chai";
-import APIError from "../../src/errors/APIError";
+import APIError from "./../../src/errors/APIError";
 
 function error(response: ChaiHttp.Response, errorCode: number) {
 	expect(response).to.have.property("error").to.not.eql(false);
