@@ -65,9 +65,9 @@ export class UserController extends Controller {
 	@Delete("{userId}")
 	async delete(@Path() userId: UUID): Promise<void> {
 		const listController: ListController = new ListController();
-		(await UserService.getUserLists(userId, SelectKindList.ALL)).forEach(async (list) =>
-			await listController.delete(list.id, userId)
-		);
+		for (const list of await UserService.getUserLists(userId, SelectKindList.ALL)) {
+			await listController.delete(list.id, userId);
+		}
 		await UserService.delete(userId);
 	}
 

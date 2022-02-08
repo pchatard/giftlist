@@ -70,7 +70,9 @@ export class ListController extends Controller {
 		if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
 			await ListService.forget(listId, userId);
 			if (ownerIds.length == 1 && ownerIds.includes(userId)) {
-				grantedIds.forEach(async (grantedId) => await ListService.forget(listId, grantedId));
+				for (const grantedId of grantedIds) {
+					await ListService.forget(listId, grantedId);
+				}
 				await ListService.delete(listId);
 			}
 		} else {
