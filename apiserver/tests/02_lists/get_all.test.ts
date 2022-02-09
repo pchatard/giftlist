@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { BaseUrl_Lists, GlobalVar, List1, List2, List3 } from "./../global";
+import { GlobalVar, List1, List2, List3, Url_ListGetAll } from "./../global";
 import { expect200 } from "./../helpers/success";
 import { get } from "./../helpers/crud";
 
@@ -7,7 +7,7 @@ export default function suite() {
 	// TODO: Test SELECT option
 	it("Returns 200 with list informations", async () => {
 		const result: any = [List1, List2, List3];
-		const response = await get(BaseUrl_Lists + "?userId=" + GlobalVar.User1_Id + "&select=all");
+		const response = await get(Url_ListGetAll(GlobalVar.User1_Id, "all"));
 		expect200(response);
 		expect(response).to.have.property("body").to.be.an("array");
 		(response.body as any[]).forEach((element, index) => {
