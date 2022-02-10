@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Mes amis">
+	<DefaultLayout title="Mes amis" back>
 		<div class="flex items-stretch border rounded-lg size">
 			<div class="w-1/3 flex flex-col">
 				<Subtitle class="px-4 py-2">Mes amis</Subtitle>

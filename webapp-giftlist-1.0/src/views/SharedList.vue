@@ -1,5 +1,10 @@
 <template>
-	<DefaultLayout title="La liste de mon copain">
+	<DefaultLayout
+		title="La liste de mon copain"
+		back
+		:backButtonTitle="backButtonTitle"
+		:backButtonLink="router.options.history.state.back"
+	>
 		<template v-slot:commands>
 			<ListGridToggleButton :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
 		</template>
@@ -69,6 +74,15 @@ export default defineComponent({
 		onMounted(() => {
 			dispatch("initializeGifts", listCode);
 			dispatch("initializePreferences", auth.value.user.sub);
+		});
+
+		const backButtonTitle = computed(() => {
+			const previous = router.options.history.state.back;
+			if (previous?.toString().includes("/app/booked")) {
+				return "Mes cadeaux réservés";
+			} else {
+				return "Mes listes partagées";
+			}
 		});
 
 		const tableHeaders = ref([
@@ -154,6 +168,7 @@ export default defineComponent({
 			toggleDisplayMode,
 			selectedGift,
 			handleSort,
+			backButtonTitle,
 		};
 	},
 });

@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Options">
+	<DefaultLayout title="Options" back>
 		<div class="w-10/12 mx-auto">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
