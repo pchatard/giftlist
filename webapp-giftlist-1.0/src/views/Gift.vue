@@ -1,5 +1,10 @@
 <template>
-	<DefaultLayout title="Cadeau">
+	<DefaultLayout
+		title="Cadeau"
+		back
+		backButtonTitle="Ma liste"
+		:backButtonLink="'/app/lists/' + listId"
+	>
 		<template v-slot:commands>
 			<Button btnStyle="danger" hasIcon @click="deleteGift">
 				<template v-slot:icon>
@@ -27,7 +32,7 @@ import Button from "@/components/Styled/Button.vue";
 
 import { TrashIcon } from "@heroicons/vue/outline";
 import { GiftCategory } from "@/types/api/GiftCategory";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { Gift } from "@/types/api/Gift";
 
@@ -42,6 +47,7 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 		const { dispatch } = useStore();
+		const listId = router.currentRoute.value.params.id;
 
 		const giftCategories: GiftCategory[] = [
 			{ id: "x", name: "Type de cadeau" },
@@ -140,7 +146,6 @@ export default defineComponent({
 		};
 
 		const saveGiftChanges = () => {
-			const listId = router.currentRoute.value.params.id;
 			// Validate fields
 			if (!validateGiftFields()) {
 				return;
@@ -183,6 +188,7 @@ export default defineComponent({
 		};
 
 		return {
+			listId,
 			giftInformation,
 			handleGiftInformationChange,
 			cancel,

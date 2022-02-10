@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Paramètres">
+	<DefaultLayout title="Paramètres" back>
 		<section class="my-4">
 			<Subtitle>Affichage</Subtitle>
 			<div>

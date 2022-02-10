@@ -4,12 +4,12 @@
 
 - [ ] Homepage
 - [ ] Mentions Légales, etc
+- [ ] (Synthèse de liste)
+- [ ] (Import des cadeaux)
 - [x] Profil
 - [x] Mes amis
 - [x] Détails d'un cadeau
 - [x] Modifier un cadeau
-- [ ] (Synthèse de liste)
-- [ ] (Import des cadeaux)
 
 # Tâches
 
@@ -39,9 +39,9 @@
 - [ ] Gestion des erreurs : Retravailler la snackbar
 - [ ] Externaliser tous les labels dans des fichiers JSON
 - [ ] Skeletons et animations chargement
-- [ ] Bouton retour
 - [ ] Accessibilité
 - [ ] (Clic droit personnalisé)
+- [x] Bouton retour
 
 ## CSS
 - [ ] Uniformiser les styles

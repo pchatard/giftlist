@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Nouveau cadeau">
+	<DefaultLayout title="Nouveau cadeau" back>
 		<GiftForm
 			action="create"
 			:values="giftInformation"

@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Mon compte">
+	<DefaultLayout title="Mon compte" back>
 		<div class="flex flex-col my-4">
 			<div class="flex items-center justify-between border rounded-lg px-4 my-4">
 				<img :src="auth.user.picture" alt="Profile Image" class="rounded-full m-4" />

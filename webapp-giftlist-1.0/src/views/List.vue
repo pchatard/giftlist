@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Ma liste">
+	<DefaultLayout title="Ma liste" back backButtonTitle="Mes listes" backButtonLink="/app/lists">
 		<template v-slot:commands>
 			<span
 				class="
