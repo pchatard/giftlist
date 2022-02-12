@@ -1,0 +1,19 @@
+{
+    "links": {
+        "login": "Connexion",
+        "lists": "Mes listes",
+        "shared": "Mes listes partagées",
+        "booked": "Mes cadeaux réservés"
+    },
+    "actions": {
+        "lists": "Nouvelle liste",
+        "shared": "Ajouter un code",
+        "list": "Nouvelle idée cadeau"
+    },
+    "dropdown": {
+        "profile": "Mon compte",
+        "friends": "Mes amis",
+        "settings": "Paramètres",
+        "logout": "Déconnexion"
+    }
+}

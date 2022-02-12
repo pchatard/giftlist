@@ -12,7 +12,7 @@
 				class="mx-1"
 				btnStyle="secondary"
 			>
-				Connexion
+				{{ labels.links.login }}
 			</Button>
 		</ul>
 	</div>
@@ -20,6 +20,8 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref } from "vue";
+
+import labels from "@/labels/fr/navbar.json";
 
 import Button from "@/components/Styled/Button.vue";
 import { useStore } from "vuex";
@@ -39,6 +41,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			auth,
 			login,
 		};
