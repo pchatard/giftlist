@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Les listes de mes copains">
+	<DefaultLayout :title="labels.titles.shared">
 		<Table :headers="tableHeaders" @sort="handleSort">
 			<tr
 				v-for="list in lists"
@@ -53,6 +53,8 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import router from "@/router";
 
+import labels from "@/labels/fr/lists.json";
+
 import { List } from "@/types/api/List";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
@@ -77,9 +79,9 @@ export default defineComponent({
 
 		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
-			{ title: "Nom", sortable: true, sorted: "none" },
-			{ title: "Propriétaire", sortable: true, sorted: "none" },
-			{ title: "Date d'échéance", sortable: true, sorted: "none" },
+			{ title: labels.list.table.title, sortable: true, sorted: "none" },
+			{ title: labels.list.table.owners, sortable: true, sorted: "none" },
+			{ title: labels.list.table.termDate, sortable: true, sorted: "none" },
 		]);
 
 		const handleSort = (headers: Array<any>) => {
@@ -155,6 +157,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			router,
 			lists,
 			openList,
