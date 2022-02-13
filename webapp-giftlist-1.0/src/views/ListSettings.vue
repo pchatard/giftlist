@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Options" back>
+	<DefaultLayout :title="labels.titles.listSettings" back>
 		<div class="w-10/12 mx-auto">
 			<Disclosure v-slot="{ open }">
 				<DisclosureButton
@@ -89,6 +89,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
@@ -210,6 +212,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			generalInformation,
 			handleGeneralInformationChange,
 			handleSharingOptionsChange,

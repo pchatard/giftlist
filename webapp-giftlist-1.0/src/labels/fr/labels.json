@@ -1,0 +1,120 @@
+{
+    "titles": {
+        "lists": "Mes listes",
+        "listSettings": "Options",
+        "newList": "Nouvelle liste",
+        "shared": "Mes listes partagées",
+        "booked": "Mes cadeaux réservés",
+        "newGift": "Nouveau cadeau",
+        "profile": "Mon compte",
+        "friends": "Mes amis",
+        "settings": "Paramètres"
+    },
+    "navbar": {
+        "links": {
+            "login": "Connexion",
+            "lists": "Mes listes",
+            "shared": "Mes listes partagées",
+            "booked": "Mes cadeaux réservés"
+        },
+        "actions": {
+            "lists": "Nouvelle liste",
+            "shared": "Ajouter un code",
+            "list": "Nouvelle idée cadeau"
+        },
+        "dropdown": {
+            "profile": "Mon compte",
+            "friends": "Mes amis",
+            "settings": "Paramètres",
+            "logout": "Déconnexion"
+        }
+    },
+    "tables": {
+        "list": {
+            "title": "Titre",
+            "owners": "Propriétaire(s)",
+            "status": "Status",
+            "termDate": "Date d'échéance"
+        },
+        "gift": {
+            "favorite": "Favori",
+            "type": "Type",
+            "status": "Status",
+            "price": "Prix",
+            "creationDate": "Date d'ajout",
+            "title": "Titre"
+        }
+    },
+    "modals": {
+        "defaults": {
+            "cancel": "Annuler"
+        },
+        "deleteList": {
+            "confirm": "Supprimer",
+            "cancel": "Annuler",
+            "title": "Supprimer la liste ",
+            "text": "Êtes-vous sûr de vouloir supprimer cette liste ?",
+            "text2": "Cette action est irréversible."
+        },
+        "code": {
+            "title": "Entrer un nouveau code de partage",
+            "confirm": "Valider",
+            "cancel": "Annuler",
+            "input": {
+                "label": "Code de partage",
+                "placeholder": "abcd-efgh-ijkl-mnop",
+                "helperText": "Le code que vous a transmis votre ami(e)"
+            }
+        },
+        "details": {
+            "confirm": "Ouvrir"
+        },
+        "bookGift": {
+            "title": "Réserver ",
+            "confirm": "Réserver",
+            "cancel": "Réserver"
+        },
+        "giftDetails": {
+            "confirm": "Réserver",
+            "cancel": "Fermer",
+            "openNewTab": "Ouvrir dans un nouvel onglet",
+            "brand": "Marque",
+            "size": "Taille",
+            "color": "Couleur",
+            "comments": "Commentaires",
+            "detailsStatus": {
+                "available": "Ce cadeau est disponible !",
+                "booked": "Déjà réservé"
+            }
+        },
+        "deleteGift": {
+            "title": "Supprimer ",
+            "confirm": "Supprimer"
+        }
+    },
+    "lists": {
+        "buttons": {
+            "settings": "Options",
+            "delete": "Supprimer",
+            "info": "Détails"
+        },
+        "subtitle": "idées cadeaux",
+        "status": {
+            "public": "Publique",
+            "private": "Privée"
+        },
+        "modal": {}
+    },
+    "gifts": {
+        "title": "Cadeau",
+        "status": {
+            "booked": "Réservé",
+            "available": "Disponible"
+        },
+        "buttons": {
+            "open": "Ouvrir",
+            "book": "Réserver",
+            "delete": "Supprimer"
+        }
+    }
+}

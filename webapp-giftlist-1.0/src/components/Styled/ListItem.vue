@@ -7,7 +7,7 @@
 			<div>
 				<div class="text-sm font-medium text-gray-900 whitespace-normal">{{ list.title }}</div>
 				<div v-if="shared" class="text-sm text-gray-500">
-					{{ list.gifts.length }} {{ labels.list.table.subtitle }}
+					{{ list.gifts.length }} {{ labels.lists.subtitle }}
 				</div>
 				<div v-else class="text-sm text-gray-500">Sous-titre</div>
 			</div>
@@ -24,7 +24,7 @@
 				'bg-green-100 text-green-800': list.isShared,
 			}"
 		>
-			{{ list.isShared ? labels.list.table.status.public : labels.list.table.status.private }}
+			{{ list.isShared ? labels.lists.status.public : labels.lists.status.private }}
 		</span>
 	</TableData>
 	<TableData class="text-sm text-gray-500" content="Aujourd'hui" />
@@ -36,7 +36,7 @@
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<InformationCircleIcon class="h-4 w-4 mr-2" />
-				{{ labels.list.table.buttons.info }}
+				{{ labels.lists.buttons.info }}
 			</span>
 		</button>
 		<button
@@ -46,7 +46,7 @@
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<CogIcon class="h-4 w-4 mr-2" />
-				{{ labels.list.table.buttons.settings }}
+				{{ labels.lists.buttons.settings }}
 			</span>
 		</button>
 		<button
@@ -56,7 +56,7 @@
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-red-100 rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />
-				{{ labels.list.table.buttons.delete }}
+				{{ labels.lists.buttons.delete }}
 			</span>
 		</button>
 	</td>
@@ -65,7 +65,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import labels from "@/labels/fr/lists.json";
+import labels from "@/labels/fr/labels.json";
 
 import TableData from "@/components/Styled/TableData.vue";
 import { TrashIcon, ViewListIcon, InformationCircleIcon, CogIcon } from "@heroicons/vue/outline";

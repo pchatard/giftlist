@@ -58,7 +58,7 @@
 								@click="redirectToProfile"
 							>
 								<UserIcon class="w-5 h-5 mr-2" />
-								{{ labels.dropdown.profile }}
+								{{ labels.navbar.dropdown.profile }}
 							</button>
 						</MenuItem>
 						<MenuItem v-slot="{ active }">
@@ -70,7 +70,7 @@
 								@click="redirectToFriends"
 							>
 								<UsersIcon class="w-5 h-5 mr-2" />
-								{{ labels.dropdown.friends }}
+								{{ labels.navbar.dropdown.friends }}
 							</button>
 						</MenuItem>
 						<MenuItem v-slot="{ active }">
@@ -82,7 +82,7 @@
 								@click="redirectToSettings"
 							>
 								<CogIcon class="w-5 h-5 mr-2" />
-								{{ labels.dropdown.settings }}
+								{{ labels.navbar.dropdown.settings }}
 							</button>
 						</MenuItem>
 					</div>
@@ -95,7 +95,7 @@
 							@click="$emit('logout')"
 						>
 							<LogoutIcon class="w-5 h-5 mr-2" />
-							{{ labels.dropdown.logout }}
+							{{ labels.navbar.dropdown.logout }}
 						</button>
 					</MenuItem>
 				</MenuItems>
@@ -105,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import labels from "@/labels/fr/navbar.json";
+import labels from "@/labels/fr/labels.json";
 
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { CogIcon, UserCircleIcon, LogoutIcon, UserIcon, UsersIcon } from "@heroicons/vue/outline";

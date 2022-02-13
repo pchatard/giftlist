@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Mes amis" back>
+	<DefaultLayout :title="labels.titles.friends" back>
 		<div class="flex items-stretch border rounded-lg size">
 			<div class="w-1/3 flex flex-col">
 				<Subtitle class="px-4 py-2">Mes amis</Subtitle>
@@ -115,6 +115,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+
+import labels from "@/labels/fr/labels.json";
+
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Button from "@/components/Styled/Button.vue";
 import Subtitle from "@/components/Styled/Subtitle.vue";
@@ -171,6 +174,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			acceptFriendRequest,
 			declineFriendRequest,
 			deleteFriend,

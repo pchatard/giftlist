@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Nouveau cadeau" back>
+	<DefaultLayout :title="labels.titles.newGift" back>
 		<GiftForm
 			action="create"
 			:values="giftInformation"
@@ -12,6 +12,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import GiftForm from "@/components/Gift/GiftForm.vue";
@@ -175,6 +177,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			giftInformation,
 			handleGiftInformationChange,
 			cancel,

@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Mon compte" back>
+	<DefaultLayout :title="labels.titles.profile" back>
 		<div class="flex flex-col my-4">
 			<div class="flex items-center justify-between border rounded-lg px-4 my-4">
 				<img :src="auth.user.picture" alt="Profile Image" class="rounded-full m-4" />
@@ -123,6 +123,8 @@
 <script lang="ts">
 import { defineComponent, inject, ref } from "vue";
 
+import labels from "@/labels/fr/labels.json";
+
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Subtitle from "@/components/Styled/Subtitle.vue";
@@ -153,6 +155,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			auth,
 			friends,
 			verifyEmail,

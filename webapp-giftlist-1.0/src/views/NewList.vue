@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Nouvelle liste" back>
+	<DefaultLayout :title="labels.titles.newList" back>
 		<div class="flex flex-col">
 			<div class="relative my-4 flex flex-col border rounded-lg">
 				<Subtitle class="absolute top-0 left-4 transform -translate-y-1/2 bg-white px-4">{{
@@ -56,6 +56,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+
+import labels from "@/labels/fr/labels.json";
 
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
@@ -247,6 +249,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			cancel,
 			currentComponent,
 			handleChangeStepFromStepper,

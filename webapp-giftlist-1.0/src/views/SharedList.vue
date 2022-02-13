@@ -1,6 +1,6 @@
 <template>
 	<DefaultLayout
-		title="La liste de mon copain"
+		:title="listName"
 		back
 		:backButtonTitle="backButtonTitle"
 		:backButtonLink="router.options.history.state.back"
@@ -44,6 +44,8 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import labels from "@/labels/fr/labels.json";
+
 import { Gift } from "@/types/api/Gift";
 import Modal from "@/components/Styled/Modal.vue";
 
@@ -71,6 +73,8 @@ export default defineComponent({
 		const listCode = router.currentRoute.value.params.code;
 		const auth = ref(inject("Auth") as any);
 
+		const listName = "La liste de mon copain";
+
 		onMounted(() => {
 			dispatch("initializeGifts", listCode);
 			dispatch("initializePreferences", auth.value.user.sub);
@@ -79,19 +83,24 @@ export default defineComponent({
 		const backButtonTitle = computed(() => {
 			const previous = router.options.history.state.back;
 			if (previous?.toString().includes("/app/booked")) {
-				return "Mes cadeaux réservés";
+				return labels.titles.booked;
 			} else {
-				return "Mes listes partagées";
+				return labels.titles.shared;
 			}
 		});
 
 		const tableHeaders = ref([
-			{ title: "Favori", width: "w-10 text-center", sortable: true, sorted: "none" },
-			{ title: "Titre", sortable: true, sorted: "none" },
-			{ title: "Type", sortable: true, sorted: "none" },
-			{ title: "Status", sortable: true, sorted: "none" },
-			{ title: "Date d'ajout", sortable: true, sorted: "none" },
-			{ title: "Prix", sortable: true, sorted: "none" },
+			{
+				title: labels.tables.gift.favorite,
+				width: "w-10 text-center",
+				sortable: true,
+				sorted: "none",
+			},
+			{ title: labels.tables.gift.title, sortable: true, sorted: "none" },
+			{ title: labels.tables.gift.type, sortable: true, sorted: "none" },
+			{ title: labels.tables.gift.status, sortable: true, sorted: "none" },
+			{ title: labels.tables.gift.creationDate, sortable: true, sorted: "none" },
+			{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
 		]);
 
 		const handleSort = (headers: Array<any>) => {
@@ -116,9 +125,9 @@ export default defineComponent({
 		};
 
 		const handleBookModal = (gift: Gift) => {
-			modal.value.title = "Réserver " + gift.title;
-			modal.value.confirmText = "Réserver";
-			modal.value.cancelText = "Annuler";
+			modal.value.title = labels.modals.bookGift.title + gift.title;
+			modal.value.confirmText = labels.modals.bookGift.confirm;
+			modal.value.cancelText = labels.modals.bookGift.cancel;
 			modal.value.showModal = true;
 			modal.value.confirm = handleBookConfirm;
 			selectedGift.value = null;
@@ -131,8 +140,8 @@ export default defineComponent({
 
 		const handleDetailsModal = (gift: Gift) => {
 			modal.value.title = gift.title;
-			modal.value.confirmText = "Réserver";
-			modal.value.cancelText = "Fermer";
+			modal.value.confirmText = labels.modals.giftDetails.confirm;
+			modal.value.cancelText = labels.modals.giftDetails.cancel;
 			modal.value.showModal = true;
 			modal.value.confirm = handleDetailsConfirm;
 			selectedGift.value = gift;
@@ -151,6 +160,7 @@ export default defineComponent({
 		});
 
 		return {
+			listName,
 			isListView: computed(() => {
 				if (state.preferences.displayList === undefined) {
 					return true;

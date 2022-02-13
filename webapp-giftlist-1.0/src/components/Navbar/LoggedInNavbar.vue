@@ -8,7 +8,7 @@
 		<ul class="flex flex-row items-center">
 			<NavbarItem
 				path="/app/lists"
-				:text="labels.links.lists"
+				:text="labels.navbar.links.lists"
 				:outline="true"
 				class="giftlist-navbar-item"
 			>
@@ -16,7 +16,7 @@
 			</NavbarItem>
 			<NavbarItem
 				path="/app/shared"
-				:text="labels.links.shared"
+				:text="labels.navbar.links.shared"
 				:outline="true"
 				class="giftlist-navbar-item"
 			>
@@ -24,7 +24,7 @@
 			</NavbarItem>
 			<NavbarItem
 				path="/app/booked"
-				:text="labels.links.booked"
+				:text="labels.navbar.links.booked"
 				:outline="true"
 				class="giftlist-navbar-item"
 			>
@@ -47,7 +47,7 @@
 import { computed, defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import labels from "@/labels/fr/navbar.json";
+import labels from "@/labels/fr/labels.json";
 
 import NavbarItem from "@/components/Styled/NavbarItem.vue";
 import NavbarDropdown from "./NavbarDropdown.vue";

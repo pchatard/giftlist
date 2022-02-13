@@ -13,7 +13,7 @@ import NewGift from "../views/NewGift.vue";
 import Gift from "../views/Gift.vue";
 import BookedGifts from "../views/BookedGifts.vue";
 
-import labels from "@/labels/fr/navbar.json";
+import labels from "@/labels/fr/labels.json";
 
 import Auth0 from "@/auth";
 
@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             navbarCta: {
                 action: listsNavbarCta,
-                name: labels.actions.lists,
+                name: labels.navbar.actions.lists,
             },
         },
     },
@@ -81,7 +81,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             navbarCta: {
                 action: listNavbarCta,
-                name: labels.actions.list,
+                name: labels.navbar.actions.list,
             },
         },
     },
@@ -111,7 +111,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
             navbarCta: {
                 action: sharedListsNavbarCta,
-                name: labels.actions.shared,
+                name: labels.navbar.actions.shared,
             },
         },
     },

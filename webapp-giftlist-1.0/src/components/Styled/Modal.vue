@@ -111,6 +111,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
+import labels from "@/labels/fr/labels.json";
+
 import { ModalTypeEnum } from "@/types/ModalTypeEnum";
 
 import {
@@ -150,7 +152,7 @@ export default defineComponent({
 		cancelText: {
 			type: String,
 			required: false,
-			default: "Annuler",
+			default: labels.modals.defaults.cancel,
 		},
 	},
 	emits: ["close", "confirm"],

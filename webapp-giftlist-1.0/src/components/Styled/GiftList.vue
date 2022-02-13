@@ -14,7 +14,7 @@
 	<TableData>
 		<div>
 			<div class="text-sm font-medium text-gray-900 whitespace-normal">
-				{{ gift.title || "Cadeau" }}
+				{{ gift.title || labels.gifts.title }}
 			</div>
 			<div class="text-sm text-gray-500">Autres infos</div>
 		</div>
@@ -34,7 +34,7 @@
 				'bg-green-100 text-green-800': !gift.isBooked,
 			}"
 		>
-			{{ gift.isBooked ? "Réservé" : "Disponible" }}
+			{{ gift.isBooked ? labels.gifts.status.booked : labels.gifts.status.available }}
 		</span>
 	</TableData>
 	<TableData class="text-sm text-gray-500" content="Aujourd'hui" />
@@ -48,7 +48,7 @@
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<ExternalLinkIcon class="h-4 w-4 mr-2" />
-				Ouvrir
+				{{ labels.gifts.buttons.open }}
 			</span>
 		</button>
 		<button
@@ -62,7 +62,7 @@
 				:class="!gift.isBooked ? 'hover:bg-red-100' : 'hover:bg-gray-100'"
 			>
 				<TicketIcon class="h-4 w-4 mr-2" />
-				Réserver
+				{{ labels.gifts.buttons.book }}
 			</span>
 		</button>
 		<button
@@ -72,7 +72,7 @@
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-red-100 rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />
-				Supprimer
+				{{ labels.gifts.buttons.delete }}
 			</span>
 		</button>
 	</td>
@@ -80,6 +80,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType, toRefs } from "vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import { Gift } from "@/types/api/Gift";
 
@@ -147,6 +149,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			openBookGiftModal,
 			openDeleteGiftModal,
 			openLinkInNewTab,
