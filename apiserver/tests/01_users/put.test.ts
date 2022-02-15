@@ -5,7 +5,7 @@ import { expect204 } from "./../helpers/success";
 import { get, put } from "./../helpers/crud";
 
 export default function suite() {
-	it("Returns 204 with user informations", async () => {
+	it("Returns 204, user informations are changed", async () => {
 		const response = await put(Url_UserPut(GlobalVar.User1_Id), { email: "new@new.fr" });
 		expect204(response);
 		const changedUser = await get(Url_UserGetOne(GlobalVar.User1_Id));

@@ -10,8 +10,11 @@ import {
 	DeleteList,
 	GetList,
 	GetLists,
+	InviteList,
 	PostList,
 	PutList,
+	ShareList,
+	UnshareList,
 } from "./02_lists";
 
 chai.use(chaiHttp);
@@ -33,6 +36,9 @@ describe("Lists", function () {
 	describe("GET " + URLS.Url_ListGetAll(), GetLists);
 	describe("GET " + URLS.Url_ListGetOne(), GetList);
 	describe("PUT " + URLS.Url_ListPut(), PutList);
+	describe("PUT " + URLS.Url_ListShare(), ShareList);
+	describe("PUT " + URLS.Url_ListUnshare(), UnshareList);
+	describe("PUT " + URLS.Url_ListInvite(), InviteList);
 	describe("DELETE " + URLS.Url_ListDelete(), DeleteList);
 	after(async () => await AfterList());
 });

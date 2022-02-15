@@ -1,3 +1,4 @@
+import { User } from "./../models/User";
 import List from "./../models/List";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
 import { UUID } from "./../types/UUID";
@@ -74,6 +75,21 @@ class ListService {
 			where: { sharingCode: sharingCode },
 			relations: ["owners", "grantedUsers"],
 		});
+	}
+
+	/**
+	 * Get a list from its sharing code.
+	 * @param {UUID} sharingCode sharing code of list to get, uuid v4 formatted
+	 * @returns {Promise<List>} The list matching the listId parameter
+	 */
+	static async addGrantedUser(listId: UUID, user: User): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["grantedUsers"],
+		});
+		list.isShared = true;
+		list.grantedUsers = (list.grantedUsers || []).concat(user);
+		return await listRepository.save(list);
 	}
 
 	/**

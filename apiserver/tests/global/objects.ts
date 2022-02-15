@@ -11,6 +11,11 @@ export const User2: CreateUserDTO = {
 	displayName: "TestUser2",
 };
 
+export const User3: CreateUserDTO = {
+	email: "test3@test.fr",
+	displayName: "TestUser3",
+};
+
 export const List1: CreateListDTO = {
 	title: "TestList1",
 	ownersIds: [],

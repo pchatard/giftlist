@@ -1,9 +1,13 @@
-import { GlobalVar, List1, List2, List3, Url_UserPost, User1, User2 } from "./../global";
+import { GlobalVar, List1, List2, List3, Url_UserPost, User1, User2, User3 } from "./../global";
 import { post } from "./../helpers/crud";
 import { expect200 } from "./../helpers/success";
 
 export default async function before(): Promise<void> {
-	const responses = [await post(Url_UserPost(), User1), await post(Url_UserPost(), User2)];
+	const responses = [
+		await post(Url_UserPost(), User1),
+		await post(Url_UserPost(), User2),
+		await post(Url_UserPost(), User3),
+	];
 	responses.forEach((response, index) => {
 		expect200(response);
 		if (index == 0) {
@@ -16,6 +20,9 @@ export default async function before(): Promise<void> {
 			GlobalVar.User2_Id = response.body.id;
 			List2.grantedUsersIds?.push(GlobalVar.User2_Id);
 			List3.ownersIds.concat(GlobalVar.User2_Id);
+		}
+		if (index == 2) {
+			GlobalVar.User3_Id = response.body.id;
 		}
 	});
 }

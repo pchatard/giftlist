@@ -3,8 +3,11 @@ export default class {
 
 	public static User1_Id: string = "";
 	public static User2_Id: string = "";
+	public static User3_Id: string = "";
 
 	public static List1_Id: string = "";
 	public static List2_Id: string = "";
 	public static List3_Id: string = "";
+	public static List1_SharingCode: string = "";
+	public static List2_SharingCode: string = "";
 }

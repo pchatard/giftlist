@@ -16,7 +16,7 @@ export default function suite() {
 		const lists_User2 = await get(Url_ListGetAll(GlobalVar.User2_Id, "all"));
 		checkCreateListsDTOInListsDTO(lists_User2.body, [List3]);
 		const lists_User1 = await get(Url_ListGetAll(GlobalVar.User1_Id, "all"));
-		checkCreateListsDTOInListsDTO(lists_User1.body, [List1, List2, List3]);
+		checkCreateListsDTOInListsDTO(lists_User1.body, [{ ...List1, isShared: true }, List2, List3]);
 	});
 	it("Returns 204 and list is no more present", async () => {
 		const response = await del(Url_ListDelete(GlobalVar.List1_Id, GlobalVar.User1_Id));
@@ -35,8 +35,11 @@ export default function suite() {
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
-		const response = await del(Url_ListDelete(wrongUUID));
-		expectValidationFailed(response);
+		const responses = [
+			await del(Url_ListDelete(wrongUUID, GlobalVar.User1_Id)),
+			await del(Url_ListDelete(GlobalVar.List1_Id, wrongUUID)),
+		];
+		responses.forEach((response) => expectValidationFailed(response));
 	});
 }
 

@@ -93,6 +93,7 @@ export class ListController extends Controller {
 				list;
 			rest.ownersIds = owners.map((u) => u.id);
 			rest.closureDate = rest.closureDate || undefined;
+			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
 			return { ...rest } as ListDTO;
 		});
 	}
@@ -114,6 +115,7 @@ export class ListController extends Controller {
 			await ListService.get(listId);
 		rest.ownersIds = owners.map((u) => u.id);
 		rest.grantedUsersIds = grantedUsers?.map((u) => u.id) || [];
+		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
 		return rest as ListDTO;
 	}
 
@@ -124,7 +126,7 @@ export class ListController extends Controller {
 	@SuccessResponse(204)
 	@Put("{listId}/share")
 	async share(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		this.edit(listId, { isShared: true }, userId);
+		await this.edit(listId, { isShared: true }, userId);
 	}
 
 	/**
@@ -134,7 +136,7 @@ export class ListController extends Controller {
 	@SuccessResponse(204)
 	@Put("{listId}/unshare")
 	async private(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		this.edit(listId, { isShared: false }, userId);
+		await this.edit(listId, { isShared: false }, userId);
 	}
 
 	/**
@@ -146,6 +148,8 @@ export class ListController extends Controller {
 	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
 		const list: List = await ListService.getFromSharingCode(sharingCode);
 		const user: User = await UserService.get(userId);
-		await ListService.edit(list.id, { grantedUsers: [...(list.grantedUsers || []), user] });
+		if (!list.owners.find((u) => u.id == user.id)) {
+			await ListService.addGrantedUser(list.id, user);
+		}
 	}
 }
