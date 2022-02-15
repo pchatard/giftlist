@@ -32,7 +32,7 @@ describe("Lists", function () {
 	describe("POST " + URLS.Url_ListPost(), PostList);
 	describe("GET " + URLS.Url_ListGetAll(), GetLists);
 	describe("GET " + URLS.Url_ListGetOne(), GetList);
-	describe("PUT " + URLS.Url_ListGetOne(), PutList);
+	describe("PUT " + URLS.Url_ListPut(), PutList);
 	describe("DELETE " + URLS.Url_ListDelete(), DeleteList);
 	after(async () => await AfterList());
 });

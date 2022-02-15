@@ -25,6 +25,9 @@ export const Url_ListGetOne = (listId: string = ":listId", userId: string = ":us
 export const Url_ListDelete = (listId: string = ":listId", userId: string = ":userId"): string =>
 	BaseUrl_Lists + "/" + listId + "?userId=" + userId;
 
+export const Url_ListPut = (listId: string = ":listId", userId: string = ":userId"): string =>
+	BaseUrl_Lists + "/" + listId + "?userId=" + userId;
+
 // Specials Endpoints
 export const Url_NotFound = (): string => "/notfound";
 
