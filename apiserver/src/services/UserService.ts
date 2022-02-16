@@ -77,7 +77,7 @@ class UserService {
 	static async getUserLists(userId: UUID, select: SelectKindList): Promise<List[]> {
 		const userRepository: Repository<User> = getRepository(User);
 		const user: User = await userRepository.findOneOrFail(userId, {
-			relations: ["lists", "friendLists", "lists.owners", "lists.grantedUsers"],
+			relations: ["lists", "friendLists", "lists.owners", "friendLists.owners"],
 		});
 		let res: List[] = [];
 		switch (select) {

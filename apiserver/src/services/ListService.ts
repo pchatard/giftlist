@@ -1,11 +1,12 @@
-import { User } from "./../models/User";
-import List from "./../models/List";
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
+import List from "./../models/List";
+import { User } from "./../models/User";
 import { UUID } from "./../types/UUID";
 
 class ListService {
 	/**
 	 * Create a new list.
+	 * @param {Partial<List>} listInfos partial list infos, required for creation of entity
 	 * @returns {Promise<List>} the created list
 	 */
 	static async create(listInfos: Partial<List>): Promise<List> {
@@ -28,7 +29,7 @@ class ListService {
 	/**
 	 * Delete a list from Database.
 	 * @param {UUID} listId id of list to delete, uuid v4 formatted
-	 * @param {UUID} listId id of user which ask, uuid v4 formatted
+	 * @param {UUID} userId id of user which ask, uuid v4 formatted
 	 * @returns {Promise<DeleteResult>}
 	 */
 	static async delete(listId: UUID): Promise<DeleteResult> {
@@ -39,7 +40,7 @@ class ListService {
 	/**
 	 * Forget a list for a user from Database.
 	 * @param {UUID} listId id of list to delete, uuid v4 formatted
-	 * @param {UUID} listId id of user which ask, uuid v4 formatted
+	 * @param {UUID} userId id of user which ask, uuid v4 formatted
 	 * @returns {Promise<DeleteResult>}
 	 */
 	static async forget(listId: UUID, userId: UUID): Promise<List> {

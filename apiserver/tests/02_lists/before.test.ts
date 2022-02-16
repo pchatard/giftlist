@@ -19,7 +19,7 @@ export default async function before(): Promise<void> {
 		if (index == 1) {
 			GlobalVar.User2_Id = response.body.id;
 			List2.grantedUsersIds?.push(GlobalVar.User2_Id);
-			List3.ownersIds.concat(GlobalVar.User2_Id);
+			List3.ownersIds.push(GlobalVar.User2_Id);
 		}
 		if (index == 2) {
 			GlobalVar.User3_Id = response.body.id;

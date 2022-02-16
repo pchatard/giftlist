@@ -31,7 +31,9 @@ export default function suite() {
 		const lists_User1 = await get(Url_ListGetAll(GlobalVar.User1_Id, "all"));
 		checkCreateListsDTOInListsDTO(lists_User1.body, []);
 		const lists_User2 = await get(Url_ListGetAll(GlobalVar.User2_Id, "all"));
-		checkCreateListsDTOInListsDTO(lists_User2.body, [List3]);
+		checkCreateListsDTOInListsDTO(lists_User2.body, [
+			{ ...List3, ownersIds: [GlobalVar.User2_Id] },
+		]);
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
@@ -44,10 +46,10 @@ export default function suite() {
 }
 
 function checkCreateListsDTOInListsDTO(checkedList: ListDTO[], listToMatch: CreateListDTO[]) {
-	checkedList.forEach((list, index) => {
+	for (const [index, list] of checkedList.entries()) {
 		const { sharingCode, ownersIds: listOwners, ...listCore } = list;
 		const { ownersIds: toMatchOwners, grantedUsersIds, ...toMatchCore } = listToMatch[index];
 		expect(listOwners).to.have.members(toMatchOwners);
 		expect(listCore).to.includes(toMatchCore);
-	});
+	}
 }

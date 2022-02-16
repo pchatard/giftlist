@@ -1,4 +1,4 @@
-import { CreateListDTO } from "./../../build/types/dto/lists.d";
+import { CreateListDTO } from "./../../build/types/dto/lists";
 import { CreateUserDTO } from "./../../build/types/dto/users";
 
 export const User1: CreateUserDTO = {
