@@ -1,6 +1,9 @@
 import "mocha";
+
 import * as fs from "fs";
+
 import request from "request";
+
 import { GlobalVar } from "./global";
 
 const options = {

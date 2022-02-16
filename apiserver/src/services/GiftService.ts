@@ -1,5 +1,13 @@
-import { Database, get, push, ref, remove, set, update } from "@firebase/database";
-import { DatabaseReference } from "@firebase/database";
+import {
+	Database,
+	DatabaseReference,
+	get,
+	push,
+	ref,
+	remove,
+	set,
+	update,
+} from "@firebase/database";
 import { query } from "firebase/database";
 
 class GiftService {

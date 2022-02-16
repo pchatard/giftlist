@@ -1,7 +1,8 @@
 import { expect } from "chai";
-import { GlobalVar, List2, List3, Url_ListGetAll } from "./../global";
-import { expect200 } from "./../helpers/success";
-import { get } from "./../helpers/crud";
+
+import { GlobalVar, List2, List3, Url_ListGetAll } from "../global";
+import { get } from "../helpers/crud";
+import { expect200 } from "../helpers/success";
 
 export default function suite() {
 	it("Returns 200, with all lists", async () => {

@@ -1,8 +1,9 @@
-import { UUID } from "./../types/UUID";
-import User from "./../models/User";
-import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
-import List from "./../models/List";
-import { SelectKindList } from "./../types/SelectKindList";
+import { DeleteResult, Repository, UpdateResult, getRepository } from "typeorm";
+
+import List from "../models/List";
+import User from "../models/User";
+import { SelectKindList } from "../types/SelectKindList";
+import { UUID } from "../types/UUID";
 
 class UserService {
 	/**

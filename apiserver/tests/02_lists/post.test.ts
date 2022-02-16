@@ -1,8 +1,9 @@
 import { expect } from "chai";
-import { GlobalVar, List1, List2, List3, Url_ListPost } from "./../global";
-import { expect200 } from "./../helpers/success";
-import { expectValidationFailed } from "./../helpers/error";
-import { post } from "./../helpers/crud";
+
+import { GlobalVar, List1, List2, List3, Url_ListPost } from "../global";
+import { post } from "../helpers/crud";
+import { expectValidationFailed } from "../helpers/error";
+import { expect200 } from "../helpers/success";
 
 export default function suite() {
 	it("Returns 200 with ID if all data are provided", async () => {

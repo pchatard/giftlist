@@ -1,21 +1,18 @@
-import express from "express";
-import helmet from "helmet";
+import { Database } from "@firebase/database";
 import cookies from "cookie-parser";
-import { createConnection } from "typeorm";
-import cockroachDBOptions from "./config/ormconfig";
-
-import User from "./models/User";
-import List from "./models/List";
-
+import express from "express";
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
-import { Database } from "@firebase/database";
-import firebaseConfig from "./config/firebase";
-
-import { errorHandler, notFoundHandler } from "./middlewares/error";
-
+import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
+import { createConnection } from "typeorm";
+
+import firebaseConfig from "./config/firebase";
+import cockroachDBOptions from "./config/ormconfig";
 import swaggerDocument from "./config/swagger.json";
+import { errorHandler, notFoundHandler } from "./middlewares/error";
+import List from "./models/List";
+import User from "./models/User";
 import { RegisterRoutes } from "./routes";
 
 const PORT = process.env.API_PORT;

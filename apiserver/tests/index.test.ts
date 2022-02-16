@@ -1,7 +1,8 @@
 import "mocha";
+
 import chai from "chai";
 import chaiHttp from "chai-http";
-import * as URLS from "./global/urls";
+
 import { NotFound, Unauthorized } from "./00_specials";
 import { DeleteUser, GetUser, GetUsers, PostUser, PutUser } from "./01_users";
 import {
@@ -16,6 +17,7 @@ import {
 	ShareList,
 	UnshareList,
 } from "./02_lists";
+import * as URLS from "./global/urls";
 
 chai.use(chaiHttp);
 

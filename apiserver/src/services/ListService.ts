@@ -1,7 +1,8 @@
-import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
-import List from "./../models/List";
-import { User } from "./../models/User";
-import { UUID } from "./../types/UUID";
+import { DeleteResult, Repository, UpdateResult, getRepository } from "typeorm";
+
+import List from "../models/List";
+import { User } from "../models/User";
+import { UUID } from "../types/UUID";
 
 class ListService {
 	/**

@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import { GlobalVar, Url_UserPost, User1, User2 } from "./../global";
-import MailAlreadyUsedError from "./../../src/errors/UserErrors/MailAlreadyUsedError";
-import { expect200 } from "./../helpers/success";
-import { expect500, expectValidationFailed } from "./../helpers/error";
-import { post } from "./../helpers/crud";
+
+import MailAlreadyUsedError from "../../src/errors/UserErrors/MailAlreadyUsedError";
+import { GlobalVar, Url_UserPost, User1, User2 } from "../global";
+import { post } from "../helpers/crud";
+import { expect500, expectValidationFailed } from "../helpers/error";
+import { expect200 } from "../helpers/success";
 
 export default function suite() {
 	it("Returns 200 with ID if all data are provided", async () => {

@@ -1,6 +1,6 @@
-import { GlobalVar, List1, List2, List3, Url_UserPost, User1, User2, User3 } from "./../global";
-import { post } from "./../helpers/crud";
-import { expect200 } from "./../helpers/success";
+import { GlobalVar, List1, List2, List3, Url_UserPost, User1, User2, User3 } from "../global";
+import { post } from "../helpers/crud";
+import { expect200 } from "../helpers/success";
 
 export default async function before(): Promise<void> {
 	const responses = [

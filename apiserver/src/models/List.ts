@@ -8,7 +8,8 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
-import { UUID } from "./../types/UUID";
+
+import { UUID } from "../types/UUID";
 import User from "./User";
 
 @Entity("List", { orderBy: { createdDate: "ASC" } })
