@@ -1,8 +1,9 @@
 import { expect } from "chai";
-import { GlobalVar, List1, List2, Url_ListGetOne } from "./../global";
-import { get } from "./../helpers/crud";
-import { expectError, expectValidationFailed } from "./../helpers/error";
-import { expect200 } from "./../helpers/success";
+
+import { GlobalVar, List1, List2, Url_ListGetOne } from "../global";
+import { get } from "../helpers/crud";
+import { expectError, expectValidationFailed } from "../helpers/error";
+import { expect200 } from "../helpers/success";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {

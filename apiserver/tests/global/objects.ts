@@ -1,5 +1,5 @@
-import { CreateListDTO } from "./../../build/types/dto/lists";
-import { CreateUserDTO } from "./../../build/types/dto/users";
+import { CreateListDTO } from "../../src/dto/lists";
+import { CreateUserDTO } from "../../src/dto/users";
 
 export const User1: CreateUserDTO = {
 	email: "test1@test.fr",

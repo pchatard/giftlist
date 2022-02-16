@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { JsonWebTokenError } from "jsonwebtoken";
 import { ValidateError } from "tsoa";
-import OwnershipError from "./../errors/UserErrors/OwnershipError";
+
+import OwnershipError from "../errors/UserErrors/OwnershipError";
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
 	if (err instanceof ValidateError) {

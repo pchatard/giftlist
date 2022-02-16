@@ -12,12 +12,13 @@ import {
 	SuccessResponse,
 	Tags,
 } from "tsoa";
-import UserService from "./../services/UserService";
-import User from "./../models/User";
-import { UUID } from "./../types/UUID";
-import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
-import { CreateUserDTO, UserDTO, UserIdDTO } from "./../dto/users";
-import { SelectKindList } from "./../types/SelectKindList";
+
+import { CreateUserDTO, UserDTO, UserIdDTO } from "../dto/users";
+import MailAlreadyUsedError from "../errors/UserErrors/MailAlreadyUsedError";
+import User from "../models/User";
+import UserService from "../services/UserService";
+import { SelectKindList } from "../types/SelectKindList";
+import { UUID } from "../types/UUID";
 import { ListController } from "./ListController";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security

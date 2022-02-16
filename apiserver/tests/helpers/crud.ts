@@ -1,7 +1,9 @@
 import "mocha";
+
 import chai from "chai";
-import server from "./../../src/index";
-import { GlobalVar } from "./../global";
+
+import server from "../../src/index";
+import { GlobalVar } from "../global";
 
 export const get = async (url: string): Promise<ChaiHttp.Response> =>
 	await chai

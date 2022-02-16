@@ -12,14 +12,15 @@ import {
 	SuccessResponse,
 	Tags,
 } from "tsoa";
-import List from "./../models/List";
-import User from "./../models/User";
-import ListService from "./../services/ListService";
-import UserService from "./../services/UserService";
-import OwnershipError from "./../errors/UserErrors/OwnershipError";
-import { UUID } from "./../types/UUID";
-import { SelectKindList } from "./../types/SelectKindList";
-import { CreateListDTO, ListDTO, ListIdDTO } from "./../dto/lists";
+
+import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
+import OwnershipError from "../errors/UserErrors/OwnershipError";
+import List from "../models/List";
+import User from "../models/User";
+import ListService from "../services/ListService";
+import UserService from "../services/UserService";
+import { SelectKindList } from "../types/SelectKindList";
+import { UUID } from "../types/UUID";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("lists")

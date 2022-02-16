@@ -1,4 +1,4 @@
-import User from "./../models/User";
+import User from "../models/User";
 import Expand from "./expand";
 
 export interface CreateUserDTO

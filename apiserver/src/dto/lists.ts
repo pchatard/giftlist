@@ -1,4 +1,4 @@
-import List from "./../models/List";
+import List from "../models/List";
 import Expand from "./expand";
 
 export interface CreateListDTO

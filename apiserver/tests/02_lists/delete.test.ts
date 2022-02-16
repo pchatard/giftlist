@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import { GlobalVar, List1, List2, List3, Url_ListDelete, Url_ListGetAll } from "./../global";
-import { expectError, expectValidationFailed } from "./../helpers/error";
-import { expect204 } from "./../helpers/success";
-import { del, get } from "./../helpers/crud";
-import { CreateListDTO, ListDTO } from "./../../src/dto/lists";
+
+import { CreateListDTO, ListDTO } from "../../src/dto/lists";
+import { GlobalVar, List1, List2, List3, Url_ListDelete, Url_ListGetAll } from "../global";
+import { del, get } from "../helpers/crud";
+import { expectError, expectValidationFailed } from "../helpers/error";
+import { expect204 } from "../helpers/success";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {

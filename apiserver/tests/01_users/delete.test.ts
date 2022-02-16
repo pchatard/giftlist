@@ -1,8 +1,9 @@
 import { expect } from "chai";
-import { GlobalVar, Url_UserDelete, Url_UserGetAll, User2 } from "./../global";
-import { expectValidationFailed } from "./../helpers/error";
-import { expect204 } from "./../helpers/success";
-import { del, get } from "./../helpers/crud";
+
+import { GlobalVar, Url_UserDelete, Url_UserGetAll, User2 } from "../global";
+import { del, get } from "../helpers/crud";
+import { expectValidationFailed } from "../helpers/error";
+import { expect204 } from "../helpers/success";
 
 export default function suite() {
 	it("Returns 204 and user is no more present", async () => {
