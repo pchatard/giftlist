@@ -11,22 +11,14 @@ import {
 	Security,
 	SuccessResponse,
 	Tags,
-} from "@tsoa/runtime";
+} from "tsoa";
 import UserService from "./../services/UserService";
 import User from "./../models/User";
-import { UUID } from "../types/UUID";
+import { UUID } from "./../types/UUID";
 import MailAlreadyUsedError from "./../errors/UserErrors/MailAlreadyUsedError";
-import MailIsInvalidError from "./../errors/UserErrors/MailIsInvalidError";
-import FieldIsMissingError from "./../errors/FieldIsMissingError";
-import UserNotFoundError from "./../errors/UserErrors/UserNotFoundError";
-import { isValidEmail } from "./../helpers/validators";
-import { cleanObject } from "../helpers/cleanObjects";
-
-// TODO: Follow https://github.com/lukeautry/tsoa/issues/911 to remove this workaround
-type Expand<T> = { [K in keyof T]: T[K] };
-interface CreateUserDTO extends Expand<Omit<User, "id" | "friends" | "createdDate">> {}
-interface UserIdDTO extends Expand<Pick<User, "id">> {}
-interface UserDTO extends Expand<Pick<User, "displayName" | "email">> {}
+import { CreateUserDTO, UserDTO, UserIdDTO } from "./../dto/users";
+import { SelectKindList } from "./../types/SelectKindList";
+import { ListController } from "./ListController";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("users")
@@ -40,18 +32,9 @@ export class UserController extends Controller {
 	 * @returns {Promise<UUID>} UUID of the created user
 	 */
 	@SuccessResponse(200)
-	@Response<FieldIsMissingError | MailIsInvalidError | MailAlreadyUsedError>(
-		400,
-		"If one field is missing, mail is invalid or already used"
-	)
+	@Response<MailAlreadyUsedError>(400, "If mail is already used")
 	@Post()
 	async create(@Body() body: CreateUserDTO): Promise<UserIdDTO> {
-		if (!body.email || !body.displayName) {
-			throw new FieldIsMissingError(!body.email ? "email" : "displayName");
-		}
-		if (!isValidEmail(body.email)) {
-			throw new MailIsInvalidError();
-		}
 		try {
 			const { id }: User = await UserService.create(body.email, body.displayName);
 			return { id } as UserIdDTO;
@@ -65,14 +48,13 @@ export class UserController extends Controller {
 
 	/**
 	 * Edit a user.
-	 * @returns {Promise<UUID>} UUID of the created user
 	 * @param {UUID} userId the GUID of user
 	 * @param {UserDTO} body data to edit a user
 	 */
 	@SuccessResponse(204)
 	@Put("{userId}")
 	async edit(@Path() userId: UUID, @Body() body: Partial<UserDTO>): Promise<void> {
-		await UserService.edit(userId, cleanObject(body));
+		await UserService.edit(userId, body);
 	}
 
 	/**
@@ -82,6 +64,10 @@ export class UserController extends Controller {
 	@SuccessResponse(204)
 	@Delete("{userId}")
 	async delete(@Path() userId: UUID): Promise<void> {
+		const listController: ListController = new ListController();
+		for (const list of await UserService.getUserLists(userId, SelectKindList.ALL)) {
+			await listController.delete(list.id, userId);
+		}
 		await UserService.delete(userId);
 	}
 
@@ -94,7 +80,7 @@ export class UserController extends Controller {
 	async getAll(): Promise<UserDTO[]> {
 		const users: User[] = await UserService.getAll();
 		return users.map((user) => {
-			const { id, friends, createdDate, ...rest } = user;
+			const { id, friends, lists, friendLists, createdDate, ...rest } = user;
 			return { ...rest } as UserDTO;
 		});
 	}
@@ -105,15 +91,10 @@ export class UserController extends Controller {
 	 * @returns {Promise<UserDTO>} the required user
 	 */
 	@SuccessResponse(200)
-	@Response<UserNotFoundError>(400, "If userId is incorrect")
 	@Get("{userId}")
 	async get(@Path() userId: UUID): Promise<UserDTO> {
-		const user: User | undefined = await UserService.get(userId);
-		if (!user) {
-			throw new UserNotFoundError();
-		} else {
-			const { id, createdDate, ...rest } = user;
-			return rest;
-		}
+		const user: User = await UserService.get(userId);
+		const { id, createdDate, ...rest } = user;
+		return rest;
 	}
 }

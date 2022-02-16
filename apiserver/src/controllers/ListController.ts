@@ -1,202 +1,155 @@
-import { v4 as uuidv4 } from "uuid";
-import List from "../services/ListService";
-import User from "../services/UserService";
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Path,
+	Post,
+	Put,
+	Query,
+	Route,
+	Security,
+	SuccessResponse,
+	Tags,
+} from "tsoa";
+import List from "./../models/List";
+import User from "./../models/User";
+import ListService from "./../services/ListService";
+import UserService from "./../services/UserService";
+import OwnershipError from "./../errors/UserErrors/OwnershipError";
+import { UUID } from "./../types/UUID";
+import { SelectKindList } from "./../types/SelectKindList";
+import { CreateListDTO, ListDTO, ListIdDTO } from "./../dto/lists";
 
-import { checkListNameAvailability } from "../helpers/lists";
-
-import ListNameAlreadyUsedError from "../errors/ListErrors/ListNameAlreadyUsedError";
-import { Request, Response } from "express";
-
-class ListController {
+@Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
+@Route("lists")
+@Tags("List")
+export class ListController extends Controller {
 	/**
-	 * Sends back in the response all the lists.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Creates a new list.
 	 */
-	static async findAll(req: Request, res: Response, next: Function) {
-		try {
-			const lists = await List.getAll(req.app.get("database"));
-			res.send(lists);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(200)
+	@Post()
+	async create(@Body() body: CreateListDTO): Promise<ListIdDTO> {
+		const owners: User[] = await UserService.getMany(body.ownersIds);
+		let grantedUsers: User[] = [];
+		if (body.grantedUsersIds) {
+			grantedUsers = await UserService.getMany(body.grantedUsersIds);
+		}
+		const { id }: List = await ListService.create({ ...body, owners, grantedUsers });
+		return { id } as ListIdDTO;
+	}
+
+	/**
+	 * Edit a list.
+	 * @param {UUID} listId the GUID of the list
+	 * @param {ListDTO} body data to edit a list
+	 */
+	@SuccessResponse(204)
+	@Put("{listId}")
+	async edit(
+		@Path() listId: UUID,
+		@Body() body: Partial<ListDTO>,
+		@Query() userId: UUID
+	): Promise<void> {
+		if (!(await ListService.listOwners(listId)).includes(userId)) {
+			throw new OwnershipError();
+		}
+		await ListService.edit(listId, body);
+	}
+
+	/**
+	 * Delete a list.
+	 * @param {UUID} listId the GUID of the list
+	 */
+	@SuccessResponse(204)
+	@Delete("{listId}")
+	async delete(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
+		const ownerIds: UUID[] = await ListService.listOwners(listId);
+		const grantedIds: UUID[] = await ListService.listGrantedUsers(listId);
+		if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
+			await ListService.forget(listId, userId);
+			if (ownerIds.length == 1 && ownerIds.includes(userId)) {
+				for (const grantedId of grantedIds) {
+					await ListService.forget(listId, grantedId);
+				}
+				await ListService.delete(listId);
+			}
+		} else {
+			throw new OwnershipError();
 		}
 	}
 
 	/**
-	 * Sends back in the response the lists owned by and shared with the logged in user.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
+	 * Gets all user's lists data.
+	 * @returns {Promise<ListDTO[]>} all user lists
 	 */
-	static async findMine(req: Request, res: Response): Promise<void> {
-		const userId = req.user["https://giftlist-api/email"];
-		const { mine, shared } = (await List.getMine(req.app.get("database"), userId)) as {
-			mine: string;
-			shared: string;
-		};
-		res.status(200).send({ mine: mine, shared: shared });
+	@SuccessResponse(200)
+	@Get()
+	async getAll(@Query() userId: UUID, @Query() select: SelectKindList): Promise<ListDTO[]> {
+		const lists: List[] = await UserService.getUserLists(userId, select);
+		return lists.map((list) => {
+			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
+				list;
+			rest.ownersIds = owners.map((u) => u.id);
+			rest.closureDate = rest.closureDate || undefined;
+			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
+			return { ...rest } as ListDTO;
+		});
 	}
 
 	/**
 	 * Sends back a list in the response based on its id.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * @param {UUID} listId the GUID of the list
 	 */
-	static async findOne(req: Request, res: Response, next: Function) {
-		try {
-			const list = await List.getOne(req.app.get("database"), req.params.listId);
-			res.send(list);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(200)
+	@Get("{listId}")
+	async get(@Path() listId: UUID, @Query() userId: UUID): Promise<ListDTO> {
+		if (
+			!(await ListService.listOwners(listId)).includes(userId) &&
+			!(await ListService.listGrantedUsers(listId)).includes(userId)
+		) {
+			throw new OwnershipError();
 		}
+		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
+			await ListService.get(listId);
+		rest.ownersIds = owners.map((u) => u.id);
+		rest.grantedUsersIds = grantedUsers?.map((u) => u.id) || [];
+		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
+		return rest as ListDTO;
 	}
 
 	/**
-	 * Creates a new list and sends its database representation back in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Make a list to public.
+	 * @param {UUID} listId the GUID of the list
 	 */
-	static async create(req: Request, res: Response, next: Function) {
-		try {
-			const userId = req.user["https://giftlist-api/email"];
-
-			if (!(await checkListNameAvailability(req.app.get("database"), userId, req.body.name))) {
-				throw new ListNameAlreadyUsedError();
-			}
-
-			const list = {
-				name: req.body.name,
-				created_at: Date(),
-				modified_at: Date(),
-				ownerId: userId,
-				owner: (await User.get(userId))?.displayName,
-				public: false,
-			};
-			const createdList = await List.create(req.app.get("database"), list);
-			res.send(createdList);
-		} catch (error) {
-			next(error);
-		}
+	@SuccessResponse(204)
+	@Put("{listId}/share")
+	async share(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
+		await this.edit(listId, { isShared: true }, userId);
 	}
 
 	/**
-	 * Updates a list and sends it back in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Make a list private.
+	 * @param {UUID} listId the GUID of the list
 	 */
-	static update(req: Request, res: Response, next: Function) {
-		try {
-			const userId = req.user["https://giftlist-api/email"];
-			if (!checkListNameAvailability(req.app.get("database"), userId, req.body.name)) {
-				throw new ListNameAlreadyUsedError();
-			}
-
-			const updatedList = List.update(req.app.get("database"), req.params.listId, req.body.name);
-			res.send(updatedList);
-		} catch (error) {
-			next(error);
-		}
+	@SuccessResponse(204)
+	@Put("{listId}/unshare")
+	async private(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
+		await this.edit(listId, { isShared: false }, userId);
 	}
 
 	/**
-	 * Deletes a list and sends back the user's lists in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Get a list from its sharing code.
+	 * @param {UUID} sharingCode the sharing code of the list
 	 */
-	static async delete(req: Request, res: Response, next: Function) {
-		try {
-			await List.delete(req.app.get("database"), req.params.listId);
-			await ListController.findMine(req, res);
-		} catch (error) {
-			next(error);
-		}
-	}
-
-	/**
-	 * Creates a sharing code for a list to make it public.
-	 * Sends back the list in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
-	 */
-	static async share(req: Request, res: Response, next: Function) {
-		try {
-			// Get the list ID.
-			const listId = req.params.listId;
-			const currentList = (await List.getOne(req.app.get("database"), listId)) as {
-				sharingCode: string;
-			};
-			let code = currentList.sharingCode;
-			if (!code) {
-				code = uuidv4();
-			}
-			// Add them to the list in DB
-			const list = List.share(req.app.get("database"), listId, code);
-			// Return
-			res.send({ list });
-		} catch (error) {
-			next(error);
-		}
-	}
-
-	/**
-	 * Makes a list private.
-	 * Sends back the list in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
-	 */
-	static async private(req: Request, res: Response, next: Function) {
-		try {
-			const listId = req.params.listId;
-			const privateList = await List.private(req.app.get("database"), listId);
-			res.send({ list: privateList });
-		} catch (error) {
-			next(error);
-		}
-	}
-
-	/**
-	 * Sends back a list in the response based on its sharing code.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
-	 */
-	static async findSharedList(req: Request, res: Response, next: Function) {
-		try {
-			// Retrieve the list from the sharing code
-			const sharedList = (await List.getSharedList(
-				req.app.get("database"),
-				req.params.sharingCode
-			)) as {
-				id: string;
-				sharedWith: Array<any>;
-			};
-
-			const userId = req.user["https://giftlist-api/email"];
-			// Add the user to the list's sharedWith property if not already done
-			if (!sharedList.sharedWith.includes(userId)) {
-				List.addUserToList(req.app.get("database"), userId, sharedList.id);
-			}
-
-			res.send(sharedList);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(204)
+	@Put("invite/{sharingCode}")
+	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
+		const list: List = await ListService.getFromSharingCode(sharingCode);
+		const user: User = await UserService.get(userId);
+		if (!list.owners.find((u) => u.id == user.id)) {
+			await ListService.addGrantedUser(list.id, user);
 		}
 	}
 }
-
-export default ListController;

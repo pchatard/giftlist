@@ -4,14 +4,15 @@ import cookies from "cookie-parser";
 import { createConnection } from "typeorm";
 import cockroachDBOptions from "./config/ormconfig";
 
-import { User } from "./models/User";
+import User from "./models/User";
+import List from "./models/List";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { Database } from "@firebase/database";
 import firebaseConfig from "./config/firebase";
 
-import { errorHandler, notFoundHandler, tokenHandler } from "./middlewares/error";
+import { errorHandler, notFoundHandler } from "./middlewares/error";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./config/swagger.json";
@@ -40,12 +41,11 @@ app.use(
 
 // Routes and Error handler
 RegisterRoutes(app);
-app.use(tokenHandler);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 app.listen(PORT, async () => {
-	await createConnection({ ...cockroachDBOptions, entities: [User] });
+	await createConnection({ ...cockroachDBOptions, entities: [User, List] });
 });
 
 export default app;

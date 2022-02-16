@@ -1,177 +1,120 @@
-import Gift from "./GiftService";
-import { Database, DatabaseReference, push, ref, remove, set, update } from "@firebase/database";
-import { get, query } from "firebase/database";
+import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
+import List from "./../models/List";
+import { User } from "./../models/User";
+import { UUID } from "./../types/UUID";
 
 class ListService {
 	/**
-	 * Returns all the lists of the database.
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @returns {Array} An array of gifts
+	 * Create a new list.
+	 * @param {Partial<List>} listInfos partial list infos, required for creation of entity
+	 * @returns {Promise<List>} the created list
 	 */
-	static async getAll(db: Database): Promise<Array<any>> {
-		const reference: DatabaseReference = ref(db, "lists");
-		var results: Array<any> = new Array();
-		(await get(query(reference))).forEach((l) => {
-			results.push(l.val());
+	static async create(listInfos: Partial<List>): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = listRepository.create(listInfos);
+		return await listRepository.save(list);
+	}
+
+	/**
+	 * Edit list properties.
+	 * @param {UUID} listId id of list to update, uuid v4 formatted
+	 * @param {Partial<List>} listNewProps new props of list to apply
+	 * @returns {Promise<UpdateResult>}
+	 */
+	static async edit(listId: UUID, listNewProps: Partial<List>): Promise<UpdateResult> {
+		const listRepository: Repository<List> = getRepository(List);
+		return await listRepository.update(listId, { ...listNewProps });
+	}
+
+	/**
+	 * Delete a list from Database.
+	 * @param {UUID} listId id of list to delete, uuid v4 formatted
+	 * @param {UUID} userId id of user which ask, uuid v4 formatted
+	 * @returns {Promise<DeleteResult>}
+	 */
+	static async delete(listId: UUID): Promise<DeleteResult> {
+		const listRepository: Repository<List> = getRepository(List);
+		return await listRepository.delete(listId);
+	}
+
+	/**
+	 * Forget a list for a user from Database.
+	 * @param {UUID} listId id of list to delete, uuid v4 formatted
+	 * @param {UUID} userId id of user which ask, uuid v4 formatted
+	 * @returns {Promise<DeleteResult>}
+	 */
+	static async forget(listId: UUID, userId: UUID): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["owners", "grantedUsers"],
 		});
-		// TODO: Clean
-		let resultsArr: any = results;
-		if (results) {
-			resultsArr = Object.keys(results).map((key: any) => {
-				const id = key;
-				const sharedWith = results[key].sharedWith
-					? Object.values(results[key].sharedWith)
-					: [];
-				return { ...results[key], sharedWith, id };
-			});
-		} else {
-			resultsArr = [];
-		}
-		return resultsArr;
+		list.owners = list.owners.filter((owner) => owner.id !== userId);
+		list.grantedUsers = (list.grantedUsers || []).filter((user) => user.id !== userId);
+		return await listRepository.save(list);
 	}
 
 	/**
-	 * Returns all the lists owned by and shared with the user with the userId id.
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} userId - The id of the user you want to get the lists
-	 * @returns {Object} An object containing an array of the owned lists and an array of the shared lists
+	 * Return a list from Database.
+	 * @param {string} listId id of list to get, uuid v4 formatted
+	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
-	static async getMine(db: Database, userId: string): Promise<object> {
-		const lists = await this.getAll(db);
-		const mine = lists.filter((list) => list.ownerId === userId);
-		const shared = lists.filter((list) => list.sharedWith.includes(userId) && list.public);
-		return { mine, shared };
-	}
-
-	/**
-	 * Returns a list based on its id.
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} listId - The id of the list
-	 * @returns {Object} The list matching the listId id.
-	 */
-	static async getOne(db: Database, listId: string): Promise<object> {
-		const reference: DatabaseReference = ref(db, "lists/" + listId);
-		type A = {
-			id?: string;
-			sharedWith?: Array<any>;
-		};
-		let result: A = {};
-		result.sharedWith = (await get(query(reference))).val();
-		result.id = listId;
-		const sharedWith = result.sharedWith ? Object.values(result.sharedWith) : [];
-		result.sharedWith = sharedWith;
-		return result;
-	}
-
-	/**
-	 * Creates a list in the database and returns its representation
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {Object} list - The list object you want to add to the database
-	 * @returns {Object} The list's representation in the database.
-	 */
-	static async create(db: Database, list: object): Promise<object> {
-		const reference: DatabaseReference = ref(db, "lists");
-		const newList = push(reference, list);
-		return await ListService.getOne(db, newList.key || "");
-	}
-
-	/**
-	 * Updates the name of a list based on its id.
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} id - The id of the list to be updated
-	 * @param {String} newName - The new name of the list
-	 * @returns {Object} The updated list
-	 */
-	static async update(db: Database, id: string, newName: string): Promise<object> {
-		const reference: DatabaseReference = ref(db, `lists/${id}`);
-		update(reference, {
-			"/name": newName,
-			"/modified_at": Date(),
-		});
-		return await ListService.getOne(db, id);
-	}
-
-	/**
-	 * Removes a list from the database
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} listId - The id of the list to be deleted
-	 */
-	static async delete(db: Database, listId: string): Promise<void> {
-		await ListService.deleteGiftsFromList(db, listId);
-		const reference: DatabaseReference = ref(db, "lists/" + listId);
-		remove(reference);
-	}
-
-	/**
-	 * Removes all the gifts from a given list
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} listId - The id of the list being deleted
-	 */
-	static async deleteGiftsFromList(db: Database, listId: string): Promise<void> {
-		const gifts = await Gift.getFromList(db, listId);
-		gifts.forEach((gift) => {
-			Gift.delete(db, gift.id, true);
+	static async get(listId: UUID): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		return await listRepository.findOneOrFail(listId, {
+			relations: ["owners", "grantedUsers"],
 		});
 	}
 
 	/**
-	 * Turns a list public property to true and Sets a sharingCode property to the code parameter in a given list
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} listId - The id of the list
-	 * @param {String} code - The sharingCode
-	 * @returns {Object} The updated list
+	 * Get a list from its sharing code.
+	 * @param {UUID} sharingCode sharing code of list to get, uuid v4 formatted
+	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
-	static share(db: Database, listId: string, code: string): object {
-		const reference: DatabaseReference = ref(db, `lists/${listId}/sharingCode`);
-		set(reference, code);
-		update(ref(db, `/lists/${listId}`), { "/public": true });
-		return ListService.getOne(db, listId);
+	static async getFromSharingCode(sharingCode: UUID): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		return await listRepository.findOneOrFail({
+			where: { sharingCode: sharingCode },
+			relations: ["owners", "grantedUsers"],
+		});
 	}
 
 	/**
-	 * Returns a list based on its sharing code
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} sharingCode - The sharing code of the list
-	 * @returns {Object} The list matching with the code.
+	 * Get a list from its sharing code.
+	 * @param {UUID} sharingCode sharing code of list to get, uuid v4 formatted
+	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
-	static async getSharedList(db: Database, sharingCode: string): Promise<object> {
-		const lists = await this.getAll(db);
-		const sharedList = lists.find((list) => list.sharingCode === sharingCode);
-		return sharedList;
+	static async addGrantedUser(listId: UUID, user: User): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["grantedUsers"],
+		});
+		list.isShared = true;
+		list.grantedUsers = (list.grantedUsers || []).concat(user);
+		return await listRepository.save(list);
 	}
 
 	/**
-	 * Adds the user with userId id to the listId list's sharedWith property
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} userId - The id of the user to be added
-	 * @param {String} listId - The id of the list where the user should be added
+	 * List the list owners
+	 * @param {UUID} listId id of list, uuid v4 formatted
+	 * @returns
 	 */
-	static addUserToList(db: Database, userId: string, listId: string): void {
-		const reference: DatabaseReference = ref(db, `lists/${listId}/sharedWith`);
-		push(reference, userId);
+	static async listOwners(listId: UUID): Promise<UUID[]> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, { relations: ["owners"] });
+		return list.owners.map((u) => u.id);
 	}
 
 	/**
-	 * Turns public property to false of a given list.
-	 * @function
-	 * @param {Database} db - Database connection
-	 * @param {String} listId - The id of the list that should go private
-	 * @returns {Object} The updated list.
+	 * List the list granted users
+	 * @param {UUID} listId id of list, uuid v4 formatted
+	 * @returns
 	 */
-	static private(db: Database, listId: string): object {
-		const reference: DatabaseReference = ref(db, `lists/${listId}/public`);
-		set(reference, false);
-		return ListService.getOne(db, listId);
+	static async listGrantedUsers(listId: UUID): Promise<UUID[]> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["grantedUsers"],
+		});
+		return (list.grantedUsers || []).map((u) => u.id);
 	}
 }
 

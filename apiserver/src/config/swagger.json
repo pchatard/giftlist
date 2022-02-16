@@ -12,7 +12,7 @@
 				"description": "Stringified UUIDv4.\nSee [RFC 4112](https://tools.ietf.org/html/rfc4122)",
 				"pattern": "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"
 			},
-			"UserIdDTO": {
+			"ListIdDTO": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
@@ -21,41 +21,110 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"FieldIsMissingError": {
+			"CreateListDTO": {
 				"properties": {
-					"name": {
+					"title": {
 						"type": "string"
 					},
-					"message": {
-						"type": "string"
+					"closureDate": {
+						"type": "string",
+						"format": "date-time"
 					},
-					"stack": {
-						"type": "string"
+					"ownersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
+					},
+					"isShared": {
+						"type": "boolean",
+						"default": false
+					},
+					"grantedUsersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
-					"name",
-					"message"
+					"title",
+					"ownersIds"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
-			"MailIsInvalidError": {
+			"Partial_ListDTO_": {
 				"properties": {
-					"name": {
+					"sharingCode": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"title": {
 						"type": "string"
 					},
-					"message": {
+					"closureDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"ownersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
+					},
+					"isShared": {
+						"type": "boolean",
+						"default": false
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"ListDTO": {
+				"properties": {
+					"sharingCode": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"title": {
 						"type": "string"
 					},
-					"stack": {
-						"type": "string"
+					"closureDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"ownersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
+					},
+					"isShared": {
+						"type": "boolean",
+						"default": false
 					}
 				},
 				"required": [
-					"name",
-					"message"
+					"title",
+					"ownersIds"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SelectKindList": {
+				"description": "List Selection Kind",
+				"enum": [
+					"all",
+					"owned",
+					"granted"
+				],
+				"type": "string"
+			},
+			"UserIdDTO": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -90,10 +159,13 @@
 						"$ref": "#/components/schemas/email"
 					},
 					"displayName": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					}
 				},
+				"required": [
+					"email",
+					"displayName"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -103,8 +175,7 @@
 						"$ref": "#/components/schemas/email"
 					},
 					"displayName": {
-						"type": "string",
-						"default": ""
+						"type": "string"
 					}
 				},
 				"type": "object",
@@ -116,28 +187,12 @@
 						"$ref": "#/components/schemas/email"
 					},
 					"displayName": {
-						"type": "string",
-						"default": ""
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"UserNotFoundError": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"stack": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"name",
-					"message"
+					"email",
+					"displayName"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -161,6 +216,330 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/lists": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListIdDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateListDTO"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ListDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets all user's lists data.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "select",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/SelectKindList"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}": {
+			"put": {
+				"operationId": "Edit",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Edit a list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "data to edit a list",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_ListDTO_"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Delete a list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Sends back a list in the response based on its id.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/share": {
+			"put": {
+				"operationId": "Share",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Make a list to public.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/unshare": {
+			"put": {
+				"operationId": "Private",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Make a list private.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/invite/{sharingCode}": {
+			"put": {
+				"operationId": "AccessFromSharingCode",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Get a list from its sharing code.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the sharing code of the list",
+						"in": "path",
+						"name": "sharingCode",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
 		"/users": {
 			"post": {
 				"operationId": "Create",
@@ -176,21 +555,11 @@
 						}
 					},
 					"400": {
-						"description": "If one field is missing, mail is invalid or already used",
+						"description": "If mail is already used",
 						"content": {
 							"application/json": {
 								"schema": {
-									"anyOf": [
-										{
-											"$ref": "#/components/schemas/FieldIsMissingError"
-										},
-										{
-											"$ref": "#/components/schemas/MailIsInvalidError"
-										},
-										{
-											"$ref": "#/components/schemas/MailAlreadyUsedError"
-										}
-									]
+									"$ref": "#/components/schemas/MailAlreadyUsedError"
 								}
 							}
 						}
@@ -324,16 +693,6 @@
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/UserDTO"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "If userId is incorrect",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UserNotFoundError"
 								}
 							}
 						}
