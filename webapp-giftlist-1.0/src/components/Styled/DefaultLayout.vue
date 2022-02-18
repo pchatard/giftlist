@@ -8,7 +8,7 @@
 					@click="handleBackButtonClick"
 				>
 					<ArrowLeftIcon class="w-4" />
-					<span>Retour {{ backButtonTitle ? "vers " + backButtonTitle : "" }}</span>
+					<span>{{ backText }}</span>
 				</div>
 				<Title class="mb-4">{{ title }}</Title>
 			</div>
@@ -23,8 +23,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import Title from "@/components/Styled/Title.vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import { ArrowLeftIcon } from "@heroicons/vue/outline";
 import { useRouter } from "vue-router";
@@ -47,8 +49,15 @@ export default defineComponent({
 	setup(props) {
 		const router = useRouter();
 
+		const backText = computed(() => {
+			const back = labels.defaultLayout.back;
+			if (props.backButtonTitle) {
+				return `${back} vers ${props.backButtonTitle}`;
+			}
+			return back;
+		});
+
 		const handleBackButtonClick = () => {
-			console.log(router);
 			if (props.backButtonLink) {
 				router.push(props.backButtonLink);
 			} else {
@@ -57,6 +66,7 @@ export default defineComponent({
 		};
 
 		return {
+			backText,
 			handleBackButtonClick,
 		};
 	},

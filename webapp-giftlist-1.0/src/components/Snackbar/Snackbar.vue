@@ -6,7 +6,9 @@
 			class="fixed bottom-0 right-0 shadow-md rounded-md p-4 m-4"
 		>
 			<span> {{ snack.message }} </span>
-			<button @click="hideSnackbar" class="ml-4 px-4 py-2 shadow-sm rounded-md">Fermer</button>
+			<button @click="hideSnackbar" class="ml-4 px-4 py-2 shadow-sm rounded-md">
+				{{ labels.snackbar.close }}
+			</button>
 		</div>
 	</transition>
 </template>
@@ -15,6 +17,8 @@
 import { defineComponent, PropType } from "vue";
 import { SnackbarState } from "@/store/snackbar";
 import { useStore } from "vuex";
+
+import labels from "@/labels/fr/labels.json";
 
 export default defineComponent({
 	name: "Snackbar",
@@ -32,6 +36,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			hideSnackbar,
 		};
 	},

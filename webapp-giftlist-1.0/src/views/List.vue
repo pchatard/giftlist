@@ -1,5 +1,10 @@
 <template>
-	<DefaultLayout title="Ma liste" back backButtonTitle="Mes listes" backButtonLink="/app/lists">
+	<DefaultLayout
+		:title="listName"
+		back
+		:backButtonTitle="labels.titles.lists"
+		backButtonLink="/app/lists"
+	>
 		<template v-slot:commands>
 			<span
 				class="
@@ -14,7 +19,7 @@
 				@click="router.push(`/app/lists/${list.id}/settings`)"
 			>
 				<CogIcon class="h-4 w-4 mr-2" />
-				Options
+				{{ labels.lists.buttons.settings }}
 			</span>
 			<ListGridToggleButton :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
 		</template>
@@ -53,6 +58,8 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import labels from "@/labels/fr/labels.json";
+
 import { Gift } from "@/types/api/Gift";
 import Modal from "@/components/Styled/Modal.vue";
 
@@ -79,14 +86,20 @@ export default defineComponent({
 		const { dispatch, state, getters } = useStore();
 		const router = useRouter();
 		const listId = router.currentRoute.value.params.id;
+		const listName = "Ma liste";
 		const auth = ref(inject("Auth") as any);
 
 		const tableHeaders = ref([
-			{ title: "Favori", width: "w-10 text-center", sortable: true, sorted: "none" },
-			{ title: "Titre", sortable: true, sorted: "none" },
-			{ title: "Type", sortable: true, sorted: "none" },
-			{ title: "Date d'ajout", sortable: true, sorted: "none" },
-			{ title: "Prix", sortable: true, sorted: "none" },
+			{
+				title: labels.tables.gift.favorite,
+				width: "w-10 text-center",
+				sortable: true,
+				sorted: "none",
+			},
+			{ title: labels.tables.gift.title, sortable: true, sorted: "none" },
+			{ title: labels.tables.gift.type, sortable: true, sorted: "none" },
+			{ title: labels.tables.gift.creationDate, sortable: true, sorted: "none" },
+			{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
 		]);
 
 		const handleSort = (headers: Array<any>) => {
@@ -104,7 +117,7 @@ export default defineComponent({
 		};
 
 		const handleDeleteModal = (gift: Gift) => {
-			modal.value.title = "Supprimer " + gift.title;
+			modal.value.title = labels.modals.deleteGift.title + gift.title;
 			modal.value.showModal = true;
 			modal.value.confirm = handleDeleteConfirm;
 			modal.value.gift = gift;
@@ -117,8 +130,8 @@ export default defineComponent({
 
 		const modal = ref({
 			showModal: false,
-			title: "Supprimer",
-			confirmText: "Supprimer",
+			title: labels.modals.deleteGift.title,
+			confirmText: labels.modals.deleteGift.confirm,
 			confirm: handleDeleteConfirm,
 			gift: {} as Gift,
 		});
@@ -136,6 +149,8 @@ export default defineComponent({
 					return state.preferences.displayList;
 				}
 			}),
+			labels,
+			listName,
 			gifts,
 			handleDeleteModal,
 			list,

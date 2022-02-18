@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Paramètres" back>
+	<DefaultLayout :title="labels.titles.settings" back>
 		<section class="my-4">
 			<Subtitle>Affichage</Subtitle>
 			<div>
@@ -129,6 +129,8 @@
 import { defineComponent, inject, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 
+import labels from "@/labels/fr/labels.json";
+
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Subtitle from "@/components/Styled/Subtitle.vue";
@@ -222,6 +224,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			selectedDisplayList,
 			displayListOptions,
 			selectedBookingShowOthers,

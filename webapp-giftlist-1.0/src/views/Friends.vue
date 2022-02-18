@@ -1,8 +1,8 @@
 <template>
-	<DefaultLayout title="Mes amis" back>
+	<DefaultLayout :title="labels.titles.friends" back>
 		<div class="flex items-stretch border rounded-lg size">
 			<div class="w-1/3 flex flex-col">
-				<Subtitle class="px-4 py-2">Mes amis</Subtitle>
+				<!-- <Subtitle class="px-4 py-2">Mes amis</Subtitle> -->
 				<ul class="overflow-scroll">
 					<li
 						v-for="i in 2"
@@ -59,8 +59,8 @@
 			</div>
 			<div class="w-2/3 px-4 py-2 flex flex-col divide-y">
 				<div class="h-3/5 flex flex-col justify-center pb-4">
-					<Subtitle class="pb-2">Ajouter un ami</Subtitle>
-					<p>Ajoutez vos amis en entrant leur adresse e-mail :</p>
+					<Subtitle class="pb-2">{{ labels.friends.addFriendsTitle }}</Subtitle>
+					<p>{{ labels.friends.addFriendsText }}</p>
 					<div class="flex items-center my-2">
 						<FormInputText
 							class="w-2/5"
@@ -74,18 +74,16 @@
 							@change="handleEmailInputChange"
 							reset
 						/>
-						<Button class="ml-4 w-2/5" @click="sendFriendRequest"
-							>Envoyer une invitation</Button
-						>
+						<Button class="ml-4 w-2/5" @click="sendFriendRequest">{{
+							labels.friends.addFriendsButton
+						}}</Button>
 					</div>
 					<p>
-						En ajoutant des amis, vous pourrez partager directement vos listes avec eux, sans
-						avoir à partager de lien.
+						{{ labels.friends.addFriendsDescription }}
 					</p>
 				</div>
 				<div class="h-2/5 flex flex-col justify-center py-4">
-					<Subtitle class="pb-2">Invitez vos amis sur Giftlist</Subtitle>
-					<!-- <p>Invitez vos amis sur Giftlist :</p> -->
+					<Subtitle class="pb-2">{{ labels.friends.inviteTitle }}</Subtitle>
 					<div class="flex items-center mt-2">
 						<FormInputText
 							class="w-2/5"
@@ -99,13 +97,12 @@
 							@change="handleEmailInvitationInputChange"
 							reset
 						/>
-						<Button class="ml-4 w-2/5" @click="sendInvitationRequest"
-							>Inviter sur Giftlist</Button
-						>
+						<Button class="ml-4 w-2/5" @click="sendInvitationRequest">
+							{{ labels.friends.inviteButton }}
+						</Button>
 					</div>
 					<p>
-						Invitez vos amis sur Giftlist pour qu'ils puissent créer leurs listes et partager
-						leurs envies à leur tour !
+						{{ labels.friends.inviteButton }}
 					</p>
 				</div>
 			</div>
@@ -115,6 +112,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+
+import labels from "@/labels/fr/labels.json";
+
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Button from "@/components/Styled/Button.vue";
 import Subtitle from "@/components/Styled/Subtitle.vue";
@@ -139,11 +139,11 @@ export default defineComponent({
 		};
 
 		const emailInput = ref({
-			label: "E-mail de votre ami",
-			placeholder: "bonjour@giftlist.com",
+			label: labels.friends.addFriendsInput.label,
+			placeholder: labels.friends.addFriendsInput.placeholder,
 			value: "",
 			errorMessage: "",
-			helperText: "Ajouter vos amis via leur adresse mail",
+			helperText: labels.friends.addFriendsInput.helperText,
 		});
 
 		const handleEmailInputChange = (value: string) => {
@@ -155,11 +155,11 @@ export default defineComponent({
 		};
 
 		const emailInvitationInput = ref({
-			label: "E-mail de votre ami",
-			placeholder: "bonjour@giftlist.com",
+			label: labels.friends.inviteInput.label,
+			placeholder: labels.friends.inviteInput.placeholder,
 			value: "",
 			errorMessage: "",
-			helperText: "Invitez vos amis sur Giftlist via leur adresse mail",
+			helperText: labels.friends.inviteInput.helperText,
 		});
 
 		const handleEmailInvitationInputChange = (value: string) => {
@@ -171,6 +171,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			acceptFriendRequest,
 			declineFriendRequest,
 			deleteFriend,

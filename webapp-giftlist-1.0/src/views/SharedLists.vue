@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Les listes de mes copains">
+	<DefaultLayout :title="labels.titles.shared">
 		<Table :headers="tableHeaders" @sort="handleSort">
 			<tr
 				v-for="list in lists"
@@ -15,9 +15,9 @@
 			:show="newSharingCodeModalIsOpen"
 			@confirm="confirmNewSharingCode"
 			@close="closeNewSharingCodeModal"
-			title="Entrer un nouveau code de partage"
-			confirmText="Valider"
-			cancelText="Annuler"
+			:title="labels.modals.code.title"
+			:confirmText="labels.modals.code.confirm"
+			:cancelText="labels.modals.code.cancel"
 		>
 			<FormInputText
 				:label="newSharingCodeData.label"
@@ -38,7 +38,7 @@
 			@close="handleDetailsModal"
 			@confirm="openList"
 			:title="detailsModal.list.title || ''"
-			confirmText="Ouvrir"
+			:confirmText="labels.modals.listDetails.confirm"
 		>
 			<p>Détails de la liste</p>
 			<p>Propriétaire(s):</p>
@@ -52,6 +52,8 @@ import { computed, ComputedRef, defineComponent, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import router from "@/router";
+
+import labels from "@/labels/fr/labels.json";
 
 import { List } from "@/types/api/List";
 
@@ -77,9 +79,9 @@ export default defineComponent({
 
 		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
-			{ title: "Nom", sortable: true, sorted: "none" },
-			{ title: "Propriétaire", sortable: true, sorted: "none" },
-			{ title: "Date d'échéance", sortable: true, sorted: "none" },
+			{ title: labels.tables.list.title, sortable: true, sorted: "none" },
+			{ title: labels.tables.list.owners, sortable: true, sorted: "none" },
+			{ title: labels.tables.list.termDate, sortable: true, sorted: "none" },
 		]);
 
 		const handleSort = (headers: Array<any>) => {
@@ -97,9 +99,9 @@ export default defineComponent({
 			code: "",
 			errorMessage: "",
 			isError: false,
-			helperText: "Le code que vous a transmis votre ami(e)",
-			label: "Code de partage",
-			placeholder: "abcd-efgh-ijkl",
+			helperText: labels.modals.code.input.helperText,
+			label: labels.modals.code.input.label,
+			placeholder: labels.modals.code.input.placeholder,
 		});
 		const newSharingCodeModalIsOpen = computed(
 			() => router.currentRoute.value.path === "/app/shared/new"
@@ -155,6 +157,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			router,
 			lists,
 			openList,

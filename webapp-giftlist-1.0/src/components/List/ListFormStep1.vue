@@ -30,15 +30,15 @@
 		<div class="col-span-full grid grid-rows-2 grid-cols-3 pt-4">
 			<FormInputToggle
 				class="col-span-full"
-				label="Ajouter une date d'échéance ?"
-				:value="values.activateTermDate"
+				:label="values.activateTermDate.label"
+				:value="values.activateTermDate.value"
 				@change="handleActivateTermDateChange"
 				inline
-				helperText="Grâce à la date d'échéance, vos amis pourront juger de l'imminence de votre évènement."
+				:helperText="values.activateTermDate.helperText"
 			/>
 			<FormDatePicker
-				v-show="values.activateTermDate"
-				:disabled="!values.activateTermDate"
+				v-show="values.activateTermDate.value"
+				:disabled="!values.activateTermDate.value"
 				class="col-span-1 w-auto"
 				:label="values.termDate.label"
 				:value="values.termDate.value"
@@ -98,7 +98,10 @@ export default defineComponent({
 		const handleActivateTermDateChange = (activateTermDate: boolean) => {
 			const values = {
 				...props.values,
-				activateTermDate,
+				activateTermDate: {
+					...props.values?.activateTermDate,
+					value: activateTermDate,
+				},
 			};
 			context.emit("change", values);
 		};

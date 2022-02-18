@@ -1,18 +1,18 @@
 <template>
-	<DefaultLayout title="Mon compte" back>
+	<DefaultLayout :title="labels.titles.profile" back>
 		<div class="flex flex-col my-4">
 			<div class="flex items-center justify-between border rounded-lg px-4 my-4">
 				<img :src="auth.user.picture" alt="Profile Image" class="rounded-full m-4" />
 
 				<div class="mx-4 w-1/4">
 					<Subtitle>{{ auth.user.nickname }}</Subtitle>
-					<div>Email : {{ auth.user.email }}</div>
+					<div>{{ labels.profile.email }} {{ auth.user.email }}</div>
 					<button
 						v-if="!auth.user.email_verified"
 						class="text-indigo-600"
 						@click="verifyEmail"
 					>
-						Vérifier mon email
+						{{ labels.profile.verifyEmail }}
 					</button>
 				</div>
 				<div class="w-1/4">
@@ -52,10 +52,10 @@
 							>8+</span
 						>
 					</div>
-					<div class="pl-1">12 amis</div>
-					<router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600"
-						>Gérer mes amis</router-link
-					>
+					<div class="pl-1">12 {{ labels.profile.friends }}</div>
+					<router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600">
+						{{ labels.profile.manageFriends }}
+					</router-link>
 				</div>
 				<div class="w-1/4">
 					<div class="flex items-center justify-between mb-4">
@@ -63,19 +63,25 @@
 							<span>
 								<strong> 3 </strong>
 							</span>
-							<span class="text-center leading-tight">Listes créées</span>
+							<span class="text-center leading-tight">
+								{{ labels.profile.createdLists }}
+							</span>
 						</div>
 						<div class="flex flex-col items-center">
 							<span>
 								<strong> 12 </strong>
 							</span>
-							<span class="text-center leading-tight">Cadeaux créés</span>
+							<span class="text-center leading-tight">
+								{{ labels.profile.createdGifts }}
+							</span>
 						</div>
 						<div class="flex flex-col items-center">
 							<span>
 								<strong> 5 </strong>
 							</span>
-							<span class="text-center leading-tight">Cadeaux offerts</span>
+							<span class="text-center leading-tight">
+								{{ labels.profile.bookedGifts }}
+							</span>
 						</div>
 					</div>
 				</div>
@@ -84,36 +90,37 @@
 			<div class="flex items-stretch divide-x">
 				<div class="flex-1 p-8">
 					<div class="pb-5">
-						<Subtitle>Modifier mon adresse email</Subtitle>
-						<p class="mt-2 mb-4">
-							Votre adresse email actuelle est <strong>{{ auth.user.email }}</strong
-							>. Vous pouvez la modifier en cliquant sur le bouton ci-dessous qui vous
-							redirigera vers la page de notre gestionnaire.
-						</p>
-						<Button btnStyle="secondary" class="w-1/2" @click="changeEmail"
-							>Modifier mon email</Button
-						>
+						<Subtitle>{{ labels.profile.editEmailTitle }}</Subtitle>
+						<div class="mt-2 mb-4">
+							<p>
+								{{ labels.profile.editEmailCurrent }} <strong>{{ auth.user.email }}</strong>
+							</p>
+							<p>
+								{{ labels.profile.editEmailText }}
+							</p>
+						</div>
+						<Button btnStyle="secondary" class="w-1/2" @click="changeEmail">
+							{{ labels.profile.editEmailButton }}
+						</Button>
 					</div>
 					<div class="pt-5">
-						<Subtitle>Modifier mon mot de passe</Subtitle>
+						<Subtitle>{{ labels.profile.editPasswordTitle }}</Subtitle>
 						<p class="mt-2 mb-4">
-							Vous pouvez modifier votre mot de passe en cliquant sur le bouton ci-dessous.
-							Vous serez redirigé vers une page de notre gestionnaire.
+							{{ labels.profile.editPasswordText }}
 						</p>
-						<Button btnStyle="secondary" class="w-1/2" @click="changePassword"
-							>Modifier mon mot de passe</Button
-						>
+						<Button btnStyle="secondary" class="w-1/2" @click="changePassword">
+							{{ labels.profile.editPasswordButton }}
+						</Button>
 					</div>
 				</div>
 				<div class="flex-1 flex flex-col p-8">
-					<Subtitle>Télécharger mes données</Subtitle>
+					<Subtitle>{{ labels.profile.dataTitle }}</Subtitle>
 					<p class="mt-2 mb-4">
-						Dans le cadre de la législation RGPD blablabla, vous pouvez télécharger l'ensemble
-						des données vous concernant dont Giftlist dispose.
+						{{ labels.profile.dataText }}
 					</p>
-					<Button btnStyle="secondary" class="w-1/2" @click="downloadData"
-						>Télécharger mes données</Button
-					>
+					<Button btnStyle="secondary" class="w-1/2" @click="downloadData">
+						{{ labels.profile.dataButton }}
+					</Button>
 				</div>
 			</div>
 		</div>
@@ -122,6 +129,8 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref } from "vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
@@ -153,6 +162,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			auth,
 			friends,
 			verifyEmail,

@@ -119,7 +119,7 @@
 				<template v-slot:icon>
 					<XIcon />
 				</template>
-				Annuler
+				{{ labels.gift.buttons.cancel }}
 			</Button>
 
 			<Button btnStyle="primary" hasIcon @click="$emit('confirm')">
@@ -138,7 +138,7 @@
 				<template v-slot:icon>
 					<CheckIcon />
 				</template>
-				Valider et créer un autre
+				{{ labels.gift.buttons.createAnother }}
 			</Button>
 		</div>
 	</div>
@@ -146,6 +146,8 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import FormInputText from "@/components/Inputs/FormInputText.vue";
 import FormInputToggle from "@/components/Inputs/FormInputToggle.vue";
@@ -194,13 +196,14 @@ export default defineComponent({
 
 		const confirmText = computed(() => {
 			if (props.action === "create") {
-				return "Valider";
+				return labels.gift.buttons.create;
 			}
 
-			return "Enregistrer les changements";
+			return labels.gift.buttons.save;
 		});
 
 		return {
+			labels,
 			confirmText,
 			handleChange,
 		};

@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Mes cadeaux réservés">
+	<DefaultLayout :title="labels.titles.booked">
 		<div class="grid grid-cols-4 gap-4">
 			<BookedGift
 				v-for="gift in bookedGifts"
@@ -24,6 +24,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import BookedGift from "@/components/Gift/BookedGift.vue";
@@ -110,7 +112,7 @@ export default defineComponent({
 			confirm: openList,
 		});
 
-		return { bookedGifts, modal, handleDetailsModal, selectedGift };
+		return { labels, bookedGifts, modal, handleDetailsModal, selectedGift };
 	},
 });
 </script>

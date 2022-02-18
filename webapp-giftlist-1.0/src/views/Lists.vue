@@ -1,5 +1,5 @@
 <template>
-	<DefaultLayout title="Mes listes">
+	<DefaultLayout :title="labels.titles.lists">
 		<Table :headers="tableHeaders" @sort="handleSort">
 			<tr
 				v-for="list in lists"
@@ -16,12 +16,12 @@
 			@confirm="deleteList"
 			@close="closeDeleteModal"
 			type="danger"
-			:title="`Supprimer la liste ${listToDelete?.title} ?`"
-			confirmText="Supprimer"
-			cancelText="Annuler"
+			:title="labels.modals.deleteList.title + listToDelete?.title"
+			:confirmText="labels.modals.deleteList.confirm"
+			:cancelText="labels.modals.deleteList.cancel"
 		>
-			<p class="text-sm text-gray-500">Êtes-vous sûr de vouloir supprimer cette liste ?</p>
-			<p class="text-sm text-gray-500">Cette action est irréversible.</p>
+			<p class="text-sm text-gray-500">{{ labels.modals.deleteList.text }}</p>
+			<p class="text-sm text-gray-500">{{ labels.modals.deleteList.text2 }}</p>
 		</Modal>
 	</DefaultLayout>
 </template>
@@ -30,6 +30,8 @@
 import { computed, ComputedRef, defineComponent, onMounted, Ref, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+
+import labels from "@/labels/fr/labels.json";
 
 import { List } from "@/types/api/List";
 
@@ -54,10 +56,10 @@ export default defineComponent({
 
 		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
-			{ title: "Nom", sortable: true, sorted: "none" },
-			{ title: "Propriétaire", sortable: true, sorted: "none" },
-			{ title: "Status", sortable: true, sorted: "none" },
-			{ title: "Date d'échéance", sortable: true, sorted: "none" },
+			{ title: labels.tables.list.title, sortable: true, sorted: "none" },
+			{ title: labels.tables.list.owners, sortable: true, sorted: "none" },
+			{ title: labels.tables.list.status, sortable: true, sorted: "none" },
+			{ title: labels.tables.list.termDate, sortable: true, sorted: "none" },
 		]);
 
 		const handleSort = (headers: Array<any>) => {
@@ -94,6 +96,7 @@ export default defineComponent({
 		// });
 
 		return {
+			labels,
 			deleteModalIsOpen,
 			listToDelete,
 			openDeleteModal,
