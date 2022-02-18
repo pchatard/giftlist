@@ -80,6 +80,8 @@ import DatePickerDayView from "./DatePickerDayView.vue";
 import DatePickerMonthView from "./DatePickerMonthView.vue";
 import DatePickerYearView from "./DatePickerYearView.vue";
 
+import labels from "@/labels/fr/labels.json";
+
 export default defineComponent({
 	name: "FormDatePicker",
 	components: {
@@ -129,18 +131,18 @@ export default defineComponent({
 		const monthIsSelected = ref(false);
 		const yearIsSelected = ref(false);
 		const monthes = [
-			"Janvier",
-			"Février",
-			"Mars",
-			"Avril",
-			"Mai",
-			"Juin",
-			"Juillet",
-			"Août",
-			"Septembre",
-			"Octobre",
-			"Novembre",
-			"Décembre",
+			labels.inputs.datePicker.monthes.january,
+			labels.inputs.datePicker.monthes.february,
+			labels.inputs.datePicker.monthes.march,
+			labels.inputs.datePicker.monthes.april,
+			labels.inputs.datePicker.monthes.may,
+			labels.inputs.datePicker.monthes.june,
+			labels.inputs.datePicker.monthes.july,
+			labels.inputs.datePicker.monthes.august,
+			labels.inputs.datePicker.monthes.september,
+			labels.inputs.datePicker.monthes.october,
+			labels.inputs.datePicker.monthes.november,
+			labels.inputs.datePicker.monthes.december,
 		];
 		const datePickerErrorMessage = ref("");
 

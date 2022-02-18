@@ -37,11 +37,11 @@
 - [ ] Ecrire des tests
 - [ ] Gérer le refresh Auth0
 - [ ] Gestion des erreurs : Retravailler la snackbar
-- [ ] Externaliser tous les labels dans des fichiers JSON
 - [ ] Skeletons et animations chargement
 - [ ] Accessibilité
 - [ ] (Clic droit personnalisé)
 - [x] Bouton retour
+- [x] Externaliser tous les labels dans des fichiers JSON
 
 ## CSS
 - [ ] Uniformiser les styles

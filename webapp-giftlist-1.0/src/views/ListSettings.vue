@@ -20,7 +20,7 @@
 						focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75
 					"
 				>
-					<span>Informations générales</span>
+					<span>{{ labels.listOptions.generalTitle }}</span>
 					<ChevronUpIcon
 						:class="open ? 'transform rotate-180' : ''"
 						class="w-5 h-5 text-indigo-500"
@@ -62,7 +62,7 @@
 						focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75
 					"
 				>
-					<span>Options de partage</span>
+					<span>{{ labels.listOptions.sharingTitle }}</span>
 					<ChevronUpIcon
 						:class="open ? 'transform rotate-180' : ''"
 						class="w-5 h-5 text-indigo-500"
@@ -128,33 +128,41 @@ export default defineComponent({
 		// TODO: Fill with list data
 		const generalInformation = ref({
 			title: {
-				label: "Titre",
+				label: labels.listOptions.inputs.title.label,
 				value: "",
 				errorMessage: "",
-				helperText: "Le titre de votre nouvelle liste",
-				placeholder: "Mes 18 ans",
+				helperText: labels.listOptions.inputs.title.helperText,
+				placeholder: labels.listOptions.inputs.title.placeholder,
 				required: true,
 			},
 			description: {
-				label: "Description",
+				label: labels.listOptions.inputs.description.label,
 				value: "",
-				placeholder: "La wishlist de la majorité",
-				helperText: "Une rapide description de votre liste",
+				placeholder: labels.listOptions.inputs.description.placeholder,
+				helperText: labels.listOptions.inputs.description.helperText,
 				errorMessage: "",
 				required: false,
 			},
-			activateTermDate: false,
+			activateTermDate: {
+				value: false,
+				label: labels.listOptions.inputs.activateTermDate.label,
+				helperText: labels.listOptions.inputs.activateTermDate.helperText,
+			},
 			termDate: {
-				label: "Date d'échéance de votre liste",
+				label: labels.listOptions.inputs.termDate.label,
 				value: initializeDate().toISOString().split("T")[0],
-				helperText: "La date avant laquelle on doit vous offrir vos cadeaux",
+				helperText: labels.listOptions.inputs.termDate.helperText,
 				errorMessage: "",
 			},
 		});
 
 		// TODO: Fill with list data
 		const sharingOptions = ref({
-			shared: false,
+			shared: {
+				value: false,
+				label: labels.listOptions.inputs.shared.label,
+				helperText: labels.listOptions.inputs.shared.helperText,
+			},
 			friends: [
 				{ id: 1, name: "Arnold A." },
 				{ id: 12, name: "Ben 10" },
@@ -165,8 +173,16 @@ export default defineComponent({
 				{ id: 54, name: "Guéric G." },
 				{ id: 47, name: "Hans H." },
 			],
-			owners: [],
-			authorizedUsers: [],
+			owners: {
+				label: labels.listOptions.inputs.owners.label,
+				helperText: labels.listOptions.inputs.owners.helperText,
+				value: [],
+			},
+			authorizedUsers: {
+				label: labels.listOptions.inputs.authorizedUsers.label,
+				helperText: labels.listOptions.inputs.authorizedUsers.helperText,
+				value: [],
+			},
 		});
 
 		const openGeneral = ref(true);

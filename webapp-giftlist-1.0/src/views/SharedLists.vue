@@ -38,7 +38,7 @@
 			@close="handleDetailsModal"
 			@confirm="openList"
 			:title="detailsModal.list.title || ''"
-			:confirmText="labels.modals.details.confirm"
+			:confirmText="labels.modals.listDetails.confirm"
 		>
 			<p>Détails de la liste</p>
 			<p>Propriétaire(s):</p>

@@ -1,8 +1,8 @@
 <template>
 	<DefaultLayout
-		title="Cadeau"
+		:title="giftName"
 		back
-		backButtonTitle="Ma liste"
+		:backButtonTitle="listName"
 		:backButtonLink="'/app/lists/' + listId"
 	>
 		<template v-slot:commands>
@@ -10,7 +10,7 @@
 				<template v-slot:icon>
 					<TrashIcon />
 				</template>
-				Supprimer
+				{{ labels.gift.buttons.delete }}
 			</Button>
 		</template>
 		<GiftForm
@@ -30,6 +30,8 @@ import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import GiftForm from "@/components/Gift/GiftForm.vue";
 import Button from "@/components/Styled/Button.vue";
 
+import labels from "@/labels/fr/labels.json";
+
 import { TrashIcon } from "@heroicons/vue/outline";
 import { GiftCategory } from "@/types/api/GiftCategory";
 import { useRoute, useRouter } from "vue-router";
@@ -47,6 +49,8 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 		const { dispatch } = useStore();
+		const giftName = "Cadeau";
+		const listName = "Ma liste";
 		const listId = router.currentRoute.value.params.id;
 
 		const giftCategories: GiftCategory[] = [
@@ -58,75 +62,75 @@ export default defineComponent({
 		];
 		const giftInformation = ref({
 			title: {
-				label: "Titre",
+				label: labels.gift.inputs.title.label,
 				value: "",
-				placeholder: "Cadeau",
-				helperText: "Le nom de votre idée cadeau",
+				placeholder: labels.gift.inputs.title.placeholder,
+				helperText: labels.gift.inputs.title.helperText,
 				errorMessage: "",
 				required: true,
 			},
 			isFavorite: {
-				label: "Favori",
+				label: labels.gift.inputs.isFavorite.label,
 				value: false,
-				helperText: "Faire apparaître ce cadeau comme favori",
+				helperText: labels.gift.inputs.isFavorite.helperText,
 			},
 			price: {
-				label: "Prix",
+				label: labels.gift.inputs.price.label,
 				value: 0,
-				placeholder: "15",
-				helperText: "Le prix de votre idée cadeau",
+				placeholder: labels.gift.inputs.price.placeholder,
+				helperText: labels.gift.inputs.price.helperText,
 				errorMessage: "",
 				required: false,
 			},
 			category: {
-				label: "Catégorie",
+				label: labels.gift.inputs.category.label,
 				value: giftCategories[0],
 				options: giftCategories,
-				helperText: "Sélectionner un type de cadeau",
+				helperText: labels.gift.inputs.category.helperText,
 				errorMessage: "",
 			},
 			link: {
-				label: "Lien",
+				label: labels.gift.inputs.link.label,
 				value: "",
-				placeholder: "https://www.google.com",
-				helperText: "Copier un lien vers votre idée cadeau",
+				placeholder: labels.gift.inputs.link.placeholder,
+				helperText: labels.gift.inputs.link.helperText,
 				errorMessage: "",
 				required: false,
 			},
 			showDetails: {
-				label: "Détails",
+				label: labels.gift.inputs.showDetails.label,
 				value: false,
-				helperText: "Marque, Taille, Couleur, Commentaires supplémentaires...",
+				helperText: labels.gift.inputs.showDetails.helperText,
 			},
 			brand: {
-				label: "Marque",
+				label: labels.gift.inputs.brand.label,
 				value: "",
-				placeholder: "Nike, Adidas, etc",
-				helperText: "La marque de votre idée cadeau",
+				placeholder: labels.gift.inputs.brand.placeholder,
+				helperText: labels.gift.inputs.brand.helperText,
 				errorMessage: "",
 				required: false,
 			},
 			size: {
-				label: "Taille",
+				label: labels.gift.inputs.size.label,
 				value: "",
-				placeholder: "M, 38, etc",
-				helperText: "La taille de votre idée cadeau",
+				placeholder: labels.gift.inputs.size.placeholder,
+				helperText: labels.gift.inputs.size.helperText,
 				errorMessage: "",
 				required: false,
 			},
 			color: {
-				label: "Couleur",
+				label: labels.gift.inputs.color.label,
 				value: "",
-				placeholder: "Rouge, Noir",
-				helperText: "La couleur de votre idée cadeau",
+				placeholder: labels.gift.inputs.color.placeholder,
+				helperText: labels.gift.inputs.color.helperText,
 				errorMessage: "",
 				required: false,
 			},
 			comments: {
-				label: "Commentaires",
+				label: labels.gift.inputs.comments.label,
 				value: "",
-				placeholder: "Commentaires",
-				helperText: "Ajouter des précisions supplémentaires",
+				placeholder: labels.gift.inputs.comments.placeholder,
+				helperText: labels.gift.inputs.comments.helperText,
 				errorMessage: "",
 				required: false,
 			},
@@ -180,7 +184,7 @@ export default defineComponent({
 			let validate = true;
 
 			if (!giftInformation.value.title.value) {
-				giftInformation.value.title.errorMessage = "Ce champ est requis";
+				giftInformation.value.title.errorMessage = labels.gift.inputs.title.errors.mandatory;
 				validate = false;
 			}
 
@@ -188,6 +192,9 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
+			giftName,
+			listName,
 			listId,
 			giftInformation,
 			handleGiftInformationChange,

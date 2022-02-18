@@ -2,9 +2,9 @@
 	<DefaultLayout :title="labels.titles.newList" back>
 		<div class="flex flex-col">
 			<div class="relative my-4 flex flex-col border rounded-lg">
-				<Subtitle class="absolute top-0 left-4 transform -translate-y-1/2 bg-white px-4">{{
-					stepTitle
-				}}</Subtitle>
+				<Subtitle class="absolute top-0 left-4 transform -translate-y-1/2 bg-white px-4">
+					{{ stepTitle }}
+				</Subtitle>
 
 				<component
 					class="p-4 my-4 rounded-md"
@@ -21,13 +21,13 @@
 						<template v-slot:icon>
 							<XIcon />
 						</template>
-						Annuler
+						{{ labels.newList.buttons.cancel }}
 					</Button>
 					<Button btnStyle="secondary" hasIcon v-show="step > 1" @click="step--">
 						<template v-slot:icon>
 							<ArrowLeftIcon />
 						</template>
-						Précédent
+						{{ labels.newList.buttons.previous }}
 					</Button>
 				</div>
 				<div class="flex gap-4">
@@ -39,7 +39,7 @@
 						<template v-slot:icon>
 							<CheckIcon />
 						</template>
-						Créer ma liste
+						{{ labels.newList.buttons.confirm }}
 					</Button>
 					<Button btnStyle="primary" hasIcon v-show="step != maxStep" @click="nextAction">
 						<template v-slot:icon>
@@ -105,31 +105,39 @@ export default defineComponent({
 		const listInformation = ref({
 			step1: {
 				title: {
-					label: "Titre",
+					label: labels.newList.step1.inputs.title.label,
 					value: "",
 					errorMessage: "",
-					helperText: "Le titre de votre nouvelle liste",
-					placeholder: "Mes 18 ans",
+					helperText: labels.newList.step1.inputs.title.helperText,
+					placeholder: labels.newList.step1.inputs.title.placeholder,
 					required: true,
 				},
 				description: {
-					label: "Description",
+					label: labels.newList.step1.inputs.description.label,
 					value: "",
-					placeholder: "La wishlist de la majorité",
-					helperText: "Une rapide description de votre liste",
+					placeholder: labels.newList.step1.inputs.description.placeholder,
+					helperText: labels.newList.step1.inputs.description.helperText,
 					errorMessage: "",
 					required: false,
 				},
-				activateTermDate: true,
+				activateTermDate: {
+					value: true,
+					label: labels.newList.step1.inputs.activateTermDate.label,
+					helperText: labels.newList.step1.inputs.activateTermDate.helperText,
+				},
 				termDate: {
-					label: "Date d'échéance de votre liste",
+					label: labels.newList.step1.inputs.termDate.label,
 					value: date.toISOString().split("T")[0],
-					helperText: "La date avant laquelle on doit vous offrir vos cadeaux",
+					helperText: labels.newList.step1.inputs.termDate.label,
 					errorMessage: "",
 				},
 			},
 			step2: {
-				shared: false,
+				shared: {
+					value: false,
+					label: labels.newList.step2.inputs.shared.label,
+					helperText: labels.newList.step2.inputs.shared.helperText,
+				},
 				friends: [
 					{ id: 1, name: "Arnold A." },
 					{ id: 12, name: "Ben 10" },
@@ -140,8 +148,16 @@ export default defineComponent({
 					{ id: 54, name: "Guéric G." },
 					{ id: 47, name: "Hans H." },
 				],
-				owners: [],
-				authorizedUsers: [],
+				owners: {
+					label: labels.newList.step2.inputs.owners.label,
+					helperText: labels.newList.step2.inputs.owners.helperText,
+					value: [],
+				},
+				authorizedUsers: {
+					label: labels.newList.step2.inputs.authorizedUsers.label,
+					helperText: labels.newList.step2.inputs.authorizedUsers.helperText,
+					value: [],
+				},
 			},
 		});
 
@@ -183,22 +199,22 @@ export default defineComponent({
 
 		const nextButtonText = computed(() => {
 			if (step.value === 1) {
-				return "Etape 2 : Options de partage";
+				return labels.newList.buttons.next.step2;
 			}
 			switch (step.value) {
 				case 1:
-					return "Etape 2 : Options de partage";
+					return labels.newList.buttons.next.step2;
 				default:
-					return "Suivant";
+					return labels.newList.buttons.next.default;
 			}
 		});
 
 		const stepTitle = computed(() => {
 			switch (step.value) {
 				case 1:
-					return "Informations générales";
+					return labels.newList.step1.title;
 				case 2:
-					return "Options de partage";
+					return labels.newList.step2.title;
 				default:
 					return "";
 			}
@@ -228,7 +244,8 @@ export default defineComponent({
 			let validateStep1 = true;
 			// Check that title is filled
 			if (!listInformation.value.step1.title.value) {
-				listInformation.value.step1.title.errorMessage = "Le titre est obligatoire";
+				listInformation.value.step1.title.errorMessage =
+					labels.newList.step1.inputs.title.errors.mandatory;
 				validateStep1 = false;
 			}
 
@@ -236,7 +253,7 @@ export default defineComponent({
 			const dateIsInPast = new Date(listInformation.value.step1.termDate.value) <= new Date();
 			if (dateIsInPast) {
 				listInformation.value.step1.termDate.errorMessage =
-					"La date renseignée est dans le passé";
+					labels.newList.step1.inputs.termDate.errors.pastDate;
 				validateStep1 = false;
 			}
 

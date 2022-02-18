@@ -66,7 +66,7 @@
                 "helperText": "Le code que vous a transmis votre ami(e)"
             }
         },
-        "details": {
+        "listDetails": {
             "confirm": "Ouvrir"
         },
         "bookGift": {
@@ -92,6 +92,30 @@
             "confirm": "Supprimer"
         }
     },
+    "snackbar": {
+        "close": "Fermer"
+    },
+    "inputs": {
+        "datePicker": {
+            "monthes": {
+                "january": "Janvier",
+                "february": "Février",
+                "march": "Mars",
+                "april": "Avril",
+                "may": "Mai",
+                "june": "Juin",
+                "july": "Juillet",
+                "august": "Août",
+                "september": "Septembre",
+                "october": "Octobre",
+                "november": "Novembre",
+                "december": "Décembre"
+            }
+        }
+    },
+    "defaultLayout": {
+        "back": "Retour"
+    },
     "lists": {
         "buttons": {
             "settings": "Options",
@@ -115,6 +139,210 @@
             "open": "Ouvrir",
             "book": "Réserver",
             "delete": "Supprimer"
+        }
+    },
+    "profile": {
+        "email": "Email :",
+        "verifyEmail": "Vérifier mon email",
+        "friendsNumber": "amis",
+        "manageFriends": "Gérer mes amis",
+        "createdLists": "Listes créées",
+        "createdGifts": "Cadeaux créés",
+        "bookedGifts": "Cadeaux offerts",
+        "editEmailTitle": "Modifier mon adresse email",
+        "editEmailCurrent": "Votre adresse actuelle :",
+        "editEmailText": "Vous pouvez modifier votre adresse email en cliquant sur le bouton ci-dessous qui vous redirigera vers la page de notre gestionnaire.",
+        "editEmailButton": "Modifier mon email",
+        "editPasswordTitle": "Modifier mon mot de passe",
+        "editPasswordText": "Vous pouvez modifier votre mot de passe en cliquant sur le bouton ci-dessous. Vous serez redirigé vers une page de notre gestionnaire.",
+        "editPasswordButton": "Modifier mon mot de passe",
+        "dataTitle": "Télécharger mes données",
+        "dataText": "Dans le cadre de la législation RGPD blablabla, vous pouvez télécharger l'ensemble des données vous concernant dont Giftlist dispose.",
+        "dataButton": "Télécharger mes données"
+    },
+    "friends": {
+        "addFriendsTitle": "Ajouter un ami",
+        "addFriendsText": "Ajoutez vos amis en entrant leur adresse e-mail :",
+        "addFriendsButton": "Envoyer une invitation",
+        "addFriendsDescription": "En ajoutant des amis, vous pourrez partager directement vos listes avec eux, sans avoir à partager de lien.",
+        "addFriendsInput": {
+            "placeholder": "hello@giftlist.com",
+            "label": "E-mail de votre ami",
+            "helperText": "Ajouter vos amis via leur adresse mail"
+        },
+        "inviteTitle": "Invitez vos amis sur Giftlist",
+        "inviteButton": "Inviter sur Giftlist",
+        "inviteDescription": "Invitez vos amis sur Giftlist pour qu'ils puissent créer leurs listes et partager leurs envies à leur tour !",
+        "inviteInput": {
+            "placeholder": "hello@giftlist.com",
+            "label": "E-mail de votre ami",
+            "helperText": "Invitez vos amis sur Giftlist via leur adresse mail"
+        }
+    },
+    "newList": {
+        "buttons": {
+            "cancel": "Annuler",
+            "previous": "Précédent",
+            "confirm": "Créer ma liste",
+            "next": {
+                "default": "Suivant",
+                "step2": "Etape 2 : Options de partage"
+            }
+        },
+        "step1": {
+            "title": "Informations générales",
+            "inputs": {
+                "title": {
+                    "label": "Titre",
+                    "placeholder": "Mes 18 ans",
+                    "helperText": "Le titre de votre nouvelle liste",
+                    "errors": {
+                        "mandatory": "Le titre est obligatoire"
+                    }
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "La wishlist de la majorité",
+                    "helperText": "Une rapide description de votre liste"
+                },
+                "activateTermDate": {
+                    "label": "Ajouter une date d'échéance ?",
+                    "helperText": "Grâce à la date d'échéance, vos amis pourront juger de l'imminence de votre évènement."
+                },
+                "termDate": {
+                    "label": "Date d'échéance de votre liste",
+                    "helperText": "La date avant laquelle on doit vous offrir vos cadeaux",
+                    "errors": {
+                        "pastDate": "La date renseignée est dans le passé"
+                    }
+                }
+            }
+        },
+        "step2": {
+            "title": "Options de partage",
+            "inputs": {
+                "shared": {
+                    "label": "Partager la liste",
+                    "helperText": "En activant cette option, votre liste sera visible pour les personnes de votre choix ou celles disposant du lien ou du code de partage."
+                },
+                "owners": {
+                    "title": "Propriétaires :",
+                    "label": "Propriétaires",
+                    "helperText": "Ajouter des propriétaires"
+                },
+                "authorizedUsers": {
+                    "title": "Invités :",
+                    "label": "Ajouter des personnes",
+                    "helperText": "Partager cette liste avec de nouvelles personnes",
+                    "empty": "Personne n'a encore été ajouté..."
+                }
+            }
+        }
+    },
+    "listOptions": {
+        "generalTitle": "Informations générales",
+        "sharingTitle": "Options de partage",
+        "inputs": {
+            "title": {
+                "label": "Titre",
+                "placeholder": "Mes 18 ans",
+                "helperText": "Le titre de votre liste",
+                "errors": {
+                    "mandatory": "Le titre est obligatoire"
+                }
+            },
+            "description": {
+                "label": "Description",
+                "placeholder": "La wishlist de la majorité",
+                "helperText": "Une rapide description de votre liste"
+            },
+            "activateTermDate": {
+                "label": "Ajouter une date d'échéance ?",
+                "helperText": "Grâce à la date d'échéance, vos amis pourront juger de l'imminence de votre évènement."
+            },
+            "termDate": {
+                "label": "Date d'échéance de votre liste",
+                "helperText": "La date avant laquelle on doit vous offrir vos cadeaux",
+                "errors": {
+                    "pastDate": "La date renseignée est dans le passé"
+                }
+            },
+            "shared": {
+                "label": "Partager la liste",
+                "helperText": "En activant cette option, votre liste sera visible pour les personnes de votre choix ou celles disposant du lien ou du code de partage."
+            },
+            "owners": {
+                "title": "Propriétaires :",
+                "label": "Propriétaires",
+                "helperText": "Ajouter des propriétaires"
+            },
+            "authorizedUsers": {
+                "title": "Invités :",
+                "label": "Ajouter des personnes",
+                "helperText": "Partager cette liste avec de nouvelles personnes",
+                "empty": "Personne n'a encore été ajouté..."
+            }
+        }
+    },
+    "gift": {
+        "buttons": {
+            "cancel": "Annuler",
+            "delete": "Supprimer",
+            "save": "Enregistrer les changements",
+            "create": "Valider",
+            "createAnother": "Valider et créer un autre"
+        },
+        "inputs": {
+            "title": {
+                "label": "Titre",
+                "placeholder": "Cadeau",
+                "helperText": "Le nom de votre idée cadeau",
+                "errors": {
+                    "mandatory": "Ce champ est requis"
+                }
+            },
+            "isFavorite": {
+                "label": "Favori",
+                "helperText": "Faire apparaître ce cadeau comme favori"
+            },
+            "price": {
+                "label": "Prix",
+                "placeholder": "15",
+                "helperText": "Le prix de votre idée cadeau"
+            },
+            "category": {
+                "label": "Catégorie",
+                "helperText": "Sélectionner un type de cadeau"
+            },
+            "link": {
+                "label": "Lien",
+                "placeholder": "https://www.google.com",
+                "helperText": "Copier un lien vers votre idée cadeau"
+            },
+            "showDetails": {
+                "label": "Détails",
+                "helperText": "Marque, Taille, Couleur, Commentaires supplémentaires..."
+            },
+            "brand": {
+                "label": "Marque",
+                "placeholder": "Nike, Adidas, etc",
+                "helperText": "La marque de votre idée cadeau"
+            },
+            "size": {
+                "label": "Taille",
+                "placeholder": "M, 38, etc",
+                "helperText": "La taille de votre idée cadeau"
+            },
+            "color": {
+                "label": "Couleur",
+                "placeholder": "Rouge, Noir",
+                "helperText": "La couleur de votre idée cadeau"
+            },
+            "comments": {
+                "label": "Commentaires",
+                "placeholder": "Commentaires",
+                "helperText": "Ajouter des précisions supplémentaires"
+            }
         }
     }
 }
