@@ -1,10 +1,5 @@
 import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	JoinTable,
-	ManyToMany,
-	PrimaryGeneratedColumn,
+	Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 

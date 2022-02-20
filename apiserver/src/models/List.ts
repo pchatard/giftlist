@@ -1,15 +1,11 @@
 import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	JoinTable,
-	ManyToMany,
-	PrimaryGeneratedColumn,
-	UpdateDateColumn,
+	Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn,
+	UpdateDateColumn
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
 import { UUID } from "../types/UUID";
+import { Gift } from "./Gift";
 import User from "./User";
 
 @Entity("List", { orderBy: { createdDate: "ASC" } })
@@ -40,6 +36,9 @@ export class List {
 	public grantedUsers?: User[];
 
 	public grantedUsersIds?: UUID[];
+
+	@OneToMany(() => Gift, (gift) => gift.list)
+	public gifts!: Gift[];
 
 	@CreateDateColumn()
 	createdDate!: Date;

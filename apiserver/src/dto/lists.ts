@@ -3,7 +3,10 @@ import Expand from "./expand";
 
 export interface CreateListDTO
 	extends Expand<
-		Omit<List, "id" | "sharingCode" | "owners" | "grantedUsers" | "createdDate" | "updatedDate">
+		Omit<
+			List,
+			"id" | "sharingCode" | "gifts" | "owners" | "grantedUsers" | "createdDate" | "updatedDate"
+		>
 	> {}
 export interface ListIdDTO extends Expand<Pick<List, "id">> {}
 export interface ListDTO
