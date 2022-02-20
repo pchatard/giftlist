@@ -1,4 +1,4 @@
-import { DeleteResult, Repository, UpdateResult, getRepository } from "typeorm";
+import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
 
 import List from "../models/List";
 import User from "../models/User";
@@ -53,7 +53,7 @@ class UserService {
 	/**
 	 * Return a user from Database.
 	 * @param {string} userId id of user to get, uuid v4 formatted
-	 * @returns {Promise<User | undefined >} The user matching the userId parameter
+	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
 	static async get(userId: UUID): Promise<User> {
 		const userRepository: Repository<User> = getRepository(User);
@@ -63,7 +63,7 @@ class UserService {
 	/**
 	 * Return a user from Database.
 	 * @param {string} userId id of user to get, uuid v4 formatted
-	 * @returns {Promise<User | undefined >} The user matching the userId parameter
+	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
 	static async getMany(userIds: UUID[]): Promise<User[]> {
 		const userRepository: Repository<User> = getRepository(User);
@@ -71,9 +71,10 @@ class UserService {
 	}
 
 	/**
-	 *
-	 * @param {UUID} userId
-	 * @param {} select
+	 * Returns all user lists.
+	 * @param {UUID} userId id of user which owns the list, uuid v4 formatted
+	 * @param {SelectKindList} select filter tag to return "all" lists, "owns" or "granted" ones only
+	 * @returns {Promise<List[]>} the userId lists
 	 */
 	static async getUserLists(userId: UUID, select: SelectKindList): Promise<List[]> {
 		const userRepository: Repository<User> = getRepository(User);

@@ -1,16 +1,5 @@
 import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Path,
-	Post,
-	Put,
-	Query,
-	Route,
-	Security,
-	SuccessResponse,
-	Tags,
+	Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Security, SuccessResponse, Tags
 } from "tsoa";
 
 import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
@@ -21,6 +10,7 @@ import ListService from "../services/ListService";
 import UserService from "../services/UserService";
 import { SelectKindList } from "../types/SelectKindList";
 import { UUID } from "../types/UUID";
+import GiftController from "./GiftController";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("lists")
@@ -73,6 +63,10 @@ export class ListController extends Controller {
 			if (ownerIds.length == 1 && ownerIds.includes(userId)) {
 				for (const grantedId of grantedIds) {
 					await ListService.forget(listId, grantedId);
+				}
+				const giftController: GiftController = new GiftController();
+				for (const gift of await ListService.getListGifts(listId, true)) {
+					await giftController.delete(listId, gift.id, userId);
 				}
 				await ListService.delete(listId);
 			}

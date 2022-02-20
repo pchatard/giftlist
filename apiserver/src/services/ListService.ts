@@ -1,5 +1,6 @@
-import { DeleteResult, Repository, UpdateResult, getRepository } from "typeorm";
+import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
 
+import Gift from "../models/Gift";
 import List from "../models/List";
 import { User } from "../models/User";
 import { UUID } from "../types/UUID";
@@ -42,7 +43,7 @@ class ListService {
 	 * Forget a list for a user from Database.
 	 * @param {UUID} listId id of list to delete, uuid v4 formatted
 	 * @param {UUID} userId id of user which ask, uuid v4 formatted
-	 * @returns {Promise<DeleteResult>}
+	 * @returns {Promise<List>}
 	 */
 	static async forget(listId: UUID, userId: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
@@ -97,7 +98,7 @@ class ListService {
 	/**
 	 * List the list owners
 	 * @param {UUID} listId id of list, uuid v4 formatted
-	 * @returns
+	 * @returns {Promise<UUID[]>} the listId owners
 	 */
 	static async listOwners(listId: UUID): Promise<UUID[]> {
 		const listRepository: Repository<List> = getRepository(List);
@@ -108,7 +109,7 @@ class ListService {
 	/**
 	 * List the list granted users
 	 * @param {UUID} listId id of list, uuid v4 formatted
-	 * @returns
+	 * @returns {Promise<UUID[]>} the listId granted users
 	 */
 	static async listGrantedUsers(listId: UUID): Promise<UUID[]> {
 		const listRepository: Repository<List> = getRepository(List);
@@ -116,6 +117,22 @@ class ListService {
 			relations: ["grantedUsers"],
 		});
 		return (list.grantedUsers || []).map((u) => u.id);
+	}
+
+	/**
+	 * Returns all list gifts.
+	 * @param {UUID} listId id of list, uuid v4 formatted
+	 * @param {boolean} showHidden flag to show hidden gifts or not
+	 * @returns {Promise<Gift[]>} the listId gifts
+	 */
+	static async getListGifts(listId: UUID, showHidden: boolean): Promise<Gift[]> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["gifts"],
+		});
+		return list.gifts
+			.filter((g) => (showHidden ? true : g.isHidden == false))
+			.sort((a, b) => a.createdDate.valueOf() - b.createdDate.valueOf());
 	}
 }
 

@@ -1,158 +1,214 @@
-import { Request, Response } from "express";
+import {
+	Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Security, SuccessResponse, Tags
+} from "tsoa";
 
-import Gift from "../services/GiftService";
+import { CreateGiftDTO, GiftDTO, GiftIdDTO } from "../dto/gifts";
+import OwnershipError from "../errors/UserErrors/OwnershipError";
+import Gift from "../models/Gift";
+import List from "../models/List";
+import GiftService from "../services/GiftService";
+import ListService from "../services/ListService";
+import { UUID } from "../types/UUID";
 
-class GiftController {
+@Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
+@Route("lists/{listId}/gifts")
+@Tags("Gift")
+export class GiftController extends Controller {
 	/**
-	 * Sends back all the gifts in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Creates a new gift.
 	 */
-	static async findAll(req: Request, res: Response, next: Function) {
-		try {
-			const lists = await Gift.getAll(req.app.get("database"));
-			res.send(lists);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(200)
+	@Post()
+	async create(
+		@Path() listId: UUID,
+		@Body() body: CreateGiftDTO,
+		@Query() userId: UUID
+	): Promise<GiftIdDTO> {
+		if (!(await ListService.listOwners(listId)).includes(userId)) {
+			throw new OwnershipError();
 		}
+		const list: List = await ListService.get(listId);
+		const { id }: Gift = await GiftService.create({ ...body, list });
+		return { id } as GiftIdDTO;
 	}
 
 	/**
-	 * Sends back all the gifts from a given list in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Edit a gift.
+	 * @param {UUID} giftId the GUID of the gift
+	 * @param {ListDTO} body data to edit a gift
 	 */
-	static async findGiftsFromList(req: Request, res: Response, next: Function) {
-		try {
-			const listItems = await Gift.getFromList(req.app.get("database"), req.params.listId);
-			res.send(listItems);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(204)
+	@Put("{giftId}")
+	async edit(
+		@Path() listId: UUID,
+		@Path() giftId: UUID,
+		@Body() body: Partial<GiftDTO>,
+		@Query() userId: UUID
+	): Promise<void> {
+		if (!(await ListService.listOwners(listId)).includes(userId)) {
+			throw new OwnershipError();
 		}
+		await GiftService.edit(giftId, body);
 	}
 
 	/**
-	 * Sends back in the response the gift with the giftId id.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Delete a gift.
+	 * @param {UUID} giftId the GUID of the gift
 	 */
-	static async findOne(req: Request, res: Response, next: Function) {
-		try {
-			const list = await Gift.getOne(req.app.get("database"), req.params.giftId);
-			res.send(list);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(204)
+	@Delete("{giftId}")
+	async delete(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+		if (!(await ListService.listOwners(listId)).includes(userId)) {
+			throw new OwnershipError();
 		}
+		await GiftService.delete(giftId);
 	}
 
 	/**
-	 * Creates a new gift and sends back its database representation in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Gets all list's gifts data.
+	 * @returns {Promise<ListDTO[]>} all list gifts
 	 */
-	static async create(req: Request, res: Response, next: Function) {
-		try {
-			const gift = {
-				...req.body.gift,
-				booked: false,
-				created_at: Date(),
-				modified_at: Date(),
-			};
-			const createdItem = await Gift.create(req.app.get("database"), gift);
-			res.send(createdItem);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(200)
+	@Get()
+	async getAll(@Path() listId: UUID, @Query() userId: UUID): Promise<GiftDTO[]> {
+		let gifts: Gift[] = [];
+		if ((await ListService.listGrantedUsers(listId)).includes(userId)) {
+			gifts = await ListService.getListGifts(listId, false);
+		} else if ((await ListService.listOwners(listId)).includes(userId)) {
+			gifts = await ListService.getListGifts(listId, true);
+		} else {
+			throw new OwnershipError();
 		}
+		return gifts.map((gift) => {
+			const { id, list, createdDate, updatedDate, ...rest } = gift;
+			rest.listId = list.id;
+			return { ...rest } as GiftDTO;
+		});
 	}
 
 	/**
-	 * Updates a gift and sends it back in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Sends back a gift in the response based on its id.
+	 * @param {UUID} giftId the GUID of the gift
 	 */
-	static async update(req: Request, res: Response, next: Function) {
-		try {
-			const gift = req.body;
-			const updatedItem = await Gift.update(req.app.get("database"), req.params.giftId, gift);
-			res.send(updatedItem);
-		} catch (error) {
-			next(error);
+	@SuccessResponse(200)
+	@Get("{giftId}")
+	async get(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<GiftDTO> {
+		if (!(await ListService.listOwners(listId)).includes(userId)) {
+			throw new OwnershipError();
 		}
+		const { id, list, createdDate, updatedDate, ...rest }: Gift = await GiftService.get(giftId);
+		rest.listId = list.id;
+		return rest as GiftDTO;
 	}
 
 	/**
-	 * Toggles the favorite property of the given gift and sends back its new state in the response.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Mark a gift as hidden.
+	 * @param {UUID} giftId the GUID of the gift
 	 */
-	static async favoritize(req: Request, res: Response, next: Function) {
-		try {
-			const newState = req.body.newState;
-			const newFavState = await Gift.updateFavoriteState(
-				req.app.get("database"),
-				req.params.giftId,
-				newState
-			);
-			res.send(newFavState);
-		} catch (error) {
-			next(error);
-		}
+	@SuccessResponse(204)
+	@Put("{giftId}/hide")
+	async hide(@Query() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+		await this.edit(
+			listId,
+			giftId,
+			{
+				/*isHidden: true*/
+			},
+			userId
+		);
 	}
 
 	/**
-	 * Toggles the booked property of a gift, and sends back the updated gift in the response
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Remove "hidden" flag of a gift.
+	 * @param {UUID} giftId the GUID of the gift
 	 */
-	static async book(req: Request, res: Response, next: Function) {
-		try {
-			let booked = {};
-			const userId = req.user["https://giftlist-api/email"];
-			if (req.body.booked && req.body.name) {
-				// Use an object with id and name
-				booked = { id: userId, name: req.body.name };
-			} else if (req.body.booked && !req.body.name) {
-				booked = { id: userId };
-			}
-			const updatedGift = await Gift.updateBookedState(
-				req.app.get("database"),
-				req.params.giftId,
-				booked
-			);
-			res.send(updatedGift);
-		} catch (error) {
-			next(error);
-		}
+	@SuccessResponse(204)
+	@Put("{giftId}/unhide")
+	async unhide(@Query() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+		await this.edit(
+			listId,
+			giftId,
+			{
+				/*isHidden: false*/
+			},
+			userId
+		);
 	}
 
 	/**
-	 * Deletes a gift and sends back true if it succeeds.
-	 * @function
-	 * @param {Request} req - Express request object
-	 * @param {Response} res - Express response object
-	 * @param {Function} next - Following middleware
+	 * Mark a gift as favorite.
+	 * @param {UUID} giftId the GUID of the gift
 	 */
-	static async delete(req: Request, res: Response, next: Function) {
-		try {
-			await Gift.delete(req.app.get("database"), req.params.giftId);
-			res.send(true);
-		} catch (error) {
-			next(error);
-		}
+	@SuccessResponse(204)
+	@Put("{giftId}/fav")
+	async favorite(
+		@Path() listId: UUID,
+		@Path() giftId: UUID,
+		@Query() userId: UUID
+	): Promise<void> {
+		await this.edit(
+			listId,
+			giftId,
+			{
+				/*isFavorite: true*/
+			},
+			userId
+		);
+	}
+
+	/**
+	 * Remove "favorite" flag of a gift.
+	 * @param {UUID} giftId the GUID of the gift
+	 */
+	@SuccessResponse(204)
+	@Put("{giftId}/unfav")
+	async unfavorite(
+		@Path() listId: UUID,
+		@Path() giftId: UUID,
+		@Query() userId: UUID
+	): Promise<void> {
+		await this.edit(
+			listId,
+			giftId,
+			{
+				/*isFavorite: false*/
+			},
+			userId
+		);
+	}
+
+	/**
+	 * Mark a gift as booked.
+	 * @param {UUID} giftId the GUID of the gift
+	 */
+	@SuccessResponse(204)
+	@Put("{giftId}/book")
+	async book(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+		await this.edit(
+			listId,
+			giftId,
+			{
+				/*isBooked: true*/
+			},
+			userId
+		);
+	}
+
+	/**
+	 * Remove "booked" flag of a gift.
+	 * @param {UUID} giftId the GUID of the gift
+	 */
+	@SuccessResponse(204)
+	@Put("{giftId}/unbook")
+	async unbook(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+		await this.edit(
+			listId,
+			giftId,
+			{
+				/*isBooked: false*/
+			},
+			userId
+		);
 	}
 }
 

@@ -1,16 +1,5 @@
 import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Path,
-	Post,
-	Put,
-	Response,
-	Route,
-	Security,
-	SuccessResponse,
-	Tags,
+	Body, Controller, Delete, Get, Path, Post, Put, Response, Route, Security, SuccessResponse, Tags
 } from "tsoa";
 
 import { CreateUserDTO, UserDTO, UserIdDTO } from "../dto/users";
