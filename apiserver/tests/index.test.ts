@@ -6,16 +6,8 @@ import chaiHttp from "chai-http";
 import { NotFound, Unauthorized } from "./00_specials";
 import { DeleteUser, GetUser, GetUsers, PostUser, PutUser } from "./01_users";
 import {
-	AfterList,
-	BeforeList,
-	DeleteList,
-	GetList,
-	GetLists,
-	InviteList,
-	PostList,
-	PutList,
-	ShareList,
-	UnshareList,
+	AfterList, BeforeList, DeleteList, GetList, GetLists, InviteList, PostList, PutList, ShareList,
+	UnshareList
 } from "./02_lists";
 import * as URLS from "./global/urls";
 
