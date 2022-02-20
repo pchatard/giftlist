@@ -1,3 +1,4 @@
+import { CreateGiftDTO } from "../../src/dto/gifts";
 import { CreateListDTO } from "../../src/dto/lists";
 import { CreateUserDTO } from "../../src/dto/users";
 
@@ -35,4 +36,22 @@ export const List3: CreateListDTO = {
 	ownersIds: [],
 	grantedUsersIds: [],
 	isShared: true,
+};
+
+export const Gift1: CreateGiftDTO = {
+	title: "TestGift1",
+	category: "book",
+	isBooked: false,
+	isFavorite: false,
+	isHidden: false,
+	listId: "",
+};
+
+export const Gift2: CreateGiftDTO = {
+	title: "TestGift2",
+	category: "clothes",
+	isBooked: false,
+	isFavorite: false,
+	isHidden: true,
+	listId: "",
 };

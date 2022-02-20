@@ -39,6 +39,77 @@ export const Url_ListInvite = (
 	userId: string = ":userId"
 ): string => BaseUrl_Lists + "/invite/" + sharingCode + "?userId=" + userId;
 
+// Lists Endpoints
+const BaseUrl_Gift = (listId: string = ":listId"): string =>
+	BaseUrl_Lists + "/" + listId + "/gifts";
+
+export const Url_GiftPost = (listId: string = ":listId", userId: string = ":userId"): string =>
+	BaseUrl_Gift(listId) + "?userId=" + userId;
+
+export const Url_GiftGetAll = (listId: string = ":listId", userId: string = ":userId"): string =>
+	BaseUrl_Gift(listId) + "?userId=" + userId;
+
+export const Url_GiftGetOne = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => BaseUrl_Gift(listId) + "/" + giftId + "?userId=" + userId;
+
+export const Url_GiftDelete = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => BaseUrl_Gift(listId) + "/" + giftId + "?userId=" + userId;
+
+export const Url_GiftPut = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => BaseUrl_Gift(listId) + "/" + giftId + "?userId=" + userId;
+
+const Url_GiftSpecial = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId",
+	special: string
+): string => BaseUrl_Gift(listId) + "/" + giftId + "/" + special + "?userId=" + userId;
+
+export const Url_GiftHide = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => Url_GiftSpecial(listId, giftId, userId, "hide");
+
+export const Url_GiftUnhide = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => Url_GiftSpecial(listId, giftId, userId, "unhide");
+
+export const Url_GiftFav = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => Url_GiftSpecial(listId, giftId, userId, "fav");
+
+export const Url_GiftUnfav = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => Url_GiftSpecial(listId, giftId, userId, "unfav");
+
+export const Url_GiftBook = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => Url_GiftSpecial(listId, giftId, userId, "book");
+
+export const Url_GiftUnbook = (
+	listId: string = ":listId",
+	giftId: string = ":giftId",
+	userId: string = ":userId"
+): string => Url_GiftSpecial(listId, giftId, userId, "unbook");
+
 // Specials Endpoints
 export const Url_NotFound = (): string => "/notfound";
 

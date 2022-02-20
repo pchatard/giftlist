@@ -8,7 +8,7 @@ export default async function before(): Promise<void> {
 		await post(Url_UserPost(), User2),
 		await post(Url_UserPost(), User3),
 	];
-	responses.forEach((response, index) => {
+	for (const [index, response] of responses.entries()) {
 		expect200(response);
 		if (index == 0) {
 			GlobalVar.User1_Id = response.body.id;
@@ -24,5 +24,5 @@ export default async function before(): Promise<void> {
 		if (index == 2) {
 			GlobalVar.User3_Id = response.body.id;
 		}
-	});
+	}
 }
