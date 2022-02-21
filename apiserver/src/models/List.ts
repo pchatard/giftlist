@@ -1,6 +1,6 @@
 import {
 	Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn,
-	UpdateDateColumn
+	RelationId, UpdateDateColumn
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,6 +23,7 @@ export class List {
 	@JoinTable({ name: "List_Owners" })
 	public owners!: User[];
 
+	@RelationId((list: List) => list.owners)
 	public ownersIds!: UUID[];
 
 	@Column()
@@ -35,6 +36,7 @@ export class List {
 	@JoinTable({ name: "List_GrantedUsers" })
 	public grantedUsers?: User[];
 
+	@RelationId((list: List) => list.grantedUsers)
 	public grantedUsersIds?: UUID[];
 
 	@OneToMany(() => Gift, (gift) => gift.list)

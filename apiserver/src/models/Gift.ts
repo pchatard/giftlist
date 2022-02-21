@@ -1,5 +1,5 @@
 import {
-	Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn
+	Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId, UpdateDateColumn
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 
@@ -33,24 +33,25 @@ export class Gift {
 	@ManyToOne(() => List, (list) => list.gifts)
 	public list!: List;
 
+	@RelationId((gift: Gift) => gift.list)
 	public listId!: UUID;
 
-	@Column()
+	@Column({ nullable: true })
 	public price?: number;
 
-	@Column()
+	@Column({ nullable: true })
 	public linkURL?: string;
 
-	@Column()
+	@Column({ nullable: true })
 	public brand?: string;
 
-	@Column()
+	@Column({ nullable: true })
 	public size?: string;
 
-	@Column()
+	@Column({ nullable: true })
 	public color?: string;
 
-	@Column()
+	@Column({ nullable: true })
 	public comments?: string;
 
 	// Trouver un moyen de stocker les données des personnes qui réservent en tenant compte de leurs préférences...

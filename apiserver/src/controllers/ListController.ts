@@ -66,7 +66,7 @@ export class ListController extends Controller {
 				}
 				const giftController: GiftController = new GiftController();
 				for (const gift of await ListService.getListGifts(listId, true)) {
-					await giftController.delete(listId, gift.id, userId);
+					await giftController.quickDelete(gift.id);
 				}
 				await ListService.delete(listId);
 			}
@@ -86,10 +86,9 @@ export class ListController extends Controller {
 		return lists.map((list) => {
 			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
 				list;
-			rest.ownersIds = owners.map((u) => u.id);
 			rest.closureDate = rest.closureDate || undefined;
 			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
-			return { ...rest } as ListDTO;
+			return rest as ListDTO;
 		});
 	}
 
@@ -108,8 +107,6 @@ export class ListController extends Controller {
 		}
 		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
 			await ListService.get(listId);
-		rest.ownersIds = owners.map((u) => u.id);
-		rest.grantedUsersIds = grantedUsers?.map((u) => u.id) || [];
 		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
 		return rest as ListDTO;
 	}

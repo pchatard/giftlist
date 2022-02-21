@@ -61,6 +61,10 @@ export class GiftController extends Controller {
 		if (!(await ListService.listOwners(listId)).includes(userId)) {
 			throw new OwnershipError();
 		}
+		this.quickDelete(giftId);
+	}
+
+	async quickDelete(giftId: UUID): Promise<void> {
 		await GiftService.delete(giftId);
 	}
 
@@ -81,8 +85,7 @@ export class GiftController extends Controller {
 		}
 		return gifts.map((gift) => {
 			const { id, list, createdDate, updatedDate, ...rest } = gift;
-			rest.listId = list.id;
-			return { ...rest } as GiftDTO;
+			return rest as GiftDTO;
 		});
 	}
 
@@ -93,11 +96,13 @@ export class GiftController extends Controller {
 	@SuccessResponse(200)
 	@Get("{giftId}")
 	async get(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<GiftDTO> {
-		if (!(await ListService.listOwners(listId)).includes(userId)) {
+		if (
+			!(await ListService.listOwners(listId)).includes(userId) &&
+			!(await ListService.listGrantedUsers(listId)).includes(userId)
+		) {
 			throw new OwnershipError();
 		}
 		const { id, list, createdDate, updatedDate, ...rest }: Gift = await GiftService.get(giftId);
-		rest.listId = list.id;
 		return rest as GiftDTO;
 	}
 

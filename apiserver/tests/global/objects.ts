@@ -55,3 +55,12 @@ export const Gift2: CreateGiftDTO = {
 	isHidden: true,
 	listId: "",
 };
+
+export const Gift3: CreateGiftDTO = {
+	title: "TestGift3",
+	category: "others",
+	isBooked: false,
+	isFavorite: false,
+	isHidden: false,
+	listId: "",
+};
