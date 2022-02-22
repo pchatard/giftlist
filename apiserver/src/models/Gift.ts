@@ -1,7 +1,6 @@
 import {
 	Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId, UpdateDateColumn
 } from "typeorm";
-import { v4 as uuidv4 } from "uuid";
 
 import { UUID } from "../types/UUID";
 // import GiftCategory from "./GiftCategory";
@@ -10,25 +9,25 @@ import { List } from "./List";
 @Entity("Gift", { orderBy: { createdDate: "ASC" } })
 export class Gift {
 	@PrimaryGeneratedColumn("uuid")
-	public id: UUID = uuidv4();
+	public id!: UUID;
 
 	@Column()
 	public title!: string;
 
-	@Column()
-	public isBooked: boolean = false;
+	@Column({ default: false })
+	public isBooked!: boolean;
 
-	@Column()
-	public isFavorite: boolean = false;
+	@Column({ default: false })
+	public isFavorite!: boolean;
 
-	@Column()
-	public isHidden: boolean = false;
+	@Column({ default: false })
+	public isHidden!: boolean;
 
 	// Follow https://github.com/typeorm/typeorm/issues/8039
 	// @Column({ type: "enum", enum: GiftCategory, default: GiftCategory.OTHER })
 	// public category: GiftCategory = GiftCategory.OTHER;
-	@Column()
-	public category: string = "others";
+	@Column({ default: "others" })
+	public category!: string;
 
 	@ManyToOne(() => List, (list) => list.gifts)
 	public list!: List;

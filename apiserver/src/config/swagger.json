@@ -27,20 +27,16 @@
 						"type": "string"
 					},
 					"isBooked": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"isFavorite": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"isHidden": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"category": {
-						"type": "string",
-						"default": "others"
+						"type": "string"
 					},
 					"listId": {
 						"$ref": "#/components/schemas/UUID"
@@ -67,6 +63,10 @@
 				},
 				"required": [
 					"title",
+					"isBooked",
+					"isFavorite",
+					"isHidden",
+					"category",
 					"listId"
 				],
 				"type": "object",
@@ -78,20 +78,16 @@
 						"type": "string"
 					},
 					"isBooked": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"isFavorite": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"isHidden": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"category": {
-						"type": "string",
-						"default": "others"
+						"type": "string"
 					},
 					"listId": {
 						"$ref": "#/components/schemas/UUID"
@@ -125,20 +121,16 @@
 						"type": "string"
 					},
 					"isBooked": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"isFavorite": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"isHidden": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"category": {
-						"type": "string",
-						"default": "others"
+						"type": "string"
 					},
 					"listId": {
 						"$ref": "#/components/schemas/UUID"
@@ -165,6 +157,10 @@
 				},
 				"required": [
 					"title",
+					"isBooked",
+					"isFavorite",
+					"isHidden",
+					"category",
 					"listId"
 				],
 				"type": "object",

@@ -2,7 +2,6 @@ import {
 	Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn,
 	RelationId, UpdateDateColumn
 } from "typeorm";
-import { v4 as uuidv4 } from "uuid";
 
 import { UUID } from "../types/UUID";
 import { Gift } from "./Gift";
@@ -11,7 +10,7 @@ import User from "./User";
 @Entity("List", { orderBy: { createdDate: "ASC" } })
 export class List {
 	@PrimaryGeneratedColumn("uuid")
-	public id: UUID = uuidv4();
+	public id!: UUID;
 
 	@Column()
 	public title!: string;
@@ -26,11 +25,11 @@ export class List {
 	@RelationId((list: List) => list.owners)
 	public ownersIds!: UUID[];
 
-	@Column()
-	public isShared: boolean = false;
+	@Column({ default: false })
+	public isShared!: boolean;
 
 	@Column({ generated: "uuid", unique: true, update: false })
-	public sharingCode: UUID = uuidv4();
+	public sharingCode!: UUID;
 
 	@ManyToMany(() => User, (user) => user.friendLists)
 	@JoinTable({ name: "List_GrantedUsers" })

@@ -104,7 +104,7 @@ export class GiftController extends Controller {
 			throw new OwnershipError();
 		}
 		const { id, list, createdDate, updatedDate, ...rest }: Gift = await GiftService.get(giftId);
-		return rest as GiftDTO;
+		return cleanObject(rest) as GiftDTO;
 	}
 
 	/**
