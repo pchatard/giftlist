@@ -18,6 +18,9 @@
 						"$ref": "#/components/schemas/UUID"
 					}
 				},
+				"required": [
+					"id"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -175,6 +178,9 @@
 						"$ref": "#/components/schemas/UUID"
 					}
 				},
+				"required": [
+					"id"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -194,8 +200,7 @@
 						"type": "array"
 					},
 					"isShared": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"grantedUsersIds": {
 						"items": {
@@ -206,7 +211,8 @@
 				},
 				"required": [
 					"title",
-					"ownersIds"
+					"ownersIds",
+					"isShared"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -230,8 +236,7 @@
 						"type": "array"
 					},
 					"isShared": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -256,13 +261,14 @@
 						"type": "array"
 					},
 					"isShared": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					}
 				},
 				"required": [
 					"title",
-					"ownersIds"
+					"sharingCode",
+					"ownersIds",
+					"isShared"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -282,6 +288,9 @@
 						"$ref": "#/components/schemas/UUID"
 					}
 				},
+				"required": [
+					"id"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -643,7 +652,7 @@
 				],
 				"parameters": [
 					{
-						"in": "query",
+						"in": "path",
 						"name": "listId",
 						"required": true,
 						"schema": {
@@ -689,7 +698,7 @@
 				],
 				"parameters": [
 					{
-						"in": "query",
+						"in": "path",
 						"name": "listId",
 						"required": true,
 						"schema": {

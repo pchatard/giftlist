@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { GlobalVar, Url_GiftGetOne, Url_GiftPut } from "../global";
+import { Gift1, GlobalVar, Url_GiftGetOne, Url_GiftPut } from "../global";
 import { get, put } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
@@ -44,14 +44,9 @@ export default function suite() {
 		const changedGift = await get(
 			Url_GiftGetOne(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User1_Id)
 		);
-		expect(changedGift).to.have.property("body").to.eql({
-			title: "ChangedGift1",
-			category: "book",
-			isBooked: false,
-			isFavorite: false,
-			isHidden: false,
-			listId: GlobalVar.List1_Id,
-		});
+		expect(changedGift)
+			.to.have.property("body")
+			.to.eql({ ...Gift1, title: "ChangedGift1" });
 		await put(Url_GiftPut(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User1_Id), {
 			title: "TestGift1",
 		});
@@ -59,8 +54,9 @@ export default function suite() {
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
 		const responses = [
-			await put(Url_GiftPut(wrongUUID, GlobalVar.User1_Id)),
-			await put(Url_GiftPut(GlobalVar.Gift1_Id, wrongUUID)),
+			await put(Url_GiftPut(wrongUUID, GlobalVar.Gift2_Id, GlobalVar.User1_Id)),
+			await put(Url_GiftPut(GlobalVar.List1_Id, wrongUUID, GlobalVar.User1_Id)),
+			await put(Url_GiftPut(GlobalVar.List1_Id, GlobalVar.Gift2_Id, wrongUUID)),
 		];
 		responses.forEach((response) => expectValidationFailed(response));
 	});

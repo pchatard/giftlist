@@ -120,7 +120,7 @@ export class GiftController extends Controller {
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/hide")
-	async hide(@Query() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+	async hide(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
 		await this.edit(listId, giftId, { isHidden: true }, userId);
 	}
 
@@ -130,7 +130,7 @@ export class GiftController extends Controller {
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/unhide")
-	async unhide(@Query() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+	async unhide(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
 		await this.edit(listId, giftId, { isHidden: false }, userId);
 	}
 

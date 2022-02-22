@@ -24,7 +24,7 @@ const models: TsoaRoute.Models = {
     "GiftIdDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": {"ref":"UUID"},
+            "id": {"ref":"UUID","required":true},
         },
         "additionalProperties": false,
     },
@@ -66,7 +66,7 @@ const models: TsoaRoute.Models = {
     "ListIdDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": {"ref":"UUID"},
+            "id": {"ref":"UUID","required":true},
         },
         "additionalProperties": false,
     },
@@ -77,7 +77,7 @@ const models: TsoaRoute.Models = {
             "title": {"dataType":"string","required":true},
             "closureDate": {"dataType":"datetime"},
             "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
-            "isShared": {"dataType":"boolean","default":false},
+            "isShared": {"dataType":"boolean","required":true},
             "grantedUsersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},
         },
         "additionalProperties": false,
@@ -85,17 +85,17 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_ListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},"isShared":{"dataType":"boolean","default":false}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},"isShared":{"dataType":"boolean"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
         "dataType": "refObject",
         "properties": {
             "title": {"dataType":"string","required":true},
-            "sharingCode": {"ref":"UUID"},
+            "sharingCode": {"ref":"UUID","required":true},
             "closureDate": {"dataType":"datetime"},
             "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
-            "isShared": {"dataType":"boolean","default":false},
+            "isShared": {"dataType":"boolean","required":true},
         },
         "additionalProperties": false,
     },
@@ -108,7 +108,7 @@ const models: TsoaRoute.Models = {
     "UserIdDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": {"ref":"UUID"},
+            "id": {"ref":"UUID","required":true},
         },
         "additionalProperties": false,
     },
@@ -296,7 +296,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_hide(request: any, response: any, next: any) {
             const args = {
-                    listId: {"in":"query","name":"listId","required":true,"ref":"UUID"},
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
                     userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
@@ -322,7 +322,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_unhide(request: any, response: any, next: any) {
             const args = {
-                    listId: {"in":"query","name":"listId","required":true,"ref":"UUID"},
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
                     userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
