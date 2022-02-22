@@ -19,6 +19,12 @@ export default function suite() {
 		expect200(response);
 		expect(response).to.have.property("body").to.deep.include(Gift3);
 	});
+	it("Returns 401 Unauthorized, if owned but gift does not belong to list", async () => {
+		const response = await get(
+			Url_GiftGetOne(GlobalVar.List1_Id, GlobalVar.Gift3_Id, GlobalVar.User1_Id)
+		);
+		expectError(response, 401, "Unauthorized");
+	});
 	it("Returns 200 with list informations, if owned", async () => {
 		const response = await get(
 			Url_GiftGetOne(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User1_Id)

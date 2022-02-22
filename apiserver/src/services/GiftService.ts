@@ -38,12 +38,22 @@ class GiftService {
 
 	/**
 	 * Return a gift from Database.
-	 * @param {string} giftId id of gift to get, uuid v4 formatted
+	 * @param {UUID} giftId id of gift to get, uuid v4 formatted
 	 * @returns {Promise<Gift>} The gift matching the giftId parameter
 	 */
 	static async get(giftId: UUID): Promise<Gift> {
 		const giftRepository: Repository<Gift> = getRepository(Gift);
 		return await giftRepository.findOneOrFail(giftId);
+	}
+
+	/**
+	 * Check if gift belongs to list.
+	 * @param {UUID} listId id of gift to get, uuid v4 formatted
+	 * @param {UUID} giftId id of list to get, uuid v4 formatted
+	 * @returns {Promise<Gift>} The gift matching the giftId parameter
+	 */
+	static async checkGiftOfList(listId: UUID, giftId: UUID): Promise<boolean> {
+		return (await this.get(giftId)).listId == listId;
 	}
 }
 

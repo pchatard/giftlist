@@ -24,6 +24,15 @@ export default function suite() {
 		);
 		expectError(response, 401, "Unauthorized");
 	});
+	it("Returns 401 Unauthorized, if owned but gift does not belong to list", async () => {
+		const response = await put(
+			Url_GiftPut(GlobalVar.List1_Id, GlobalVar.Gift3_Id, GlobalVar.User1_Id),
+			{
+				title: "ChangedGift1",
+			}
+		);
+		expectError(response, 401, "Unauthorized");
+	});
 	it("Returns 204, gift informations are changed, if owned", async () => {
 		const response = await put(
 			Url_GiftPut(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User1_Id),

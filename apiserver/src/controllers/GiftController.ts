@@ -46,7 +46,10 @@ export class GiftController extends Controller {
 		@Body() body: Partial<GiftDTO>,
 		@Query() userId: UUID
 	): Promise<void> {
-		if (!(await ListService.listOwners(listId)).includes(userId)) {
+		if (
+			!(await ListService.listOwners(listId)).includes(userId) ||
+			!(await GiftService.checkGiftOfList(listId, giftId))
+		) {
 			throw new OwnershipError();
 		}
 		await GiftService.edit(giftId, body);
@@ -59,7 +62,10 @@ export class GiftController extends Controller {
 	@SuccessResponse(204)
 	@Delete("{giftId}")
 	async delete(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		if (!(await ListService.listOwners(listId)).includes(userId)) {
+		if (
+			!(await ListService.listOwners(listId)).includes(userId) ||
+			!(await GiftService.checkGiftOfList(listId, giftId))
+		) {
 			throw new OwnershipError();
 		}
 		this.quickDelete(giftId);
@@ -98,8 +104,9 @@ export class GiftController extends Controller {
 	@Get("{giftId}")
 	async get(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<GiftDTO> {
 		if (
-			!(await ListService.listOwners(listId)).includes(userId) &&
-			!(await ListService.listGrantedUsers(listId)).includes(userId)
+			(!(await ListService.listOwners(listId)).includes(userId) &&
+				!(await ListService.listGrantedUsers(listId)).includes(userId)) ||
+			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new OwnershipError();
 		}
