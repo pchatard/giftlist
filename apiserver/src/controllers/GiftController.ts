@@ -4,6 +4,7 @@ import {
 
 import { CreateGiftDTO, GiftDTO, GiftIdDTO } from "../dto/gifts";
 import OwnershipError from "../errors/UserErrors/OwnershipError";
+import { cleanObject } from "../helpers/cleanObjects";
 import Gift from "../models/Gift";
 import List from "../models/List";
 import GiftService from "../services/GiftService";
@@ -85,7 +86,7 @@ export class GiftController extends Controller {
 		}
 		return gifts.map((gift) => {
 			const { id, list, createdDate, updatedDate, ...rest } = gift;
-			return rest as GiftDTO;
+			return cleanObject(rest) as GiftDTO;
 		});
 	}
 
@@ -113,14 +114,7 @@ export class GiftController extends Controller {
 	@SuccessResponse(204)
 	@Put("{giftId}/hide")
 	async hide(@Query() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(
-			listId,
-			giftId,
-			{
-				/*isHidden: true*/
-			},
-			userId
-		);
+		await this.edit(listId, giftId, { isHidden: true }, userId);
 	}
 
 	/**
@@ -130,14 +124,7 @@ export class GiftController extends Controller {
 	@SuccessResponse(204)
 	@Put("{giftId}/unhide")
 	async unhide(@Query() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(
-			listId,
-			giftId,
-			{
-				/*isHidden: false*/
-			},
-			userId
-		);
+		await this.edit(listId, giftId, { isHidden: false }, userId);
 	}
 
 	/**
@@ -151,14 +138,7 @@ export class GiftController extends Controller {
 		@Path() giftId: UUID,
 		@Query() userId: UUID
 	): Promise<void> {
-		await this.edit(
-			listId,
-			giftId,
-			{
-				/*isFavorite: true*/
-			},
-			userId
-		);
+		await this.edit(listId, giftId, { isFavorite: true }, userId);
 	}
 
 	/**
@@ -172,14 +152,7 @@ export class GiftController extends Controller {
 		@Path() giftId: UUID,
 		@Query() userId: UUID
 	): Promise<void> {
-		await this.edit(
-			listId,
-			giftId,
-			{
-				/*isFavorite: false*/
-			},
-			userId
-		);
+		await this.edit(listId, giftId, { isFavorite: false }, userId);
 	}
 
 	/**
@@ -189,14 +162,7 @@ export class GiftController extends Controller {
 	@SuccessResponse(204)
 	@Put("{giftId}/book")
 	async book(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(
-			listId,
-			giftId,
-			{
-				/*isBooked: true*/
-			},
-			userId
-		);
+		await this.edit(listId, giftId, { isBooked: true }, userId);
 	}
 
 	/**
@@ -206,14 +172,7 @@ export class GiftController extends Controller {
 	@SuccessResponse(204)
 	@Put("{giftId}/unbook")
 	async unbook(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(
-			listId,
-			giftId,
-			{
-				/*isBooked: false*/
-			},
-			userId
-		);
+		await this.edit(listId, giftId, { isBooked: false }, userId);
 	}
 }
 

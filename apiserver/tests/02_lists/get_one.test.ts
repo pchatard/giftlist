@@ -20,7 +20,6 @@ export default function suite() {
 	it("Returns 200 with list informations, if owned", async () => {
 		const response = await get(Url_ListGetOne(GlobalVar.List1_Id, GlobalVar.User1_Id));
 		expect200(response);
-		expect(response).to.have.property("body").to.have.property("closureDate");
 		expect(response).to.have.property("body").to.have.property("sharingCode").to.be.a.string;
 		expect(response).to.have.property("body").to.deep.include(List1);
 	});

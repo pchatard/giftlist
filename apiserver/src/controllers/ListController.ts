@@ -4,6 +4,7 @@ import {
 
 import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
 import OwnershipError from "../errors/UserErrors/OwnershipError";
+import { cleanObject } from "../helpers/cleanObjects";
 import List from "../models/List";
 import User from "../models/User";
 import ListService from "../services/ListService";
@@ -86,9 +87,8 @@ export class ListController extends Controller {
 		return lists.map((list) => {
 			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
 				list;
-			rest.closureDate = rest.closureDate || undefined;
 			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
-			return rest as ListDTO;
+			return cleanObject(rest) as ListDTO;
 		});
 	}
 
@@ -108,7 +108,7 @@ export class ListController extends Controller {
 		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
 			await ListService.get(listId);
 		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
-		return rest as ListDTO;
+		return cleanObject(rest) as ListDTO;
 	}
 
 	/**

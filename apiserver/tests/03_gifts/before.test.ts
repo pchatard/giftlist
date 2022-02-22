@@ -15,7 +15,7 @@ export default async function before(): Promise<void> {
 		}
 		if (index == 1) {
 			GlobalVar.User2_Id = response.body.id;
-			List2.grantedUsersIds?.push(GlobalVar.User2_Id);
+			List1.grantedUsersIds?.push(GlobalVar.User2_Id);
 		}
 	}
 	const list_responses = [await post(Url_ListPost(), List1), await post(Url_ListPost(), List2)];

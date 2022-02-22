@@ -8,7 +8,7 @@ import { expect200 } from "../helpers/success";
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {
 		const response = await get(
-			Url_GiftGetOne(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User2_Id)
+			Url_GiftGetOne(GlobalVar.List2_Id, GlobalVar.Gift3_Id, GlobalVar.User2_Id)
 		);
 		expectError(response, 401, "Unauthorized");
 	});

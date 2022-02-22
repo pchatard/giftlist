@@ -31,7 +31,6 @@ export default function suite() {
 				ownersIds: [GlobalVar.User1_Id],
 				grantedUsersIds: [],
 				isShared: false,
-				closureDate: null,
 				sharingCode: GlobalVar.List1_SharingCode,
 			});
 		await put(Url_ListPut(GlobalVar.List1_Id, GlobalVar.User1_Id), { title: "TestList1" });
