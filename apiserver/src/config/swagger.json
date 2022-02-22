@@ -12,12 +12,175 @@
 				"description": "Stringified UUIDv4.\nSee [RFC 4112](https://tools.ietf.org/html/rfc4122)",
 				"pattern": "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"
 			},
+			"GiftIdDTO": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateGiftDTO": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"isBooked": {
+						"type": "boolean"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"isBooked",
+					"isFavorite",
+					"isHidden",
+					"category",
+					"listId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_GiftDTO_": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"isBooked": {
+						"type": "boolean"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"isBooked": {
+						"type": "boolean"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"isBooked",
+					"isFavorite",
+					"isHidden",
+					"category",
+					"listId"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"GiftDTO": {
+				"$ref": "#/components/schemas/Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_"
+			},
 			"ListIdDTO": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
 					}
 				},
+				"required": [
+					"id"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -37,8 +200,7 @@
 						"type": "array"
 					},
 					"isShared": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					},
 					"grantedUsersIds": {
 						"items": {
@@ -49,18 +211,19 @@
 				},
 				"required": [
 					"title",
-					"ownersIds"
+					"ownersIds",
+					"isShared"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"Partial_ListDTO_": {
 				"properties": {
-					"sharingCode": {
-						"$ref": "#/components/schemas/UUID"
-					},
 					"title": {
 						"type": "string"
+					},
+					"sharingCode": {
+						"$ref": "#/components/schemas/UUID"
 					},
 					"closureDate": {
 						"type": "string",
@@ -73,8 +236,7 @@
 						"type": "array"
 					},
 					"isShared": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -82,11 +244,11 @@
 			},
 			"ListDTO": {
 				"properties": {
-					"sharingCode": {
-						"$ref": "#/components/schemas/UUID"
-					},
 					"title": {
 						"type": "string"
+					},
+					"sharingCode": {
+						"$ref": "#/components/schemas/UUID"
 					},
 					"closureDate": {
 						"type": "string",
@@ -99,13 +261,14 @@
 						"type": "array"
 					},
 					"isShared": {
-						"type": "boolean",
-						"default": false
+						"type": "boolean"
 					}
 				},
 				"required": [
 					"title",
-					"ownersIds"
+					"sharingCode",
+					"ownersIds",
+					"isShared"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -125,6 +288,9 @@
 						"$ref": "#/components/schemas/UUID"
 					}
 				},
+				"required": [
+					"id"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -216,6 +382,533 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/lists/{listId}/gifts": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GiftIdDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new gift.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateGiftDTO"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/GiftDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets all list's gifts data.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/gifts/{giftId}": {
+			"put": {
+				"operationId": "Edit",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Edit a gift.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "data to edit a gift",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_GiftDTO_"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Delete a gift.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GiftDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Sends back a gift in the response based on its id.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/gifts/{giftId}/hide": {
+			"put": {
+				"operationId": "Hide",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Mark a gift as hidden.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/gifts/{giftId}/unhide": {
+			"put": {
+				"operationId": "Unhide",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Remove \"hidden\" flag of a gift.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/gifts/{giftId}/fav": {
+			"put": {
+				"operationId": "Favorite",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Mark a gift as favorite.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/gifts/{giftId}/unfav": {
+			"put": {
+				"operationId": "Unfavorite",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Remove \"favorite\" flag of a gift.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/gifts/{giftId}/book": {
+			"put": {
+				"operationId": "Book",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Mark a gift as booked.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/gifts/{giftId}/unbook": {
+			"put": {
+				"operationId": "Unbook",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Remove \"booked\" flag of a gift.",
+				"tags": [
+					"Gift"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the GUID of the gift",
+						"in": "path",
+						"name": "giftId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"in": "query",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
 		"/lists": {
 			"post": {
 				"operationId": "Create",

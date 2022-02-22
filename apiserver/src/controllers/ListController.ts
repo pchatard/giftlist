@@ -1,26 +1,17 @@
 import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Path,
-	Post,
-	Put,
-	Query,
-	Route,
-	Security,
-	SuccessResponse,
-	Tags,
+	Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Security, SuccessResponse, Tags
 } from "tsoa";
 
 import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
 import OwnershipError from "../errors/UserErrors/OwnershipError";
+import { cleanObject } from "../helpers/cleanObjects";
 import List from "../models/List";
 import User from "../models/User";
 import ListService from "../services/ListService";
 import UserService from "../services/UserService";
 import { SelectKindList } from "../types/SelectKindList";
 import { UUID } from "../types/UUID";
+import GiftController from "./GiftController";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("lists")
@@ -74,6 +65,10 @@ export class ListController extends Controller {
 				for (const grantedId of grantedIds) {
 					await ListService.forget(listId, grantedId);
 				}
+				const giftController: GiftController = new GiftController();
+				for (const gift of await ListService.getListGifts(listId, true)) {
+					await giftController.quickDelete(gift.id);
+				}
 				await ListService.delete(listId);
 			}
 		} else {
@@ -92,10 +87,8 @@ export class ListController extends Controller {
 		return lists.map((list) => {
 			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
 				list;
-			rest.ownersIds = owners.map((u) => u.id);
-			rest.closureDate = rest.closureDate || undefined;
 			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
-			return { ...rest } as ListDTO;
+			return cleanObject(rest) as ListDTO;
 		});
 	}
 
@@ -114,10 +107,8 @@ export class ListController extends Controller {
 		}
 		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
 			await ListService.get(listId);
-		rest.ownersIds = owners.map((u) => u.id);
-		rest.grantedUsersIds = grantedUsers?.map((u) => u.id) || [];
 		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
-		return rest as ListDTO;
+		return cleanObject(rest) as ListDTO;
 	}
 
 	/**

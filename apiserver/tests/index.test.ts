@@ -6,17 +6,13 @@ import chaiHttp from "chai-http";
 import { NotFound, Unauthorized } from "./00_specials";
 import { DeleteUser, GetUser, GetUsers, PostUser, PutUser } from "./01_users";
 import {
-	AfterList,
-	BeforeList,
-	DeleteList,
-	GetList,
-	GetLists,
-	InviteList,
-	PostList,
-	PutList,
-	ShareList,
-	UnshareList,
+	AfterList, BeforeList, DeleteList, GetList, GetLists, InviteList, PostList, PutList, ShareList,
+	UnshareList
 } from "./02_lists";
+import {
+	AfterGift, BeforeGift, BookGift, DeleteGift, FavGift, GetGift, GetGifts, HideGift, PostGift,
+	PutGift, UnbookGift, UnfavGift, UnhideGift
+} from "./03_gifts";
 import * as URLS from "./global/urls";
 
 chai.use(chaiHttp);
@@ -43,4 +39,19 @@ describe("Lists", function () {
 	describe("PUT " + URLS.Url_ListInvite(), InviteList);
 	describe("DELETE " + URLS.Url_ListDelete(), DeleteList);
 	after(async () => await AfterList());
+});
+describe("Gifts", function () {
+	before(async () => await BeforeGift());
+	describe("POST " + URLS.Url_GiftPost(), PostGift);
+	describe("GET " + URLS.Url_GiftGetAll(), GetGifts);
+	describe("GET " + URLS.Url_GiftGetOne(), GetGift);
+	describe("PUT " + URLS.Url_GiftPut(), PutGift);
+	describe("PUT " + URLS.Url_GiftBook(), BookGift);
+	describe("PUT " + URLS.Url_GiftUnbook(), UnbookGift);
+	describe("PUT " + URLS.Url_GiftFav(), FavGift);
+	describe("PUT " + URLS.Url_GiftUnfav(), UnfavGift);
+	describe("PUT " + URLS.Url_GiftHide(), HideGift);
+	describe("PUT " + URLS.Url_GiftUnhide(), UnhideGift);
+	describe("DELETE " + URLS.Url_GiftDelete(), DeleteGift);
+	after(async () => await AfterGift());
 });

@@ -20,7 +20,6 @@ export default function suite() {
 				ownersIds: [GlobalVar.User1_Id],
 				grantedUsersIds: [],
 				isShared: false,
-				closureDate: null,
 				sharingCode: "",
 			});
 	});
@@ -38,7 +37,6 @@ export default function suite() {
 				ownersIds: [GlobalVar.User1_Id],
 				grantedUsersIds: [GlobalVar.User3_Id],
 				isShared: true,
-				closureDate: null,
 				sharingCode: GlobalVar.List1_SharingCode,
 			});
 	});

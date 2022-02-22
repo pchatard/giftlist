@@ -1,0 +1,13 @@
+export { default as BeforeGift } from "./before.test";
+export { default as PostGift } from "./post.test";
+export { default as GetGifts } from "./get_all.test";
+export { default as GetGift } from "./get_one.test";
+export { default as PutGift } from "./put.test";
+export { default as BookGift } from "./book.test";
+export { default as UnbookGift } from "./unbook.test";
+export { default as FavGift } from "./fav.test";
+export { default as UnfavGift } from "./unfav.test";
+export { default as HideGift } from "./hide.test";
+export { default as UnhideGift } from "./unhide.test";
+export { default as DeleteGift } from "./delete.test";
+export { default as AfterGift } from "./after.test";

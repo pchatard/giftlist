@@ -3,6 +3,8 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { GiftController } from './controllers/GiftController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ListController } from './controllers/ListController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './controllers/UserController';
@@ -19,10 +21,52 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"string","validators":{"pattern":{"value":"[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GiftIdDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"ref":"UUID","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateGiftDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "title": {"dataType":"string","required":true},
+            "isBooked": {"dataType":"boolean","required":true},
+            "isFavorite": {"dataType":"boolean","required":true},
+            "isHidden": {"dataType":"boolean","required":true},
+            "category": {"dataType":"string","required":true},
+            "listId": {"ref":"UUID","required":true},
+            "price": {"dataType":"double"},
+            "linkURL": {"dataType":"string"},
+            "brand": {"dataType":"string"},
+            "size": {"dataType":"string"},
+            "color": {"dataType":"string"},
+            "comments": {"dataType":"string"},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Partial_GiftDTO_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"isBooked":{"dataType":"boolean"},"isFavorite":{"dataType":"boolean"},"isHidden":{"dataType":"boolean"},"category":{"dataType":"string"},"listId":{"ref":"UUID"},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string","required":true},"isBooked":{"dataType":"boolean","required":true},"isFavorite":{"dataType":"boolean","required":true},"isHidden":{"dataType":"boolean","required":true},"category":{"dataType":"string","required":true},"listId":{"ref":"UUID","required":true},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GiftDTO": {
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListIdDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": {"ref":"UUID"},
+            "id": {"ref":"UUID","required":true},
         },
         "additionalProperties": false,
     },
@@ -33,7 +77,7 @@ const models: TsoaRoute.Models = {
             "title": {"dataType":"string","required":true},
             "closureDate": {"dataType":"datetime"},
             "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
-            "isShared": {"dataType":"boolean","default":false},
+            "isShared": {"dataType":"boolean","required":true},
             "grantedUsersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},
         },
         "additionalProperties": false,
@@ -41,17 +85,17 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_ListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"sharingCode":{"ref":"UUID"},"title":{"dataType":"string"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},"isShared":{"dataType":"boolean","default":false}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},"isShared":{"dataType":"boolean"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
         "dataType": "refObject",
         "properties": {
-            "sharingCode": {"ref":"UUID"},
             "title": {"dataType":"string","required":true},
+            "sharingCode": {"ref":"UUID","required":true},
             "closureDate": {"dataType":"datetime"},
             "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
-            "isShared": {"dataType":"boolean","default":false},
+            "isShared": {"dataType":"boolean","required":true},
         },
         "additionalProperties": false,
     },
@@ -64,7 +108,7 @@ const models: TsoaRoute.Models = {
     "UserIdDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": {"ref":"UUID"},
+            "id": {"ref":"UUID","required":true},
         },
         "additionalProperties": false,
     },
@@ -117,6 +161,292 @@ export function RegisterRoutes(app: express.Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
+        app.post('/lists/:listId/gifts',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_create(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    body: {"in":"body","name":"body","required":true,"ref":"CreateGiftDTO"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.create.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/lists/:listId/gifts/:giftId',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_edit(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_GiftDTO_"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.edit.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/lists/:listId/gifts/:giftId',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_delete(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.delete.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/lists/:listId/gifts',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_getAll(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.getAll.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/lists/:listId/gifts/:giftId',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_get(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.get.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/lists/:listId/gifts/:giftId/hide',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_hide(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.hide.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/lists/:listId/gifts/:giftId/unhide',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_unhide(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.unhide.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/lists/:listId/gifts/:giftId/fav',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_favorite(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.favorite.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/lists/:listId/gifts/:giftId/unfav',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_unfavorite(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.unfavorite.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/lists/:listId/gifts/:giftId/book',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_book(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.book.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/lists/:listId/gifts/:giftId/unbook',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function GiftController_unbook(request: any, response: any, next: any) {
+            const args = {
+                    listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
+                    giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
+                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new GiftController();
+
+
+              const promise = controller.unbook.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/lists',
             authenticateMiddleware([{"auth0":[]}]),
 
