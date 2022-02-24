@@ -33,8 +33,13 @@ RegisterRoutes(app);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-app.listen(PORT, async () => {
+const server = app.listen(PORT, async () => {
 	await createConnection({ ...cockroachDBOptions, entities: [User, List, Gift] });
+	console.log("Listening on " + PORT);
+});
+
+process.on("SIGTERM", () => {
+	server.close(() => {});
 });
 
 export default app;
