@@ -30,7 +30,7 @@ export function expressAuthentication(
 					reject(err);
 				} else {
 					if (
-						decoded.aud != process.env.AUTH0_AUDIENCE ||
+						!decoded.aud.includes(process.env.AUTH0_AUDIENCE) ||
 						decoded.iss != process.env.AUTH0_ISSUER
 					) {
 						reject(new UnauthorizedError("invalid_token", { message: "Invalid Token" }));

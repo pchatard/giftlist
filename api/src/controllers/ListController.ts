@@ -139,7 +139,7 @@ export class ListController extends Controller {
 	@Put("invite/{sharingCode}")
 	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
 		const list: List = await ListService.getFromSharingCode(sharingCode);
-		const user: User = await UserService.get(userId);
+		const user: User = await UserService.getById(userId);
 		if (!list.owners.find((u) => u.id == user.id)) {
 			await ListService.addGrantedUser(list.id, user);
 		}

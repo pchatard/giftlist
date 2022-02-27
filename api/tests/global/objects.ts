@@ -2,17 +2,26 @@ import { CreateGiftDTO } from "../../src/dto/gifts";
 import { CreateListDTO } from "../../src/dto/lists";
 import { CreateUserDTO } from "../../src/dto/users";
 
+export const UserTest: CreateUserDTO = {
+	id: process.env.AUTH0_CLIENT_ID + "@clients",
+	email: "testuser@test.fr",
+	displayName: "Test User",
+};
+
 export const User1: CreateUserDTO = {
+	id: "auth0|000000000000000000000000",
 	email: "test1@test.fr",
 	displayName: "TestUser1",
 };
 
 export const User2: CreateUserDTO = {
+	id: "facebook|000000000000000000000000",
 	email: "test2@test.fr",
 	displayName: "TestUser2",
 };
 
 export const User3: CreateUserDTO = {
+	id: "google|000000000000000000000000",
 	email: "test3@test.fr",
 	displayName: "TestUser3",
 };

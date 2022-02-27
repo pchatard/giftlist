@@ -282,10 +282,44 @@
 				],
 				"type": "string"
 			},
+			"email": {
+				"type": "string",
+				"format": "email",
+				"description": "Stringified email.\nSee [Email Regex](https://emailregex.com/) and [RFC 5322](https://tools.ietf.org/html/rfc5322)",
+				"pattern": "(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"
+			},
+			"UserDTO": {
+				"properties": {
+					"displayName": {
+						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
+					}
+				},
+				"required": [
+					"displayName",
+					"email"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_UserDTO_": {
+				"properties": {
+					"displayName": {
+						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
 			"UserIdDTO": {
 				"properties": {
 					"id": {
-						"$ref": "#/components/schemas/UUID"
+						"type": "string"
 					}
 				},
 				"required": [
@@ -313,52 +347,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"email": {
-				"type": "string",
-				"format": "email",
-				"description": "Stringified email.\nSee [Email Regex](https://emailregex.com/) and [RFC 5322](https://tools.ietf.org/html/rfc5322)",
-				"pattern": "(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"
-			},
 			"CreateUserDTO": {
 				"properties": {
-					"email": {
-						"$ref": "#/components/schemas/email"
+					"id": {
+						"type": "string"
 					},
 					"displayName": {
 						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
 					}
 				},
 				"required": [
-					"email",
-					"displayName"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Partial_UserDTO_": {
-				"properties": {
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
-					"displayName": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"description": "Make all properties in T optional"
-			},
-			"UserDTO": {
-				"properties": {
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
-					"displayName": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"email",
-					"displayName"
+					"id",
+					"displayName",
+					"email"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -1233,6 +1237,80 @@
 				]
 			}
 		},
+		"/users/me": {
+			"get": {
+				"operationId": "GetLogged",
+				"responses": {
+					"200": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets logged user's data.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "Edit",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Edit a user.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "data to edit a user",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_UserDTO_"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Delete logged user.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/users": {
 			"post": {
 				"operationId": "Create",
@@ -1309,74 +1387,7 @@
 				"parameters": []
 			}
 		},
-		"/users/{userId}": {
-			"put": {
-				"operationId": "Edit",
-				"responses": {
-					"204": {
-						"description": ""
-					}
-				},
-				"description": "Edit a user.",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of user",
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				],
-				"requestBody": {
-					"description": "data to edit a user",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/Partial_UserDTO_"
-							}
-						}
-					}
-				}
-			},
-			"delete": {
-				"operationId": "Delete",
-				"responses": {
-					"204": {
-						"description": ""
-					}
-				},
-				"description": "Delete logged user.",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of user",
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				]
-			},
+		"/users/{userMail}": {
 			"get": {
 				"operationId": "Get",
 				"responses": {
@@ -1391,7 +1402,7 @@
 						}
 					}
 				},
-				"description": "Gets logged user's data.",
+				"description": "Gets user's data.",
 				"tags": [
 					"User"
 				],
@@ -1402,12 +1413,12 @@
 				],
 				"parameters": [
 					{
-						"description": "the GUID of user",
+						"description": "the email of user",
 						"in": "path",
-						"name": "userId",
+						"name": "userMail",
 						"required": true,
 						"schema": {
-							"$ref": "#/components/schemas/UUID"
+							"$ref": "#/components/schemas/email"
 						}
 					}
 				]

@@ -7,9 +7,11 @@ export const Url_UserGetAll = (): string => BaseUrl_Users;
 
 export const Url_UserGetOne = (userId: string = ":userId"): string => BaseUrl_Users + "/" + userId;
 
-export const Url_UserPut = (userId: string = ":userId"): string => BaseUrl_Users + "/" + userId;
+export const Url_UserGetMe = (): string => BaseUrl_Users + "/me";
 
-export const Url_UserDelete = (userId: string = ":userId"): string => BaseUrl_Users + "/" + userId;
+export const Url_UserPutMe = (): string => BaseUrl_Users + "/me";
+
+export const Url_UserDeleteMe = (): string => BaseUrl_Users + "/me";
 
 // Lists Endpoints
 const BaseUrl_Lists: string = "/lists";
@@ -113,4 +115,7 @@ export const Url_GiftUnbook = (
 // Specials Endpoints
 export const Url_NotFound = (): string => "/notfound";
 
-export const Url_Unauthorized = (): string => BaseUrl_Users;
+export const Url_GetUnauthorized = (): string => Url_UserGetAll();
+export const Url_DeleteUnauthorized = (): string => Url_UserDeleteMe();
+export const Url_PostUnauthorized = (): string => Url_UserPost();
+export const Url_PutUnauthorized = (): string => Url_UserPutMe();
