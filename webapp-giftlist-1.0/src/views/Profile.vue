@@ -129,9 +129,10 @@
 
 <script lang="ts">
 import { defineComponent, inject, ref } from "vue";
-
+import { Auth0Client } from "@auth0/auth0-spa-js";
 import labels from "@/labels/fr/labels.json";
 
+import { axiosInstance } from "@/main";
 import Button from "@/components/Styled/Button.vue";
 import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
 import Subtitle from "@/components/Styled/Subtitle.vue";
@@ -140,7 +141,15 @@ export default defineComponent({
 	name: "Profile",
 	components: { Button, DefaultLayout, Subtitle },
 	setup() {
-		const auth = ref(inject("Auth") as any);
+		const auth = inject("Auth") as Auth0Client;
+		auth.getTokenSilently().then(async (token) => {
+			const data = await axiosInstance.get("/users/me", {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+			})
+			console.log(data)
+			})
 		const friends = [
 			{ id: 0, name: "ND" },
 			{ id: 1, name: "ML" },
