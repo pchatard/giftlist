@@ -1,4 +1,5 @@
 import cookies from "cookie-parser";
+import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cookies());
+app.use(cors({ origin: "http://localhost:8080" }));
 
 app.use(
 	"/docs",
