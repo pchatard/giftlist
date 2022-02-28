@@ -12,7 +12,7 @@ import List from "./models/List";
 import User from "./models/User";
 import { RegisterRoutes } from "./routes";
 
-const PORT = process.env.API_PORT;
+const PORT = process.env.PORT;
 const app: express.Application = express();
 
 app.use(express.json());

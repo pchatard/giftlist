@@ -13,7 +13,7 @@
     {
       "pgOptions": {
         "ssl": {
-          "ca": "./apiserver/src/config/certs/root.crt"
+          "ca": "./api/src/config/certs/root.crt"
         }
       },
       "previewLimit": 50,
