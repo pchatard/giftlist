@@ -4,7 +4,6 @@ import List from "../models/List";
 import User from "../models/User";
 import { email } from "../types/email";
 import { SelectKindList } from "../types/SelectKindList";
-import { UUID } from "../types/UUID";
 
 class UserService {
 	/**
@@ -71,21 +70,21 @@ class UserService {
 
 	/**
 	 * Return a user from Database.
-	 * @param {string} userId id of user to get, uuid v4 formatted
+	 * @param {string} userId id of user to get
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
-	static async getMany(userIds: UUID[]): Promise<User[]> {
+	static async getMany(userIds: string[]): Promise<User[]> {
 		const userRepository: Repository<User> = getRepository(User);
 		return await userRepository.findByIds(userIds);
 	}
 
 	/**
 	 * Returns all user lists.
-	 * @param {UUID} userId id of user which owns the list, uuid v4 formatted
+	 * @param {string} userId id of user which owns the list
 	 * @param {SelectKindList} select filter tag to return "all" lists, "owns" or "granted" ones only
 	 * @returns {Promise<List[]>} the userId lists
 	 */
-	static async getUserLists(userId: UUID, select: SelectKindList): Promise<List[]> {
+	static async getUserLists(userId: string, select: SelectKindList): Promise<List[]> {
 		const userRepository: Repository<User> = getRepository(User);
 		const user: User = await userRepository.findOneOrFail(userId, {
 			relations: ["lists", "friendLists", "lists.owners", "friendLists.owners"],

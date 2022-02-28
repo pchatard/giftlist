@@ -195,7 +195,7 @@
 					},
 					"ownersIds": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"type": "string"
 						},
 						"type": "array"
 					},
@@ -204,7 +204,7 @@
 					},
 					"grantedUsersIds": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"type": "string"
 						},
 						"type": "array"
 					}
@@ -231,7 +231,7 @@
 					},
 					"ownersIds": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"type": "string"
 						},
 						"type": "array"
 					},
@@ -256,7 +256,7 @@
 					},
 					"ownersIds": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"type": "string"
 						},
 						"type": "array"
 					},
@@ -978,14 +978,6 @@
 				"parameters": [
 					{
 						"in": "query",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
 						"name": "select",
 						"required": true,
 						"schema": {
@@ -1017,14 +1009,6 @@
 						"description": "the GUID of the list",
 						"in": "path",
 						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -1068,14 +1052,6 @@
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
 						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
 					}
 				]
 			},
@@ -1111,14 +1087,6 @@
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
 						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
 					}
 				]
 			}
@@ -1145,14 +1113,6 @@
 						"description": "the GUID of the list",
 						"in": "path",
 						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -1187,14 +1147,6 @@
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
 						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
 					}
 				]
 			}
@@ -1221,14 +1173,6 @@
 						"description": "the sharing code of the list",
 						"in": "path",
 						"name": "sharingCode",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { GlobalVar, List1, List2, List3, Url_ListPost } from "../global";
+import { GlobalVar, List1, List2, List3, Url_ListPost, User1 } from "../global";
 import { post } from "../helpers/crud";
 import { expectValidationFailed } from "../helpers/error";
 import { expect200 } from "../helpers/success";
@@ -23,7 +23,7 @@ export default function suite() {
 	it("Returns 422, with validation error, if one of fields is empty", async () => {
 		const responses = [
 			await post(Url_ListPost(), { title: "TestList2" }),
-			await post(Url_ListPost(), { ownersIds: [GlobalVar.User1_Id] }),
+			await post(Url_ListPost(), { ownersIds: [User1.id] }),
 		];
 		responses.forEach((response) => expectValidationFailed(response));
 	});

@@ -1,5 +1,8 @@
+import { Request as ERequest } from "express";
+import jwt from "jsonwebtoken";
 import {
-	Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Security, SuccessResponse, Tags
+	Body, Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, SuccessResponse,
+	Tags
 } from "tsoa";
 
 import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
@@ -40,11 +43,13 @@ export class ListController extends Controller {
 	@SuccessResponse(204)
 	@Put("{listId}")
 	async edit(
+		@Request() request: ERequest,
 		@Path() listId: UUID,
-		@Body() body: Partial<ListDTO>,
-		@Query() userId: UUID
+		@Body() body: Partial<ListDTO>
 	): Promise<void> {
-		if (!(await ListService.listOwners(listId)).includes(userId)) {
+		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
+		if (!(await ListService.listOwners(listId)).includes(auth0UserId)) {
 			throw new OwnershipError();
 		}
 		await ListService.edit(listId, body);
@@ -56,9 +61,15 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204)
 	@Delete("{listId}")
-	async delete(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		const ownerIds: UUID[] = await ListService.listOwners(listId);
-		const grantedIds: UUID[] = await ListService.listGrantedUsers(listId);
+	async delete(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
+		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
+		await this.deleteById(listId, auth0UserId);
+	}
+
+	async deleteById(listId: UUID, userId: string): Promise<void> {
+		const ownerIds: string[] = await ListService.listOwners(listId);
+		const grantedIds: string[] = await ListService.listGrantedUsers(listId);
 		if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
 			await ListService.forget(listId, userId);
 			if (ownerIds.length == 1 && ownerIds.includes(userId)) {
@@ -82,8 +93,10 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(200)
 	@Get()
-	async getAll(@Query() userId: UUID, @Query() select: SelectKindList): Promise<ListDTO[]> {
-		const lists: List[] = await UserService.getUserLists(userId, select);
+	async getAll(@Request() request: ERequest, @Query() select: SelectKindList): Promise<ListDTO[]> {
+		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
+		const lists: List[] = await UserService.getUserLists(auth0UserId, select);
 		return lists.map((list) => {
 			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
 				list;
@@ -98,10 +111,13 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(200)
 	@Get("{listId}")
-	async get(@Path() listId: UUID, @Query() userId: UUID): Promise<ListDTO> {
+	async get(@Request() request: ERequest, @Path() listId: UUID): Promise<ListDTO> {
+		// TODO: MEEEEEEEEEEERGE THIS CODE IN MIDDL ?
+		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
 		if (
-			!(await ListService.listOwners(listId)).includes(userId) &&
-			!(await ListService.listGrantedUsers(listId)).includes(userId)
+			!(await ListService.listOwners(listId)).includes(auth0UserId) &&
+			!(await ListService.listGrantedUsers(listId)).includes(auth0UserId)
 		) {
 			throw new OwnershipError();
 		}
@@ -117,8 +133,8 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204)
 	@Put("{listId}/share")
-	async share(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, { isShared: true }, userId);
+	async share(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
+		await this.edit(request, listId, { isShared: true });
 	}
 
 	/**
@@ -127,8 +143,8 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204)
 	@Put("{listId}/unshare")
-	async private(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, { isShared: false }, userId);
+	async private(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
+		await this.edit(request, listId, { isShared: false });
 	}
 
 	/**
@@ -137,9 +153,14 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204)
 	@Put("invite/{sharingCode}")
-	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
+	async accessFromSharingCode(
+		@Request() request: ERequest,
+		@Path() sharingCode: UUID
+	): Promise<void> {
+		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
 		const list: List = await ListService.getFromSharingCode(sharingCode);
-		const user: User = await UserService.getById(userId);
+		const user: User = await UserService.getById(auth0UserId);
 		if (!list.owners.find((u) => u.id == user.id)) {
 			await ListService.addGrantedUser(list.id, user);
 		}

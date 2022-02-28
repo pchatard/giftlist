@@ -22,9 +22,9 @@ export class UserLoggedController extends Controller {
 	@Get()
 	async get(@Request() request: ERequest): Promise<UserDTO> {
 		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const decodedToken: string = jwt.decode(token, { json: true })?.sub || "";
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
 
-		const user: User = await UserService.getById(decodedToken);
+		const user: User = await UserService.getById(auth0UserId);
 		const { id, createdDate, ...rest } = user;
 		return rest;
 	}
@@ -37,8 +37,8 @@ export class UserLoggedController extends Controller {
 	@Put()
 	async edit(@Request() request: ERequest, @Body() body: Partial<UserDTO>): Promise<void> {
 		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const decodedToken: string = jwt.decode(token, { json: true })?.sub || "";
-		await UserService.edit(decodedToken, body);
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
+		await UserService.edit(auth0UserId, body);
 	}
 
 	/**
@@ -48,11 +48,11 @@ export class UserLoggedController extends Controller {
 	@Delete()
 	async delete(@Request() request: ERequest): Promise<void> {
 		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const decodedToken: string = jwt.decode(token, { json: true })?.sub || "";
+		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
 		const listController: ListController = new ListController();
-		for (const list of await UserService.getUserLists(decodedToken, SelectKindList.ALL)) {
-			await listController.delete(list.id, decodedToken);
+		for (const list of await UserService.getUserLists(auth0UserId, SelectKindList.ALL)) {
+			await listController.delete(request, list.id);
 		}
-		await UserService.delete(decodedToken);
+		await UserService.delete(auth0UserId);
 	}
 }

@@ -32,21 +32,21 @@ export const User3: CreateUserDTO = {
 
 export const List1: CreateListDTO = {
 	title: "TestList1",
-	ownersIds: [],
+	ownersIds: [UserTest.id, User1.id],
 	grantedUsersIds: [],
 	isShared: false,
 };
 
 export const List2: CreateListDTO = {
 	title: "TestList2",
-	ownersIds: [],
-	grantedUsersIds: [],
+	ownersIds: [User1.id],
+	grantedUsersIds: [UserTest.id, User2.id],
 	isShared: true,
 };
 
 export const List3: CreateListDTO = {
 	title: "TestList3",
-	ownersIds: [],
+	ownersIds: [User2.id],
 	grantedUsersIds: [],
 	isShared: true,
 };

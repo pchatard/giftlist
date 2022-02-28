@@ -61,7 +61,7 @@ export class UserManagementController extends Controller {
 	async delete(@Path() userId: string): Promise<void> {
 		const listController: ListController = new ListController();
 		for (const list of await UserService.getUserLists(userId, SelectKindList.ALL)) {
-			await listController.delete(list.id, userId);
+			await listController.deleteById(list.id, userId);
 		}
 		await UserService.delete(userId);
 	}

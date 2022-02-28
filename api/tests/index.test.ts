@@ -5,10 +5,10 @@ import chaiHttp from "chai-http";
 
 import { NotFound, Unauthorized } from "./00_specials";
 import { DeleteMe, GetMe, GetUser, GetUsers, PostUser, PutMe } from "./01_users";
-// import {
-// 	AfterList, BeforeList, DeleteList, GetList, GetLists, InviteList, PostList, PutList, ShareList,
-// 	UnshareList
-// } from "./02_lists";
+import {
+	AfterList, BeforeList, DeleteList, GetList, GetLists, InviteList, PostList, PutList, ShareList,
+	UnshareList
+} from "./02_lists";
 // import {
 // 	AfterGift, BeforeGift, BookGift, DeleteGift, FavGift, GetGift, GetGifts, HideGift, PostGift,
 // 	PutGift, UnbookGift, UnfavGift, UnhideGift
@@ -29,18 +29,18 @@ describe("Users", function () {
 	describe("PUT " + URLS.Url_UserPutMe(), PutMe);
 	describe("DELETE " + URLS.Url_UserDeleteMe(), DeleteMe);
 });
-// describe("Lists", function () {
-// 	before(async () => await BeforeList());
-// 	describe("POST " + URLS.Url_ListPost(), PostList);
-// 	describe("GET " + URLS.Url_ListGetAll(), GetLists);
-// 	describe("GET " + URLS.Url_ListGetOne(), GetList);
-// 	describe("PUT " + URLS.Url_ListPut(), PutList);
-// 	describe("PUT " + URLS.Url_ListShare(), ShareList);
-// 	describe("PUT " + URLS.Url_ListUnshare(), UnshareList);
-// 	describe("PUT " + URLS.Url_ListInvite(), InviteList);
-// 	describe("DELETE " + URLS.Url_ListDelete(), DeleteList);
-// 	after(async () => await AfterList());
-// });
+describe("Lists", function () {
+	before(async () => await BeforeList());
+	describe("POST " + URLS.Url_ListPost(), PostList);
+	describe("GET " + URLS.Url_ListGetAll(), GetLists);
+	describe("GET " + URLS.Url_ListGetOne(), GetList);
+	describe("PUT " + URLS.Url_ListPut(), PutList);
+	describe("PUT " + URLS.Url_ListShare(), ShareList);
+	describe("PUT " + URLS.Url_ListUnshare(), UnshareList);
+	describe("PUT " + URLS.Url_ListInvite(), InviteList);
+	describe("DELETE " + URLS.Url_ListDelete(), DeleteList);
+	after(async () => await AfterList());
+});
 // describe("Gifts", function () {
 // 	before(async () => await BeforeGift());
 // 	describe("POST " + URLS.Url_GiftPost(), PostGift);
