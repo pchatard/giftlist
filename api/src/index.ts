@@ -1,5 +1,6 @@
 import cookies from "cookie-parser";
 import cors from "cors";
+import { config } from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
@@ -12,6 +13,8 @@ import Gift from "./models/Gift";
 import List from "./models/List";
 import User from "./models/User";
 import { RegisterRoutes } from "./routes";
+
+config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
 const PORT = process.env.PORT;
 const app: express.Application = express();

@@ -1239,7 +1239,7 @@
 		},
 		"/users/me": {
 			"get": {
-				"operationId": "GetLogged",
+				"operationId": "Get",
 				"responses": {
 					"200": {
 						"description": "",

@@ -1,6 +1,10 @@
+import { config } from "dotenv";
+
 import { CreateGiftDTO } from "../../src/dto/gifts";
 import { CreateListDTO } from "../../src/dto/lists";
 import { CreateUserDTO } from "../../src/dto/users";
+
+config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
 export const UserTest: CreateUserDTO = {
 	id: process.env.AUTH0_CLIENT_ID + "@clients",

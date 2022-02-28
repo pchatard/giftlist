@@ -1,7 +1,10 @@
+import { config } from "dotenv";
 import { Request } from "express";
 import { UnauthorizedError } from "express-jwt";
 import jwt from "jsonwebtoken";
 import jwksRsa, { SigningKey } from "jwks-rsa";
+
+config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
 export function expressAuthentication(
 	request: Request,

@@ -7,7 +7,9 @@ import { GiftController } from './controllers/GiftController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ListController } from './controllers/ListController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './controllers/UserController';
+import { UserLoggedController } from './controllers/UserLoggedController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { UserManagementController } from './controllers/UserManagementController';
 import { expressAuthentication } from './middlewares/authenticate';
 // @ts-ignore - no great way to install types from subpackage
 const promiseAny = require('promise.any');
@@ -651,7 +653,7 @@ export function RegisterRoutes(app: express.Router) {
         app.get('/users/me',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_getLogged(request: any, response: any, next: any) {
+            function UserLoggedController_get(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
@@ -662,10 +664,10 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserLoggedController();
 
 
-              const promise = controller.getLogged.apply(controller, validatedArgs as any);
+              const promise = controller.get.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
@@ -675,7 +677,7 @@ export function RegisterRoutes(app: express.Router) {
         app.put('/users/me',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_edit(request: any, response: any, next: any) {
+            function UserLoggedController_edit(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     body: {"in":"body","name":"body","required":true,"ref":"Partial_UserDTO_"},
@@ -687,7 +689,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserLoggedController();
 
 
               const promise = controller.edit.apply(controller, validatedArgs as any);
@@ -700,7 +702,7 @@ export function RegisterRoutes(app: express.Router) {
         app.delete('/users/me',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_delete(request: any, response: any, next: any) {
+            function UserLoggedController_delete(request: any, response: any, next: any) {
             const args = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
             };
@@ -711,7 +713,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserLoggedController();
 
 
               const promise = controller.delete.apply(controller, validatedArgs as any);
@@ -724,7 +726,7 @@ export function RegisterRoutes(app: express.Router) {
         app.post('/users',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_create(request: any, response: any, next: any) {
+            function UserManagementController_create(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"CreateUserDTO"},
             };
@@ -735,7 +737,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserManagementController();
 
 
               const promise = controller.create.apply(controller, validatedArgs as any);
@@ -745,10 +747,59 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/users/admin/:userId',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function UserManagementController_edit(request: any, response: any, next: any) {
+            const args = {
+                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_UserDTO_"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new UserManagementController();
+
+
+              const promise = controller.edit.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/users/admin/:userId',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function UserManagementController_delete(request: any, response: any, next: any) {
+            const args = {
+                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new UserManagementController();
+
+
+              const promise = controller.delete.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.get('/users',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_getAll(request: any, response: any, next: any) {
+            function UserManagementController_getAll(request: any, response: any, next: any) {
             const args = {
             };
 
@@ -758,7 +809,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserManagementController();
 
 
               const promise = controller.getAll.apply(controller, validatedArgs as any);
@@ -771,7 +822,7 @@ export function RegisterRoutes(app: express.Router) {
         app.get('/users/:userMail',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_get(request: any, response: any, next: any) {
+            function UserManagementController_get(request: any, response: any, next: any) {
             const args = {
                     userMail: {"in":"path","name":"userMail","required":true,"ref":"email"},
             };
@@ -782,7 +833,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserManagementController();
 
 
               const promise = controller.get.apply(controller, validatedArgs as any);

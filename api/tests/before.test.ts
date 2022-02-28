@@ -1,9 +1,12 @@
 import "mocha";
 
+import { config } from "dotenv";
 import * as fs from "fs";
 import request from "request";
 
 import { GlobalVar } from "./global";
+
+config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
 const options = {
 	url: process.env.AUTH0_TOKEN_URL as string,

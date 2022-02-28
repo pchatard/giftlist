@@ -24,6 +24,21 @@
       "name": "Cockroach",
       "username": "giftlist",
       "database": "giftlist-2305.giftlist"
+    },
+    {
+      "pgOptions": {
+        "ssl": {
+          "ca": "./api/src/config/certs/root.crt"
+        }
+      },
+      "previewLimit": 50,
+      "server": "free-tier5.gcp-europe-west1.cockroachlabs.cloud",
+      "port": 26257,
+      "driver": "PostgreSQL",
+      "name": "Cockroach",
+      "username": "testuser",
+      "password": "testuser",
+      "database": "giftlist-2305.testdb"
     }
   ],
   "importSorter.generalConfiguration.sortOnBeforeSave": true,
