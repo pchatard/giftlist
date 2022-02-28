@@ -40,7 +40,9 @@ app.use(errorHandler);
 
 const server = app.listen(PORT, async () => {
 	await createConnection({ ...cockroachDBOptions, entities: [User, List, Gift] });
-	console.log("Listening on " + PORT);
+	{
+		process.env.NODE_ENV == "dev" && console.log("Listening on " + PORT);
+	}
 });
 
 process.on("SIGTERM", () => {

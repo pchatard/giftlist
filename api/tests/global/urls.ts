@@ -7,6 +7,12 @@ export const Url_UserGetAll = (): string => BaseUrl_Users;
 
 export const Url_UserGetOne = (userId: string = ":userId"): string => BaseUrl_Users + "/" + userId;
 
+export const Url_UserPut = (userId: string = ":userId"): string =>
+	BaseUrl_Users + "/admin/" + userId;
+
+export const Url_UserDelete = (userId: string = ":userId"): string =>
+	BaseUrl_Users + "/admin/" + userId;
+
 export const Url_UserGetMe = (): string => BaseUrl_Users + "/me";
 
 export const Url_UserPutMe = (): string => BaseUrl_Users + "/me";
