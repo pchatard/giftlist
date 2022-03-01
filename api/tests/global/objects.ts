@@ -71,3 +71,21 @@ export const Gift3: CreateGiftDTO = {
 	isHidden: false,
 	listId: "",
 };
+
+export const Gift4: CreateGiftDTO = {
+	title: "TestGift4",
+	category: "cooking-item",
+	isBooked: false,
+	isFavorite: false,
+	isHidden: true,
+	listId: "",
+};
+
+export const Gift5: CreateGiftDTO = {
+	title: "TestGift5",
+	category: "book",
+	isBooked: false,
+	isFavorite: false,
+	isHidden: false,
+	listId: "",
+};

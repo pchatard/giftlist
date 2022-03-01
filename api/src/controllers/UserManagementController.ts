@@ -1,11 +1,9 @@
 import {
-	Body, Controller, Delete, Get, Hidden, Path, Post, Put, Response, Route, Security,
-	SuccessResponse, Tags
+	Body, Controller, Delete, Get, Hidden, Path, Post, Put, Route, Security, SuccessResponse, Tags
 } from "tsoa";
 import { EntityNotFoundError } from "typeorm";
 
 import { CreateUserDTO, UserDTO, UserIdDTO } from "../dto/users";
-import MailAlreadyUsedError from "../errors/UserErrors/MailAlreadyUsedError";
 import User from "../models/User";
 import UserService from "../services/UserService";
 import { email } from "../types/email";
@@ -20,10 +18,9 @@ export class UserManagementController extends Controller {
 	 * created by Auth0, we manage a user database to store preferences,
 	 * friends and much more.
 	 * @param {CreateUserDTO} body data to create a user
-	 * @returns {Promise<UUID>} UUID of the created user
+	 * @returns {Promise<UserIdDTO>} id of the created user
 	 */
 	@SuccessResponse(200)
-	@Response<MailAlreadyUsedError>(400, "If mail is already used")
 	@Post()
 	async create(@Body() body: CreateUserDTO): Promise<UserIdDTO> {
 		try {

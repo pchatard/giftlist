@@ -43,7 +43,7 @@ class ListService {
 	 * Forget a list for a user from Database.
 	 * @param {UUID} listId id of list to delete, uuid v4 formatted
 	 * @param {UUID} userId id of user which ask, uuid v4 formatted
-	 * @returns {Promise<List>}
+	 * @returns {Promise<List>} the forgotten list
 	 */
 	static async forget(listId: UUID, userId: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
@@ -83,6 +83,7 @@ class ListService {
 	/**
 	 * Get a list from its sharing code.
 	 * @param {UUID} sharingCode sharing code of list to get, uuid v4 formatted
+	 * @param {User} user user to add to granted
 	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
 	static async addGrantedUser(listId: UUID, user: User): Promise<List> {

@@ -328,25 +328,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"MailAlreadyUsedError": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"message": {
-						"type": "string"
-					},
-					"stack": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name",
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"CreateUserDTO": {
 				"properties": {
 					"id": {
@@ -412,16 +393,9 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -429,6 +403,7 @@
 					}
 				],
 				"requestBody": {
+					"description": "list property for entity creation",
 					"required": true,
 					"content": {
 						"application/json": {
@@ -467,16 +442,9 @@
 				],
 				"parameters": [
 					{
+						"description": "gifts list id",
 						"in": "path",
 						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -504,6 +472,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -515,14 +484,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -559,6 +520,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -570,14 +532,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -610,6 +564,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -621,14 +576,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -656,6 +603,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -667,14 +615,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -702,6 +642,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -713,14 +654,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -748,6 +681,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -759,14 +693,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -794,6 +720,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -805,14 +732,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -840,6 +759,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -851,14 +771,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -886,6 +798,7 @@
 				],
 				"parameters": [
 					{
+						"description": "gift list id",
 						"in": "path",
 						"name": "listId",
 						"required": true,
@@ -897,14 +810,6 @@
 						"description": "the GUID of the gift",
 						"in": "path",
 						"name": "giftId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"in": "query",
-						"name": "userId",
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
@@ -939,6 +844,7 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "list property for entity creation",
 					"required": true,
 					"content": {
 						"application/json": {
@@ -977,6 +883,7 @@
 				],
 				"parameters": [
 					{
+						"description": "flag to select owned or granted lists",
 						"in": "query",
 						"name": "select",
 						"required": true,
@@ -1153,7 +1060,7 @@
 		},
 		"/lists/invite/{sharingCode}": {
 			"put": {
-				"operationId": "AccessFromSharingCode",
+				"operationId": "AccessFromCode",
 				"responses": {
 					"204": {
 						"description": ""
@@ -1268,27 +1175,13 @@
 								}
 							}
 						}
-					},
-					"400": {
-						"description": "If mail is already used",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/MailAlreadyUsedError"
-								}
-							}
-						}
 					}
 				},
 				"description": "Create a new user during sign up. Even if users are authenticated and\ncreated by Auth0, we manage a user database to store preferences,\nfriends and much more.",
 				"tags": [
 					"User"
 				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
+				"security": [],
 				"parameters": [],
 				"requestBody": {
 					"description": "data to create a user",

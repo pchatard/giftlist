@@ -2,6 +2,7 @@ import "mocha";
 
 import { config } from "dotenv";
 import * as fs from "fs";
+import { doWhen } from "readyness";
 import request from "request";
 
 import { GlobalVar } from "./global";
@@ -26,7 +27,7 @@ before((done) => {
 	const readDate = new Date(lines[0].split("DATE=")[1]);
 	if (getUnixTimestamp(readDate) + 172800 > getUnixTimestamp(new Date())) {
 		GlobalVar.Token = lines[1].toString().split("TOKEN=")[1];
-		done();
+		doWhen(done);
 	} else {
 		let newValues = replaceDate(data);
 		request.post(options, function (error, _response, body) {
@@ -34,7 +35,7 @@ before((done) => {
 			const token = JSON.parse(body)["access_token"];
 			GlobalVar.Token = token;
 			fs.writeFileSync("./tests/.env", replaceToken(newValues, token));
-			done();
+			doWhen(done);
 		});
 	}
 });

@@ -46,77 +46,47 @@ export const Url_ListInvite = (sharingCode: string = ":listId"): string =>
 const BaseUrl_Gift = (listId: string = ":listId"): string =>
 	BaseUrl_Lists + "/" + listId + "/gifts";
 
-export const Url_GiftPost = (listId: string = ":listId", userId: string = ":userId"): string =>
-	BaseUrl_Gift(listId) + "?userId=" + userId;
+export const Url_GiftPost = (listId: string = ":listId"): string => BaseUrl_Gift(listId);
 
-export const Url_GiftGetAll = (listId: string = ":listId", userId: string = ":userId"): string =>
-	BaseUrl_Gift(listId) + "?userId=" + userId;
+export const Url_GiftGetAll = (listId: string = ":listId"): string => BaseUrl_Gift(listId);
 
-export const Url_GiftGetOne = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => BaseUrl_Gift(listId) + "/" + giftId + "?userId=" + userId;
+export const Url_GiftGetOne = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	BaseUrl_Gift(listId) + "/" + giftId;
 
-export const Url_GiftDelete = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => BaseUrl_Gift(listId) + "/" + giftId + "?userId=" + userId;
+export const Url_GiftDelete = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	BaseUrl_Gift(listId) + "/" + giftId;
 
-export const Url_GiftPut = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => BaseUrl_Gift(listId) + "/" + giftId + "?userId=" + userId;
+export const Url_GiftPut = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	BaseUrl_Gift(listId) + "/" + giftId;
 
 const Url_GiftSpecial = (
 	listId: string = ":listId",
 	giftId: string = ":giftId",
-	userId: string = ":userId",
 	special: string
-): string => BaseUrl_Gift(listId) + "/" + giftId + "/" + special + "?userId=" + userId;
+): string => BaseUrl_Gift(listId) + "/" + giftId + "/" + special;
 
-export const Url_GiftHide = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => Url_GiftSpecial(listId, giftId, userId, "hide");
+export const Url_GiftHide = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	Url_GiftSpecial(listId, giftId, "hide");
 
-export const Url_GiftUnhide = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => Url_GiftSpecial(listId, giftId, userId, "unhide");
+export const Url_GiftUnhide = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	Url_GiftSpecial(listId, giftId, "unhide");
 
-export const Url_GiftFav = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => Url_GiftSpecial(listId, giftId, userId, "fav");
+export const Url_GiftFav = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	Url_GiftSpecial(listId, giftId, "fav");
 
-export const Url_GiftUnfav = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => Url_GiftSpecial(listId, giftId, userId, "unfav");
+export const Url_GiftUnfav = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	Url_GiftSpecial(listId, giftId, "unfav");
 
-export const Url_GiftBook = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => Url_GiftSpecial(listId, giftId, userId, "book");
+export const Url_GiftBook = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	Url_GiftSpecial(listId, giftId, "book");
 
-export const Url_GiftUnbook = (
-	listId: string = ":listId",
-	giftId: string = ":giftId",
-	userId: string = ":userId"
-): string => Url_GiftSpecial(listId, giftId, userId, "unbook");
+export const Url_GiftUnbook = (listId: string = ":listId", giftId: string = ":giftId"): string =>
+	Url_GiftSpecial(listId, giftId, "unbook");
 
 // Specials Endpoints
 export const Url_NotFound = (): string => "/notfound";
 
 export const Url_GetUnauthorized = (): string => Url_UserGetAll();
 export const Url_DeleteUnauthorized = (): string => Url_UserDeleteMe();
-export const Url_PostUnauthorized = (): string => Url_UserPost();
+export const Url_PostUnauthorized = (): string => Url_ListPost();
 export const Url_PutUnauthorized = (): string => Url_UserPutMe();

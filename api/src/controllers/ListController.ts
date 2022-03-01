@@ -21,6 +21,7 @@ import GiftController from "./GiftController";
 export class ListController extends Controller {
 	/**
 	 * Creates a new list.
+	 * @param {CreateListDTO} body list property for entity creation
 	 */
 	@SuccessResponse(200)
 	@Post()
@@ -62,6 +63,11 @@ export class ListController extends Controller {
 		await this.deleteById(listId, request.userId);
 	}
 
+	/**
+	 * Delete a list by id
+	 * @param listId id of list to delete
+	 * @param userId owner or granted user of the list
+	 */
 	async deleteById(listId: UUID, userId: string): Promise<void> {
 		const ownerIds: string[] = await ListService.listOwners(listId);
 		const grantedIds: string[] = await ListService.listGrantedUsers(listId);
@@ -84,6 +90,7 @@ export class ListController extends Controller {
 
 	/**
 	 * Gets all user's lists data.
+	 * @param {SelectKindList} select flag to select owned or granted lists
 	 * @returns {Promise<ListDTO[]>} all user lists
 	 */
 	@SuccessResponse(200)
@@ -101,6 +108,7 @@ export class ListController extends Controller {
 	/**
 	 * Sends back a list in the response based on its id.
 	 * @param {UUID} listId the GUID of the list
+	 * @returns {Promise<ListDTO>} the list
 	 */
 	@SuccessResponse(200)
 	@Get("{listId}")
@@ -143,10 +151,7 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204)
 	@Put("invite/{sharingCode}")
-	async accessFromSharingCode(
-		@Request() request: ERequest,
-		@Path() sharingCode: UUID
-	): Promise<void> {
+	async accessFromCode(@Request() request: ERequest, @Path() sharingCode: UUID): Promise<void> {
 		const list: List = await ListService.getFromSharingCode(sharingCode);
 		const user: User = await UserService.getById(request.userId);
 		if (!list.owners.find((u) => u.id == user.id)) {

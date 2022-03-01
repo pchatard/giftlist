@@ -66,6 +66,7 @@
 		"mocha": "^9.1.3",
 		"nyc": "^15.1.0",
 		"prettier": "^2.4.1",
+		"readyness": "^0.1.0",
 		"request": "^2.88.2",
 		"swagger-autogen": "^2.12.4",
 		"swagger-jsdoc": "^6.1.0",

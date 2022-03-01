@@ -3,6 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
 import helmet from "helmet";
+import { waitFor } from "readyness";
 import swaggerUi from "swagger-ui-express";
 import { createConnection } from "typeorm";
 
@@ -38,8 +39,11 @@ RegisterRoutes(app);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
+var appListening = waitFor("app:listening");
+
 const server = app.listen(PORT, async () => {
 	await createConnection({ ...cockroachDBOptions, entities: [User, List, Gift] });
+	appListening();
 	{
 		process.env.NODE_ENV == "dev" && console.log("Listening on " + PORT);
 	}

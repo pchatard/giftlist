@@ -1,5 +1,6 @@
+import { Request as ERequest } from "express";
 import {
-	Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Security, SuccessResponse, Tags
+	Body, Controller, Delete, Get, Path, Post, Put, Request, Route, Security, SuccessResponse, Tags
 } from "tsoa";
 
 import { CreateGiftDTO, GiftDTO, GiftIdDTO } from "../dto/gifts";
@@ -17,15 +18,18 @@ import { UUID } from "../types/UUID";
 export class GiftController extends Controller {
 	/**
 	 * Creates a new gift.
+	 * @param {UUID} listId gift list id
+	 * @param {CreateGiftDTO} body list property for entity creation
+	 * @returns {Promise<GiftIdDTO>} gift id
 	 */
 	@SuccessResponse(200)
 	@Post()
 	async create(
+		@Request() request: ERequest,
 		@Path() listId: UUID,
-		@Body() body: CreateGiftDTO,
-		@Query() userId: UUID
+		@Body() body: CreateGiftDTO
 	): Promise<GiftIdDTO> {
-		if (!(await ListService.listOwners(listId)).includes(userId)) {
+		if (!(await ListService.listOwners(listId)).includes(request.userId)) {
 			throw new OwnershipError();
 		}
 		const list: List = await ListService.get(listId);
@@ -35,19 +39,20 @@ export class GiftController extends Controller {
 
 	/**
 	 * Edit a gift.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 * @param {ListDTO} body data to edit a gift
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}")
 	async edit(
+		@Request() request: ERequest,
 		@Path() listId: UUID,
 		@Path() giftId: UUID,
-		@Body() body: Partial<GiftDTO>,
-		@Query() userId: UUID
+		@Body() body: Partial<GiftDTO>
 	): Promise<void> {
 		if (
-			!(await ListService.listOwners(listId)).includes(userId) ||
+			!(await ListService.listOwners(listId)).includes(request.userId) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new OwnershipError();
@@ -57,13 +62,18 @@ export class GiftController extends Controller {
 
 	/**
 	 * Delete a gift.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(204)
 	@Delete("{giftId}")
-	async delete(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
+	async delete(
+		@Request() request: ERequest,
+		@Path() listId: UUID,
+		@Path() giftId: UUID
+	): Promise<void> {
 		if (
-			!(await ListService.listOwners(listId)).includes(userId) ||
+			!(await ListService.listOwners(listId)).includes(request.userId) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new OwnershipError();
@@ -77,15 +87,16 @@ export class GiftController extends Controller {
 
 	/**
 	 * Gets all list's gifts data.
+	 * @param {UUID} listId gifts list id
 	 * @returns {Promise<ListDTO[]>} all list gifts
 	 */
 	@SuccessResponse(200)
 	@Get()
-	async getAll(@Path() listId: UUID, @Query() userId: UUID): Promise<GiftDTO[]> {
+	async getAll(@Request() request: ERequest, @Path() listId: UUID): Promise<GiftDTO[]> {
 		let gifts: Gift[] = [];
-		if ((await ListService.listGrantedUsers(listId)).includes(userId)) {
+		if ((await ListService.listGrantedUsers(listId)).includes(request.userId)) {
 			gifts = await ListService.getListGifts(listId, false);
-		} else if ((await ListService.listOwners(listId)).includes(userId)) {
+		} else if ((await ListService.listOwners(listId)).includes(request.userId)) {
 			gifts = await ListService.getListGifts(listId, true);
 		} else {
 			throw new OwnershipError();
@@ -98,14 +109,19 @@ export class GiftController extends Controller {
 
 	/**
 	 * Sends back a gift in the response based on its id.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(200)
 	@Get("{giftId}")
-	async get(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<GiftDTO> {
+	async get(
+		@Request() request: ERequest,
+		@Path() listId: UUID,
+		@Path() giftId: UUID
+	): Promise<GiftDTO> {
 		if (
-			(!(await ListService.listOwners(listId)).includes(userId) &&
-				!(await ListService.listGrantedUsers(listId)).includes(userId)) ||
+			(!(await ListService.listOwners(listId)).includes(request.userId) &&
+				!(await ListService.listGrantedUsers(listId)).includes(request.userId)) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new OwnershipError();
@@ -116,70 +132,92 @@ export class GiftController extends Controller {
 
 	/**
 	 * Mark a gift as hidden.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/hide")
-	async hide(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, giftId, { isHidden: true }, userId);
+	async hide(
+		@Request() request: ERequest,
+		@Path() listId: UUID,
+		@Path() giftId: UUID
+	): Promise<void> {
+		await this.edit(request, listId, giftId, { isHidden: true });
 	}
 
 	/**
 	 * Remove "hidden" flag of a gift.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/unhide")
-	async unhide(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, giftId, { isHidden: false }, userId);
+	async unhide(
+		@Request() request: ERequest,
+		@Path() listId: UUID,
+		@Path() giftId: UUID
+	): Promise<void> {
+		await this.edit(request, listId, giftId, { isHidden: false });
 	}
 
 	/**
 	 * Mark a gift as favorite.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/fav")
 	async favorite(
+		@Request() request: ERequest,
 		@Path() listId: UUID,
-		@Path() giftId: UUID,
-		@Query() userId: UUID
+		@Path() giftId: UUID
 	): Promise<void> {
-		await this.edit(listId, giftId, { isFavorite: true }, userId);
+		await this.edit(request, listId, giftId, { isFavorite: true });
 	}
 
 	/**
 	 * Remove "favorite" flag of a gift.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/unfav")
 	async unfavorite(
+		@Request() request: ERequest,
 		@Path() listId: UUID,
-		@Path() giftId: UUID,
-		@Query() userId: UUID
+		@Path() giftId: UUID
 	): Promise<void> {
-		await this.edit(listId, giftId, { isFavorite: false }, userId);
+		await this.edit(request, listId, giftId, { isFavorite: false });
 	}
 
 	/**
 	 * Mark a gift as booked.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/book")
-	async book(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, giftId, { isBooked: true }, userId);
+	async book(
+		@Request() request: ERequest,
+		@Path() listId: UUID,
+		@Path() giftId: UUID
+	): Promise<void> {
+		await this.edit(request, listId, giftId, { isBooked: true });
 	}
 
 	/**
 	 * Remove "booked" flag of a gift.
+	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
 	@SuccessResponse(204)
 	@Put("{giftId}/unbook")
-	async unbook(@Path() listId: UUID, @Path() giftId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, giftId, { isBooked: false }, userId);
+	async unbook(
+		@Request() request: ERequest,
+		@Path() listId: UUID,
+		@Path() giftId: UUID
+	): Promise<void> {
+		await this.edit(request, listId, giftId, { isBooked: false });
 	}
 }
 
