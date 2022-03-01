@@ -1,5 +1,4 @@
 import { Request as ERequest } from "express";
-import jwt from "jsonwebtoken";
 import {
 	Body, Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, SuccessResponse,
 	Tags
@@ -47,9 +46,7 @@ export class ListController extends Controller {
 		@Path() listId: UUID,
 		@Body() body: Partial<ListDTO>
 	): Promise<void> {
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
-		if (!(await ListService.listOwners(listId)).includes(auth0UserId)) {
+		if (!(await ListService.listOwners(listId)).includes(request.userId)) {
 			throw new OwnershipError();
 		}
 		await ListService.edit(listId, body);
@@ -62,9 +59,7 @@ export class ListController extends Controller {
 	@SuccessResponse(204)
 	@Delete("{listId}")
 	async delete(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
-		await this.deleteById(listId, auth0UserId);
+		await this.deleteById(listId, request.userId);
 	}
 
 	async deleteById(listId: UUID, userId: string): Promise<void> {
@@ -94,9 +89,7 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Get()
 	async getAll(@Request() request: ERequest, @Query() select: SelectKindList): Promise<ListDTO[]> {
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
-		const lists: List[] = await UserService.getUserLists(auth0UserId, select);
+		const lists: List[] = await UserService.getUserLists(request.userId, select);
 		return lists.map((list) => {
 			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
 				list;
@@ -112,12 +105,9 @@ export class ListController extends Controller {
 	@SuccessResponse(200)
 	@Get("{listId}")
 	async get(@Request() request: ERequest, @Path() listId: UUID): Promise<ListDTO> {
-		// TODO: MEEEEEEEEEEERGE THIS CODE IN MIDDL ?
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
 		if (
-			!(await ListService.listOwners(listId)).includes(auth0UserId) &&
-			!(await ListService.listGrantedUsers(listId)).includes(auth0UserId)
+			!(await ListService.listOwners(listId)).includes(request.userId) &&
+			!(await ListService.listGrantedUsers(listId)).includes(request.userId)
 		) {
 			throw new OwnershipError();
 		}
@@ -157,10 +147,8 @@ export class ListController extends Controller {
 		@Request() request: ERequest,
 		@Path() sharingCode: UUID
 	): Promise<void> {
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
 		const list: List = await ListService.getFromSharingCode(sharingCode);
-		const user: User = await UserService.getById(auth0UserId);
+		const user: User = await UserService.getById(request.userId);
 		if (!list.owners.find((u) => u.id == user.id)) {
 			await ListService.addGrantedUser(list.id, user);
 		}

@@ -12,7 +12,6 @@ import { email } from "../types/email";
 import { SelectKindList } from "../types/SelectKindList";
 import { ListController } from "./ListController";
 
-@Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("users")
 @Tags("User")
 export class UserManagementController extends Controller {
@@ -44,6 +43,7 @@ export class UserManagementController extends Controller {
 	 * @param {UUID} userId the GUID of user
 	 * @param {UserDTO} body data to edit a user
 	 */
+	@Security("auth0")
 	@SuccessResponse(204)
 	@Put("admin/{userId}")
 	@Hidden() // TODO: Remove Hidden and add administration capabilities
@@ -55,6 +55,7 @@ export class UserManagementController extends Controller {
 	 * Delete logged user.
 	 * @param {UUID} userId the GUID of user
 	 */
+	@Security("auth0")
 	@SuccessResponse(204)
 	@Delete("admin/{userId}")
 	@Hidden() // TODO: Remove Hidden and add administration capabilities
@@ -70,6 +71,7 @@ export class UserManagementController extends Controller {
 	 * Gets all user's data.
 	 * @returns {Promise<UserDTO[]>} all users
 	 */
+	@Security("auth0")
 	@SuccessResponse(200)
 	@Get()
 	async getAll(): Promise<UserDTO[]> {
@@ -85,6 +87,7 @@ export class UserManagementController extends Controller {
 	 * @param {email} userMail the email of user
 	 * @returns {Promise<UserDTO>} the required user
 	 */
+	@Security("auth0")
 	@SuccessResponse(200)
 	@Get("{userMail}")
 	async get(@Path() userMail: email): Promise<UserDTO> {

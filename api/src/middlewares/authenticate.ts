@@ -38,6 +38,8 @@ export function expressAuthentication(
 					) {
 						reject(new UnauthorizedError("invalid_token", { message: "Invalid Token" }));
 					}
+					// If authenticated, pass the userID into request
+					request.userId = decoded.sub;
 					resolve(decoded);
 				}
 			});

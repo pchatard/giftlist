@@ -1,5 +1,4 @@
 import { Request as ERequest } from "express";
-import jwt from "jsonwebtoken";
 import {
 	Body, Controller, Delete, Get, Put, Request, Route, Security, SuccessResponse, Tags
 } from "tsoa";
@@ -21,10 +20,7 @@ export class UserLoggedController extends Controller {
 	@SuccessResponse(200)
 	@Get()
 	async get(@Request() request: ERequest): Promise<UserDTO> {
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
-
-		const user: User = await UserService.getById(auth0UserId);
+		const user: User = await UserService.getById(request.userId);
 		const { id, createdDate, ...rest } = user;
 		return rest;
 	}
@@ -36,9 +32,7 @@ export class UserLoggedController extends Controller {
 	@SuccessResponse(204)
 	@Put()
 	async edit(@Request() request: ERequest, @Body() body: Partial<UserDTO>): Promise<void> {
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
-		await UserService.edit(auth0UserId, body);
+		await UserService.edit(request.userId, body);
 	}
 
 	/**
@@ -47,12 +41,10 @@ export class UserLoggedController extends Controller {
 	@SuccessResponse(204)
 	@Delete()
 	async delete(@Request() request: ERequest): Promise<void> {
-		const token: string = (request.headers["authorization"] || "").split("Bearer ")[1];
-		const auth0UserId: string = jwt.decode(token, { json: true })?.sub || "";
 		const listController: ListController = new ListController();
-		for (const list of await UserService.getUserLists(auth0UserId, SelectKindList.ALL)) {
+		for (const list of await UserService.getUserLists(request.userId, SelectKindList.ALL)) {
 			await listController.delete(request, list.id);
 		}
-		await UserService.delete(auth0UserId);
+		await UserService.delete(request.userId);
 	}
 }
