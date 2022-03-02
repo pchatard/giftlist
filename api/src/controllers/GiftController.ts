@@ -202,7 +202,14 @@ export class GiftController extends Controller {
 		@Path() listId: UUID,
 		@Path() giftId: UUID
 	): Promise<void> {
-		await this.edit(request, listId, giftId, { isBooked: true });
+		if (
+			(!(await ListService.listOwners(listId)).includes(request.userId) &&
+				!(await ListService.listGrantedUsers(listId)).includes(request.userId)) ||
+			!(await GiftService.checkGiftOfList(listId, giftId))
+		) {
+			throw new OwnershipError();
+		}
+		await GiftService.edit(giftId, { isBooked: true });
 	}
 
 	/**
@@ -217,7 +224,14 @@ export class GiftController extends Controller {
 		@Path() listId: UUID,
 		@Path() giftId: UUID
 	): Promise<void> {
-		await this.edit(request, listId, giftId, { isBooked: false });
+		if (
+			(!(await ListService.listOwners(listId)).includes(request.userId) &&
+				!(await ListService.listGrantedUsers(listId)).includes(request.userId)) ||
+			!(await GiftService.checkGiftOfList(listId, giftId))
+		) {
+			throw new OwnershipError();
+		}
+		await GiftService.edit(giftId, { isBooked: false });
 	}
 }
 
