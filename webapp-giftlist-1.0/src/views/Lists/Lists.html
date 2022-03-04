@@ -1,0 +1,15 @@
+<DefaultLayout :title="labels.titles.lists">
+    <Table :headers="tableHeaders" @sort="handleSort">
+        <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
+            @click="router.push(`/app/lists/${list.id}`)">
+            <ListItem :list="list" @delete="openDeleteModal" />
+        </tr>
+    </Table>
+
+    <Modal :show="deleteModalIsOpen" @confirm="deleteList" @close="closeDeleteModal" type="danger"
+        :title="labels.modals.deleteList.title + listToDelete?.title" :confirmText="labels.modals.deleteList.confirm"
+        :cancelText="labels.modals.deleteList.cancel">
+        <p class="text-sm text-gray-500">{{ labels.modals.deleteList.text }}</p>
+        <p class="text-sm text-gray-500">{{ labels.modals.deleteList.text2 }}</p>
+    </Modal>
+</DefaultLayout>

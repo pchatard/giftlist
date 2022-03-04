@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
-import List from "../views/List.vue";
-import Profile from "../views/Profile.vue";
-import Friends from "../views/Friends.vue";
-import Settings from "../views/Settings.vue";
-import SharedList from "../views/SharedList.vue";
-import Lists from "../views/Lists.vue";
-import ListSettings from "../views/ListSettings.vue";
-import SharedLists from "../views/SharedLists.vue";
-import NewList from "../views/NewList.vue";
-import NewGift from "../views/NewGift.vue";
-import Gift from "../views/Gift.vue";
-import BookedGifts from "../views/BookedGifts.vue";
+import Home from "../views/Home/Home.vue";
+import List from "../views/List/List.vue";
+import Profile from "../views/Profile/Profile.vue";
+import Friends from "../views/Friends/Friends.vue";
+import Settings from "../views/Settings/Settings.vue";
+import SharedList from "../views/SharedList/SharedList.vue";
+import Lists from "../views/Lists/Lists.vue";
+import ListSettings from "../views/ListSettings/ListSettings.vue";
+import SharedLists from "../views/SharedLists/SharedLists.vue";
+import NewList from "../views/NewList/NewList.vue";
+import NewGift from "../views/NewGift/NewGift.vue";
+import Gift from "../views/Gift/Gift.vue";
+import BookedGifts from "../views/BookedGifts/BookedGifts.vue";
 
 import labels from "@/labels/fr/labels.json";
 

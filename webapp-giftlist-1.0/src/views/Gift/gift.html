@@ -1,0 +1,12 @@
+<DefaultLayout :title="giftName" back :backButtonTitle="listName" :backButtonLink="'/app/lists/' + listId">
+    <template v-slot:commands>
+        <Button btnStyle="danger" hasIcon @click="deleteGift">
+            <template v-slot:icon>
+                <TrashIcon />
+            </template>
+            {{ labels.gift.buttons.delete }}
+        </Button>
+    </template>
+    <GiftForm action="update" :values="giftInformation" @change="handleGiftInformationChange" @cancel="cancel"
+        @confirm="saveGiftChanges" />
+</DefaultLayout>
