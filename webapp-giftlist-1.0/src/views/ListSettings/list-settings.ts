@@ -1,14 +1,14 @@
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-import ListFormStep1 from '@/components/List/ListFormStep1.vue';
-import ListFormStep2 from '@/components/List/ListFormStep2.vue';
-import Button from '@/components/Styled/Button.vue';
-import DefaultLayout from '@/components/Styled/DefaultLayout.vue';
-import labels from '@/labels/fr/labels.json';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import { ChevronUpIcon } from '@heroicons/vue/solid';
+import ListFormStep1 from "@/components/List/ListFormStep1.vue";
+import ListFormStep2 from "@/components/List/ListFormStep2.vue";
+import Button from "@/components/Styled/Button.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import labels from "@/labels/fr/labels.json";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { ChevronUpIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
 	name: "ListSettings",

@@ -1,12 +1,12 @@
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-import GiftForm from '@/components/Gift/GiftForm.vue';
-import DefaultLayout from '@/components/Styled/DefaultLayout.vue';
-import labels from '@/labels/fr/labels.json';
-import { Gift } from '@/types/api/Gift';
-import { GiftCategory } from '@/types/api/GiftCategory';
+import GiftForm from "@/components/Gift/GiftForm.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import labels from "@/labels/fr/labels.json";
+import { Gift } from "@/types/api/Gift";
+import { GiftCategory } from "@/types/api/GiftCategory";
 
 export default defineComponent({
 	name: "NewGift",

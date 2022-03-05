@@ -1,0 +1,18 @@
+<div class="max-w-7xl mx-auto">
+    <div class="flex items-center justify-between">
+        <div class="flex flex-col gap-2">
+            <div v-if="back" class="flex gap-2 text-gray-600 cursor-pointer hover:text-black"
+                @click="handleBackButtonClick">
+                <ArrowLeftIcon class="w-4" />
+                <span>{{ backText }}</span>
+            </div>
+            <Title class="mb-4">{{ title }}</Title>
+        </div>
+        <div class="flex items-center">
+            <slot name="commands" />
+        </div>
+    </div>
+    <div class="rounded-lg min-h-layout h-full relative">
+        <slot />
+    </div>
+</div>

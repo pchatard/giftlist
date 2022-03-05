@@ -1,11 +1,11 @@
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref } from "vue";
 
-import FormInputText from '@/components/Inputs/FormInputText.vue';
-import Button from '@/components/Styled/Button.vue';
-import DefaultLayout from '@/components/Styled/DefaultLayout.vue';
-import Subtitle from '@/components/Styled/Subtitle.vue';
-import labels from '@/labels/fr/labels.json';
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/vue/outline';
+import FormInputText from "@/components/Inputs/FormInputText.vue";
+import Button from "@/components/Styled/Button.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import Subtitle from "@/components/Styled/Subtitle.vue";
+import labels from "@/labels/fr/labels.json";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "Friends",

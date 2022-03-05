@@ -1,15 +1,15 @@
-import { computed, ComputedRef, defineComponent, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { computed, ComputedRef, defineComponent, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-import FormInputText from '@/components/Inputs/FormInputText.vue';
-import DefaultLayout from '@/components/Styled/DefaultLayout.vue';
-import ListItem from '@/components/Styled/ListItem.vue';
-import Modal from '@/components/Styled/Modal.vue';
-import Table from '@/components/Styled/Table.vue';
-import labels from '@/labels/fr/labels.json';
-import router from '@/router';
-import { List } from '@/types/api/List';
+import FormInputText from "@/components/Inputs/FormInputText.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import ListItem from "@/components/Styled/ListItem.vue";
+import Modal from "@/components/Styled/Modal.vue";
+import Table from "@/components/Styled/Table.vue";
+import labels from "@/labels/fr/labels.json";
+import router from "@/router";
+import { List } from "@/types/api/List";
 
 export default defineComponent({
 	name: "SharedLists",

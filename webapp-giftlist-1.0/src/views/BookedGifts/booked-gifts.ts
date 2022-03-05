@@ -1,11 +1,11 @@
-import { defineComponent, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
 
-import BookedGift from '@/components/Gift/BookedGift.vue';
-import GiftDetails from '@/components/Gift/GiftDetails.vue';
-import DefaultLayout from '@/components/Styled/DefaultLayout.vue';
-import Modal from '@/components/Styled/Modal.vue';
-import labels from '@/labels/fr/labels.json';
+import BookedGift from "@/components/Gift/BookedGift.vue";
+import GiftDetails from "@/components/Gift/GiftDetails.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import Modal from "@/components/Styled/Modal.vue";
+import labels from "@/labels/fr/labels.json";
 
 export default defineComponent({
 	name: "BookedGifts",

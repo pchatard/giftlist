@@ -1,0 +1,15 @@
+<div class="rounded flex items-center justify-between">
+    <ChevronLeftIcon :class="computedLeftArrowStyle" @click.stop="previousMonth" />
+    <span class="flex mx-4 gap-4 w-full">
+        <span class="w-1/4" :class="computedDayStyle" @click="$emit('day')">{{
+            currentDay.value
+            }}</span>
+        <span class="w-1/2" :class="computedMonthStyle" @click="$emit('month')">{{
+            currentMonth.value
+            }}</span>
+        <span class="w-1/4" :class="computedYearStyle" @click="$emit('year')">{{
+            currentYear.value
+            }}</span>
+    </span>
+    <ChevronRightIcon :class="computedRightArrowStyle" @click.stop="nextMonth" />
+</div>

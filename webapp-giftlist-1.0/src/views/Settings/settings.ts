@@ -1,15 +1,18 @@
-import { defineComponent, inject, onMounted, ref, watch } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, inject, onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
 
-import Button from '@/components/Styled/Button.vue';
-import DefaultLayout from '@/components/Styled/DefaultLayout.vue';
-import Subtitle from '@/components/Styled/Subtitle.vue';
-import labels from '@/labels/fr/labels.json';
-import { PreferencesState } from '@/store/preferences';
+import Button from "@/components/Styled/Button.vue";
+import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import Subtitle from "@/components/Styled/Subtitle.vue";
+import labels from "@/labels/fr/labels.json";
+import { PreferencesState } from "@/store/preferences";
 import {
-    RadioGroup, RadioGroupDescription, RadioGroupLabel, RadioGroupOption
-} from '@headlessui/vue';
-import { CheckCircleIcon } from '@heroicons/vue/outline';
+	RadioGroup,
+	RadioGroupDescription,
+	RadioGroupLabel,
+	RadioGroupOption,
+} from "@headlessui/vue";
+import { CheckCircleIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "Settings",
