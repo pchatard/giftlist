@@ -1,6 +1,8 @@
-import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { Module } from "vuex";
-import { RootState } from ".";
+
+import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
+
+import { RootState } from "./";
 
 export const snackbar: Module<SnackbarState, RootState> = {
 	state: () => ({

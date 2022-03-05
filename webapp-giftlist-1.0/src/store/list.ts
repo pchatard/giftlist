@@ -1,7 +1,9 @@
+import { Module } from "vuex";
+
 import { Gift } from "@/types/api/Gift";
 import { List } from "@/types/api/List";
-import { Module } from "vuex";
-import { RootState } from ".";
+
+import { RootState } from "./";
 
 const lists: List[] = [];
 const gifts: Gift[] = [];
@@ -63,7 +65,7 @@ export const list: Module<ListState, RootState> = {
 		},
 	},
 	actions: {
-		async getSharedList({ commit, state }, sharingCode) {
+		async getSharedList(_context, sharingCode) {
 			return new Promise<void>((resolve, reject) => {
 				try {
 					if (!sharingCode) {

@@ -1,5 +1,8 @@
 // Source : https://github.com/alexeyzimarev/auth0-vue3-ts
 
+import { App, computed, Plugin, reactive, watchEffect } from "vue";
+import { NavigationGuardWithThis } from "vue-router";
+
 import createAuth0Client, {
 	Auth0Client,
 	GetIdTokenClaimsOptions,
@@ -9,8 +12,6 @@ import createAuth0Client, {
 	RedirectLoginOptions,
 	User,
 } from "@auth0/auth0-spa-js";
-import { App, Plugin, computed, reactive, watchEffect } from "vue";
-import { NavigationGuardWithThis } from "vue-router";
 
 let client: Auth0Client;
 

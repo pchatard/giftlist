@@ -1,0 +1,35 @@
+<div class="grid grid-cols-3 gap-4 divide-y">
+    <div class="col-span-full grid grid-cols-3">
+        <InputSelect class="col-span-1 py-4" :label="values.owners.label" :value="ownersSelectValue"
+            :options="ownersSelectOptions" writable :helperText="values.owners.helperText"
+            @change="handleSelectOwner" />
+        <div class="col-span-full flex items-center">
+            <span>{{ labels.newList.step2.inputs.owners.title }}</span>
+            <div class="flex flex-wrap gap-y-2 py-2 ml-4">
+                <PersonTag text="Moi" class="px-4" hideDelete />
+                <PersonTag class="ml-2" v-for="owner in values.owners.value" :key="owner.id" :text="owner.name"
+                    @delete="handleOwnersDelete(owner.id)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-full grid grid-cols-3">
+        <InputToggle class="col-span-full pt-4" :label="values.shared.label" :value="values.shared.value"
+            @change="handleSharedChange" inline :helperText="values.shared.helperText" />
+
+        <InputSelect v-show="values.shared.value" class="col-span-1 py-4" :label="values.authorizedUsers.label"
+            :helperText="values.authorizedUsers.helperText" writable :disabled="!values.shared.value"
+            :value="authorizedUsersSelectValue" :options="authorizedUsersSelectOptions"
+            @change="handleSelectAuthorized" />
+        <div class="col-span-full flex items-center" v-show="values.shared.value">
+            <span>{{ labels.newList.step2.inputs.authorizedUsers.title }}</span>
+            <div class="flex py-2 ml-4" v-if="values.authorizedUsers.value.length">
+                <PersonTag class="ml-2" v-for="person in values.authorizedUsers.value" :key="person.id"
+                    :text="person.name" @delete="handleAuthorizedDelete(person.id)" />
+            </div>
+            <div v-else class="text-gray-600 ml-2">
+                {{ labels.newList.step2.inputs.authorizedUsers.empty }}
+            </div>
+        </div>
+    </div>
+</div>

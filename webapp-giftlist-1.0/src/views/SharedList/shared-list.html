@@ -1,0 +1,21 @@
+<DefaultLayout :title="listName" back :backButtonTitle="backButtonTitle"
+    :backButtonLink="router.options.history.state.back">
+    <template v-slot:commands>
+        <GridListToggle :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
+    </template>
+
+    <div v-if="!isListView" class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-row gap-x-4 gap-y-8">
+        <GiftGridView v-for="gift in gifts" :key="gift.id" :gift="gift" :shared="true" />
+    </div>
+    <Table v-else :headers="tableHeaders" @sort="handleSort">
+        <tr v-for="gift in gifts" :key="gift.id" class="cursor-pointer hover:bg-gray-50"
+            @click="handleDetailsModal(gift)">
+            <GiftListView :gift="gift" :shared="true" @book="handleBookModal" />
+        </tr>
+    </Table>
+
+    <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText" :cancelText="modal.cancelText"
+        @close="modal.showModal = false" @confirm="modal.confirm">
+        <GiftDetails v-if="selectedGift" :gift="selectedGift" />
+    </Modal>
+</DefaultLayout>
