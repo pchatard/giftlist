@@ -37,12 +37,12 @@ export const gift: Module<GiftState, RootState> = {
 		},
 	},
 	actions: {
-		async initializeGifts({ commit, state, rootState }, listCode) {
+		async initializeGifts({ commit, state, rootState }, _listCode) {
 			const gifts: Gift[] = rootState.list.mine[0].gifts || [];
 			commit("POPULATE_GIFTS", gifts);
 			return state.gifts;
 		},
-		async createGift({ commit, state }, gift: Gift) {
+		async createGift({ commit }, gift: Gift) {
 			return new Promise<void>((resolve, reject) => {
 				try {
 					// Create on backend

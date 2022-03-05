@@ -83,7 +83,7 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			window.addEventListener("click", (event) => {
+			window.addEventListener("click", () => {
 				openWithInput.value = false;
 			});
 		});

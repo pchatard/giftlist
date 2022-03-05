@@ -124,7 +124,7 @@ export default defineComponent({
 						router.go(-1);
 						// Update data if necessary
 					})
-					.catch((err) => {
+					.catch(() => {
 						// TODO
 					});
 			}

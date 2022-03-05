@@ -8,7 +8,6 @@ import ListItem from "@/components/ListItem/ListItem.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
-import router from "@/router";
 import { List } from "@/types/api/List";
 
 export default defineComponent({

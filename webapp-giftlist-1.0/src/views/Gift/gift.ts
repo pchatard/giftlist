@@ -1,5 +1,5 @@
 import { defineComponent, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 import Button from "@/components/Button/Button.vue";

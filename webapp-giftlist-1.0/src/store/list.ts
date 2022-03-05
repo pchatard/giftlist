@@ -65,7 +65,7 @@ export const list: Module<ListState, RootState> = {
 		},
 	},
 	actions: {
-		async getSharedList({ commit, state }, sharingCode) {
+		async getSharedList(_context, sharingCode) {
 			return new Promise<void>((resolve, reject) => {
 				try {
 					if (!sharingCode) {
