@@ -1,4 +1,4 @@
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
 	name: "DatePickerDay",
@@ -31,7 +31,7 @@ export default defineComponent({
 			while (tempDay.getMonth() === currentDate.getMonth()) {
 				tempDay.setDate(tempDay.getDate() + 1);
 				tempDay.setHours(12);
-				let day = new Date(tempDay);
+				const day = new Date(tempDay);
 				days.push(day);
 			}
 			days.unshift(date.value);
@@ -40,7 +40,7 @@ export default defineComponent({
 			while (tempDay.getMonth() === currentDate.getMonth()) {
 				tempDay.setDate(tempDay.getDate() - 1);
 				tempDay.setHours(12);
-				let day = new Date(tempDay);
+				const day = new Date(tempDay);
 				days.unshift(day);
 			}
 			days.splice(days.length - 1, 1);
@@ -54,7 +54,7 @@ export default defineComponent({
 			const days = [];
 			firstMonthDay.setDate(firstMonthDay.getDate() - 1);
 			while (firstMonthDay.getDay() !== 0) {
-				let day = new Date(firstMonthDay);
+				const day = new Date(firstMonthDay);
 				days.unshift(day);
 				firstMonthDay.setDate(firstMonthDay.getDate() - 1);
 				firstMonthDay.setHours(12);
@@ -68,7 +68,7 @@ export default defineComponent({
 			const days = [];
 			lastMonthDay.setDate(lastMonthDay.getDate() + 1);
 			while (lastMonthDay.getDay() !== 1) {
-				let day = new Date(lastMonthDay);
+				const day = new Date(lastMonthDay);
 				days.push(day);
 				lastMonthDay.setDate(lastMonthDay.getDate() + 1);
 				lastMonthDay.setHours(12);

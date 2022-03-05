@@ -1,21 +1,21 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home/Home.vue";
-import List from "../views/List/List.vue";
-import Profile from "../views/Profile/Profile.vue";
-import Friends from "../views/Friends/Friends.vue";
-import Settings from "../views/Settings/Settings.vue";
-import SharedList from "../views/SharedList/SharedList.vue";
-import Lists from "../views/Lists/Lists.vue";
-import ListSettings from "../views/ListSettings/ListSettings.vue";
-import SharedLists from "../views/SharedLists/SharedLists.vue";
-import NewList from "../views/NewList/NewList.vue";
-import NewGift from "../views/NewGift/NewGift.vue";
-import Gift from "../views/Gift/Gift.vue";
-import BookedGifts from "../views/BookedGifts/BookedGifts.vue";
-
-import labels from "@/labels/fr/labels.json";
 
 import Auth0 from "@/auth";
+import labels from "@/labels/fr/labels.json";
+
+import BookedGifts from "../views/BookedGifts/BookedGifts.vue";
+import Friends from "../views/Friends/Friends.vue";
+import Gift from "../views/Gift/Gift.vue";
+import Home from "../views/Home/Home.vue";
+import List from "../views/List/List.vue";
+import Lists from "../views/Lists/Lists.vue";
+import ListSettings from "../views/ListSettings/ListSettings.vue";
+import NewGift from "../views/NewGift/NewGift.vue";
+import NewList from "../views/NewList/NewList.vue";
+import Profile from "../views/Profile/Profile.vue";
+import Settings from "../views/Settings/Settings.vue";
+import SharedList from "../views/SharedList/SharedList.vue";
+import SharedLists from "../views/SharedLists/SharedLists.vue";
 
 const sharedListsNavbarCta = (): void => {
 	console.debug("SharedLists - sharedListsNavbarCta - Opening new sharing code modal");

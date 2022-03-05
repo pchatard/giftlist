@@ -1,9 +1,9 @@
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType } from "vue";
 
-import Button from '@/components/Button/Button.vue';
-import { Gift } from '@/types/api/Gift';
-import { ExternalLinkIcon, PencilIcon, ShoppingCartIcon, TrashIcon } from '@heroicons/vue/outline';
-import { HeartIcon } from '@heroicons/vue/solid';
+import Button from "@/components/Button/Button.vue";
+import { Gift } from "@/types/api/Gift";
+import { ExternalLinkIcon, PencilIcon, ShoppingCartIcon, TrashIcon } from "@heroicons/vue/outline";
+import { HeartIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
 	name: "GiftGridView",

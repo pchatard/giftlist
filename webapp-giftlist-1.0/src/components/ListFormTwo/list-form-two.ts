@@ -1,9 +1,9 @@
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from "vue";
 
-import InputSelect from '@/components/InputSelect/InputSelect.vue';
-import InputToggle from '@/components/InputToggle/InputToggle.vue';
-import PersonTag from '@/components/PersonTag/PersonTag.vue';
-import labels from '@/labels/fr/labels.json';
+import InputSelect from "@/components/InputSelect/InputSelect.vue";
+import InputToggle from "@/components/InputToggle/InputToggle.vue";
+import PersonTag from "@/components/PersonTag/PersonTag.vue";
+import labels from "@/labels/fr/labels.json";
 
 export default defineComponent({
 	name: "ListFormTwo",

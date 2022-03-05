@@ -1,5 +1,6 @@
 import { Module } from "vuex";
-import { RootState } from ".";
+
+import { RootState } from "./";
 
 export const auth: Module<AuthState, RootState> = {
 	state: initAuthState,

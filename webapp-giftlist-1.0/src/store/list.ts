@@ -1,7 +1,9 @@
+import { Module } from "vuex";
+
 import { Gift } from "@/types/api/Gift";
 import { List } from "@/types/api/List";
-import { Module } from "vuex";
-import { RootState } from ".";
+
+import { RootState } from "./";
 
 const lists: List[] = [];
 const gifts: Gift[] = [];

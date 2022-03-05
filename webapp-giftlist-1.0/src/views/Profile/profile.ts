@@ -1,8 +1,8 @@
 import { defineComponent, inject, ref } from "vue";
 
-import Button from "@/components/Styled/Button.vue";
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
-import Subtitle from "@/components/Styled/Subtitle.vue";
+import Button from "@/components/Button/Button.vue";
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
 
 export default defineComponent({

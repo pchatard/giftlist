@@ -1,8 +1,8 @@
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch } from "vue";
 
-import InputWrapper from '@/components/InputWrapper/InputWrapper.vue';
-import { TransitionRoot } from '@headlessui/vue';
-import { ClipboardCheckIcon, ClipboardCopyIcon } from '@heroicons/vue/outline';
+import InputWrapper from "@/components/InputWrapper/InputWrapper.vue";
+import { TransitionRoot } from "@headlessui/vue";
+import { ClipboardCheckIcon, ClipboardCopyIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "InputNumber",

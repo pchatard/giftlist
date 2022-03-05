@@ -1,6 +1,6 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-import { XIcon } from '@heroicons/vue/outline';
+import { XIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "PersonTag",

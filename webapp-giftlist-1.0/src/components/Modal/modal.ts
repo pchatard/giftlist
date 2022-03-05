@@ -1,10 +1,14 @@
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType } from "vue";
 
-import labels from '@/labels/fr/labels.json';
-import { ModalTypeEnum } from '@/types/ModalTypeEnum';
+import labels from "@/labels/fr/labels.json";
+import { ModalTypeEnum } from "@/types/ModalTypeEnum";
 import {
-    Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot
-} from '@headlessui/vue';
+	Dialog,
+	DialogOverlay,
+	DialogTitle,
+	TransitionChild,
+	TransitionRoot,
+} from "@headlessui/vue";
 
 export default defineComponent({
 	name: "Modal",

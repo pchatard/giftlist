@@ -1,6 +1,8 @@
-import { Gift } from "@/types/api/Gift";
 import { Module } from "vuex";
-import { RootState } from ".";
+
+import { Gift } from "@/types/api/Gift";
+
+import { RootState } from "./";
 
 export const gift: Module<GiftState, RootState> = {
 	state: () => ({

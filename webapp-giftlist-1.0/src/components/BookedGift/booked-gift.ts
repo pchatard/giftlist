@@ -1,8 +1,11 @@
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent } from "vue";
 
 import {
-    CurrencyEuroIcon, ExternalLinkIcon, ShoppingCartIcon, UserCircleIcon
-} from '@heroicons/vue/outline';
+	CurrencyEuroIcon,
+	ExternalLinkIcon,
+	ShoppingCartIcon,
+	UserCircleIcon,
+} from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "BookedGift",

@@ -1,6 +1,6 @@
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent } from "vue";
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/outline';
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "DatePickerHeader",

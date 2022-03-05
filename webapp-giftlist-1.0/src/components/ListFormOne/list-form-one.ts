@@ -1,8 +1,8 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-import InputDate from '@/components/InputDate/InputDate.vue';
-import InputText from '@/components/InputText/InputText.vue';
-import InputToggle from '@/components/InputToggle/InputToggle.vue';
+import InputDate from "@/components/InputDate/InputDate.vue";
+import InputText from "@/components/InputText/InputText.vue";
+import InputToggle from "@/components/InputToggle/InputToggle.vue";
 
 export default defineComponent({
 	name: "ListFormOne",

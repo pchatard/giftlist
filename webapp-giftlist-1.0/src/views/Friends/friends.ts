@@ -1,15 +1,15 @@
 import { defineComponent, ref } from "vue";
 
-import FormInputText from "@/components/Inputs/FormInputText.vue";
-import Button from "@/components/Styled/Button.vue";
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
-import Subtitle from "@/components/Styled/Subtitle.vue";
+import Button from "@/components/Button/Button.vue";
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import InputText from "@/components/InputText/InputText.vue";
+import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "Friends",
-	components: { Button, DefaultLayout, FormInputText, Subtitle, CheckCircleIcon, XCircleIcon },
+	components: { Button, DefaultLayout, InputText, Subtitle, CheckCircleIcon, XCircleIcon },
 	setup() {
 		const acceptFriendRequest = () => {
 			console.log("Friends.vue - acceptFriendRequest");

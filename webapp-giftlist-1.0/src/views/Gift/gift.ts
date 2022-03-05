@@ -2,9 +2,9 @@ import { defineComponent, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import GiftForm from "@/components/Gift/GiftForm.vue";
-import Button from "@/components/Styled/Button.vue";
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import Button from "@/components/Button/Button.vue";
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import GiftForm from "@/components/GiftForm/GiftForm.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
 import { GiftCategory } from "@/types/api/GiftCategory";

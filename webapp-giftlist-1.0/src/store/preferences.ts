@@ -1,5 +1,6 @@
 import { Module } from "vuex";
-import { RootState } from ".";
+
+import { RootState } from "./";
 
 // Get management API token for production
 // https://auth0.com/docs/security/tokens/access-tokens/get-management-api-access-tokens-for-production

@@ -22,7 +22,7 @@
             <transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform opacity-0"
                 enter-to-class="transform opacity-100">
                 <DisclosurePanel v-show="openGeneral" static class="px-4 pt-4 pb-2 text-sm text-black">
-                    <ListFormStep1 :values="generalInformation" @change="handleGeneralInformationChange" />
+                    <ListFormOne :values="generalInformation" @change="handleGeneralInformationChange" />
                 </DisclosurePanel>
             </transition>
         </Disclosure>
@@ -48,7 +48,7 @@
             <transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform opacity-0"
                 enter-to-class="transform opacity-100">
                 <DisclosurePanel v-show="openShare" static class="px-4 pt-4 pb-2 text-sm text-black">
-                    <ListFormStep2 :values="sharingOptions" @change="handleSharingOptionsChange" />
+                    <ListFormTwo :values="sharingOptions" @change="handleSharingOptionsChange" />
                 </DisclosurePanel>
             </transition>
         </Disclosure>

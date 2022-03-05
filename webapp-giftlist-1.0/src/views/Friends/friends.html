@@ -40,7 +40,7 @@
                 <Subtitle class="pb-2">{{ labels.friends.addFriendsTitle }}</Subtitle>
                 <p>{{ labels.friends.addFriendsText }}</p>
                 <div class="flex items-center my-2">
-                    <FormInputText class="w-2/5" type="email" :label="emailInput.label" :value="emailInput.value"
+                    <InputText class="w-2/5" type="email" :label="emailInput.label" :value="emailInput.value"
                         :helperText="emailInput.helperText" :placeholder="emailInput.placeholder"
                         :errorMessage="emailInput.errorMessage" :isError="emailInput.errorMessage !== ''"
                         @change="handleEmailInputChange" reset />
@@ -55,7 +55,7 @@
             <div class="h-2/5 flex flex-col justify-center py-4">
                 <Subtitle class="pb-2">{{ labels.friends.inviteTitle }}</Subtitle>
                 <div class="flex items-center mt-2">
-                    <FormInputText class="w-2/5" type="email" :label="emailInvitationInput.label"
+                    <InputText class="w-2/5" type="email" :label="emailInvitationInput.label"
                         :value="emailInvitationInput.value" :helperText="emailInvitationInput.helperText"
                         :placeholder="emailInvitationInput.placeholder"
                         :errorMessage="emailInvitationInput.errorMessage"

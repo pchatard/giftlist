@@ -1,6 +1,6 @@
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType } from "vue";
 
-import { ButtonStyleEnum } from '@/types/ButtonStyleEnum';
+import { ButtonStyleEnum } from "@/types/ButtonStyleEnum";
 
 export default defineComponent({
 	name: "Button",

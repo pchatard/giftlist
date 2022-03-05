@@ -1,13 +1,13 @@
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from "vue";
 
-import DatePickerDay from '@/components/DatePickerDay/DatePickerDay.vue';
-import DatePickerHeader from '@/components/DatePickerHeader/DatePickerHeader.vue';
-import DatePickerMonth from '@/components/DatePickerMonth/DatePickerMonth.vue';
-import DatePickerYear from '@/components/DatePickerYear/DatePickerYear.vue';
-import InputWrapper from '@/components/InputWrapper/InputWrapper.vue';
-import Modal from '@/components/Modal/Modal.vue';
-import labels from '@/labels/fr/labels.json';
-import { CalendarIcon } from '@heroicons/vue/outline';
+import DatePickerDay from "@/components/DatePickerDay/DatePickerDay.vue";
+import DatePickerHeader from "@/components/DatePickerHeader/DatePickerHeader.vue";
+import DatePickerMonth from "@/components/DatePickerMonth/DatePickerMonth.vue";
+import DatePickerYear from "@/components/DatePickerYear/DatePickerYear.vue";
+import InputWrapper from "@/components/InputWrapper/InputWrapper.vue";
+import Modal from "@/components/Modal/Modal.vue";
+import labels from "@/labels/fr/labels.json";
+import { CalendarIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "InputDate",

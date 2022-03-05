@@ -1,13 +1,17 @@
-import { defineComponent, PropType, toRefs } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, PropType, toRefs } from "vue";
+import { useStore } from "vuex";
 
-import TableData from '@/components/TableData/TableData.vue';
-import labels from '@/labels/fr/labels.json';
-import { Gift } from '@/types/api/Gift';
+import TableData from "@/components/TableData/TableData.vue";
+import labels from "@/labels/fr/labels.json";
+import { Gift } from "@/types/api/Gift";
 import {
-    ExternalLinkIcon, HeartIcon as HeartIconOutline, ShoppingCartIcon, TicketIcon, TrashIcon
-} from '@heroicons/vue/outline';
-import { HeartIcon } from '@heroicons/vue/solid';
+	ExternalLinkIcon,
+	HeartIcon as HeartIconOutline,
+	ShoppingCartIcon,
+	TicketIcon,
+	TrashIcon,
+} from "@heroicons/vue/outline";
+import { HeartIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
 	name: "GiftListView",

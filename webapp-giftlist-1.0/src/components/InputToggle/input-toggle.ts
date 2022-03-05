@@ -1,6 +1,6 @@
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch } from "vue";
 
-import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
+import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 
 export default defineComponent({
 	name: "InputToggle",

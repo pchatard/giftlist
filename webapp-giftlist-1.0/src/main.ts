@@ -1,11 +1,13 @@
-import { createApp } from "vue";
-import App from "./App.vue";
 import "./registerServiceWorker";
+import "./assets/index.css";
+
+import axios from "axios";
+import { createApp } from "vue";
+
+import App from "./App.vue";
+import Auth0 from "./auth";
 import router from "./router";
 import store from "./store";
-import "./assets/index.css";
-import axios from "axios";
-import Auth0 from "./auth";
 
 export const axiosInstance = axios.create({
 	baseURL: process.env.VUE_APP_API_URL,

@@ -1,11 +1,11 @@
-import { computed, defineComponent, inject, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, defineComponent, inject, ref } from "vue";
+import { useRouter } from "vue-router";
 
-import Button from '@/components/Button/Button.vue';
-import NavbarDropdownMenu from '@/components/NavbarDropdownMenu/NavbarDropdownMenu.vue';
-import NavbarItem from '@/components/NavbarItem/NavbarItem.vue';
-import labels from '@/labels/fr/labels.json';
-import { CollectionIcon, GiftIcon, PlusCircleIcon, UserGroupIcon } from '@heroicons/vue/outline';
+import Button from "@/components/Button/Button.vue";
+import NavbarDropdownMenu from "@/components/NavbarDropdownMenu/NavbarDropdownMenu.vue";
+import NavbarItem from "@/components/NavbarItem/NavbarItem.vue";
+import labels from "@/labels/fr/labels.json";
+import { CollectionIcon, GiftIcon, PlusCircleIcon, UserGroupIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "NavbarLoggedIn",

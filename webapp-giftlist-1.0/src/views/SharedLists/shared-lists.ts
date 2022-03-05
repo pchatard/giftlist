@@ -2,11 +2,11 @@ import { computed, ComputedRef, defineComponent, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import FormInputText from "@/components/Inputs/FormInputText.vue";
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
-import ListItem from "@/components/Styled/ListItem.vue";
-import Modal from "@/components/Styled/Modal.vue";
-import Table from "@/components/Styled/Table.vue";
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import InputText from "@/components/InputText/InputText.vue";
+import ListItem from "@/components/ListItem/ListItem.vue";
+import Modal from "@/components/Modal/Modal.vue";
+import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import router from "@/router";
 import { List } from "@/types/api/List";
@@ -18,7 +18,7 @@ export default defineComponent({
 		Modal,
 		ListItem,
 		Table,
-		FormInputText,
+		InputText,
 	},
 	setup() {
 		const router = useRouter();

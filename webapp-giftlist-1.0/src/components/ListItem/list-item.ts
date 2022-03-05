@@ -1,10 +1,10 @@
-import { defineComponent, PropType } from 'vue';
-import { useRouter } from 'vue-router';
+import { defineComponent, PropType } from "vue";
+import { useRouter } from "vue-router";
 
-import TableData from '@/components/TableData/TableData.vue';
-import labels from '@/labels/fr/labels.json';
-import { List } from '@/types/api/List';
-import { CogIcon, InformationCircleIcon, TrashIcon, ViewListIcon } from '@heroicons/vue/outline';
+import TableData from "@/components/TableData/TableData.vue";
+import labels from "@/labels/fr/labels.json";
+import { List } from "@/types/api/List";
+import { CogIcon, InformationCircleIcon, TrashIcon, ViewListIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "ListItem",

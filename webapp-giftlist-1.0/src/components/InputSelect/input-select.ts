@@ -1,9 +1,13 @@
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 import {
-    Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions
-} from '@headlessui/vue';
-import { CheckIcon, SelectorIcon } from '@heroicons/vue/outline';
+	Listbox,
+	ListboxButton,
+	ListboxLabel,
+	ListboxOption,
+	ListboxOptions,
+} from "@headlessui/vue";
+import { CheckIcon, SelectorIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "InputSelect",

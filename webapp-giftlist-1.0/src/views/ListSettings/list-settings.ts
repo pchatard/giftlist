@@ -2,10 +2,10 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import ListFormStep1 from "@/components/List/ListFormStep1.vue";
-import ListFormStep2 from "@/components/List/ListFormStep2.vue";
-import Button from "@/components/Styled/Button.vue";
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
+import Button from "@/components/Button/Button.vue";
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import ListFormOne from "@/components/ListFormOne/ListFormOne.vue";
+import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
 import labels from "@/labels/fr/labels.json";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/solid";
@@ -19,8 +19,8 @@ export default defineComponent({
 		Disclosure,
 		DisclosureButton,
 		DisclosurePanel,
-		ListFormStep1,
-		ListFormStep2,
+		ListFormOne,
+		ListFormTwo,
 	},
 	setup() {
 		const router = useRouter();

@@ -2,11 +2,11 @@ import { computed, defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import ListFormStep1 from "@/components/List/ListFormStep1.vue";
-import ListFormStep2 from "@/components/List/ListFormStep2.vue";
-import Button from "@/components/Styled/Button.vue";
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
-import Subtitle from "@/components/Styled/Subtitle.vue";
+import Button from "@/components/Button/Button.vue";
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import ListFormOne from "@/components/ListFormOne/ListFormOne.vue";
+import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
+import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, XIcon } from "@heroicons/vue/outline";
 
@@ -16,8 +16,8 @@ export default defineComponent({
 		Button,
 		Subtitle,
 		DefaultLayout,
-		ListFormStep1,
-		ListFormStep2,
+		ListFormOne,
+		ListFormTwo,
 		XIcon,
 		CheckIcon,
 		ArrowLeftIcon,
@@ -32,11 +32,11 @@ export default defineComponent({
 		const currentComponent = computed(() => {
 			switch (step.value) {
 				case 1:
-					return "ListFormStep1";
+					return "ListFormOne";
 				case 2:
-					return "ListFormStep2";
+					return "ListFormTwo";
 				default:
-					return "ListFormStep1";
+					return "ListFormOne";
 			}
 		});
 

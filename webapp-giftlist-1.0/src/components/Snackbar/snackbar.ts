@@ -1,8 +1,8 @@
-import { defineComponent, PropType } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, PropType } from "vue";
+import { useStore } from "vuex";
 
-import labels from '@/labels/fr/labels.json';
-import { SnackbarState } from '@/store/snackbar';
+import labels from "@/labels/fr/labels.json";
+import { SnackbarState } from "@/store/snackbar";
 
 export default defineComponent({
 	name: "Snackbar",

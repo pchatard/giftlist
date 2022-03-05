@@ -1,9 +1,9 @@
-import { computed, defineComponent } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, defineComponent } from "vue";
+import { useRouter } from "vue-router";
 
-import Title from '@/components/Title/Title.vue';
-import labels from '@/labels/fr/labels.json';
-import { ArrowLeftIcon } from '@heroicons/vue/outline';
+import Title from "@/components/Title/Title.vue";
+import labels from "@/labels/fr/labels.json";
+import { ArrowLeftIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "DefaultLayout",

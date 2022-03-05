@@ -2,13 +2,13 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import GiftDetails from "@/components/Gift/GiftDetails.vue";
-import DefaultLayout from "@/components/Styled/DefaultLayout.vue";
-import GiftGrid from "@/components/Styled/GiftGrid.vue";
-import GiftList from "@/components/Styled/GiftList.vue";
-import ListGridToggleButton from "@/components/Styled/ListGridToggleButton.vue";
-import Modal from "@/components/Styled/Modal.vue";
-import Table from "@/components/Styled/Table.vue";
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import GiftDetails from "@/components/GiftDetails/GiftDetails.vue";
+import GiftGridView from "@/components/GiftGridView/GiftGridView.vue";
+import GiftListView from "@/components/GiftListView/GiftListView.vue";
+import GridListToggle from "@/components/GridListToggle/GridListToggle.vue";
+import Modal from "@/components/Modal/Modal.vue";
+import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
 
@@ -17,9 +17,9 @@ export default defineComponent({
 	components: {
 		DefaultLayout,
 		GiftDetails,
-		GiftGrid,
-		GiftList,
-		ListGridToggleButton,
+		GiftGridView,
+		GiftListView,
+		GridListToggle,
 		Modal,
 		Table,
 	},

@@ -1,7 +1,7 @@
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref } from "vue";
 
-import TableHeader from '@/components/TableHeader/TableHeader.vue';
-import { TableHeader as TableHeaderType } from '@/types/TableHeader';
+import TableHeader from "@/components/TableHeader/TableHeader.vue";
+import { TableHeader as TableHeaderType } from "@/types/TableHeader";
 
 export default defineComponent({
 	name: "Table",

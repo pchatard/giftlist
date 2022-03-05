@@ -1,6 +1,6 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-import { ArrowSmDownIcon, ArrowSmUpIcon } from '@heroicons/vue/outline';
+import { ArrowSmDownIcon, ArrowSmUpIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "TableHeader",

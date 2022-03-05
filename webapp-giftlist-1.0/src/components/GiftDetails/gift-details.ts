@@ -1,10 +1,15 @@
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-import labels from '@/labels/fr/labels.json';
+import labels from "@/labels/fr/labels.json";
 import {
-    AnnotationIcon, ChartBarIcon, ColorSwatchIcon, CurrencyEuroIcon, ExternalLinkIcon,
-    ShoppingCartIcon, TagIcon
-} from '@heroicons/vue/outline';
+	AnnotationIcon,
+	ChartBarIcon,
+	ColorSwatchIcon,
+	CurrencyEuroIcon,
+	ExternalLinkIcon,
+	ShoppingCartIcon,
+	TagIcon,
+} from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "GiftDetails",
