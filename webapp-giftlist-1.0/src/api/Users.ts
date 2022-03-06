@@ -1,15 +1,21 @@
 import { UserDTO } from "@/types/dto/UserDTO";
+import { AxiosResponse } from "axios";
+import GiftlistAPI from "./APIUtils";
+
+const API_PATH_ME = "/users/me";
+const API_PATH_GET_ALL = "/users";
+const API_PATH_GET_BY_EMAIL = (email: string) => `/users/${email}`;
 
 export default class Users {
-	API_PATH_ME = "";
-	API_PATH_EDIT = "";
-	API_PATH_DELETE = "";
-	API_PATH_GET_ALL = "";
-	API_PATH_GET_BY_EMAIL = (email: string) => `${email}`;
-
 	// Get my information
-	static me(): UserDTO {
-		return {};
+	static async me(): Promise<UserDTO | undefined> {
+		try {
+			const apiResponse: AxiosResponse<UserDTO> = await GiftlistAPI.get(API_PATH_ME);
+			const user = apiResponse.data;
+			return user;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	// Edit my information
@@ -18,16 +24,33 @@ export default class Users {
 	}
 
 	// Delete my account
-	static delete() {}
+	static delete() {
+		console.log();
+	}
 
 	// Get all users
-	static getAll(): UserDTO[] {
-		return [];
+	static async getAll(): Promise<UserDTO[] | undefined> {
+		try {
+			const apiResponse: AxiosResponse<UserDTO[]> = await GiftlistAPI.get(API_PATH_GET_ALL);
+			const users = apiResponse.data;
+			console.log(users);
+			return users;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	// Get one user by email
-	static getByEmail(email: string): UserDTO {
-		console.log(email);
-		return {};
+	static async getByEmail(email: string): Promise<UserDTO | undefined> {
+		try {
+			const apiResponse: AxiosResponse<UserDTO> = await GiftlistAPI.get(
+				API_PATH_GET_BY_EMAIL(email)
+			);
+			const user = apiResponse.data;
+			console.log(user);
+			return user;
+		} catch (error) {
+			console.log(error);
+		}
 	}
 }

@@ -3,17 +3,17 @@ import { GiftDTO } from "@/types/dto/GiftDTO";
 import { GiftIdDTO } from "@/types/dto/GiftIdDTO";
 
 export default class Gifts {
-	API_PATH_CREATE = (listId: string) => `${listId}`;
-	API_PATH_GET_ALL = (listId: string) => `${listId}`;
-	API_PATH_GET_ONE = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_DELETE = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_EDIT = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_HIDE = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_UNHIDE = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_FAV = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_UNFAV = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_BOOK = (listId: string, giftId: string) => `${listId}/${giftId}`;
-	API_PATH_UNBOOK = (listId: string, giftId: string) => `${listId}/${giftId}`;
+	API_PATH_CREATE = (listId: string) => `/lists/${listId}/gifts`;
+	API_PATH_GET_ALL = (listId: string) => `/lists/${listId}/gifts`;
+	API_PATH_GET_ONE = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}`;
+	API_PATH_DELETE = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}`;
+	API_PATH_EDIT = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}`;
+	API_PATH_HIDE = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}/hide`;
+	API_PATH_UNHIDE = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}/unhide`;
+	API_PATH_FAV = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}/fav`;
+	API_PATH_UNFAV = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}/unfav`;
+	API_PATH_BOOK = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}/book`;
+	API_PATH_UNBOOK = (listId: string, giftId: string) => `/lists/${listId}/gifts/${giftId}/unbook`;
 
 	// Create a gift
 	static create(listId: string, gift: CreateGiftDTO): GiftIdDTO {

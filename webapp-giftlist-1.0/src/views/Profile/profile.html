@@ -4,8 +4,8 @@
             <img :src="auth.user.picture" alt="Profile Image" class="rounded-full m-4" />
 
             <div class="mx-4 w-1/4">
-                <Subtitle>{{ auth.user.nickname }}</Subtitle>
-                <div>{{ labels.profile.email }} {{ auth.user.email }}</div>
+                <Subtitle>{{ user ? user.displayName : "" }}</Subtitle>
+                <div>{{ labels.profile.email }} {{ user ? user.email : "" }}</div>
                 <button v-if="!auth.user.email_verified" class="text-indigo-600" @click="verifyEmail">
                     {{ labels.profile.verifyEmail }}
                 </button>
@@ -38,7 +38,7 @@
                             -ml-2
                         ">8+</span>
                 </div>
-                <div class="pl-1">12 {{ labels.profile.friends }}</div>
+                <div class="pl-1">12 {{ labels.profile.friendsNumber }}</div>
                 <router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600">
                     {{ labels.profile.manageFriends }}
                 </router-link>
@@ -79,7 +79,7 @@
                     <Subtitle>{{ labels.profile.editEmailTitle }}</Subtitle>
                     <div class="mt-2 mb-4">
                         <p>
-                            {{ labels.profile.editEmailCurrent }} <strong>{{ auth.user.email }}</strong>
+                            {{ labels.profile.editEmailCurrent }} <strong>{{ user ? user.email : "" }}</strong>
                         </p>
                         <p>
                             {{ labels.profile.editEmailText }}

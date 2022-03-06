@@ -3,14 +3,14 @@ import { ListDTO } from "@/types/dto/ListDTO";
 import { ListIdDTO } from "@/types/dto/ListIdDTO";
 
 export default class Lists {
-	API_PATH_CREATE = "";
-	API_PATH_GET = (select: "all" | "owned" | "granted") => `${select}`;
-	API_PATH_GET_ONE = (listId: string) => `${listId}`;
-	API_PATH_EDIT = (listId: string) => `${listId}`;
-	API_PATH_DELETE = (listId: string) => `${listId}`;
-	API_PATH_SHARE = (listId: string) => `${listId}`;
-	API_PATH_UNSHARE = (listId: string) => `${listId}`;
-	API_PATH_GET_FROM_SHARING_CODE = (sharingCode: string) => `${sharingCode}`;
+	API_PATH_CREATE = "/lists";
+	API_PATH_GET = (select: "all" | "owned" | "granted") => `/lists?select=${select}`;
+	API_PATH_GET_ONE = (listId: string) => `/lists/${listId}`;
+	API_PATH_EDIT = (listId: string) => `/lists/${listId}`;
+	API_PATH_DELETE = (listId: string) => `/lists/${listId}`;
+	API_PATH_SHARE = (listId: string) => `/lists/${listId}/share`;
+	API_PATH_UNSHARE = (listId: string) => `/lists/${listId}/unshare`;
+	API_PATH_GET_FROM_SHARING_CODE = (sharingCode: string) => `/lists/invite/${sharingCode}`;
 
 	// Create a new list
 	static create(list: CreateListDTO): ListIdDTO {

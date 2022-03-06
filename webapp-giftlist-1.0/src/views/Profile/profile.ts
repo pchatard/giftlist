@@ -1,14 +1,21 @@
-import { defineComponent, inject, ref } from "vue";
+import { defineComponent, inject, onMounted, Ref, ref } from "vue";
 
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
+import Users from "@/api/Users";
+import { UserDTO } from "@/types/dto/UserDTO";
 
 export default defineComponent({
 	name: "Profile",
 	components: { Button, DefaultLayout, Subtitle },
 	setup() {
+		const user: Ref<UserDTO | undefined> = ref();
+		onMounted(async () => {
+			user.value = await Users.me();
+		});
+
 		const auth = ref(inject("Auth") as any);
 		const friends = [
 			{ id: 0, name: "ND" },
@@ -33,6 +40,7 @@ export default defineComponent({
 		return {
 			labels,
 			auth,
+			user,
 			friends,
 			verifyEmail,
 			changeEmail,
