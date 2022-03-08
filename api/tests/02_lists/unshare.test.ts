@@ -5,6 +5,7 @@ import { get, put } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
 import { List1, List2, List3 } from "../seeder/lists.seed";
+import { castAsListDTO } from "./cast";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {
@@ -19,10 +20,9 @@ export default function suite() {
 		const response = await put(Url_ListUnshare(List1.id), {});
 		expect204(response);
 		const changedList = await get(Url_ListGetOne(List1.id));
-		const { grantedUsers, owners, updatedDate, createdDate, ...list1 } = List1;
 		expect(changedList)
 			.to.have.property("body")
-			.to.eql({ ...list1, isShared: false, sharingCode: "", grantedUsersIds: [] });
+			.to.eql({ ...castAsListDTO(List1), grantedUsersIds: [] });
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
