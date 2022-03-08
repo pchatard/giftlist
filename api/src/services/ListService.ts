@@ -131,7 +131,7 @@ class ListService {
 		const list: List = await listRepository.findOneOrFail(listId, {
 			relations: ["gifts"],
 		});
-		return list.gifts
+		return (list.gifts || [])
 			.filter((g) => (showHidden ? true : g.isHidden == false))
 			.sort((a, b) => a.createdDate.valueOf() - b.createdDate.valueOf());
 	}

@@ -39,7 +39,7 @@ export class List {
 	public grantedUsersIds?: string[];
 
 	@OneToMany(() => Gift, (gift) => gift.list)
-	public gifts!: Gift[];
+	public gifts?: Gift[];
 
 	@CreateDateColumn()
 	createdDate!: Date;

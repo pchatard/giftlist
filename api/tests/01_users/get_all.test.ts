@@ -1,16 +1,17 @@
 import { expect } from "chai";
 
-import { Url_UserGetAll, User1, User2, UserTest } from "../global";
+import { Url_UserGetAll, UserTest } from "../global";
 import { get } from "../helpers/crud";
 import { expect200 } from "../helpers/success";
+import { User1, User2 } from "../seeder/users.seed";
 
 export default function suite() {
 	it("Returns 200 with all users as an array", async () => {
-		const { id: id0, ...user0 } = UserTest;
-		const { id: id1, ...user1 } = User1;
-		const { id: id2, ...user2 } = User2;
+		const { id: id1, createdDate: createdDate1, ...user1 } = User1;
+		const { id: id2, createdDate: createdDate2, ...user2 } = User2;
+		const { id: idTest, ...userTest } = UserTest;
 		const response = await get(Url_UserGetAll());
 		expect200(response);
-		expect(response).to.have.property("body").to.eql([user0, user1, user2]);
+		expect(response).to.have.property("body").to.eql([user1, user2, userTest]);
 	});
 }

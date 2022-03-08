@@ -21,12 +21,13 @@ import GiftController from "./GiftController";
 export class ListController extends Controller {
 	/**
 	 * Creates a new list.
+	 * Please note that user which call the function is added to owners if not anticipated in body call
 	 * @param {CreateListDTO} body list property for entity creation
 	 */
 	@SuccessResponse(200)
 	@Post()
-	async create(@Body() body: CreateListDTO): Promise<ListIdDTO> {
-		const owners: User[] = await UserService.getMany(body.ownersIds);
+	async create(@Request() request: ERequest, @Body() body: CreateListDTO): Promise<ListIdDTO> {
+		const owners: User[] = await UserService.getMany([...body.ownersIds, request.userId]);
 		let grantedUsers: User[] = [];
 		if (body.grantedUsersIds) {
 			grantedUsers = await UserService.getMany(body.grantedUsersIds);
@@ -98,8 +99,7 @@ export class ListController extends Controller {
 	async getAll(@Request() request: ERequest, @Query() select: SelectKindList): Promise<ListDTO[]> {
 		const lists: List[] = await UserService.getUserLists(request.userId, select);
 		return lists.map((list) => {
-			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
-				list;
+			const { grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } = list;
 			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
 			return cleanObject(rest) as ListDTO;
 		});
@@ -119,7 +119,7 @@ export class ListController extends Controller {
 		) {
 			throw new OwnershipError();
 		}
-		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
+		const { grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
 			await ListService.get(listId);
 		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
 		return cleanObject(rest) as ListDTO;
@@ -143,6 +143,9 @@ export class ListController extends Controller {
 	@Put("{listId}/unshare")
 	async private(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.edit(request, listId, { isShared: false });
+		for (const grantedId of await ListService.listGrantedUsers(listId)) {
+			await ListService.forget(listId, grantedId);
+		}
 	}
 
 	/**
