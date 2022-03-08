@@ -21,6 +21,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"cookie-parser": "^1.4.5",
+		"cors": "^2.8.5",
 		"express": "^4.17.1",
 		"express-jwt": "^6.1.0",
 		"express-oauth2-jwt-bearer": "^1.0.1",
@@ -58,7 +59,6 @@
 		"chai": "^4.3.4",
 		"chai-http": "^4.3.0",
 		"concurrently": "^6.3.0",
-		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"dotenv-cli": "^4.1.0",
 		"eslint-plugin-promise": "^5.1.1",
