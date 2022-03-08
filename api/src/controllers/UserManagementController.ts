@@ -1,9 +1,11 @@
 import {
-	Body, Controller, Delete, Get, Hidden, Path, Post, Put, Route, Security, SuccessResponse, Tags
+	Body, Controller, Delete, Get, Hidden, Path, Post, Put, Response, Route, Security,
+	SuccessResponse, Tags
 } from "tsoa";
 import { EntityNotFoundError } from "typeorm";
 
 import { CreateUserDTO, UserDTO, UserIdDTO } from "../dto/users";
+import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
 import User from "../models/User";
 import UserService from "../services/UserService";
 import { email } from "../types/email";
@@ -20,7 +22,8 @@ export class UserManagementController extends Controller {
 	 * @param {CreateUserDTO} body data to create a user
 	 * @returns {Promise<UserIdDTO>} id of the created user
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Post()
 	async create(@Body() body: CreateUserDTO): Promise<UserIdDTO> {
 		try {
@@ -37,11 +40,12 @@ export class UserManagementController extends Controller {
 
 	/**
 	 * Edit a user.
-	 * @param {UUID} userId the GUID of user
+	 * @param {UUID} userId the ID of user
 	 * @param {UserDTO} body data to edit a user
 	 */
 	@Security("auth0")
 	@SuccessResponse(204)
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Put("admin/{userId}")
 	@Hidden() // TODO: Remove Hidden and add administration capabilities
 	async edit(@Path() userId: string, @Body() body: Partial<UserDTO>): Promise<void> {
@@ -50,10 +54,11 @@ export class UserManagementController extends Controller {
 
 	/**
 	 * Delete logged user.
-	 * @param {UUID} userId the GUID of user
+	 * @param {UUID} userId the ID of user
 	 */
 	@Security("auth0")
 	@SuccessResponse(204)
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Delete("admin/{userId}")
 	@Hidden() // TODO: Remove Hidden and add administration capabilities
 	async delete(@Path() userId: string): Promise<void> {
@@ -69,7 +74,7 @@ export class UserManagementController extends Controller {
 	 * @returns {Promise<UserDTO[]>} all users
 	 */
 	@Security("auth0")
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
 	@Get()
 	async getAll(): Promise<UserDTO[]> {
 		const users: User[] = await UserService.getAll();
@@ -85,7 +90,8 @@ export class UserManagementController extends Controller {
 	 * @returns {Promise<UserDTO>} the required user
 	 */
 	@Security("auth0")
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Get("{userMail}")
 	async get(@Path() userMail: email): Promise<UserDTO> {
 		const user: User = await UserService.getByMail(userMail);

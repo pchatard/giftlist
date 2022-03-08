@@ -1,11 +1,12 @@
 import { Request as ERequest } from "express";
 import {
-	Body, Controller, Delete, Get, Path, Post, Put, Query, Request, Route, Security, SuccessResponse,
-	Tags
+	Body, Controller, Delete, Get, Path, Post, Put, Query, Request, Response, Route, Security,
+	SuccessResponse, Tags
 } from "tsoa";
 
 import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
-import OwnershipError from "../errors/UserErrors/OwnershipError";
+import OwnershipError, { OwnershipErrorJSON } from "../errors/UserErrors/OwnershipError";
+import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
 import { cleanObject } from "../helpers/cleanObjects";
 import List from "../models/List";
 import User from "../models/User";
@@ -24,7 +25,8 @@ export class ListController extends Controller {
 	 * Please note that user which call the function is added to owners if not anticipated in body call
 	 * @param {CreateListDTO} body list property for entity creation
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Post()
 	async create(@Request() request: ERequest, @Body() body: CreateListDTO): Promise<ListIdDTO> {
 		const owners: User[] = await UserService.getMany([...body.ownersIds, request.userId]);
@@ -41,7 +43,9 @@ export class ListController extends Controller {
 	 * @param {UUID} listId the GUID of the list
 	 * @param {ListDTO} body data to edit a list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner")
 	@Put("{listId}")
 	async edit(
 		@Request() request: ERequest,
@@ -58,7 +62,9 @@ export class ListController extends Controller {
 	 * Delete a list.
 	 * @param {UUID} listId the GUID of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner or granted")
 	@Delete("{listId}")
 	async delete(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.deleteById(listId, request.userId);
@@ -94,7 +100,8 @@ export class ListController extends Controller {
 	 * @param {SelectKindList} select flag to select owned or granted lists
 	 * @returns {Promise<ListDTO[]>} all user lists
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Get()
 	async getAll(@Request() request: ERequest, @Query() select: SelectKindList): Promise<ListDTO[]> {
 		const lists: List[] = await UserService.getUserLists(request.userId, select);
@@ -110,7 +117,9 @@ export class ListController extends Controller {
 	 * @param {UUID} listId the GUID of the list
 	 * @returns {Promise<ListDTO>} the list
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner or granted")
 	@Get("{listId}")
 	async get(@Request() request: ERequest, @Path() listId: UUID): Promise<ListDTO> {
 		if (
@@ -129,7 +138,9 @@ export class ListController extends Controller {
 	 * Make a list to public.
 	 * @param {UUID} listId the GUID of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner")
 	@Put("{listId}/share")
 	async share(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.edit(request, listId, { isShared: true });
@@ -139,7 +150,9 @@ export class ListController extends Controller {
 	 * Make a list private.
 	 * @param {UUID} listId the GUID of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner")
 	@Put("{listId}/unshare")
 	async private(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.edit(request, listId, { isShared: false });
@@ -152,7 +165,8 @@ export class ListController extends Controller {
 	 * Get a list from its sharing code.
 	 * @param {UUID} sharingCode the sharing code of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Put("invite/{sharingCode}")
 	async accessFromCode(@Request() request: ERequest, @Path() sharingCode: UUID): Promise<void> {
 		const list: List = await ListService.getFromSharingCode(sharingCode);

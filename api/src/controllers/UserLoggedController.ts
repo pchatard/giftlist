@@ -1,9 +1,10 @@
 import { Request as ERequest } from "express";
 import {
-	Body, Controller, Delete, Get, Put, Request, Route, Security, SuccessResponse, Tags
+	Body, Controller, Delete, Get, Put, Request, Response, Route, Security, SuccessResponse, Tags
 } from "tsoa";
 
 import { UserDTO } from "../dto/users";
+import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
 import User from "../models/User";
 import UserService from "../services/UserService";
 import { SelectKindList } from "../types/SelectKindList";
@@ -17,7 +18,7 @@ export class UserLoggedController extends Controller {
 	 * Gets logged user's data.
 	 * @returns {Promise<UserDTO>} the required user
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
 	@Get()
 	async get(@Request() request: ERequest): Promise<UserDTO> {
 		const user: User = await UserService.getById(request.userId);
@@ -29,7 +30,8 @@ export class UserLoggedController extends Controller {
 	 * Edit a user.
 	 * @param {UserDTO} body data to edit a user
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Put()
 	async edit(@Request() request: ERequest, @Body() body: Partial<UserDTO>): Promise<void> {
 		await UserService.edit(request.userId, body);

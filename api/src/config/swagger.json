@@ -184,6 +184,28 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ValidateErrorJSON": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"enum": [
+							"Validation failed"
+						],
+						"nullable": false
+					},
+					"details": {
+						"properties": {},
+						"additionalProperties": {},
+						"type": "object"
+					}
+				},
+				"required": [
+					"message",
+					"details"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CreateListDTO": {
 				"properties": {
 					"title": {
@@ -213,6 +235,22 @@
 					"title",
 					"ownersIds",
 					"isShared"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OwnershipErrorJSON": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"enum": [
+							"Unauthorized"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -830,11 +868,21 @@
 				"operationId": "Create",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/ListIdDTO"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}
@@ -866,7 +914,7 @@
 				"operationId": "GetAll",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -874,6 +922,16 @@
 										"$ref": "#/components/schemas/ListDTO"
 									},
 									"type": "array"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}
@@ -906,7 +964,27 @@
 				"operationId": "Edit",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Edit a list.",
@@ -945,7 +1023,27 @@
 				"operationId": "Delete",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner or granted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Delete a list.",
@@ -973,11 +1071,31 @@
 				"operationId": "Get",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/ListDTO"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "If user not owner or granted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}
@@ -1010,7 +1128,27 @@
 				"operationId": "Share",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Make a list to public.",
@@ -1040,7 +1178,27 @@
 				"operationId": "Private",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Make a list private.",
@@ -1070,7 +1228,17 @@
 				"operationId": "AccessFromCode",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Get a list from its sharing code.",
@@ -1100,7 +1268,7 @@
 				"operationId": "Get",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -1125,7 +1293,17 @@
 				"operationId": "Edit",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Edit a user.",
@@ -1174,11 +1352,21 @@
 				"operationId": "Create",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/UserIdDTO"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}
@@ -1206,7 +1394,7 @@
 				"operationId": "GetAll",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -1236,11 +1424,21 @@
 				"operationId": "Get",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/UserDTO"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}

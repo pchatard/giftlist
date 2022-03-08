@@ -3,7 +3,7 @@ import { JsonWebTokenError } from "jsonwebtoken";
 import { ValidateError } from "tsoa";
 import { EntityNotFoundError } from "typeorm";
 
-import OwnershipError from "../errors/UserErrors/OwnershipError";
+import OwnershipError, { OwnershipErrorJSON } from "../errors/UserErrors/OwnershipError";
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
 	if (err instanceof ValidateError) {
@@ -19,7 +19,7 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
 	) {
 		res.status(401).send({
 			message: "Unauthorized",
-		});
+		} as OwnershipErrorJSON);
 	} else {
 		res.status(500);
 		res.json({
