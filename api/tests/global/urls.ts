@@ -39,7 +39,7 @@ export const Url_ListShare = (listId: string = ":listId"): string =>
 export const Url_ListUnshare = (listId: string = ":listId"): string =>
 	BaseUrl_Lists + "/" + listId + "/unshare";
 
-export const Url_ListInvite = (sharingCode: string = ":listId"): string =>
+export const Url_ListInvite = (sharingCode: string = ":sharingCode"): string =>
 	BaseUrl_Lists + "/invite/" + sharingCode;
 
 // Lists Endpoints

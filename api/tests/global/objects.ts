@@ -12,35 +12,9 @@ export const UserTest: CreateUserDTO = {
 	displayName: "Test User",
 };
 
-export const User1: CreateUserDTO = {
-	id: "auth0|000000000000000000000000",
-	email: "test1@test.fr",
-	displayName: "TestUser1",
-};
-
-export const User2: CreateUserDTO = {
-	id: "facebook|000000000000000000000000",
-	email: "test2@test.fr",
-	displayName: "TestUser2",
-};
-
-export const List1: CreateListDTO = {
-	title: "TestList1",
-	ownersIds: [UserTest.id, User1.id],
-	grantedUsersIds: [],
-	isShared: false,
-};
-
-export const List2: CreateListDTO = {
-	title: "TestList2",
-	ownersIds: [User1.id],
-	grantedUsersIds: [UserTest.id, User2.id],
-	isShared: true,
-};
-
-export const List3: CreateListDTO = {
-	title: "TestList3",
-	ownersIds: [User2.id],
+export const ListTest: CreateListDTO = {
+	title: "TestListTest",
+	ownersIds: [UserTest.id],
 	grantedUsersIds: [],
 	isShared: true,
 };

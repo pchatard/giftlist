@@ -3,9 +3,8 @@ import cors from "cors";
 import { config } from "dotenv";
 import express from "express";
 import helmet from "helmet";
-import { waitFor } from "readyness";
 import swaggerUi from "swagger-ui-express";
-import { createConnection } from "typeorm";
+import { ConnectionOptions, createConnection } from "typeorm";
 
 import cockroachDBOptions from "./config/ormconfig";
 import swaggerDocument from "./config/swagger.json";
@@ -16,6 +15,11 @@ import User from "./models/User";
 import { RegisterRoutes } from "./routes";
 
 config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
+
+export const dbConnection: ConnectionOptions = {
+	...cockroachDBOptions,
+	entities: [User, List, Gift],
+};
 
 const PORT = process.env.PORT;
 const app: express.Application = express();
@@ -39,11 +43,8 @@ RegisterRoutes(app);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-var appListening = waitFor("app:listening");
-
 const server = app.listen(PORT, async () => {
-	await createConnection({ ...cockroachDBOptions, entities: [User, List, Gift] });
-	appListening();
+	await createConnection(dbConnection);
 	{
 		process.env.NODE_ENV == "dev" && console.log("Listening on " + PORT);
 	}

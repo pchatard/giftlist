@@ -219,6 +219,9 @@
 			},
 			"Partial_ListDTO_": {
 				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
 					"title": {
 						"type": "string"
 					},
@@ -244,6 +247,9 @@
 			},
 			"ListDTO": {
 				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
 					"title": {
 						"type": "string"
 					},
@@ -265,6 +271,7 @@
 					}
 				},
 				"required": [
+					"id",
 					"title",
 					"sharingCode",
 					"ownersIds",
@@ -833,7 +840,7 @@
 						}
 					}
 				},
-				"description": "Creates a new list.",
+				"description": "Creates a new list.\nPlease note that user which call the function is added to owners if not anticipated in body call",
 				"tags": [
 					"List"
 				],
