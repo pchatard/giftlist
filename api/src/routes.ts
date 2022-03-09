@@ -50,19 +50,19 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Partial_GiftDTO_": {
+    "Partial_EditGiftDTO_": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"isBooked":{"dataType":"boolean"},"isFavorite":{"dataType":"boolean"},"isHidden":{"dataType":"boolean"},"category":{"dataType":"string"},"listId":{"ref":"UUID"},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
+    "Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string","required":true},"isBooked":{"dataType":"boolean","required":true},"isFavorite":{"dataType":"boolean","required":true},"isHidden":{"dataType":"boolean","required":true},"category":{"dataType":"string","required":true},"listId":{"ref":"UUID","required":true},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"ref":"UUID","required":true},"title":{"dataType":"string","required":true},"isBooked":{"dataType":"boolean","required":true},"isFavorite":{"dataType":"boolean","required":true},"isHidden":{"dataType":"boolean","required":true},"category":{"dataType":"string","required":true},"listId":{"ref":"UUID","required":true},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "GiftDTO": {
         "dataType": "refAlias",
-        "type": {"ref":"Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_","validators":{}},
+        "type": {"ref":"Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListIdDTO": {
@@ -102,9 +102,9 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Partial_ListDTO_": {
+    "Partial_EditListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"ref":"UUID"},"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"string"}},"isShared":{"dataType":"boolean"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"string"}},"isShared":{"dataType":"boolean"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
@@ -206,7 +206,7 @@ export function RegisterRoutes(app: express.Router) {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    body: {"in":"body","name":"body","required":true,"ref":"Partial_GiftDTO_"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_EditGiftDTO_"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -490,7 +490,7 @@ export function RegisterRoutes(app: express.Router) {
             const args = {
                     request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
-                    body: {"in":"body","name":"body","required":true,"ref":"Partial_ListDTO_"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_EditListDTO_"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

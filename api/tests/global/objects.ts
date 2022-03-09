@@ -19,47 +19,11 @@ export const ListTest: CreateListDTO = {
 	isShared: true,
 };
 
-export const Gift1: CreateGiftDTO = {
-	title: "TestGift1",
+export const GiftTest: CreateGiftDTO = {
+	title: "TestGiftTest",
+	isBooked: false,
+	isHidden: false,
+	isFavorite: false,
 	category: "book",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: false,
-	listId: "",
-};
-
-export const Gift2: CreateGiftDTO = {
-	title: "TestGift2",
-	category: "clothes",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: true,
-	listId: "",
-};
-
-export const Gift3: CreateGiftDTO = {
-	title: "TestGift3",
-	category: "others",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: false,
-	listId: "",
-};
-
-export const Gift4: CreateGiftDTO = {
-	title: "TestGift4",
-	category: "cooking-item",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: true,
-	listId: "",
-};
-
-export const Gift5: CreateGiftDTO = {
-	title: "TestGift5",
-	category: "book",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: false,
 	listId: "",
 };

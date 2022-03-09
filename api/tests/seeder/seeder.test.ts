@@ -1,6 +1,7 @@
 import { Connection } from "typeorm";
 import { Factory, Seeder as TSeeder } from "typeorm-seeding";
 
+import Gift from "../../src/models/Gift";
 import List from "../../src/models/List";
 import User from "../../src/models/User";
 import { UserTest } from "../global";
@@ -24,7 +25,7 @@ export default class Seeder implements TSeeder {
 		await connection.manager.save(lists);
 
 		const raw_g = [Gift1, Gift2, Gift3, Gift4, Gift5];
-		const gifts = connection.manager.create(List, raw_g);
+		const gifts = connection.manager.create(Gift, raw_g);
 		await connection.manager.save(gifts);
 	}
 }

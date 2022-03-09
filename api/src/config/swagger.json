@@ -75,7 +75,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Partial_GiftDTO_": {
+			"Partial_EditGiftDTO_": {
 				"properties": {
 					"title": {
 						"type": "string"
@@ -118,8 +118,11 @@
 				"type": "object",
 				"description": "Make all properties in T optional"
 			},
-			"Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
+			"Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
 				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
 					"title": {
 						"type": "string"
 					},
@@ -159,6 +162,7 @@
 					}
 				},
 				"required": [
+					"id",
 					"title",
 					"isBooked",
 					"isFavorite",
@@ -170,7 +174,7 @@
 				"description": "From T, pick a set of properties whose keys are in the union K"
 			},
 			"GiftDTO": {
-				"$ref": "#/components/schemas/Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_"
+				"$ref": "#/components/schemas/Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_"
 			},
 			"ListIdDTO": {
 				"properties": {
@@ -255,11 +259,8 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"Partial_ListDTO_": {
+			"Partial_EditListDTO_": {
 				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					},
 					"title": {
 						"type": "string"
 					},
@@ -541,7 +542,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Partial_GiftDTO_"
+								"$ref": "#/components/schemas/Partial_EditGiftDTO_"
 							}
 						}
 					}
@@ -1013,7 +1014,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Partial_ListDTO_"
+								"$ref": "#/components/schemas/Partial_EditListDTO_"
 							}
 						}
 					}

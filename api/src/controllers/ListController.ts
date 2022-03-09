@@ -4,7 +4,7 @@ import {
 	SuccessResponse, Tags
 } from "tsoa";
 
-import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
+import { CreateListDTO, EditListDTO, ListDTO, ListIdDTO } from "../dto/lists";
 import OwnershipError, { OwnershipErrorJSON } from "../errors/UserErrors/OwnershipError";
 import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
 import { cleanObject } from "../helpers/cleanObjects";
@@ -50,7 +50,7 @@ export class ListController extends Controller {
 	async edit(
 		@Request() request: ERequest,
 		@Path() listId: UUID,
-		@Body() body: Partial<ListDTO>
+		@Body() body: Partial<EditListDTO>
 	): Promise<void> {
 		if (!(await ListService.listOwners(listId)).includes(request.userId)) {
 			throw new OwnershipError();

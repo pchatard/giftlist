@@ -15,12 +15,12 @@ export default function suite() {
 	it("Returns 200 with list informations, if not owned but granted", async () => {
 		const response = await get(Url_ListGetOne(ListGranted.id));
 		expect200(response);
-		expect(response).to.have.property("body").to.deep.equal(castAsListDTO(ListGranted));
+		expect(response).to.have.property("body").to.be.deep.equal(castAsListDTO(ListGranted));
 	});
 	it("Returns 200 with list informations, if owned", async () => {
 		const response = await get(Url_ListGetOne(ListOwned.id));
 		expect200(response);
-		expect(response).to.have.property("body").to.deep.equal(castAsListDTO(ListOwned));
+		expect(response).to.have.property("body").to.be.deep.equal(castAsListDTO(ListOwned));
 		GlobalVar.ListTest_SharingCode = (
 			await get(Url_ListGetOne(GlobalVar.ListTest_Id))
 		).body.sharingCode;

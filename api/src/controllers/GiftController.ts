@@ -3,7 +3,7 @@ import {
 	Body, Controller, Delete, Get, Path, Post, Put, Request, Route, Security, SuccessResponse, Tags
 } from "tsoa";
 
-import { CreateGiftDTO, GiftDTO, GiftIdDTO } from "../dto/gifts";
+import { CreateGiftDTO, EditGiftDTO, GiftDTO, GiftIdDTO } from "../dto/gifts";
 import OwnershipError from "../errors/UserErrors/OwnershipError";
 import { cleanObject } from "../helpers/cleanObjects";
 import Gift from "../models/Gift";
@@ -49,7 +49,7 @@ export class GiftController extends Controller {
 		@Request() request: ERequest,
 		@Path() listId: UUID,
 		@Path() giftId: UUID,
-		@Body() body: Partial<GiftDTO>
+		@Body() body: Partial<EditGiftDTO>
 	): Promise<void> {
 		if (
 			!(await ListService.listOwners(listId)).includes(request.userId) ||
@@ -102,7 +102,7 @@ export class GiftController extends Controller {
 			throw new OwnershipError();
 		}
 		return gifts.map((gift) => {
-			const { id, list, createdDate, updatedDate, ...rest } = gift;
+			const { list, createdDate, updatedDate, ...rest } = gift;
 			return cleanObject(rest) as GiftDTO;
 		});
 	}
@@ -126,7 +126,7 @@ export class GiftController extends Controller {
 		) {
 			throw new OwnershipError();
 		}
-		const { id, list, createdDate, updatedDate, ...rest }: Gift = await GiftService.get(giftId);
+		const { list, createdDate, updatedDate, ...rest }: Gift = await GiftService.get(giftId);
 		return cleanObject(rest) as GiftDTO;
 	}
 

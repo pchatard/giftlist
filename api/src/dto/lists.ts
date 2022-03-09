@@ -13,3 +13,5 @@ export interface ListDTO
 	extends Expand<
 		Pick<List, "id" | "title" | "isShared" | "sharingCode" | "closureDate" | "ownersIds">
 	> {}
+
+export interface EditListDTO extends Expand<Omit<ListDTO, "id">> {}

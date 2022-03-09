@@ -12,7 +12,7 @@ export default function suite() {
 		const response = await put(Url_ListInvite(ListOwned.sharingCode), {});
 		expect204(response);
 		const changedList = await get(Url_ListGetOne(ListOwned.id));
-		expect(changedList).to.have.property("body").to.deep.equal(castAsListDTO(ListOwned));
+		expect(changedList).to.have.property("body").to.be.deep.equal(castAsListDTO(ListOwned));
 	});
 	it("Returns 204, user is added to grantedUser if not owner", async () => {
 		const response = await put(Url_ListInvite(ListInvited.sharingCode), {});
