@@ -1,6 +1,5 @@
 /**
- * Remove "__promise_xxxx__" property from object.
- * TODO: Do we need it really ?
+ * Remove undefined, null and "__promise_xxxx__" properties from object.
  * @param {T} obj the object to clean
  * @returns the cleaned object
  */
