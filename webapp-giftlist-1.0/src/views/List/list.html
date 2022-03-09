@@ -1,0 +1,31 @@
+<DefaultLayout :title="listName" back :backButtonTitle="labels.titles.lists" backButtonLink="/app/lists">
+    <template v-slot:commands>
+        <span class="
+					flex
+					items-center
+					mr-4
+					text-indigo-600
+					font-medium
+					hover:text-indigo-900
+					cursor-pointer
+				" @click="router.push(`/app/lists/${list.id}/settings`)">
+            <CogIcon class="h-4 w-4 mr-2" />
+            {{ labels.lists.buttons.settings }}
+        </span>
+        <GridListToggle :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
+    </template>
+
+    <div v-if="!isListView" class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-row gap-x-4 gap-y-8">
+        <GiftGridView v-for="gift in gifts" :key="gift.id" :gift="gift" />
+    </div>
+    <Table v-else :headers="tableHeaders" @sort="handleSort">
+        <tr v-for="gift in gifts" :key="gift.id" class="cursor-pointer hover:bg-gray-50"
+            @click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)">
+            <GiftListView :gift="gift" @delete="handleDeleteModal" />
+        </tr>
+    </Table>
+
+    <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText"
+        @close="modal.showModal = false" @confirm="modal.confirm" type="danger">
+    </Modal>
+</DefaultLayout>

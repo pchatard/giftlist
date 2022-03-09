@@ -1,0 +1,22 @@
+<fieldset class="flex flex-col items-start transition-all">
+    <label class="text-sm font-semibold transition-all" :class="computedLabelClass">
+        {{ label }}
+        <span v-if="mandatory" class="text-red-600">*</span>
+    </label>
+    <div class="
+            input-container
+            relative
+            flex
+            items-stretch
+            overflow-hidden
+            border
+            rounded-md
+            my-1
+            w-full
+        " :class="computedInputBorderClass">
+        <slot />
+    </div>
+    <span class="input-helper text-xs text-gray-500" :class="{ 'text-red-600': isError }">
+        {{ computedHelperText }}
+    </span>
+</fieldset>

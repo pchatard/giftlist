@@ -1,0 +1,25 @@
+<DefaultLayout :title="labels.titles.shared">
+    <Table :headers="tableHeaders" @sort="handleSort">
+        <tr v-for="list in lists" :key="list.sharingCode" class="cursor-pointer hover:bg-gray-50"
+            @click="router.push(`/app/shared/${list.sharingCode}`)">
+            <ListItem :list="list" :shared="true" @details="handleDetailsModal" />
+        </tr>
+    </Table>
+
+    <Modal :show="newSharingCodeModalIsOpen" @confirm="confirmNewSharingCode" @close="closeNewSharingCodeModal"
+        :title="labels.modals.code.title" :confirmText="labels.modals.code.confirm"
+        :cancelText="labels.modals.code.cancel">
+        <InputText :label="newSharingCodeData.label" :value="newSharingCodeData.code"
+            :helperText="newSharingCodeData.helperText" :isError="newSharingCodeData.isError"
+            :errorMessage="newSharingCodeData.errorMessage" :placeholder="newSharingCodeData.placeholder"
+            @change="(newCode) => (newSharingCodeData.code = newCode)" focus reset
+            @keydown.enter="confirmNewSharingCode" />
+    </Modal>
+
+    <Modal :show="detailsModal.show" @close="handleDetailsModal" @confirm="openList"
+        :title="detailsModal.list.title || ''" :confirmText="labels.modals.listDetails.confirm">
+        <p>Détails de la liste</p>
+        <p>Propriétaire(s):</p>
+        <p>Nombre de cadeaux disponibles / réservés</p>
+    </Modal>
+</DefaultLayout>

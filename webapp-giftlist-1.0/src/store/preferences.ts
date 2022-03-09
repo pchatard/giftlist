@@ -1,5 +1,6 @@
 import { Module } from "vuex";
-import { RootState } from ".";
+
+import { RootState } from "./";
 
 // Get management API token for production
 // https://auth0.com/docs/security/tokens/access-tokens/get-management-api-access-tokens-for-production
@@ -17,7 +18,7 @@ export const preferences: Module<PreferencesState, RootState> = {
 		},
 	},
 	actions: {
-		async initializePreferences(context, userId: string) {
+		async initializePreferences(_context, _userId: string) {
 			// return new Promise<PreferencesState>((resolve, reject) => {
 			// 	fetch(
 			// 		"https://giftlist-app.eu.auth0.com/api/v2/users/" + userId + "?fields=user_metadata",
@@ -46,7 +47,7 @@ export const preferences: Module<PreferencesState, RootState> = {
 			context.dispatch("changePreferences", metadataPayload.metadata);
 			return context.dispatch("savePreferences", metadataPayload.userId);
 		},
-		async savePreferences(context, userId: string) {
+		async savePreferences(_context, _userId: string) {
 			// return new Promise<PreferencesState>((resolve, reject) => {
 			// 	fetch("https://giftlist-app.eu.auth0.com/api/v2/users/" + userId, {
 			// 		method: "PATCH",

@@ -1,0 +1,6 @@
+<div class="rounded grid grid-cols-2 grid-rows-5 h-full">
+    <div v-for="year in 10" :key="year" :class="year + startYear == currentYear ? selected : base"
+        @click.stop="changeYear(year + startYear)">
+        {{ year + startYear }}
+    </div>
+</div>
