@@ -1,39 +1,32 @@
 import { expect } from "chai";
 
-import { GlobalVar, Url_ListGetOne, Url_ListUnshare } from "../global";
+import { Url_ListGetOne, Url_ListUnshare } from "../global";
 import { get, put } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
+import { ListGranted, ListInvited, ListOwned } from "../seeder/lists.seed";
+import { castAsListDTO } from "./cast";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {
-		const response = await put(Url_ListUnshare(GlobalVar.List1_Id, GlobalVar.User2_Id), {});
+		const response = await put(Url_ListUnshare(ListInvited.id), {});
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 401 Unauthorized, if not owned but granted", async () => {
-		const response = await put(Url_ListUnshare(GlobalVar.List2_Id, GlobalVar.User2_Id), {});
+		const response = await put(Url_ListUnshare(ListGranted.id), {});
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 204, if owned", async () => {
-		const response = await put(Url_ListUnshare(GlobalVar.List1_Id, GlobalVar.User1_Id), {});
+		const response = await put(Url_ListUnshare(ListOwned.id), {});
 		expect204(response);
-		const changedList = await get(Url_ListGetOne(GlobalVar.List1_Id, GlobalVar.User1_Id));
+		const changedList = await get(Url_ListGetOne(ListOwned.id));
 		expect(changedList)
 			.to.have.property("body")
-			.to.eql({
-				title: "TestList1",
-				ownersIds: [GlobalVar.User1_Id],
-				grantedUsersIds: [],
-				isShared: false,
-				sharingCode: "",
-			});
+			.to.eql({ ...castAsListDTO(ListOwned), grantedUsersIds: [] });
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
-		const responses = [
-			await put(Url_ListUnshare(wrongUUID, GlobalVar.User1_Id)),
-			await put(Url_ListUnshare(GlobalVar.List1_Id, wrongUUID)),
-		];
-		responses.forEach((response) => expectValidationFailed(response));
+		const response = await put(Url_ListUnshare(wrongUUID));
+		expectValidationFailed(response);
 	});
 }

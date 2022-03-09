@@ -1,17 +1,14 @@
-import {
-	Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryColumn } from "typeorm";
 
 import { email } from "../types/email";
-import { UUID } from "../types/UUID";
 import List from "./List";
 
 @Entity("User", { orderBy: { createdDate: "ASC" } })
 export class User {
-	@PrimaryGeneratedColumn("uuid")
-	public id!: UUID;
+	@PrimaryColumn()
+	public id!: string;
 
-	@Column({ unique: true })
+	@Column()
 	public email!: email;
 
 	@Column()

@@ -3,3 +3,6 @@ nodes_modules
 build
 
 src/config/certs/root.crt
+
+.env.local
+.env.test

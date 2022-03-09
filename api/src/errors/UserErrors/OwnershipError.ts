@@ -6,4 +6,8 @@ class OwnershipError extends APIError {
 	}
 }
 
+export interface OwnershipErrorJSON {
+	message: "Unauthorized";
+}
+
 export default OwnershipError;

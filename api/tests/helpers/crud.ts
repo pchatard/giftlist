@@ -1,4 +1,5 @@
 import "mocha";
+import "chai-http";
 
 import chai from "chai";
 

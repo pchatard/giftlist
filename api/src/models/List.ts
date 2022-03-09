@@ -23,7 +23,7 @@ export class List {
 	public owners!: User[];
 
 	@RelationId((list: List) => list.owners)
-	public ownersIds!: UUID[];
+	public ownersIds!: string[];
 
 	@Column({ default: false })
 	public isShared!: boolean;
@@ -36,10 +36,10 @@ export class List {
 	public grantedUsers?: User[];
 
 	@RelationId((list: List) => list.grantedUsers)
-	public grantedUsersIds?: UUID[];
+	public grantedUsersIds?: string[];
 
 	@OneToMany(() => Gift, (gift) => gift.list)
-	public gifts!: Gift[];
+	public gifts?: Gift[];
 
 	@CreateDateColumn()
 	createdDate!: Date;

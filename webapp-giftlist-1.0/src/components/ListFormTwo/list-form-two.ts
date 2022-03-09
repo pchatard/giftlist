@@ -30,8 +30,8 @@ export default defineComponent({
 		};
 
 		const handleSelectOwner = (selectedOwner: any) => {
-			const owners = [...props.values?.owners.value];
-			const authorizedUsers = [...props.values?.authorizedUsers.value];
+			const owners = [...props.values!.owners.value];
+			const authorizedUsers = [...props.values!.authorizedUsers.value];
 			owners.push(selectedOwner);
 			const selectedOwnerIndex = props.values?.authorizedUsers.value.findIndex(
 				(user: any) => user.id === selectedOwner.id
@@ -54,7 +54,7 @@ export default defineComponent({
 		};
 
 		const handleOwnersDelete = (id: any) => {
-			const owners = [...props.values?.owners.value];
+			const owners = [...props.values!.owners.value];
 			owners.splice(
 				owners.findIndex((owner) => owner.id === id),
 				1
@@ -71,7 +71,7 @@ export default defineComponent({
 		};
 
 		const handleSelectAuthorized = (selectedUser: any) => {
-			const authorizedUsers = [...props.values?.authorizedUsers.value];
+			const authorizedUsers = [...props.values!.authorizedUsers.value];
 			authorizedUsers.push(selectedUser);
 			const values = {
 				...props.values,
@@ -84,7 +84,7 @@ export default defineComponent({
 		};
 
 		const handleAuthorizedDelete = (id: any) => {
-			const authorizedUsers = [...props.values?.authorizedUsers.value];
+			const authorizedUsers = [...props.values!.authorizedUsers.value];
 			authorizedUsers.splice(
 				authorizedUsers.findIndex((user) => user.id === id),
 				1

@@ -50,7 +50,7 @@ class GiftService {
 	 * Check if gift belongs to list.
 	 * @param {UUID} listId id of gift to get, uuid v4 formatted
 	 * @param {UUID} giftId id of list to get, uuid v4 formatted
-	 * @returns {Promise<Gift>} The gift matching the giftId parameter
+	 * @returns {Promise<boolean>} gift belongs to list
 	 */
 	static async checkGiftOfList(listId: UUID, giftId: UUID): Promise<boolean> {
 		return (await this.get(giftId)).listId == listId;
