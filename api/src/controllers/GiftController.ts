@@ -1,10 +1,12 @@
 import { Request as ERequest } from "express";
 import {
-	Body, Controller, Delete, Get, Path, Post, Put, Request, Route, Security, SuccessResponse, Tags
+	Body, Controller, Delete, Get, Path, Post, Put, Request, Response, Route, Security,
+	SuccessResponse, Tags
 } from "tsoa";
 
 import { CreateGiftDTO, EditGiftDTO, GiftDTO, GiftIdDTO } from "../dto/gifts";
-import OwnershipError from "../errors/UserErrors/OwnershipError";
+import OwnershipError, { OwnershipErrorJSON } from "../errors/UserErrors/OwnershipError";
+import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
 import { cleanObject } from "../helpers/cleanObjects";
 import Gift from "../models/Gift";
 import List from "../models/List";
@@ -22,7 +24,9 @@ export class GiftController extends Controller {
 	 * @param {CreateGiftDTO} body list property for entity creation
 	 * @returns {Promise<GiftIdDTO>} gift id
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner of list")
 	@Post()
 	async create(
 		@Request() request: ERequest,
@@ -43,7 +47,9 @@ export class GiftController extends Controller {
 	 * @param {UUID} giftId the GUID of the gift
 	 * @param {ListDTO} body data to edit a gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner of list or gift does not belong to list")
 	@Put("{giftId}")
 	async edit(
 		@Request() request: ERequest,
@@ -65,7 +71,9 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner of list or gift does not belong to list")
 	@Delete("{giftId}")
 	async delete(
 		@Request() request: ERequest,
@@ -90,7 +98,9 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gifts list id
 	 * @returns {Promise<ListDTO[]>} all list gifts
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner or granted of list")
 	@Get()
 	async getAll(@Request() request: ERequest, @Path() listId: UUID): Promise<GiftDTO[]> {
 		let gifts: Gift[] = [];
@@ -112,7 +122,12 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(
+		401,
+		"If user not owner or granted of list or gift does not belong to list"
+	)
 	@Get("{giftId}")
 	async get(
 		@Request() request: ERequest,
@@ -135,7 +150,9 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner of list or gift does not belong to list")
 	@Put("{giftId}/hide")
 	async hide(
 		@Request() request: ERequest,
@@ -150,7 +167,9 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner of list or gift does not belong to list")
 	@Put("{giftId}/unhide")
 	async unhide(
 		@Request() request: ERequest,
@@ -165,7 +184,9 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner of list or gift does not belong to list")
 	@Put("{giftId}/fav")
 	async favorite(
 		@Request() request: ERequest,
@@ -180,7 +201,9 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(401, "If user not owner of list or gift does not belong to list")
 	@Put("{giftId}/unfav")
 	async unfavorite(
 		@Request() request: ERequest,
@@ -195,7 +218,12 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(
+		401,
+		"If user not owner or granted of list or gift does not belong to list"
+	)
 	@Put("{giftId}/book")
 	async book(
 		@Request() request: ERequest,
@@ -217,7 +245,12 @@ export class GiftController extends Controller {
 	 * @param {UUID} listId gift list id
 	 * @param {UUID} giftId the GUID of the gift
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<OwnershipErrorJSON>(
+		401,
+		"If user not owner or granted of list or gift does not belong to list"
+	)
 	@Put("{giftId}/unbook")
 	async unbook(
 		@Request() request: ERequest,

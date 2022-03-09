@@ -24,6 +24,44 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ValidateErrorJSON": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"enum": [
+							"Validation failed"
+						],
+						"nullable": false
+					},
+					"details": {
+						"properties": {},
+						"additionalProperties": {},
+						"type": "object"
+					}
+				},
+				"required": [
+					"message",
+					"details"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OwnershipErrorJSON": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"enum": [
+							"Unauthorized"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CreateGiftDTO": {
 				"properties": {
 					"title": {
@@ -188,28 +226,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ValidateErrorJSON": {
-				"properties": {
-					"message": {
-						"type": "string",
-						"enum": [
-							"Validation failed"
-						],
-						"nullable": false
-					},
-					"details": {
-						"properties": {},
-						"additionalProperties": {},
-						"type": "object"
-					}
-				},
-				"required": [
-					"message",
-					"details"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"CreateListDTO": {
 				"properties": {
 					"title": {
@@ -239,22 +255,6 @@
 					"title",
 					"ownersIds",
 					"isShared"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"OwnershipErrorJSON": {
-				"properties": {
-					"message": {
-						"type": "string",
-						"enum": [
-							"Unauthorized"
-						],
-						"nullable": false
-					}
-				},
-				"required": [
-					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -418,11 +418,31 @@
 				"operationId": "Create",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/GiftIdDTO"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "If user not owner of list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}
@@ -464,7 +484,7 @@
 				"operationId": "GetAll",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -472,6 +492,26 @@
 										"$ref": "#/components/schemas/GiftDTO"
 									},
 									"type": "array"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "If user not owner or granted of list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}
@@ -504,7 +544,27 @@
 				"operationId": "Edit",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Edit a gift.",
@@ -552,7 +612,27 @@
 				"operationId": "Delete",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Delete a gift.",
@@ -589,11 +669,31 @@
 				"operationId": "Get",
 				"responses": {
 					"200": {
-						"description": "",
+						"description": "Success response",
 						"content": {
 							"application/json": {
 								"schema": {
 									"$ref": "#/components/schemas/GiftDTO"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "If user not owner or granted of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
 								}
 							}
 						}
@@ -635,7 +735,27 @@
 				"operationId": "Hide",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Mark a gift as hidden.",
@@ -674,7 +794,27 @@
 				"operationId": "Unhide",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Remove \"hidden\" flag of a gift.",
@@ -713,7 +853,27 @@
 				"operationId": "Favorite",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Mark a gift as favorite.",
@@ -752,7 +912,27 @@
 				"operationId": "Unfavorite",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Remove \"favorite\" flag of a gift.",
@@ -791,7 +971,27 @@
 				"operationId": "Book",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner or granted of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Mark a gift as booked.",
@@ -830,7 +1030,27 @@
 				"operationId": "Unbook",
 				"responses": {
 					"204": {
-						"description": ""
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner or granted of list or gift does not belong to list",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OwnershipErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
 					}
 				},
 				"description": "Remove \"booked\" flag of a gift.",
