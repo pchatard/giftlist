@@ -4,23 +4,23 @@ import { GlobalVar, Url_ListGetOne } from "../global";
 import { get } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect200 } from "../helpers/success";
-import { List1, List2, List3 } from "../seeder/lists.seed";
+import { ListGranted, ListInvited, ListOwned } from "../seeder/lists.seed";
 import { castAsListDTO } from "./cast";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {
-		const response = await get(Url_ListGetOne(List3.id));
+		const response = await get(Url_ListGetOne(ListInvited.id));
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 200 with list informations, if not owned but granted", async () => {
-		const response = await get(Url_ListGetOne(List2.id));
+		const response = await get(Url_ListGetOne(ListGranted.id));
 		expect200(response);
-		expect(response).to.have.property("body").to.deep.equal(castAsListDTO(List2));
+		expect(response).to.have.property("body").to.deep.equal(castAsListDTO(ListGranted));
 	});
 	it("Returns 200 with list informations, if owned", async () => {
-		const response = await get(Url_ListGetOne(List1.id));
+		const response = await get(Url_ListGetOne(ListOwned.id));
 		expect200(response);
-		expect(response).to.have.property("body").to.deep.equal(castAsListDTO(List1));
+		expect(response).to.have.property("body").to.deep.equal(castAsListDTO(ListOwned));
 		GlobalVar.ListTest_SharingCode = (
 			await get(Url_ListGetOne(GlobalVar.ListTest_Id))
 		).body.sharingCode;

@@ -4,19 +4,19 @@ import List from "../../src/models/List";
 import { UserTest } from "../global";
 import { User1, User2 } from "./users.seed";
 
-export const List1: List = {
+export const ListOwned: List = {
 	id: uuidv4(),
 	title: "TestList1",
 	owners: [],
-	ownersIds: [UserTest.id, User1.id],
+	ownersIds: [UserTest.id],
 	isShared: false,
 	sharingCode: uuidv4(),
-	grantedUsersIds: [User2.id],
+	grantedUsersIds: [User1.id],
 	createdDate: new Date(),
 	updatedDate: new Date(),
 };
 
-export const List2: List = {
+export const ListGranted: List = {
 	id: uuidv4(),
 	title: "TestList2",
 	owners: [],
@@ -28,11 +28,23 @@ export const List2: List = {
 	updatedDate: new Date(),
 };
 
-export const List3: List = {
+export const ListInvited: List = {
 	id: uuidv4(),
 	title: "TestList3",
 	owners: [],
 	ownersIds: [User1.id, User2.id],
+	isShared: true,
+	sharingCode: uuidv4(),
+	grantedUsersIds: [],
+	createdDate: new Date(),
+	updatedDate: new Date(),
+};
+
+export const ListUnauthorized: List = {
+	id: uuidv4(),
+	title: "TestList4",
+	owners: [],
+	ownersIds: [User1.id],
 	isShared: true,
 	sharingCode: uuidv4(),
 	grantedUsersIds: [],
