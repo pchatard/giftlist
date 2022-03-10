@@ -5,8 +5,8 @@ import {
 } from "tsoa";
 
 import { CreateGiftDTO, EditGiftDTO, GiftDTO, GiftIdDTO } from "../dto/gifts";
-import OwnershipError, { OwnershipErrorJSON } from "../errors/UserErrors/OwnershipError";
-import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
+import OwnershipError, { OwnershipErrorJSON } from "../errors/OwnershipError";
+import { ValidateErrorJSON } from "../errors/ValidationError";
 import { cleanObject } from "../helpers/cleanObjects";
 import Gift from "../models/Gift";
 import List from "../models/List";

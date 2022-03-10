@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { GlobalVar, ListTest, Url_ListPost } from "../global";
+import { GlobalVar, ListTest, ListTestWithGranted, Url_ListPost } from "../global";
 import { post } from "../helpers/crud";
 import { expectValidationFailed } from "../helpers/error";
 import { expect200 } from "../helpers/success";
@@ -12,6 +12,12 @@ export default function suite() {
 		expect200(response);
 		expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
 		GlobalVar.ListTest_Id = response.body.id;
+	});
+	it("Returns 200 with ID if all data are provided with granted", async () => {
+		const response = await post(Url_ListPost(), ListTestWithGranted);
+		expect200(response);
+		expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
+		GlobalVar.ListTestWithGranted_Id = response.body.id;
 	});
 	it("Returns 422, with validation error, if one of fields is empty", async () => {
 		const responses = [
