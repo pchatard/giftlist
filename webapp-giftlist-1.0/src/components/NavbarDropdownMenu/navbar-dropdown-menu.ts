@@ -4,8 +4,7 @@ import labels from "@/labels/fr/labels.json";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { CogIcon, LogoutIcon, UserCircleIcon, UserIcon, UsersIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
-import { ref } from "@vue/reactivity";
-import { inject } from "@vue/runtime-core";
+import { inject, ref } from "vue";
 
 export default {
 	name: "NavbarDropdownMenu",

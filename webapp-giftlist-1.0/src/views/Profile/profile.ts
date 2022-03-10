@@ -1,4 +1,4 @@
-import { defineComponent, inject, onMounted, Ref, ref } from "vue";
+import { computed, defineComponent, inject, onMounted, Ref, ref } from "vue";
 
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
@@ -6,17 +6,20 @@ import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
 import Users from "@/api/Users";
 import { UserDTO } from "@/types/dto/UserDTO";
+import { useStore } from "vuex";
 
 export default defineComponent({
 	name: "Profile",
 	components: { Button, DefaultLayout, Subtitle },
 	setup() {
-		const user: Ref<UserDTO | undefined> = ref();
 		onMounted(async () => {
-			user.value = await Users.me();
+			await dispatch("getUser");
 		});
 
+		const { state, dispatch } = useStore();
+		const user: Ref<UserDTO> = computed(() => state.user.user);
 		const auth = ref(inject("Auth") as any);
+
 		const friends = [
 			{ id: 0, name: "ND" },
 			{ id: 1, name: "ML" },
@@ -37,6 +40,16 @@ export default defineComponent({
 			console.log("Profile.vue - downloadData");
 		};
 
+		const deleteAccount = async () => {
+			console.log("Profile.vue - deleteAccount");
+			const deleteResult = await dispatch("deleteAccount");
+			if (deleteResult) {
+				console.log(
+					"Profile.vue - Account successfully deleted -> TODO : Delete on Auth0 and logout"
+				);
+			}
+		};
+
 		return {
 			labels,
 			auth,
@@ -46,6 +59,7 @@ export default defineComponent({
 			changeEmail,
 			changePassword,
 			downloadData,
+			deleteAccount,
 		};
 	},
 });
