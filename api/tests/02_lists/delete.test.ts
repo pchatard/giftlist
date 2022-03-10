@@ -5,7 +5,7 @@ import { del, get } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
 import { ListGranted, ListInvited, ListOwned, ListUnauthorized } from "../seeder/lists.seed";
-import { castArrayAsListDTO, ListTestAsList } from "./cast";
+import { castArrayAsListDTO, ListTestAsList, ListTestWithGrantedAsList } from "./cast";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {
@@ -21,7 +21,7 @@ export default function suite() {
 			grantedUsersIds: [],
 		}; // As unshared
 		expect(lists_user.body).to.be.deep.equal(
-			castArrayAsListDTO([list1, ListGranted, ListTestAsList()])
+			castArrayAsListDTO([list1, ListGranted, ListTestAsList(), ListTestWithGrantedAsList()])
 		);
 	});
 	it("Returns 204 and list is no more present", async () => {
@@ -32,7 +32,10 @@ export default function suite() {
 			...ListOwned,
 			grantedUsersIds: [],
 		}; // As unshared
-		expect(lists_user.body).to.be.deep.equal(castArrayAsListDTO([list1, ListGranted]));
+		expect(lists_user.body).to.be.deep.equal(
+			castArrayAsListDTO([list1, ListGranted, ListTestWithGrantedAsList()])
+		);
+		await del(Url_ListDelete(GlobalVar.ListTestWithGranted_Id));
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";

@@ -5,8 +5,9 @@ import {
 } from "tsoa";
 
 import { CreateListDTO, EditListDTO, ListDTO, ListIdDTO } from "../dto/lists";
-import OwnershipError, { OwnershipErrorJSON } from "../errors/UserErrors/OwnershipError";
-import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
+import OwnershipError, { OwnershipErrorJSON } from "../errors/OwnershipError";
+import ResourceNotFoundError from "../errors/ResourceNotFoundError";
+import { ValidateErrorJSON } from "../errors/ValidationError";
 import { cleanObject } from "../helpers/cleanObjects";
 import List from "../models/List";
 import User from "../models/User";
@@ -169,10 +170,14 @@ export class ListController extends Controller {
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Put("invite/{sharingCode}")
 	async accessFromCode(@Request() request: ERequest, @Path() sharingCode: UUID): Promise<void> {
-		const list: List = await ListService.getFromSharingCode(sharingCode);
-		const user: User = await UserService.getById(request.userId);
-		if (!list.owners.find((u) => u.id == user.id)) {
-			await ListService.addGrantedUser(list.id, user);
+		try {
+			const list: List = await ListService.getFromSharingCode(sharingCode);
+			const user: User = await UserService.getById(request.userId);
+			if (!list.owners.find((u) => u.id == user.id)) {
+				await ListService.addGrantedUser(list.id, user);
+			}
+		} catch (err: any) {
+			throw new ResourceNotFoundError();
 		}
 	}
 }

@@ -13,10 +13,14 @@ import {
 	AfterGift, BeforeGift, BookGift, DeleteGift, FavGift, GetGift, GetGifts, HideGift, PostGift,
 	PutGift, UnbookGift, UnfavGift, UnhideGift
 } from "./03_gifts";
+import { CleanObject, Validators } from "./0_helpers";
 import * as URLS from "./global/urls";
 
 chai.use(chaiHttp);
-
+describe("Helpers", function () {
+	describe("Validators", Validators);
+	describe("CleanObject", CleanObject);
+});
 describe("Specials", function () {
 	describe("NotFound", NotFound);
 	describe("Unauthorized", Unauthorized);
@@ -37,7 +41,6 @@ describe("Lists", function () {
 	describe("PUT " + URLS.Url_ListInvite(), InviteList);
 	describe("PUT " + URLS.Url_ListShare(), ShareList);
 	describe("PUT " + URLS.Url_ListUnshare(), UnshareList);
-	describe("DELETE " + URLS.Url_ListDelete(), DeleteList);
 	after(async () => await AfterList());
 });
 describe("Gifts", function () {
@@ -52,7 +55,8 @@ describe("Gifts", function () {
 	describe("PUT " + URLS.Url_GiftUnfav(), UnfavGift);
 	describe("PUT " + URLS.Url_GiftHide(), HideGift);
 	describe("PUT " + URLS.Url_GiftUnhide(), UnhideGift);
-	describe("DELETE " + URLS.Url_GiftDelete(), DeleteGift);
 	after(async () => await AfterGift());
 });
+describe("DELETE " + URLS.Url_GiftDelete(), DeleteGift);
+describe("DELETE " + URLS.Url_ListDelete(), DeleteList);
 describe("DELETE " + URLS.Url_UserDeleteMe(), DeleteMe);

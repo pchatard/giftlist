@@ -24,6 +24,9 @@ export default function suite() {
 		GlobalVar.ListTest_SharingCode = (
 			await get(Url_ListGetOne(GlobalVar.ListTest_Id))
 		).body.sharingCode;
+		GlobalVar.ListTestWithGranted_SharingCode = (
+			await get(Url_ListGetOne(GlobalVar.ListTestWithGranted_Id))
+		).body.sharingCode;
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";

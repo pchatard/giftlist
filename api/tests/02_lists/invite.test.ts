@@ -1,8 +1,9 @@
 import { expect } from "chai";
+import { v4 as uuidv4 } from "uuid";
 
 import { Url_ListGetOne, Url_ListInvite, UserTest } from "../global";
 import { get, put } from "../helpers/crud";
-import { expectValidationFailed } from "../helpers/error";
+import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
 import { ListInvited, ListOwned } from "../seeder/lists.seed";
 import { castAsListDTO } from "./cast";
@@ -24,6 +25,10 @@ export default function suite() {
 				...castAsListDTO(ListInvited),
 				grantedUsersIds: [UserTest.id],
 			});
+	});
+	it("Returns 404, with UnvalidSharingCode error, if sharing code does not exist", async () => {
+		const response = await put(Url_ListInvite(uuidv4()));
+		expectError(response, 404, "Resource not found");
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";

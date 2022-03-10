@@ -1,7 +1,7 @@
 import { ListDTO } from "../../src/dto/lists";
 import { cleanObject } from "../../src/helpers/cleanObjects";
 import List from "../../src/models/List";
-import { GlobalVar, ListTest } from "../global";
+import { GlobalVar, ListTest, ListTestWithGranted } from "../global";
 
 export function castAsListDTO(list: List, showGrantedIds: boolean = true): ListDTO {
 	const { grantedUsers, owners, updatedDate, createdDate, sharingCode, ...rest } = list;
@@ -22,5 +22,14 @@ export function ListTestAsList(changes?: Partial<List>): List {
 		...changes,
 		id: GlobalVar.ListTest_Id,
 		sharingCode: GlobalVar.ListTest_SharingCode,
+	} as List;
+}
+
+export function ListTestWithGrantedAsList(changes?: Partial<List>): List {
+	return {
+		...ListTestWithGranted,
+		...changes,
+		id: GlobalVar.ListTestWithGranted_Id,
+		sharingCode: GlobalVar.ListTestWithGranted_SharingCode,
 	} as List;
 }

@@ -4,7 +4,7 @@ import {
 } from "tsoa";
 
 import { UserDTO } from "../dto/users";
-import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
+import { ValidateErrorJSON } from "../errors/ValidationError";
 import User from "../models/User";
 import UserService from "../services/UserService";
 import { SelectKindList } from "../types/SelectKindList";

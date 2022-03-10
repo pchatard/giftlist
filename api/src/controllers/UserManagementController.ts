@@ -1,11 +1,10 @@
 import {
-	Body, Controller, Delete, Get, Hidden, Path, Post, Put, Response, Route, Security,
-	SuccessResponse, Tags
+	Body, Controller, Delete, Get, Hidden, Path, Post, Response, Route, Security, SuccessResponse,
+	Tags
 } from "tsoa";
-import { EntityNotFoundError } from "typeorm";
 
 import { CreateUserDTO, UserDTO, UserIdDTO } from "../dto/users";
-import { ValidateErrorJSON } from "../errors/ValidationErrors/ValidationError";
+import { ValidateErrorJSON } from "../errors/ValidationError";
 import User from "../models/User";
 import UserService from "../services/UserService";
 import { email } from "../types/email";
@@ -30,26 +29,9 @@ export class UserManagementController extends Controller {
 			const { id }: User = await UserService.getById(body.id);
 			return { id } as UserIdDTO;
 		} catch (err: any) {
-			if (err instanceof EntityNotFoundError) {
-				const { id }: User = await UserService.create(body);
-				return { id } as UserIdDTO;
-			}
-			throw err;
+			const { id }: User = await UserService.create(body);
+			return { id } as UserIdDTO;
 		}
-	}
-
-	/**
-	 * Edit a user.
-	 * @param {UUID} userId the ID of user
-	 * @param {UserDTO} body data to edit a user
-	 */
-	@Security("auth0")
-	@SuccessResponse(204)
-	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Put("admin/{userId}")
-	@Hidden() // TODO: Remove Hidden and add administration capabilities
-	async edit(@Path() userId: string, @Body() body: Partial<UserDTO>): Promise<void> {
-		await UserService.edit(userId, body);
 	}
 
 	/**
