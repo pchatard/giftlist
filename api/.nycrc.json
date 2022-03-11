@@ -4,7 +4,7 @@
 	"include": ["src/**"],
 	"exclude": ["src/{dto,config,*.ts}", "src/types/express", "build/**", "coverage/**"],
 	"check-coverage": true,
-	"reporter": "html",
+	"reporter": "lcov",
 	"functions": 100,
 	"lines": 89,
 	"statements": 89
