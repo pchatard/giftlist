@@ -34,7 +34,7 @@ jobs:
     - name: Install 🔧
       run: npm ci
     - shell: bash
-      run: curl --create-dirs -o /certs/root.crt -O https://cockroachlabs.cloud/clusters/f82eaea0-cfe2-4492-aa07-e986cd93e46d/cert &&\
+      run: curl --create-dirs -o /certs/root.crt -O https://cockroachlabs.cloud/clusters/f82eaea0-cfe2-4492-aa07-e986cd93e46d/cert
     - name: Build 🏗️
       run: npm run build --if-present
     - name: Test 🚨
