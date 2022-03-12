@@ -1,12 +1,12 @@
 {
-	"name": "apiserver",
+	"name": "api",
 	"version": "1.0.0",
 	"description": "",
 	"main": "./src/index.ts",
 	"scripts": {
 		"build": "tsc",
 		"clean": "rm -rf ./build/*",
-		"lint": "eslint -c ./.eslintrc.json './src/**/*.ts'",
+		"lint": "eslint -c .eslintrc.json './src/**/*.ts'",
 		"typeorm:dropschema": "NODE_ENV=test node -r ts-node/register ./node_modules/typeorm/cli.js -f ./src/config/ormconfig.ts schema:drop",
 		"prettier:check": "prettier --config .prettierrc.json --check '{src,tests}/**/*.ts' '!src/routes.ts'",
 		"prettier:write": "prettier --config .prettierrc.json --write '{src,tests}/**/*.ts' '!src/routes.ts'",
@@ -53,6 +53,7 @@
 		"@typescript-eslint/parser": "^5.2.0",
 		"chai": "^4.3.4",
 		"chai-http": "^4.3.0",
+		"eslint": "^8.11.0",
 		"eslint-plugin-promise": "^5.1.1",
 		"eslint-plugin-security": "^1.4.0",
 		"jsonwebtoken": "^8.5.1",

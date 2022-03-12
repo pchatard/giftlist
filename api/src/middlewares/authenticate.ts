@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { config } from "dotenv";
 import { Request } from "express";
 import { UnauthorizedError } from "express-jwt";
@@ -15,7 +16,7 @@ export function expressAuthentication(
 		const token = request.headers["authorization"] || "";
 
 		return new Promise((resolve, reject) => {
-			var client = jwksRsa({
+			const client = jwksRsa({
 				cache: true,
 				rateLimit: true,
 				jwksRequestsPerMinute: 5,
@@ -28,7 +29,7 @@ export function expressAuthentication(
 				);
 			}
 
-			jwt.verify(token.split("Bearer ")[1], getKey, function (err: any, decoded: any) {
+			jwt.verify(token.split("Bearer ")[1], getKey, function (err: unknown, decoded: any) {
 				if (err) {
 					reject(err);
 				} else {

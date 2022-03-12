@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-non-literal-fs-filename */
 import { config } from "dotenv";
 import * as fs from "fs";
 import { ConnectionOptions } from "typeorm";

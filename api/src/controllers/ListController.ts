@@ -176,7 +176,7 @@ export class ListController extends Controller {
 			if (!list.owners.find((u) => u.id == user.id)) {
 				await ListService.addGrantedUser(list.id, user);
 			}
-		} catch (err: any) {
+		} catch (err: unknown) {
 			throw new ResourceNotFoundError();
 		}
 	}
