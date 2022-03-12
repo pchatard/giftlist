@@ -45,13 +45,12 @@ app.use(errorHandler);
 
 const server = app.listen(PORT, async () => {
 	await createConnection(dbConnection);
-	{
-		process.env.NODE_ENV == "dev" && console.log("Listening on " + PORT);
-	}
 });
 
 process.on("SIGTERM", () => {
-	server.close(() => {});
+	server.close(() => {
+		null;
+	});
 });
 
 export default app;

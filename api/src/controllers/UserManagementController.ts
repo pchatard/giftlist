@@ -28,7 +28,7 @@ export class UserManagementController extends Controller {
 		try {
 			const { id }: User = await UserService.getById(body.id);
 			return { id } as UserIdDTO;
-		} catch (err: any) {
+		} catch (err: unknown) {
 			const { id }: User = await UserService.create(body);
 			return { id } as UserIdDTO;
 		}

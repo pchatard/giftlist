@@ -1,11 +1,12 @@
+/* eslint-disable security/detect-object-injection */
 /**
  * Remove undefined, null and "__promise_xxxx__" properties from object.
  * @param {T} obj the object to clean
  * @returns the cleaned object
  */
 export function cleanObject<T>(obj: T): T {
-	let res: any = {};
-	for (var propName in obj) {
+	const res: T = {} as T;
+	for (const propName in obj) {
 		if (
 			!propName.includes("__promise") &&
 			obj[propName] !== undefined &&

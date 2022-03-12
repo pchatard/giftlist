@@ -17,7 +17,7 @@ export default function suite() {
 		const response = await get(Url_GiftGetAll(ListOwned.id));
 		expect200(response);
 		expect(response).to.have.property("body").to.be.an("array");
-		expect(response.body).to.be.deep.equal(castArrayAsGiftDTO([Gift1, Gift2]));
+		expect(response.body).to.have.deep.members(castArrayAsGiftDTO([Gift1, Gift2]));
 	});
 	it("Returns 200, with not hidden gifts for granted", async () => {
 		const response = await get(Url_GiftGetAll(ListGranted.id));

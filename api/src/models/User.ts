@@ -16,7 +16,7 @@ export class User {
 
 	@ManyToMany(() => User)
 	@JoinTable({ name: "User_Friends" })
-	public friends?: User[];
+	public friends?: this[];
 
 	@ManyToMany(() => List, (list) => list.owners)
 	public lists?: List[];
