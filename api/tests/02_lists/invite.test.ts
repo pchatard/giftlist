@@ -1,51 +1,38 @@
 import { expect } from "chai";
+import { v4 as uuidv4 } from "uuid";
 
-import { GlobalVar, Url_ListGetOne, Url_ListInvite } from "../global";
+import { Url_ListGetOne, Url_ListInvite, UserTest } from "../global";
 import { get, put } from "../helpers/crud";
-import { expectValidationFailed } from "../helpers/error";
+import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
+import { ListInvited, ListOwned } from "../seeder/lists.seed";
+import { castAsListDTO } from "./cast";
 
 export default function suite() {
 	it("Returns 204, user is not added to grantedUser if owner", async () => {
-		const response = await put(
-			Url_ListInvite(GlobalVar.List1_SharingCode, GlobalVar.User1_Id),
-			{}
-		);
+		const response = await put(Url_ListInvite(ListOwned.sharingCode), {});
 		expect204(response);
-		const changedList = await get(Url_ListGetOne(GlobalVar.List1_Id, GlobalVar.User1_Id));
-		expect(changedList)
-			.to.have.property("body")
-			.to.eql({
-				title: "TestList1",
-				ownersIds: [GlobalVar.User1_Id],
-				grantedUsersIds: [],
-				isShared: false,
-				sharingCode: "",
-			});
+		const changedList = await get(Url_ListGetOne(ListOwned.id));
+		expect(changedList).to.have.property("body").to.be.deep.equal(castAsListDTO(ListOwned));
 	});
 	it("Returns 204, user is added to grantedUser if not owner", async () => {
-		const response = await put(
-			Url_ListInvite(GlobalVar.List1_SharingCode, GlobalVar.User3_Id),
-			{}
-		);
+		const response = await put(Url_ListInvite(ListInvited.sharingCode), {});
 		expect204(response);
-		const changedList = await get(Url_ListGetOne(GlobalVar.List1_Id, GlobalVar.User1_Id));
+		const changedList = await get(Url_ListGetOne(ListInvited.id));
 		expect(changedList)
 			.to.have.property("body")
 			.to.eql({
-				title: "TestList1",
-				ownersIds: [GlobalVar.User1_Id],
-				grantedUsersIds: [GlobalVar.User3_Id],
-				isShared: true,
-				sharingCode: GlobalVar.List1_SharingCode,
+				...castAsListDTO(ListInvited),
+				grantedUsersIds: [UserTest.id],
 			});
+	});
+	it("Returns 404, with UnvalidSharingCode error, if sharing code does not exist", async () => {
+		const response = await put(Url_ListInvite(uuidv4()));
+		expectError(response, 404, "Resource not found");
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
-		const responses = [
-			await put(Url_ListInvite(wrongUUID, GlobalVar.User1_Id)),
-			await put(Url_ListInvite(GlobalVar.List1_Id, wrongUUID)),
-		];
-		responses.forEach((response) => expectValidationFailed(response));
+		const response = await put(Url_ListInvite(wrongUUID));
+		expectValidationFailed(response);
 	});
 }

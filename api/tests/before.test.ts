@@ -1,9 +1,16 @@
 import "mocha";
 
+import { config } from "dotenv";
 import * as fs from "fs";
 import request from "request";
+import { createConnection } from "typeorm";
+import { runSeeder } from "typeorm-seeding";
 
+import { dbConnection } from "../src";
 import { GlobalVar } from "./global";
+import Seeder from "./seeder/seeder.test";
+
+config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
 const options = {
 	url: process.env.AUTH0_TOKEN_URL as string,
@@ -16,14 +23,13 @@ const options = {
 	}),
 };
 
-before((done) => {
+before(async () => {
 	// Tricky hack to ask token only if expired
 	const data = fs.readFileSync("./tests/.env", { encoding: "utf-8" });
 	const lines = data.split(/\r?\n/);
 	const readDate = new Date(lines[0].split("DATE=")[1]);
 	if (getUnixTimestamp(readDate) + 172800 > getUnixTimestamp(new Date())) {
 		GlobalVar.Token = lines[1].toString().split("TOKEN=")[1];
-		done();
 	} else {
 		let newValues = replaceDate(data);
 		request.post(options, function (error, _response, body) {
@@ -31,9 +37,10 @@ before((done) => {
 			const token = JSON.parse(body)["access_token"];
 			GlobalVar.Token = token;
 			fs.writeFileSync("./tests/.env", replaceToken(newValues, token));
-			done();
 		});
 	}
+	await createConnection(dbConnection);
+	await runSeeder(Seeder);
 });
 
 const getUnixTimestamp = (date: Date) => Math.floor(date.getTime() / 1000);

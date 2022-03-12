@@ -1,66 +1,42 @@
+import { config } from "dotenv";
+
 import { CreateGiftDTO } from "../../src/dto/gifts";
 import { CreateListDTO } from "../../src/dto/lists";
 import { CreateUserDTO } from "../../src/dto/users";
+import { User1 } from "../seeder/users.seed";
 
-export const User1: CreateUserDTO = {
-	email: "test1@test.fr",
-	displayName: "TestUser1",
+config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
+
+export const NewUserTest: CreateUserDTO = {
+	id: "newUserId",
+	email: "newUserMail@test.fr",
+	displayName: "Test NewUser",
 };
 
-export const User2: CreateUserDTO = {
-	email: "test2@test.fr",
-	displayName: "TestUser2",
+export const UserTest: CreateUserDTO = {
+	id: process.env.AUTH0_CLIENT_ID + "@clients",
+	email: "testuser@test.fr",
+	displayName: "Test User",
 };
 
-export const User3: CreateUserDTO = {
-	email: "test3@test.fr",
-	displayName: "TestUser3",
-};
-
-export const List1: CreateListDTO = {
-	title: "TestList1",
-	ownersIds: [],
-	grantedUsersIds: [],
-	isShared: false,
-};
-
-export const List2: CreateListDTO = {
-	title: "TestList2",
-	ownersIds: [],
-	grantedUsersIds: [],
+export const ListTest: CreateListDTO = {
+	title: "TestListTest",
+	ownersIds: [UserTest.id],
 	isShared: true,
 };
 
-export const List3: CreateListDTO = {
-	title: "TestList3",
-	ownersIds: [],
-	grantedUsersIds: [],
+export const ListTestWithGranted: CreateListDTO = {
+	title: "TestListTest",
+	ownersIds: [UserTest.id],
+	grantedUsersIds: [User1.id],
 	isShared: true,
 };
 
-export const Gift1: CreateGiftDTO = {
-	title: "TestGift1",
+export const GiftTest: CreateGiftDTO = {
+	title: "TestGiftTest",
+	isBooked: false,
+	isHidden: false,
+	isFavorite: false,
 	category: "book",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: false,
-	listId: "",
-};
-
-export const Gift2: CreateGiftDTO = {
-	title: "TestGift2",
-	category: "clothes",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: true,
-	listId: "",
-};
-
-export const Gift3: CreateGiftDTO = {
-	title: "TestGift3",
-	category: "others",
-	isBooked: false,
-	isFavorite: false,
-	isHidden: false,
 	listId: "",
 };

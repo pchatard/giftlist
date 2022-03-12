@@ -1,17 +1,17 @@
 {
-	"settings": {
-		"import/resolver": {
-			"node": {
-				"extensions": [".js", ".ts"]
-			}
-		}
-	},
 	"env": {
 		"browser": true,
 		"commonjs": true,
 		"es6": true,
 		"node": true
 	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:security/recommended",
+		"plugin:promise/recommended"
+	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaVersion": 2021,
@@ -20,18 +20,8 @@
 		},
 		"sourceType": "module"
 	},
-	"plugins": [
-		"@typescript-eslint",
-		"security",
-		"promise"
-	],
-	"extends": [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/eslint-recommended",
-		"plugin:@typescript-eslint/recommended",
-		"plugin:security/recommended",
-		"plugin:promise/recommended"
-	],
+	"plugins": ["@typescript-eslint", "security", "promise"],
+	"root": true,
 	"rules": {
 		"no-const-assign": "warn",
 		"no-this-before-super": "warn",
@@ -43,11 +33,18 @@
 		"constructor-super": "warn",
 		"valid-typeof": "warn",
 		"no-extra-semi": "error",
-		"react/prop-types": "off",
-		"react/display-name": "off",
 		"no-console": "warn",
+		"@typescript-eslint/camelcase": "off",
+		"@typescript-eslint/interface-name-prefix": "off",
+		"@typescript-eslint/no-empty-interface": "off",
 		"@typescript-eslint/no-inferrable-types": "off",
-		"@typescript-eslint/interface-name-prefix": ["error", "always"],
-		"@typescript-eslint/camelcase": "off"
+		"@typescript-eslint/no-unused-vars": "off"
+	},
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"extensions": [".js", ".ts"]
+			}
+		}
 	}
 }

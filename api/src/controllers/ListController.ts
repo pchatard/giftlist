@@ -1,9 +1,13 @@
+import { Request as ERequest } from "express";
 import {
-	Body, Controller, Delete, Get, Path, Post, Put, Query, Route, Security, SuccessResponse, Tags
+	Body, Controller, Delete, Get, Path, Post, Put, Query, Request, Response, Route, Security,
+	SuccessResponse, Tags
 } from "tsoa";
 
-import { CreateListDTO, ListDTO, ListIdDTO } from "../dto/lists";
-import OwnershipError from "../errors/UserErrors/OwnershipError";
+import { CreateListDTO, EditListDTO, ListDTO, ListIdDTO } from "../dto/lists";
+import ResourceNotFoundError from "../errors/ResourceNotFoundError";
+import UnauthorizedError, { UnauthorizedErrorJSON } from "../errors/UnauthorizedError";
+import { ValidateErrorJSON } from "../errors/ValidationError";
 import { cleanObject } from "../helpers/cleanObjects";
 import List from "../models/List";
 import User from "../models/User";
@@ -19,11 +23,14 @@ import GiftController from "./GiftController";
 export class ListController extends Controller {
 	/**
 	 * Creates a new list.
+	 * Please note that user which call the function is added to owners if not anticipated in body call
+	 * @param {CreateListDTO} body list property for entity creation
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Post()
-	async create(@Body() body: CreateListDTO): Promise<ListIdDTO> {
-		const owners: User[] = await UserService.getMany(body.ownersIds);
+	async create(@Request() request: ERequest, @Body() body: CreateListDTO): Promise<ListIdDTO> {
+		const owners: User[] = await UserService.getMany([...body.ownersIds, request.userId]);
 		let grantedUsers: User[] = [];
 		if (body.grantedUsersIds) {
 			grantedUsers = await UserService.getMany(body.grantedUsersIds);
@@ -37,15 +44,17 @@ export class ListController extends Controller {
 	 * @param {UUID} listId the GUID of the list
 	 * @param {ListDTO} body data to edit a list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner")
 	@Put("{listId}")
 	async edit(
+		@Request() request: ERequest,
 		@Path() listId: UUID,
-		@Body() body: Partial<ListDTO>,
-		@Query() userId: UUID
+		@Body() body: Partial<EditListDTO>
 	): Promise<void> {
-		if (!(await ListService.listOwners(listId)).includes(userId)) {
-			throw new OwnershipError();
+		if (!(await ListService.listOwners(listId)).includes(request.userId)) {
+			throw new UnauthorizedError();
 		}
 		await ListService.edit(listId, body);
 	}
@@ -54,11 +63,22 @@ export class ListController extends Controller {
 	 * Delete a list.
 	 * @param {UUID} listId the GUID of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner or granted")
 	@Delete("{listId}")
-	async delete(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		const ownerIds: UUID[] = await ListService.listOwners(listId);
-		const grantedIds: UUID[] = await ListService.listGrantedUsers(listId);
+	async delete(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
+		await this.deleteById(listId, request.userId);
+	}
+
+	/**
+	 * Delete a list by id
+	 * @param listId id of list to delete
+	 * @param userId owner or granted user of the list
+	 */
+	async deleteById(listId: UUID, userId: string): Promise<void> {
+		const ownerIds: string[] = await ListService.listOwners(listId);
+		const grantedIds: string[] = await ListService.listGrantedUsers(listId);
 		if (ownerIds.includes(userId) || grantedIds.includes(userId)) {
 			await ListService.forget(listId, userId);
 			if (ownerIds.length == 1 && ownerIds.includes(userId)) {
@@ -72,21 +92,22 @@ export class ListController extends Controller {
 				await ListService.delete(listId);
 			}
 		} else {
-			throw new OwnershipError();
+			throw new UnauthorizedError();
 		}
 	}
 
 	/**
 	 * Gets all user's lists data.
+	 * @param {SelectKindList} select flag to select owned or granted lists
 	 * @returns {Promise<ListDTO[]>} all user lists
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Get()
-	async getAll(@Query() userId: UUID, @Query() select: SelectKindList): Promise<ListDTO[]> {
-		const lists: List[] = await UserService.getUserLists(userId, select);
+	async getAll(@Request() request: ERequest, @Query() select: SelectKindList): Promise<ListDTO[]> {
+		const lists: List[] = await UserService.getUserLists(request.userId, select);
 		return lists.map((list) => {
-			const { id, grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } =
-				list;
+			const { grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } = list;
 			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
 			return cleanObject(rest) as ListDTO;
 		});
@@ -95,17 +116,20 @@ export class ListController extends Controller {
 	/**
 	 * Sends back a list in the response based on its id.
 	 * @param {UUID} listId the GUID of the list
+	 * @returns {Promise<ListDTO>} the list
 	 */
-	@SuccessResponse(200)
+	@SuccessResponse(200, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner or granted")
 	@Get("{listId}")
-	async get(@Path() listId: UUID, @Query() userId: UUID): Promise<ListDTO> {
+	async get(@Request() request: ERequest, @Path() listId: UUID): Promise<ListDTO> {
 		if (
-			!(await ListService.listOwners(listId)).includes(userId) &&
-			!(await ListService.listGrantedUsers(listId)).includes(userId)
+			!(await ListService.listOwners(listId)).includes(request.userId) &&
+			!(await ListService.listGrantedUsers(listId)).includes(request.userId)
 		) {
-			throw new OwnershipError();
+			throw new UnauthorizedError();
 		}
-		const { id, grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
+		const { grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
 			await ListService.get(listId);
 		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
 		return cleanObject(rest) as ListDTO;
@@ -115,33 +139,45 @@ export class ListController extends Controller {
 	 * Make a list to public.
 	 * @param {UUID} listId the GUID of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner")
 	@Put("{listId}/share")
-	async share(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, { isShared: true }, userId);
+	async share(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
+		await this.edit(request, listId, { isShared: true });
 	}
 
 	/**
 	 * Make a list private.
 	 * @param {UUID} listId the GUID of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner")
 	@Put("{listId}/unshare")
-	async private(@Path() listId: UUID, @Query() userId: UUID): Promise<void> {
-		await this.edit(listId, { isShared: false }, userId);
+	async private(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
+		await this.edit(request, listId, { isShared: false });
+		for (const grantedId of await ListService.listGrantedUsers(listId)) {
+			await ListService.forget(listId, grantedId);
+		}
 	}
 
 	/**
 	 * Get a list from its sharing code.
 	 * @param {UUID} sharingCode the sharing code of the list
 	 */
-	@SuccessResponse(204)
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Put("invite/{sharingCode}")
-	async accessFromSharingCode(@Path() sharingCode: UUID, @Query() userId: UUID): Promise<void> {
-		const list: List = await ListService.getFromSharingCode(sharingCode);
-		const user: User = await UserService.get(userId);
-		if (!list.owners.find((u) => u.id == user.id)) {
-			await ListService.addGrantedUser(list.id, user);
+	async accessFromCode(@Request() request: ERequest, @Path() sharingCode: UUID): Promise<void> {
+		try {
+			const list: List = await ListService.getFromSharingCode(sharingCode);
+			const user: User = await UserService.getById(request.userId);
+			if (!list.owners.find((u) => u.id == user.id)) {
+				await ListService.addGrantedUser(list.id, user);
+			}
+		} catch (err: unknown) {
+			throw new ResourceNotFoundError();
 		}
 	}
 }

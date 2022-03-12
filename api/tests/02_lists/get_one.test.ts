@@ -1,34 +1,36 @@
 import { expect } from "chai";
 
-import { GlobalVar, List1, List2, Url_ListGetOne } from "../global";
+import { GlobalVar, Url_ListGetOne } from "../global";
 import { get } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect200 } from "../helpers/success";
+import { ListGranted, ListInvited, ListOwned } from "../seeder/lists.seed";
+import { castAsListDTO } from "./cast";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {
-		const response = await get(Url_ListGetOne(GlobalVar.List1_Id, GlobalVar.User2_Id));
+		const response = await get(Url_ListGetOne(ListInvited.id));
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 200 with list informations, if not owned but granted", async () => {
-		const response = await get(Url_ListGetOne(GlobalVar.List2_Id, GlobalVar.User2_Id));
+		const response = await get(Url_ListGetOne(ListGranted.id));
 		expect200(response);
-		expect(response).to.have.property("body").to.have.property("sharingCode").to.be.a.string;
-		GlobalVar.List2_SharingCode = response.body.sharingCode;
-		expect(response).to.have.property("body").to.deep.include(List2);
+		expect(response).to.have.property("body").to.be.deep.equal(castAsListDTO(ListGranted));
 	});
 	it("Returns 200 with list informations, if owned", async () => {
-		const response = await get(Url_ListGetOne(GlobalVar.List1_Id, GlobalVar.User1_Id));
+		const response = await get(Url_ListGetOne(ListOwned.id));
 		expect200(response);
-		expect(response).to.have.property("body").to.have.property("sharingCode").to.be.a.string;
-		expect(response).to.have.property("body").to.deep.include(List1);
+		expect(response).to.have.property("body").to.be.deep.equal(castAsListDTO(ListOwned));
+		GlobalVar.ListTest_SharingCode = (
+			await get(Url_ListGetOne(GlobalVar.ListTest_Id))
+		).body.sharingCode;
+		GlobalVar.ListTestWithGranted_SharingCode = (
+			await get(Url_ListGetOne(GlobalVar.ListTestWithGranted_Id))
+		).body.sharingCode;
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
-		const responses = [
-			await get(Url_ListGetOne(wrongUUID, GlobalVar.User1_Id)),
-			await get(Url_ListGetOne(GlobalVar.List1_Id, wrongUUID)),
-		];
-		responses.forEach((response) => expectValidationFailed(response));
+		const response = await get(Url_ListGetOne(wrongUUID));
+		expectValidationFailed(response);
 	});
 }

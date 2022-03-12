@@ -7,7 +7,9 @@ import { GiftController } from './controllers/GiftController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ListController } from './controllers/ListController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './controllers/UserController';
+import { UserLoggedController } from './controllers/UserLoggedController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { UserManagementController } from './controllers/UserManagementController';
 import { expressAuthentication } from './middlewares/authenticate';
 // @ts-ignore - no great way to install types from subpackage
 const promiseAny = require('promise.any');
@@ -25,6 +27,23 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "id": {"ref":"UUID","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ValidateErrorJSON": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"enum","enums":["Validation failed"],"required":true},
+            "details": {"dataType":"nestedObjectLiteral","nestedProperties":{},"additionalProperties":{"dataType":"any"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UnauthorizedErrorJSON": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"enum","enums":["Unauthorized"],"required":true},
         },
         "additionalProperties": false,
     },
@@ -48,19 +67,38 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Partial_GiftDTO_": {
+    "Partial_EditGiftDTO_": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"isBooked":{"dataType":"boolean"},"isFavorite":{"dataType":"boolean"},"isHidden":{"dataType":"boolean"},"category":{"dataType":"string"},"listId":{"ref":"UUID"},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
+    "Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string","required":true},"isBooked":{"dataType":"boolean","required":true},"isFavorite":{"dataType":"boolean","required":true},"isHidden":{"dataType":"boolean","required":true},"category":{"dataType":"string","required":true},"listId":{"ref":"UUID","required":true},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"ref":"UUID","required":true},"title":{"dataType":"string","required":true},"isBooked":{"dataType":"boolean","required":true},"isFavorite":{"dataType":"boolean","required":true},"isHidden":{"dataType":"boolean","required":true},"category":{"dataType":"string","required":true},"listId":{"ref":"UUID","required":true},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "GiftDTO": {
         "dataType": "refAlias",
-        "type": {"ref":"Pick_Gift.-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_","validators":{}},
+        "type": {"ref":"Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GiftDTOForOwner": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"ref":"UUID","required":true},
+            "title": {"dataType":"string","required":true},
+            "isFavorite": {"dataType":"boolean","required":true},
+            "isHidden": {"dataType":"boolean","required":true},
+            "category": {"dataType":"string","required":true},
+            "listId": {"ref":"UUID","required":true},
+            "price": {"dataType":"double"},
+            "linkURL": {"dataType":"string"},
+            "brand": {"dataType":"string"},
+            "size": {"dataType":"string"},
+            "color": {"dataType":"string"},
+            "comments": {"dataType":"string"},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListIdDTO": {
@@ -76,25 +114,26 @@ const models: TsoaRoute.Models = {
         "properties": {
             "title": {"dataType":"string","required":true},
             "closureDate": {"dataType":"datetime"},
-            "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
+            "ownersIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
             "isShared": {"dataType":"boolean","required":true},
-            "grantedUsersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},
+            "grantedUsersIds": {"dataType":"array","array":{"dataType":"string"}},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Partial_ListDTO_": {
+    "Partial_EditListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},"isShared":{"dataType":"boolean"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"string"}},"isShared":{"dataType":"boolean"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
         "dataType": "refObject",
         "properties": {
+            "id": {"ref":"UUID","required":true},
             "title": {"dataType":"string","required":true},
             "sharingCode": {"ref":"UUID","required":true},
             "closureDate": {"dataType":"datetime"},
-            "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
+            "ownersIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
             "isShared": {"dataType":"boolean","required":true},
         },
         "additionalProperties": false,
@@ -105,48 +144,39 @@ const models: TsoaRoute.Models = {
         "enums": ["all","owned","granted"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserIdDTO": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"ref":"UUID","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "MailAlreadyUsedError": {
-        "dataType": "refObject",
-        "properties": {
-            "name": {"dataType":"string","required":true},
-            "message": {"dataType":"string","required":true},
-            "stack": {"dataType":"string"},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "email": {
         "dataType": "refAlias",
         "type": {"dataType":"string","validators":{"pattern":{"value":"(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))"}}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CreateUserDTO": {
+    "UserDTO": {
         "dataType": "refObject",
         "properties": {
-            "email": {"ref":"email","required":true},
             "displayName": {"dataType":"string","required":true},
+            "email": {"ref":"email","required":true},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_UserDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"email":{"ref":"email"},"displayName":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"displayName":{"dataType":"string"},"email":{"ref":"email"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserDTO": {
+    "UserIdDTO": {
         "dataType": "refObject",
         "properties": {
-            "email": {"ref":"email","required":true},
+            "id": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateUserDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"string","required":true},
             "displayName": {"dataType":"string","required":true},
+            "email": {"ref":"email","required":true},
         },
         "additionalProperties": false,
     },
@@ -166,9 +196,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_create(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     body: {"in":"body","name":"body","required":true,"ref":"CreateGiftDTO"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -192,10 +222,10 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_edit(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    body: {"in":"body","name":"body","required":true,"ref":"Partial_GiftDTO_"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_EditGiftDTO_"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -219,9 +249,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_delete(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -245,8 +275,8 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_getAll(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -270,9 +300,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_get(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -296,9 +326,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_hide(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -322,9 +352,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_unhide(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -348,9 +378,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_favorite(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -374,9 +404,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_unfavorite(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -400,9 +430,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_book(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -426,9 +456,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function GiftController_unbook(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
                     giftId: {"in":"path","name":"giftId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -452,6 +482,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_create(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     body: {"in":"body","name":"body","required":true,"ref":"CreateListDTO"},
             };
 
@@ -476,9 +507,9 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_edit(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
-                    body: {"in":"body","name":"body","required":true,"ref":"Partial_ListDTO_"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_EditListDTO_"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -502,8 +533,8 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_delete(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -527,7 +558,7 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_getAll(request: any, response: any, next: any) {
             const args = {
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     select: {"in":"query","name":"select","required":true,"ref":"SelectKindList"},
             };
 
@@ -552,8 +583,8 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_get(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -577,8 +608,8 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_share(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -602,8 +633,8 @@ export function RegisterRoutes(app: express.Router) {
 
             function ListController_private(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     listId: {"in":"path","name":"listId","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -625,10 +656,10 @@ export function RegisterRoutes(app: express.Router) {
         app.put('/lists/invite/:sharingCode',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function ListController_accessFromSharingCode(request: any, response: any, next: any) {
+            function ListController_accessFromCode(request: any, response: any, next: any) {
             const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
                     sharingCode: {"in":"path","name":"sharingCode","required":true,"ref":"UUID"},
-                    userId: {"in":"query","name":"userId","required":true,"ref":"UUID"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -640,7 +671,80 @@ export function RegisterRoutes(app: express.Router) {
                 const controller = new ListController();
 
 
-              const promise = controller.accessFromSharingCode.apply(controller, validatedArgs as any);
+              const promise = controller.accessFromCode.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.get('/users/me',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function UserLoggedController_get(request: any, response: any, next: any) {
+            const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new UserLoggedController();
+
+
+              const promise = controller.get.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.put('/users/me',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function UserLoggedController_edit(request: any, response: any, next: any) {
+            const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+                    body: {"in":"body","name":"body","required":true,"ref":"Partial_UserDTO_"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new UserLoggedController();
+
+
+              const promise = controller.edit.apply(controller, validatedArgs as any);
+              promiseHandler(controller, promise, response, undefined, next);
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        app.delete('/users/me',
+            authenticateMiddleware([{"auth0":[]}]),
+
+            function UserLoggedController_delete(request: any, response: any, next: any) {
+            const args = {
+                    request: {"in":"request","name":"request","required":true,"dataType":"object"},
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request, response);
+
+                const controller = new UserLoggedController();
+
+
+              const promise = controller.delete.apply(controller, validatedArgs as any);
               promiseHandler(controller, promise, response, undefined, next);
             } catch (err) {
                 return next(err);
@@ -648,9 +752,8 @@ export function RegisterRoutes(app: express.Router) {
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         app.post('/users',
-            authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_create(request: any, response: any, next: any) {
+            function UserManagementController_create(request: any, response: any, next: any) {
             const args = {
                     body: {"in":"body","name":"body","required":true,"ref":"CreateUserDTO"},
             };
@@ -661,7 +764,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserManagementController();
 
 
               const promise = controller.create.apply(controller, validatedArgs as any);
@@ -671,13 +774,12 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/users/:userId',
+        app.delete('/users/admin/:userId',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_edit(request: any, response: any, next: any) {
+            function UserManagementController_delete(request: any, response: any, next: any) {
             const args = {
-                    userId: {"in":"path","name":"userId","required":true,"ref":"UUID"},
-                    body: {"in":"body","name":"body","required":true,"ref":"Partial_UserDTO_"},
+                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -686,31 +788,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
-
-
-              const promise = controller.edit.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, undefined, next);
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/users/:userId',
-            authenticateMiddleware([{"auth0":[]}]),
-
-            function UserController_delete(request: any, response: any, next: any) {
-            const args = {
-                    userId: {"in":"path","name":"userId","required":true,"ref":"UUID"},
-            };
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request, response);
-
-                const controller = new UserController();
+                const controller = new UserManagementController();
 
 
               const promise = controller.delete.apply(controller, validatedArgs as any);
@@ -723,7 +801,7 @@ export function RegisterRoutes(app: express.Router) {
         app.get('/users',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_getAll(request: any, response: any, next: any) {
+            function UserManagementController_getAll(request: any, response: any, next: any) {
             const args = {
             };
 
@@ -733,7 +811,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserManagementController();
 
 
               const promise = controller.getAll.apply(controller, validatedArgs as any);
@@ -743,12 +821,12 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/users/:userId',
+        app.get('/users/:userMail',
             authenticateMiddleware([{"auth0":[]}]),
 
-            function UserController_get(request: any, response: any, next: any) {
+            function UserManagementController_get(request: any, response: any, next: any) {
             const args = {
-                    userId: {"in":"path","name":"userId","required":true,"ref":"UUID"},
+                    userMail: {"in":"path","name":"userMail","required":true,"ref":"email"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -757,7 +835,7 @@ export function RegisterRoutes(app: express.Router) {
             try {
                 validatedArgs = getValidatedArgs(args, request, response);
 
-                const controller = new UserController();
+                const controller = new UserManagementController();
 
 
               const promise = controller.get.apply(controller, validatedArgs as any);

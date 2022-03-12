@@ -8,6 +8,7 @@ export interface GiftIdDTO extends Expand<Pick<Gift, "id">> {}
 // TODO: Understand why Expand make tsoa going to timeout
 export type GiftDTO = Pick<
 	Gift,
+	| "id"
 	| "title"
 	| "isBooked"
 	| "isFavorite"
@@ -21,3 +22,7 @@ export type GiftDTO = Pick<
 	| "color"
 	| "comments"
 >;
+
+export interface GiftDTOForOwner extends Expand<Omit<GiftDTO, "isBooked">> {}
+
+export interface EditGiftDTO extends Expand<Omit<GiftDTO, "id">> {}

@@ -1,52 +1,43 @@
 import { expect } from "chai";
 
-import { GlobalVar, Url_GiftGetOne, Url_GiftUnhide } from "../global";
-import { Gift1 } from "../global/objects";
+import { Url_GiftGetOne, Url_GiftUnhide } from "../global";
 import { get, put } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
+import { Gift1, Gift3, Gift5 } from "../seeder/gifts.seed";
+import { ListGranted, ListOwned, ListUnauthorized } from "../seeder/lists.seed";
+import { castAsGiftDTO } from "./cast";
 
 export default function suite() {
 	it("Returns 401 Unauthorized, if not owned not granted", async () => {
-		const response = await put(
-			Url_GiftUnhide(GlobalVar.List2_Id, GlobalVar.Gift3_Id, GlobalVar.User2_Id),
-			{}
-		);
+		const response = await put(Url_GiftUnhide(ListUnauthorized.id, Gift5.id), {
+			title: "ChangedGift4",
+		});
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 401 Unauthorized, if not owned but granted", async () => {
-		const response = await put(
-			Url_GiftUnhide(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User2_Id),
-			{}
-		);
+		const response = await put(Url_GiftUnhide(ListGranted.id, Gift3.id), {
+			title: "ChangedGift3",
+		});
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 401 Unauthorized, if owned but gift does not belong to list", async () => {
-		const response = await put(
-			Url_GiftUnhide(GlobalVar.List1_Id, GlobalVar.Gift3_Id, GlobalVar.User1_Id),
-			{}
-		);
+		const response = await put(Url_GiftUnhide(ListOwned.id, Gift3.id), {});
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 204, if owned", async () => {
-		const response = await put(
-			Url_GiftUnhide(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User1_Id),
-			{}
-		);
+		const response = await put(Url_GiftUnhide(ListOwned.id, Gift1.id), {});
 		expect204(response);
-		const changedGift = await get(
-			Url_GiftGetOne(GlobalVar.List1_Id, GlobalVar.Gift1_Id, GlobalVar.User1_Id)
-		);
+		const changedGift = await get(Url_GiftGetOne(ListOwned.id, Gift1.id));
 		expect(changedGift)
 			.to.have.property("body")
-			.to.eql({ ...Gift1, isHidden: false });
+			.to.eql(castAsGiftDTO({ ...Gift1, isHidden: false }));
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
 		const responses = [
-			await put(Url_GiftUnhide(wrongUUID, GlobalVar.Gift2_Id, GlobalVar.User1_Id)),
-			await put(Url_GiftUnhide(GlobalVar.List1_Id, wrongUUID, GlobalVar.User1_Id)),
-			await put(Url_GiftUnhide(GlobalVar.List1_Id, GlobalVar.Gift2_Id, wrongUUID)),
+			await put(Url_GiftUnhide(wrongUUID, Gift1.id)),
+			await put(Url_GiftUnhide(ListOwned.id, wrongUUID)),
 		];
 		responses.forEach((response) => expectValidationFailed(response));
 	});
