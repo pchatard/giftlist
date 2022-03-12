@@ -1,16 +1,20 @@
+import { AxiosError } from "axios";
+
 import { axiosInstance as axios } from "@/main";
 import store from "@/store";
 import { SnackbarState } from "@/store/snackbar";
+import { APIStatusCodeEnum } from "@/types/APIStatusCodeEnum";
 import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { Auth0Client } from "@auth0/auth0-spa-js";
-import { AxiosError, AxiosRequestHeaders } from "axios";
-import { inject } from "vue";
 
 export default class GiftlistAPI {
-	static async getAuthToken() {
-		const auth: Auth0Client | undefined = inject("Auth");
-		const token = await auth?.getTokenSilently();
-		return token;
+	static token = "";
+
+	static async getAuthToken(auth: Auth0Client) {
+		const token = (await auth?.getTokenSilently()) || "";
+		if (!GiftlistAPI.token) {
+			GiftlistAPI.token = token;
+		}
 	}
 
 	static showErrorSnackbar(error: Error) {
@@ -21,53 +25,54 @@ export default class GiftlistAPI {
 		store.dispatch("showSnackbar", snackbar);
 	}
 
-	static async get(path: string, queryParams?: Record<string, unknown>) {
-		const token = await this.getAuthToken();
-		try {
-			return axios.get(path, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-				params: queryParams,
-			});
-		} catch (error) {
-			throw error as Error;
-		}
+	static async get(auth: Auth0Client, path: string, queryParams?: Record<string, unknown>) {
+		await this.getAuthToken(auth);
+
+		return axios.get(path, {
+			headers: {
+				Authorization: `Bearer ${GiftlistAPI.token}`,
+			},
+			params: queryParams,
+		});
 	}
 
 	static async post(
+		auth: Auth0Client,
 		path: string,
 		body?: Record<string, unknown>,
 		queryParams?: Record<any, unknown>
 	) {
-		const token = await this.getAuthToken();
-		return axios.post(path, body, {
+		await this.getAuthToken(auth);
+
+		return await axios.post(path, body, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${GiftlistAPI.token}`,
 			},
 			params: queryParams,
 		});
 	}
 
 	static async put(
+		auth: Auth0Client,
 		path: string,
 		body?: Record<string, unknown>,
 		queryParams?: Record<string, unknown>
 	) {
-		const token = await this.getAuthToken();
-		return axios.put(path, body, {
+		await this.getAuthToken(auth);
+
+		return await axios.put(path, body, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${GiftlistAPI.token}`,
 			},
 			params: queryParams,
 		});
 	}
 
-	static async delete(path: string, queryParams?: Record<string, unknown>) {
-		const token = await this.getAuthToken();
+	static async delete(auth: Auth0Client, path: string, queryParams?: Record<string, unknown>) {
+		await this.getAuthToken(auth);
 		return axios.delete(path, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${GiftlistAPI.token}`,
 			},
 			params: queryParams,
 		});

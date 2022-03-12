@@ -1,7 +1,13 @@
+import { AxiosError, AxiosResponse } from "axios";
+
+import router from "@/router";
+import { APIStatusCodeEnum } from "@/types/APIStatusCodeEnum";
 import { CreateGiftDTO } from "@/types/dto/CreateGiftDTO";
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { GiftIdDTO } from "@/types/dto/GiftIdDTO";
-import { AxiosResponse } from "axios";
+import { PartialGiftDTO } from "@/types/dto/PartialGiftDTO";
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
 import GiftlistAPI from "./GiftlistAPI";
 
 const API_PATH_GIFTS = (listId: string) => `/lists/${listId}/gifts`;
@@ -17,118 +23,261 @@ const API_PATH_UNBOOK = (listId: string, giftId: string) =>
 
 export default class Gifts {
 	// Create a gift
-	static async create(listId: string, gift: CreateGiftDTO): Promise<GiftIdDTO | undefined> {
+	// Errors: 401, 422
+	// listId dans CreateGiftDTO ?
+	static async create(
+		auth: Auth0Client,
+		listId: string,
+		gift: CreateGiftDTO
+	): Promise<GiftIdDTO | undefined> {
 		try {
-			const apiResponse = await GiftlistAPI.post(API_PATH_GIFTS(listId), { ...gift });
-			const giftId = apiResponse.data;
-			return giftId;
+			const apiResponse: AxiosResponse<GiftIdDTO> = await GiftlistAPI.post(
+				auth,
+				API_PATH_GIFTS(listId),
+				{ ...gift }
+			);
+
+			if (apiResponse.status == APIStatusCodeEnum.OK) {
+				return apiResponse.data;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Get one list's gifts
-	static async getAll(listId: string): Promise<GiftDTO[] | undefined> {
+	// Don't show isBooked if I own the gift
+	// Errors: 401, 422
+	static async getAll(auth: Auth0Client, listId: string): Promise<GiftDTO[] | undefined> {
 		try {
 			const apiResponse: AxiosResponse<GiftDTO[]> = await GiftlistAPI.get(
+				auth,
 				API_PATH_GIFTS(listId)
 			);
-			const gifts = apiResponse.data;
-			return gifts;
+
+			if (apiResponse.status == APIStatusCodeEnum.OK) {
+				return apiResponse.data;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Get a gift by its ID
-	static async getOne(listId: string, giftId: string): Promise<GiftDTO | undefined> {
+	// Get one list's gifts
+	// Don't show isBooked if I own the gift
+	// If gift does not exist, return something else than 401 ?
+	// Errors: 401, 422
+	static async getOne(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<GiftDTO | undefined> {
 		try {
 			const apiResponse: AxiosResponse<GiftDTO> = await GiftlistAPI.get(
+				auth,
 				API_PATH_GIFT(listId, giftId)
 			);
-			const gift = apiResponse.data;
-			return gift;
+
+			if (apiResponse.status == APIStatusCodeEnum.OK) {
+				return apiResponse.data;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Delete a gift
-	static async delete(listId: string, giftId: string): Promise<void> {
+	// Errors: 401, 422
+	static async delete(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<boolean | undefined> {
 		try {
-			await GiftlistAPI.delete(API_PATH_GIFT(listId, giftId));
+			const apiResponse = await GiftlistAPI.delete(auth, API_PATH_GIFT(listId, giftId));
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Edit a gift
-	static async edit(listId: string, giftId: string, gift: GiftDTO): Promise<void> {
+	// Tests : Remove listId from PartialGiftDTO
+	// Errors: 401, 422
+	static async edit(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string,
+		gift: PartialGiftDTO
+	): Promise<boolean | undefined> {
 		try {
-			const response = await GiftlistAPI.put(API_PATH_GIFT(listId, giftId));
-			// Check statusCode
+			const apiResponse = await GiftlistAPI.put(auth, API_PATH_GIFT(listId, giftId), {
+				...gift,
+			});
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Hide a gift
-	static async hide(listId: string, giftId: string): Promise<void> {
+	// Errors: 401, 422
+	static async hide(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<boolean | undefined> {
 		try {
-			const response = await GiftlistAPI.put(API_PATH_HIDE(listId, giftId));
-			// Check statusCode
+			const apiResponse = await GiftlistAPI.put(auth, API_PATH_HIDE(listId, giftId));
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Unhide a gift
-	static async unhide(listId: string, giftId: string): Promise<void> {
+	// Errors: 401, 422
+	static async unhide(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<boolean | undefined> {
 		try {
-			const response = await GiftlistAPI.put(API_PATH_UNHIDE(listId, giftId));
-			// Check statusCode
+			const apiResponse = await GiftlistAPI.put(auth, API_PATH_UNHIDE(listId, giftId));
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Fav a gift
-	static async fav(listId: string, giftId: string): Promise<void> {
+	// Errors: 401, 422
+	static async fav(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<boolean | undefined> {
 		try {
-			const response = await GiftlistAPI.put(API_PATH_FAV(listId, giftId));
-			// Check statusCode
+			const apiResponse = await GiftlistAPI.put(auth, API_PATH_FAV(listId, giftId));
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Unfav a gift
-	static async unfav(listId: string, giftId: string): Promise<void> {
+	// Errors: 401, 422
+	static async unfav(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<boolean | undefined> {
 		try {
-			const response = await GiftlistAPI.put(API_PATH_UNFAV(listId, giftId));
-			// Check statusCode
+			const apiResponse = await GiftlistAPI.put(auth, API_PATH_UNFAV(listId, giftId));
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Book a gift
-	static async book(listId: string, giftId: string): Promise<void> {
+	// Prevent a user from booking a gift belonging to a list he is the owner
+	// Errors: 401, 422
+	static async book(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<boolean | undefined> {
 		try {
-			const response = await GiftlistAPI.put(API_PATH_BOOK(listId, giftId));
-			// Check statusCode
+			const apiResponse = await GiftlistAPI.put(auth, API_PATH_BOOK(listId, giftId));
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 
 	// Unbook a gift
-	static async unbook(listId: string, giftId: string): Promise<void> {
+	// Prevent a user from booking a gift belonging to a list he is the owner
+	// Errors: 401, 422
+	static async unbook(
+		auth: Auth0Client,
+		listId: string,
+		giftId: string
+	): Promise<boolean | undefined> {
 		try {
-			const response = await GiftlistAPI.put(API_PATH_UNBOOK(listId, giftId));
-			// Check statusCode
+			const apiResponse = await GiftlistAPI.put(auth, API_PATH_UNBOOK(listId, giftId));
+
+			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+				return true;
+			} else {
+				throw new Error(apiResponse.statusText);
+			}
 		} catch (error) {
-			console.log(error);
+			// TODO: Use this error in an error state module ?
+			const axiosError = error as AxiosError;
+			router.push("/app/error");
 		}
 	}
 }

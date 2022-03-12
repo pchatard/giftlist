@@ -1,1 +1,3 @@
-export interface GiftIdDTO {}
+export interface GiftIdDTO {
+	id: string;
+}

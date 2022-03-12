@@ -9,8 +9,8 @@
             </div>
 
             <div class="w-1/4">
-                <Subtitle>{{ user ? user.displayName : "" }}</Subtitle>
-                <div>{{ labels.profile.email }} {{ user ? user.email : "" }}</div>
+                <Subtitle>{{ user.displayName }}</Subtitle>
+                <div>{{ labels.profile.email }} {{ user.email }}</div>
                 <button v-if="!auth.user.email_verified" class="text-indigo-600" @click="verifyEmail">
                     {{ labels.profile.verifyEmail }}
                 </button>
@@ -84,7 +84,7 @@
                     <Subtitle>{{ labels.profile.editEmailTitle }}</Subtitle>
                     <div class="mt-2 mb-4">
                         <p>
-                            {{ labels.profile.editEmailCurrent }} <strong>{{ user ? user.email : "" }}</strong>
+                            {{ labels.profile.editEmailCurrent }} <strong>{{ user.email }}</strong>
                         </p>
                         <p>
                             {{ labels.profile.editEmailText }}

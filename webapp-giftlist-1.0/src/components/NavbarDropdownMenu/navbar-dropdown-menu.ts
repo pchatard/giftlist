@@ -1,10 +1,10 @@
+import { inject, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import labels from "@/labels/fr/labels.json";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { CogIcon, LogoutIcon, UserCircleIcon, UserIcon, UsersIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
-import { inject, ref } from "vue";
 
 export default {
 	name: "NavbarDropdownMenu",

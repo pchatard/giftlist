@@ -1,1 +1,3 @@
-export interface ListIdDTO {}
+export interface ListIdDTO {
+	id: string;
+}

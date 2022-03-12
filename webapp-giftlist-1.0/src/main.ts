@@ -20,9 +20,9 @@ async function init() {
 				appState && appState.targetUrl ? appState.targetUrl : window.location.pathname
 			);
 		},
-		clientId: process.env.VUE_APP_AUTH0_CLIENT_ID,
-		domain: process.env.VUE_APP_AUTH0_DOMAIN,
-		audience: process.env.VUE_APP_AUTH0_AUDIENCE,
+		clientId: process.env.VUE_APP_AUTH0_CLIENT_ID || "",
+		domain: process.env.VUE_APP_AUTH0_DOMAIN || "",
+		audience: process.env.VUE_APP_AUTH0_AUDIENCE || "",
 		redirectUri: window.location.origin + "/app/lists",
 	});
 

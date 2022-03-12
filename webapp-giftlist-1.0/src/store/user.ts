@@ -1,59 +1,51 @@
-import Users from "@/api/Users";
-import { UserDTO } from "@/types/dto/UserDTO";
-import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 import { Module } from "vuex";
 
-import { RootState } from ".";
-import { SnackbarState } from "./snackbar";
+import Users from "@/api/Users";
+import { UserDTO } from "@/types/dto/UserDTO";
+
+import { RootState } from "./";
 
 export const user: Module<UserState, RootState> = {
 	state: initAuthState,
 	getters: {},
 	mutations: {
 		FILL_USER: (state: UserState, user: UserDTO) => {
-			state.user = {
-				...user,
-			};
+			state = Object.assign(state, user);
 		},
-		EMPTY_USER: (state) => {
-			state.user.displayName = "";
-			state.user.email = "";
+		EMPTY_USER: (state: UserState) => {
+			state.displayName = "";
+			state.email = "";
 		},
 	},
 	actions: {
-		getUser: async (context) => {
-			const response = await Users.me();
-			if (response instanceof Error) {
-				// TODO : Redirect to error page
-				return;
-			}
-			context.commit("FILL_USER", response);
-		},
-		deleteAccount: async (context) => {
-			const response = await Users.delete();
+		getUser: async (context, auth) => {
+			const response = await Users.me(auth);
 			if (response) {
-				const snackbar: SnackbarState = {
-					type: SnackbarEventEnum.ERROR,
-					message: "Une erreur est survenue. Veuillez réessayer utlérieurement.",
-				};
-				context.dispatch("showSnackbar", snackbar);
+				context.commit("FILL_USER", response);
+			}
+		},
+		deleteAccount: async (context, auth) => {
+			const response = await Users.delete(auth);
+			if (response) {
+				// Reset state
+				context.commit("EMPTY_USER");
+				return true;
+			} else {
+				// Do nothing, a snackbar is being displayed
 				return false;
 			}
-			context.commit("EMPTY_USER");
-			return true;
 		},
 	},
 };
 
-export interface UserState {
-	user: UserDTO;
+export interface UserState extends UserDTO {
+	errorText: "";
 }
 
 function initAuthState(): UserState {
 	return {
-		user: {
-			displayName: "",
-			email: "",
-		},
+		displayName: "",
+		email: "",
+		errorText: "",
 	};
 }
