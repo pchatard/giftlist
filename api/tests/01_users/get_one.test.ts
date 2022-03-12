@@ -17,6 +17,5 @@ export default function suite() {
 		const wrongMail: string = "toto";
 		const response = await get(Url_UserGetOne(wrongMail));
 		expectValidationFailed(response);
-		console.log("a");
 	});
 }
