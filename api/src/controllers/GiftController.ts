@@ -109,7 +109,6 @@ export class GiftController extends Controller {
 		} else if ((await ListService.listOwners(listId)).includes(request.userId)) {
 			gifts = await ListService.getListGifts(listId, true);
 		} else {
-			console.log("test");
 			throw new OwnershipError();
 		}
 		return gifts.map((gift) => {
