@@ -15,7 +15,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: test
     defaults:
       run:
        working-directory: ./api
@@ -44,17 +43,17 @@ jobs:
     - name: Test 🚨
       run: npm test
       env:
-        PORT: ${{ secrets.PORT }}
-        DB: ${{ secrets.DB }}
+        PORT: ${{ secrets.API_PORT }}
+        DB: ${{ secrets.TEST_DB }}
         DB_TYPE: ${{ secrets.DB_TYPE }}
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PORT: ${{ secrets.DB_PORT }}
-        DB_USER: ${{ secrets.DB_USER }}
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_USER: ${{ secrets.TEST_DB_USER }}
+        DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
         DB_CERT: ${{ secrets.DB_CERT }}
         AUTH0_ISSUER: ${{ secrets.AUTH0_ISSUER }}
         AUTH0_JWKS_URI: ${{ secrets.AUTH0_JWKS_URI }}
         AUTH0_TOKEN_URL: ${{ secrets.AUTH0_TOKEN_URL }}
         AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-        AUTH0_CLIENT_ID: ${{ secrets.AUTH0_CLIENT_ID }}
-        AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+        AUTH0_CLIENT_ID: ${{ secrets.TEST_AUTH0_CLIENT_ID }}
+        AUTH0_CLIENT_SECRET: ${{ secrets.TEST_AUTH0_CLIENT_SECRET }}
