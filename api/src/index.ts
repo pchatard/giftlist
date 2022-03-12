@@ -9,6 +9,7 @@ import { ConnectionOptions, createConnection } from "typeorm";
 import cockroachDBOptions from "./config/ormconfig";
 import swaggerDocument from "./config/swagger.json";
 import { errorHandler, notFoundHandler } from "./middlewares/error";
+import { limiter } from "./middlewares/rate_limite";
 import Gift from "./models/Gift";
 import List from "./models/List";
 import User from "./models/User";
@@ -29,6 +30,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cookies());
 app.use(cors({ origin: "http://localhost:8080" }));
+
+app.use(limiter);
 
 app.use(
 	"/docs",
