@@ -8,5 +8,4 @@ after(async () => {
 	await del(Url_UserDelete(User1.id));
 	await del(Url_UserDelete(User2.id));
 	await del(Url_UserDelete(NewUserTest.id));
-	//await del(Url_UserDeleteMe());
 });
