@@ -1,4 +1,4 @@
-name: "API - Code Scanning"
+name: "Code Scanning"
 
 on:
   push:
@@ -8,15 +8,12 @@ on:
   pull_request:
     branches:
       - "*"
-  # schedule:
-  #   - cron: '0 12 * * 0'
+  schedule:
+    - cron: '0 12 * * 0'
 
 jobs:
   CodeQL:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-       working-directory: ./api
     permissions:
       security-events: write
       actions: read
