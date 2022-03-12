@@ -11,7 +11,7 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
 		res.status(422);
 		res.json({
 			message: "Validation Failed",
-			details: err?.fields,
+			details: err.fields,
 		});
 	} else if (
 		err instanceof EntityNotFoundError ||
