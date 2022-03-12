@@ -9,6 +9,9 @@ jobs:
   deploy:
     name: Deploy Staging on Heroku
     runs-on: ubuntu-latest
+    defaults:
+      run:
+       working-directory: ./api
     env: 
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
