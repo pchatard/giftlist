@@ -14,8 +14,6 @@ const API_PATH_GET_BY_EMAIL = (email: string) => `/users/${email}`;
 
 export default class Users {
 	// Get my information
-	// Currently used in: Profile page
-	// In case of errors : redirect to error page
 	static async me(auth: Auth0Client): Promise<UserDTO | undefined> {
 		try {
 			const apiResponse: AxiosResponse<UserDTO> = await GiftlistAPI.get(auth, API_PATH_ME);
@@ -33,8 +31,6 @@ export default class Users {
 	}
 
 	// Edit my information
-	// TODO: Currently used in:
-	// TODO: errors (401, 422)
 	static async edit(auth: Auth0Client, user: PartialUserDTO): Promise<boolean | undefined> {
 		try {
 			const apiResponse: AxiosResponse<void> = await GiftlistAPI.put(auth, API_PATH_ME, {
@@ -54,8 +50,6 @@ export default class Users {
 	}
 
 	// Delete my account
-	// Currently used in: Profile
-	// In case of error, display a snackbar (401)
 	static async delete(auth: Auth0Client): Promise<boolean> {
 		try {
 			const apiResponse = await GiftlistAPI.delete(auth, API_PATH_ME);
@@ -72,8 +66,6 @@ export default class Users {
 	}
 
 	// Get all users
-	// TODO: Currently used in:
-	// TODO: In case of errors : 401
 	static async getAll(auth: Auth0Client): Promise<UserDTO[] | undefined> {
 		try {
 			const apiResponse: AxiosResponse<UserDTO[]> = await GiftlistAPI.get(
@@ -93,8 +85,6 @@ export default class Users {
 	}
 
 	// Get one user by email
-	// TODO: Used in ....
-	// TODO: Errors 401, 422
 	static async getByEmail(auth: Auth0Client, email: string): Promise<UserDTO | undefined> {
 		try {
 			const apiResponse: AxiosResponse<UserDTO> = await GiftlistAPI.get(

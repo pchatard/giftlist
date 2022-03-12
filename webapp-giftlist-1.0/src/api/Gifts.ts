@@ -22,9 +22,8 @@ const API_PATH_UNBOOK = (listId: string, giftId: string) =>
 	`/lists/${listId}/gifts/${giftId}/unbook`;
 
 export default class Gifts {
+
 	// Create a gift
-	// Errors: 401, 422
-	// listId dans CreateGiftDTO ?
 	static async create(
 		auth: Auth0Client,
 		listId: string,
@@ -44,14 +43,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Get one list's gifts
-	// Don't show isBooked if I own the gift
-	// Errors: 401, 422
 	static async getAll(auth: Auth0Client, listId: string): Promise<GiftDTO[] | undefined> {
 		try {
 			const apiResponse: AxiosResponse<GiftDTO[]> = await GiftlistAPI.get(
@@ -66,16 +64,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Get a gift by its ID
-	// Get one list's gifts
-	// Don't show isBooked if I own the gift
-	// If gift does not exist, return something else than 401 ?
-	// Errors: 401, 422
 	static async getOne(
 		auth: Auth0Client,
 		listId: string,
@@ -94,13 +89,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Delete a gift
-	// Errors: 401, 422
 	static async delete(
 		auth: Auth0Client,
 		listId: string,
@@ -116,14 +111,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Edit a gift
-	// Tests : Remove listId from PartialGiftDTO
-	// Errors: 401, 422
 	static async edit(
 		auth: Auth0Client,
 		listId: string,
@@ -142,13 +136,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Hide a gift
-	// Errors: 401, 422
 	static async hide(
 		auth: Auth0Client,
 		listId: string,
@@ -164,13 +158,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Unhide a gift
-	// Errors: 401, 422
 	static async unhide(
 		auth: Auth0Client,
 		listId: string,
@@ -186,13 +180,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Fav a gift
-	// Errors: 401, 422
 	static async fav(
 		auth: Auth0Client,
 		listId: string,
@@ -208,13 +202,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Unfav a gift
-	// Errors: 401, 422
 	static async unfav(
 		auth: Auth0Client,
 		listId: string,
@@ -230,14 +224,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Book a gift
-	// Prevent a user from booking a gift belonging to a list he is the owner
-	// Errors: 401, 422
 	static async book(
 		auth: Auth0Client,
 		listId: string,
@@ -253,14 +246,13 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
 	}
 
 	// Unbook a gift
-	// Prevent a user from booking a gift belonging to a list he is the owner
-	// Errors: 401, 422
 	static async unbook(
 		auth: Auth0Client,
 		listId: string,
@@ -276,6 +268,7 @@ export default class Gifts {
 			}
 		} catch (error) {
 			// TODO: Use this error in an error state module ?
+			// Errors: 401, 422
 			const axiosError = error as AxiosError;
 			router.push("/app/error");
 		}
