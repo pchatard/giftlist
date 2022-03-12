@@ -23,4 +23,6 @@ export type GiftDTO = Pick<
 	| "comments"
 >;
 
+export interface GiftDTOForOwner extends Expand<Omit<GiftDTO, "isBooked">> {}
+
 export interface EditGiftDTO extends Expand<Omit<GiftDTO, "id">> {}

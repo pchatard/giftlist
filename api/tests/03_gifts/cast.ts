@@ -9,13 +9,16 @@ export function castAsCreateGiftDTO(gift: Gift): CreateGiftDTO {
 	}) as CreateGiftDTO;
 }
 
-export function castAsGiftDTO(gift: Gift): GiftDTO {
+export function castAsGiftDTO(gift: Gift, showBooked: boolean = false): GiftDTO {
 	const { list, updatedDate, createdDate, ...rest } = gift;
-	return cleanObject({
-		...rest,
-	}) as GiftDTO;
+	return cleanObject(
+		{
+			...rest,
+		},
+		[!showBooked ? "isBooked" : ""]
+	) as GiftDTO;
 }
 
-export function castArrayAsGiftDTO(gifts: Gift[]): GiftDTO[] {
-	return gifts.map((g) => castAsGiftDTO(g));
+export function castArrayAsGiftDTO(gifts: Gift[], showBooked: boolean = false): GiftDTO[] {
+	return gifts.map((g) => castAsGiftDTO(g, showBooked));
 }

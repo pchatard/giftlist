@@ -3,8 +3,8 @@ import { JsonWebTokenError } from "jsonwebtoken";
 import { ValidateError } from "tsoa";
 import { EntityNotFoundError } from "typeorm";
 
-import OwnershipError, { OwnershipErrorJSON } from "../errors/OwnershipError";
 import ResourceNotFoundError from "../errors/ResourceNotFoundError";
+import UnauthorizedError, { UnauthorizedErrorJSON } from "../errors/UnauthorizedError";
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
 	if (err instanceof ValidateError) {
@@ -15,12 +15,12 @@ export function errorHandler(err: Error, _req: Request, res: Response, _next: Ne
 		});
 	} else if (
 		err instanceof EntityNotFoundError ||
-		err instanceof OwnershipError ||
+		err instanceof UnauthorizedError ||
 		err instanceof JsonWebTokenError
 	) {
 		res.status(401).send({
 			message: "Unauthorized",
-		} as OwnershipErrorJSON);
+		} as UnauthorizedErrorJSON);
 	} else if (err instanceof ResourceNotFoundError) {
 		res.status(404);
 		res.json({

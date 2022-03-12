@@ -5,8 +5,8 @@ import {
 } from "tsoa";
 
 import { CreateListDTO, EditListDTO, ListDTO, ListIdDTO } from "../dto/lists";
-import OwnershipError, { OwnershipErrorJSON } from "../errors/OwnershipError";
 import ResourceNotFoundError from "../errors/ResourceNotFoundError";
+import UnauthorizedError, { UnauthorizedErrorJSON } from "../errors/UnauthorizedError";
 import { ValidateErrorJSON } from "../errors/ValidationError";
 import { cleanObject } from "../helpers/cleanObjects";
 import List from "../models/List";
@@ -46,7 +46,7 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204, "Success response")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Response<OwnershipErrorJSON>(401, "If user not owner")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner")
 	@Put("{listId}")
 	async edit(
 		@Request() request: ERequest,
@@ -54,7 +54,7 @@ export class ListController extends Controller {
 		@Body() body: Partial<EditListDTO>
 	): Promise<void> {
 		if (!(await ListService.listOwners(listId)).includes(request.userId)) {
-			throw new OwnershipError();
+			throw new UnauthorizedError();
 		}
 		await ListService.edit(listId, body);
 	}
@@ -65,7 +65,7 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204, "Success response")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Response<OwnershipErrorJSON>(401, "If user not owner or granted")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner or granted")
 	@Delete("{listId}")
 	async delete(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.deleteById(listId, request.userId);
@@ -92,7 +92,7 @@ export class ListController extends Controller {
 				await ListService.delete(listId);
 			}
 		} else {
-			throw new OwnershipError();
+			throw new UnauthorizedError();
 		}
 	}
 
@@ -120,14 +120,14 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(200, "Success response")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Response<OwnershipErrorJSON>(401, "If user not owner or granted")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner or granted")
 	@Get("{listId}")
 	async get(@Request() request: ERequest, @Path() listId: UUID): Promise<ListDTO> {
 		if (
 			!(await ListService.listOwners(listId)).includes(request.userId) &&
 			!(await ListService.listGrantedUsers(listId)).includes(request.userId)
 		) {
-			throw new OwnershipError();
+			throw new UnauthorizedError();
 		}
 		const { grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
 			await ListService.get(listId);
@@ -141,7 +141,7 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204, "Success response")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Response<OwnershipErrorJSON>(401, "If user not owner")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner")
 	@Put("{listId}/share")
 	async share(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.edit(request, listId, { isShared: true });
@@ -153,7 +153,7 @@ export class ListController extends Controller {
 	 */
 	@SuccessResponse(204, "Success response")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Response<OwnershipErrorJSON>(401, "If user not owner")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner")
 	@Put("{listId}/unshare")
 	async private(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.edit(request, listId, { isShared: false });

@@ -23,7 +23,7 @@ export default function suite() {
 		const response = await get(Url_GiftGetAll(ListGranted.id));
 		expect200(response);
 		expect(response).to.have.property("body").to.be.an("array");
-		expect(response.body).to.be.deep.equal(castArrayAsGiftDTO([Gift3]));
+		expect(response.body).to.be.deep.equal(castArrayAsGiftDTO([Gift3], true));
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
