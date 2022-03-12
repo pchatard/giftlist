@@ -30,6 +30,7 @@
 		"helmet": "^4.6.0",
 		"jwks-rsa": "^2.0.5",
 		"nodemon": "^2.0.14",
+		"pg": "^8.7.3",
 		"promise.any": "^2.0.3",
 		"swagger-ui-express": "^4.1.6",
 		"tsoa": "^3.2.1",
