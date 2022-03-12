@@ -13,6 +13,9 @@
 
 # Tâches
 
+## Global
+- [ ] Se conformer aux rules Vue ESLint https://eslint.vuejs.org/rules/
+
 ## State / Store
 - [ ] Réfléchir aux stores
 - [ ] Connecter l'API

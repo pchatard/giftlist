@@ -1,11 +1,16 @@
 <DefaultLayout :title="labels.titles.profile" back>
     <div class="flex flex-col my-4">
         <div class="flex items-center justify-between border rounded-lg px-4 my-4">
-            <img :src="auth.user.picture" alt="Profile Image" class="rounded-full m-4" />
+            <div class="bg-indigo-600 text-white text-4xl font-semibold w-1/12 my-4 grid place-items-center rounded-full"
+                style="aspect-ratio: 1;">
+                {{
+                user.displayName.toUpperCase()[0]
+                }}
+            </div>
 
-            <div class="mx-4 w-1/4">
-                <Subtitle>{{ auth.user.nickname }}</Subtitle>
-                <div>{{ labels.profile.email }} {{ auth.user.email }}</div>
+            <div class="w-1/4">
+                <Subtitle>{{ user.displayName }}</Subtitle>
+                <div>{{ labels.profile.email }} {{ user.email }}</div>
                 <button v-if="!auth.user.email_verified" class="text-indigo-600" @click="verifyEmail">
                     {{ labels.profile.verifyEmail }}
                 </button>
@@ -38,7 +43,7 @@
                             -ml-2
                         ">8+</span>
                 </div>
-                <div class="pl-1">12 {{ labels.profile.friends }}</div>
+                <div class="pl-1">12 {{ labels.profile.friendsNumber }}</div>
                 <router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600">
                     {{ labels.profile.manageFriends }}
                 </router-link>
@@ -79,7 +84,7 @@
                     <Subtitle>{{ labels.profile.editEmailTitle }}</Subtitle>
                     <div class="mt-2 mb-4">
                         <p>
-                            {{ labels.profile.editEmailCurrent }} <strong>{{ auth.user.email }}</strong>
+                            {{ labels.profile.editEmailCurrent }} <strong>{{ user.email }}</strong>
                         </p>
                         <p>
                             {{ labels.profile.editEmailText }}
@@ -100,13 +105,24 @@
                 </div>
             </div>
             <div class="flex-1 flex flex-col p-8">
-                <Subtitle>{{ labels.profile.dataTitle }}</Subtitle>
-                <p class="mt-2 mb-4">
-                    {{ labels.profile.dataText }}
-                </p>
-                <Button btnStyle="secondary" class="w-1/2" @click="downloadData">
-                    {{ labels.profile.dataButton }}
-                </Button>
+                <div class="pb-5">
+                    <Subtitle>{{ labels.profile.dataTitle }}</Subtitle>
+                    <p class="mt-2 mb-4">
+                        {{ labels.profile.dataText }}
+                    </p>
+                    <Button btnStyle="secondary" class="w-1/2" @click="downloadData">
+                        {{ labels.profile.dataButton }}
+                    </Button>
+                </div>
+                <div class="pt-5">
+                    <Subtitle>{{ labels.profile.deleteTitle }}</Subtitle>
+                    <p class="mt-2 mb-4">
+                        {{ labels.profile.deleteText }}
+                    </p>
+                    <Button btnStyle="danger" class="w-1/2" @click="deleteAccount">
+                        {{ labels.profile.deleteButton }}
+                    </Button>
+                </div>
             </div>
         </div>
     </div>

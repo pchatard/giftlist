@@ -158,7 +158,10 @@
         "editPasswordButton": "Modifier mon mot de passe",
         "dataTitle": "Télécharger mes données",
         "dataText": "Dans le cadre de la législation RGPD blablabla, vous pouvez télécharger l'ensemble des données vous concernant dont Giftlist dispose.",
-        "dataButton": "Télécharger mes données"
+        "dataButton": "Télécharger mes données",
+        "deleteTitle": "Supprimer mon compte",
+        "deleteText": "En cliquant sur le bouton ci-dessous, votre compte et toutes vos données associées seront supprimés. Cette action est définitive.",
+        "deleteButton": "Supprimer mon compte"
     },
     "friends": {
         "addFriendsTitle": "Ajouter un ami",
