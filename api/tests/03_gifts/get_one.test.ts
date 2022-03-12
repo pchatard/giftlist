@@ -16,7 +16,7 @@ export default function suite() {
 	it("Returns 200 with list informations, if not owned but granted", async () => {
 		const response = await get(Url_GiftGetOne(ListGranted.id, Gift3.id));
 		expect200(response);
-		expect(response).to.have.property("body").to.be.deep.equal(castAsGiftDTO(Gift3));
+		expect(response).to.have.property("body").to.be.deep.equal(castAsGiftDTO(Gift3, true));
 	});
 	it("Returns 401 Unauthorized, if owned but gift does not belong to list", async () => {
 		const response = await get(Url_GiftGetOne(ListOwned.id, Gift3.id));

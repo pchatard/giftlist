@@ -40,7 +40,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "OwnershipErrorJSON": {
+    "UnauthorizedErrorJSON": {
         "dataType": "refObject",
         "properties": {
             "message": {"dataType":"enum","enums":["Unauthorized"],"required":true},
@@ -80,6 +80,25 @@ const models: TsoaRoute.Models = {
     "GiftDTO": {
         "dataType": "refAlias",
         "type": {"ref":"Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_","validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GiftDTOForOwner": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"ref":"UUID","required":true},
+            "title": {"dataType":"string","required":true},
+            "isFavorite": {"dataType":"boolean","required":true},
+            "isHidden": {"dataType":"boolean","required":true},
+            "category": {"dataType":"string","required":true},
+            "listId": {"ref":"UUID","required":true},
+            "price": {"dataType":"double"},
+            "linkURL": {"dataType":"string"},
+            "brand": {"dataType":"string"},
+            "size": {"dataType":"string"},
+            "color": {"dataType":"string"},
+            "comments": {"dataType":"string"},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListIdDTO": {

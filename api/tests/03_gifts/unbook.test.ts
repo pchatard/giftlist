@@ -21,19 +21,15 @@ export default function suite() {
 		const changedGift = await get(Url_GiftGetOne(ListGranted.id, Gift3.id));
 		expect(changedGift)
 			.to.have.property("body")
-			.to.eql(castAsGiftDTO({ ...Gift3, isBooked: false }));
+			.to.eql(castAsGiftDTO({ ...Gift3, isBooked: false }, true));
 	});
 	it("Returns 401 Unauthorized, if owned but gift does not belong to list", async () => {
 		const response = await put(Url_GiftUnbook(ListOwned.id, Gift3.id), {});
 		expectError(response, 401, "Unauthorized");
 	});
-	it("Returns 204, if owned", async () => {
+	it("Returns 401 Unauthorized, if owned", async () => {
 		const response = await put(Url_GiftUnbook(ListOwned.id, Gift1.id), {});
-		expect204(response);
-		const changedGift = await get(Url_GiftGetOne(ListOwned.id, Gift1.id));
-		expect(changedGift)
-			.to.have.property("body")
-			.to.eql(castAsGiftDTO({ ...Gift1, isBooked: false }));
+		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";

@@ -46,7 +46,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"OwnershipErrorJSON": {
+			"UnauthorizedErrorJSON": {
 				"properties": {
 					"message": {
 						"type": "string",
@@ -213,6 +213,57 @@
 			},
 			"GiftDTO": {
 				"$ref": "#/components/schemas/Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_"
+			},
+			"GiftDTOForOwner": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"title": {
+						"type": "string"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"isFavorite",
+					"isHidden",
+					"category",
+					"listId"
+				],
+				"type": "object",
+				"additionalProperties": false
 			},
 			"ListIdDTO": {
 				"properties": {
@@ -432,7 +483,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -488,10 +539,20 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/GiftDTO"
-									},
-									"type": "array"
+									"anyOf": [
+										{
+											"items": {
+												"$ref": "#/components/schemas/GiftDTO"
+											},
+											"type": "array"
+										},
+										{
+											"items": {
+												"$ref": "#/components/schemas/GiftDTOForOwner"
+											},
+											"type": "array"
+										}
+									]
 								}
 							}
 						}
@@ -501,7 +562,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -551,7 +612,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -619,7 +680,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -673,7 +734,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/GiftDTO"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/GiftDTO"
+										},
+										{
+											"$ref": "#/components/schemas/GiftDTOForOwner"
+										}
+									]
 								}
 							}
 						}
@@ -683,7 +751,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -742,7 +810,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -801,7 +869,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -860,7 +928,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -919,7 +987,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -974,11 +1042,11 @@
 						"description": "Success response"
 					},
 					"401": {
-						"description": "If user not owner or granted of list or gift does not belong to list",
+						"description": "If user is owner or not granted of list or gift does not belong to list",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -1033,11 +1101,11 @@
 						"description": "Success response"
 					},
 					"401": {
-						"description": "If user not owner or granted of list or gift does not belong to list",
+						"description": "If user is owner or granted of list or gift does not belong to list",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -1192,7 +1260,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -1251,7 +1319,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -1306,7 +1374,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -1356,7 +1424,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
@@ -1406,7 +1474,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/OwnershipErrorJSON"
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
 								}
 							}
 						}
