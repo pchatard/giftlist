@@ -13,6 +13,8 @@ export default function suite() {
 		const { id: idNewUser, ...newUserTest } = NewUserTest;
 		const response = await get(Url_UserGetAll());
 		expect200(response);
-		expect(response).to.have.property("body").to.eql([user1, user2, userTest, newUserTest]);
+		expect(response)
+			.to.have.property("body")
+			.to.have.deep.members([user1, user2, userTest, newUserTest]);
 	});
 }
