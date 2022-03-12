@@ -35,7 +35,10 @@ jobs:
     - name: Install 🔧
       run: npm ci
     - shell: bash
-      run: mkdir -p src/config/certs && curl --create-dirs -o src/config/certs/root.crt -O https://cockroachlabs.cloud/clusters/f82eaea0-cfe2-4492-aa07-e986cd93e46d/cert
+      run: |
+        touch -p tests/.env
+        mkdir -p src/config/certs
+        curl --create-dirs -o src/config/certs/root.crt -O https://cockroachlabs.cloud/clusters/f82eaea0-cfe2-4492-aa07-e986cd93e46d/cert
     - name: Build 🏗️
       run: npm run build --if-present
     - name: Test 🚨
