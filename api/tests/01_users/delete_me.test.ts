@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { Url_UserDeleteMe, Url_UserGetAll } from "../global";
 import { NewUserTest } from "../global/objects";
 import { del, get } from "../helpers/crud";
-import { expect204 } from "../helpers/success";
+import { expectError } from "../helpers/error";
 import { User1, User2 } from "../seeder/users.seed";
 
 export default function suite() {
@@ -12,8 +12,8 @@ export default function suite() {
 		const { id: id2, createdDate: createdDate2, ...user2 } = User2;
 		const { id: idNewUser, ...newUserTest } = NewUserTest;
 		const response = await del(Url_UserDeleteMe());
-		expect204(response);
-		let list = await get(Url_UserGetAll());
-		expect(list).to.have.property("body").to.eql([user1, user2, newUserTest]);
+		expectError(response, 404, "Resource not found"); // Test users are not added to Auth0 DB
+		const list = await get(Url_UserGetAll());
+		expect(list).to.have.property("body").to.have.deep.members([user1, user2, newUserTest]);
 	});
 }
