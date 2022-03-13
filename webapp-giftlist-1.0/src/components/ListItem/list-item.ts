@@ -3,8 +3,8 @@ import { useRouter } from "vue-router";
 
 import TableData from "@/components/TableData/TableData.vue";
 import labels from "@/labels/fr/labels.json";
-import { List } from "@/types/api/List";
 import { CogIcon, InformationCircleIcon, TrashIcon, ViewListIcon } from "@heroicons/vue/outline";
+import { ListDTO } from "@/types/dto/ListDTO";
 
 export default defineComponent({
 	name: "ListItem",
@@ -18,7 +18,7 @@ export default defineComponent({
 	emits: ["delete", "details"],
 	props: {
 		list: {
-			type: Object as PropType<List>,
+			type: Object as PropType<ListDTO>,
 			required: true,
 		},
 		shared: {

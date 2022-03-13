@@ -19,9 +19,9 @@ export const user: Module<UserState, RootState> = {
 	},
 	actions: {
 		getUser: async (context, auth) => {
-			const response = await Users.me(auth);
-			if (response) {
-				context.commit("FILL_USER", response);
+			const user = await Users.me(auth);
+			if (user) {
+				context.commit("FILL_USER", user);
 			}
 		},
 		deleteAccount: async (context, auth) => {

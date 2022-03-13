@@ -3,13 +3,7 @@
 </TableData>
 <TableData>
     <div class="flex items-center">
-        <div>
-            <div class="text-sm font-medium text-gray-900 whitespace-normal">{{ list.title }}</div>
-            <div v-if="shared" class="text-sm text-gray-500">
-                {{ list.gifts.length }} {{ labels.lists.subtitle }}
-            </div>
-            <div v-else class="text-sm text-gray-500">Sous-titre</div>
-        </div>
+        <div class="text-sm font-medium text-gray-900 whitespace-normal">{{ list.title }}</div>
     </div>
 </TableData>
 <TableData>
@@ -23,7 +17,10 @@
         {{ list.isShared ? labels.lists.status.public : labels.lists.status.private }}
     </span>
 </TableData>
-<TableData class="text-sm text-gray-500" content="Aujourd'hui" />
+<TableData class="text-sm text-gray-500">
+    {{ list.closureDate ? list.closureDate : "-" }}
+</TableData>
+
 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
     <button v-show="shared" @click.stop="$emit('details', list)"
         class="mx-2 text-indigo-600 font-medium hover:text-indigo-900">

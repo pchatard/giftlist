@@ -1,13 +1,15 @@
-import { computed, ComputedRef, defineComponent, Ref, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { computed, ComputedRef, defineComponent, inject, onMounted, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
-import ListItem from "@/components/ListItem/ListItem.vue";
-import Modal from "@/components/Modal/Modal.vue";
-import Table from "@/components/Table/Table.vue";
-import labels from "@/labels/fr/labels.json";
-import { List } from "@/types/api/List";
+import DefaultLayout from '@/components/DefaultLayout/DefaultLayout.vue';
+import ListItem from '@/components/ListItem/ListItem.vue';
+import Modal from '@/components/Modal/Modal.vue';
+import Table from '@/components/Table/Table.vue';
+import labels from '@/labels/fr/labels.json';
+import { ListDTO } from '@/types/dto/ListDTO';
+import { ListIdPayload } from '@/types/payload/ListIdPayload';
+import { Auth0Client } from '@auth0/auth0-spa-js';
 
 export default defineComponent({
 	name: "Lists",
@@ -18,10 +20,19 @@ export default defineComponent({
 		Modal,
 	},
 	setup() {
+
+		/******** Basic imports ********/
 		const { dispatch, state } = useStore();
 		const router = useRouter();
+		const auth = inject("Auth") as Auth0Client;
+
+		/******** Static imports ********/
 		const listTableHeaderLabels = (labels as any).tables.list;
 
+		/******** Reactive data ********/
+		const deleteModalIsOpen = ref(false);
+		const lists: ComputedRef<ListDTO[]> = computed(() => state.lists.owned);
+		const listToDelete: Ref<ListDTO | undefined> = ref();
 		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
 			{ title: listTableHeaderLabels.title, sortable: true, sorted: "none" },
@@ -30,46 +41,51 @@ export default defineComponent({
 			{ title: listTableHeaderLabels.termDate, sortable: true, sorted: "none" },
 		]);
 
+		/******** Fetch page data ********/
+		onMounted(async () => {
+			await dispatch("getLists", { auth, select: "owned" });
+		})
+
+		/******** Methods ********/
 		const handleSort = (headers: Array<any>) => {
 			tableHeaders.value = headers;
 
 			// TODO : Sort displayed data depending on tableHeaders sorted properties
 		};
 
-		const lists: ComputedRef<List[]> = computed(() => state.list.mine);
-
-		const deleteModalIsOpen = ref(false);
-		const listToDelete: Ref<List | undefined> = ref();
-
-		const openDeleteModal = (list: List) => {
+		const openDeleteModal = (list: ListDTO) => {
 			listToDelete.value = list;
 			deleteModalIsOpen.value = true;
 		};
+
 		const closeDeleteModal = () => {
 			deleteModalIsOpen.value = false;
 		};
 
 		const deleteList = async () => {
-			dispatch("deleteList", listToDelete.value?.id)
-				.then(() => {
+			if (listToDelete.value) {
+				const payload: ListIdPayload = {
+					auth,
+					listId: listToDelete.value.id
+				}
+				const success = await dispatch("deleteList", payload);
+				if (success) {
 					closeDeleteModal();
-				})
-				.catch((error) => {
-					console.error(error);
-				});
+				}
+			}
 		};
 
 		return {
 			labels,
+			router,
 			deleteModalIsOpen,
+			lists,
 			listToDelete,
+			tableHeaders,
+			handleSort,
 			openDeleteModal,
 			closeDeleteModal,
 			deleteList,
-			lists,
-			router,
-			tableHeaders,
-			handleSort,
 		};
 	},
 });
