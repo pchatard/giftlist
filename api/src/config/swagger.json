@@ -107,9 +107,6 @@
 			},
 			"Partial_EditGiftDTO_": {
 				"properties": {
-					"listId": {
-						"$ref": "#/components/schemas/UUID"
-					},
 					"isBooked": {
 						"type": "boolean"
 					},
