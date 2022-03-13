@@ -84,22 +84,27 @@ class UserService {
 	 * @param {SelectKindList} select filter tag to return "all" lists, "owns" or "granted" ones only
 	 * @returns {Promise<List[]>} the userId lists
 	 */
-	static async getUserLists(userId: string, select: SelectKindList): Promise<List[]> {
+	static async getUserLists(
+		userId: string,
+		select: SelectKindList,
+		reallyAll: boolean = false
+	): Promise<List[]> {
 		const userRepository: Repository<User> = getRepository(User);
 		const user: User = await userRepository.findOneOrFail(userId, {
 			relations: ["lists", "friendLists", "lists.owners", "friendLists.owners"],
 		});
 		let res: List[] = [];
+		const grantedLists = (user.friendLists || []).filter((l) => reallyAll || l.isShared);
 		switch (select) {
 			case SelectKindList.OWNED:
 				res = user.lists || [];
 				break;
 			case SelectKindList.GRANTED:
-				res = user.friendLists || [];
+				res = grantedLists;
 				break;
 			case SelectKindList.ALL:
 			default:
-				res = (user.lists || []).concat(user.friendLists || []);
+				res = (user.lists || []).concat(grantedLists);
 				break;
 		}
 		return res.sort((a, b) => a.createdDate.valueOf() - b.createdDate.valueOf());

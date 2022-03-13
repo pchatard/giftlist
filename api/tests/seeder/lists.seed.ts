@@ -28,6 +28,18 @@ export const ListGranted: List = {
 	updatedDate: new Date(),
 };
 
+export const ListGrantedButNotShared: List = {
+	id: uuidv4(),
+	title: "TestList2b",
+	owners: [],
+	ownersIds: [User2.id],
+	isShared: false,
+	sharingCode: uuidv4(),
+	grantedUsersIds: [UserTest.id],
+	createdDate: new Date(),
+	updatedDate: new Date(),
+};
+
 export const ListInvited: List = {
 	id: uuidv4(),
 	title: "TestList3",
