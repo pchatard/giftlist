@@ -67,9 +67,6 @@
 					"title": {
 						"type": "string"
 					},
-					"isBooked": {
-						"type": "boolean"
-					},
 					"isFavorite": {
 						"type": "boolean"
 					},
@@ -78,9 +75,6 @@
 					},
 					"category": {
 						"type": "string"
-					},
-					"listId": {
-						"$ref": "#/components/schemas/UUID"
 					},
 					"price": {
 						"type": "number",
@@ -104,22 +98,23 @@
 				},
 				"required": [
 					"title",
-					"isBooked",
 					"isFavorite",
 					"isHidden",
-					"category",
-					"listId"
+					"category"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"Partial_EditGiftDTO_": {
 				"properties": {
-					"title": {
-						"type": "string"
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
 					},
 					"isBooked": {
 						"type": "boolean"
+					},
+					"title": {
+						"type": "string"
 					},
 					"isFavorite": {
 						"type": "boolean"
@@ -129,9 +124,6 @@
 					},
 					"category": {
 						"type": "string"
-					},
-					"listId": {
-						"$ref": "#/components/schemas/UUID"
 					},
 					"price": {
 						"type": "number",
@@ -161,11 +153,14 @@
 					"id": {
 						"$ref": "#/components/schemas/UUID"
 					},
-					"title": {
-						"type": "string"
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
 					},
 					"isBooked": {
 						"type": "boolean"
+					},
+					"title": {
+						"type": "string"
 					},
 					"isFavorite": {
 						"type": "boolean"
@@ -175,9 +170,6 @@
 					},
 					"category": {
 						"type": "string"
-					},
-					"listId": {
-						"$ref": "#/components/schemas/UUID"
 					},
 					"price": {
 						"type": "number",
@@ -201,12 +193,12 @@
 				},
 				"required": [
 					"id",
-					"title",
+					"listId",
 					"isBooked",
+					"title",
 					"isFavorite",
 					"isHidden",
-					"category",
-					"listId"
+					"category"
 				],
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
@@ -219,6 +211,9 @@
 					"id": {
 						"$ref": "#/components/schemas/UUID"
 					},
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
+					},
 					"title": {
 						"type": "string"
 					},
@@ -230,9 +225,6 @@
 					},
 					"category": {
 						"type": "string"
-					},
-					"listId": {
-						"$ref": "#/components/schemas/UUID"
 					},
 					"price": {
 						"type": "number",
@@ -256,11 +248,11 @@
 				},
 				"required": [
 					"id",
+					"listId",
 					"title",
 					"isFavorite",
 					"isHidden",
-					"category",
-					"listId"
+					"category"
 				],
 				"type": "object",
 				"additionalProperties": false

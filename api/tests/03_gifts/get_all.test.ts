@@ -1,11 +1,11 @@
 import { expect } from "chai";
 
-import { Url_GiftGetAll } from "../global";
+import { GiftTest, GlobalVar, Url_GiftGetAll } from "../global";
 import { get } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect200 } from "../helpers/success";
-import { Gift1, Gift2, Gift3 } from "../seeder/gifts.seed";
-import { ListGranted, ListOwned, ListUnauthorized } from "../seeder/lists.seed";
+import { Gift3 } from "../seeder/gifts.seed";
+import { ListGranted, ListUnauthorized } from "../seeder/lists.seed";
 import { castArrayAsGiftDTO } from "./cast";
 
 export default function suite() {
@@ -14,10 +14,11 @@ export default function suite() {
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 200, with all gifts for owner", async () => {
-		const response = await get(Url_GiftGetAll(ListOwned.id));
+		const response = await get(Url_GiftGetAll(GlobalVar.ListTest_Id));
 		expect200(response);
 		expect(response).to.have.property("body").to.be.an("array");
-		expect(response.body).to.have.deep.members(castArrayAsGiftDTO([Gift1, Gift2]));
+		const giftTest = { ...GiftTest, id: GlobalVar.GiftTest_Id, listId: GlobalVar.ListTest_Id };
+		expect(response.body).to.have.deep.members([giftTest]);
 	});
 	it("Returns 200, with not hidden gifts for granted", async () => {
 		const response = await get(Url_GiftGetAll(ListGranted.id));
