@@ -67,7 +67,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_EditGiftDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"listId":{"ref":"UUID"},"isBooked":{"dataType":"boolean"},"title":{"dataType":"string"},"isFavorite":{"dataType":"boolean"},"isHidden":{"dataType":"boolean"},"category":{"dataType":"string"},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"isBooked":{"dataType":"boolean"},"title":{"dataType":"string"},"isFavorite":{"dataType":"boolean"},"isHidden":{"dataType":"boolean"},"category":{"dataType":"string"},"price":{"dataType":"double"},"linkURL":{"dataType":"string"},"brand":{"dataType":"string"},"size":{"dataType":"string"},"color":{"dataType":"string"},"comments":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Pick_Gift.-or-id-or-title-or-isBooked-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {

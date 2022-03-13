@@ -27,4 +27,4 @@ export type GiftDTO = Pick<
 
 export interface GiftDTOForOwner extends Expand<Omit<GiftDTO, "isBooked">> {}
 
-export interface EditGiftDTO extends Expand<Omit<GiftDTO, "id">> {}
+export interface EditGiftDTO extends Expand<Omit<GiftDTO, "id" | "listId">> {}
