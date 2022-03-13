@@ -18,8 +18,7 @@ export default function suite() {
 		expectError(response, 401, "Unauthorized");
 	});
 	it("Returns 200 with ID if all data are provided", async () => {
-		const giftTest = { ...GiftTest, listId: GlobalVar.ListTest_Id };
-		const response = await post(Url_GiftPost(GlobalVar.ListTest_Id), giftTest);
+		const response = await post(Url_GiftPost(GlobalVar.ListTest_Id), GiftTest);
 		expect200(response);
 		expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
 		GlobalVar.GiftTest_Id = response.body.id;

@@ -2,7 +2,9 @@ import Gift from "../models/Gift";
 import Expand from "./expand";
 
 export interface CreateGiftDTO
-	extends Expand<Omit<Gift, "id" | "list" | "createdDate" | "updatedDate">> {}
+	extends Expand<
+		Omit<Gift, "id" | "list" | "listId" | "isBooked" | "createdDate" | "updatedDate">
+	> {}
 export interface GiftIdDTO extends Expand<Pick<Gift, "id">> {}
 
 // TODO: Understand why Expand make tsoa going to timeout

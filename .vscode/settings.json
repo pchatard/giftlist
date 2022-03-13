@@ -35,5 +35,7 @@
   "importSorter.importStringConfiguration.quoteMark": "double",
   "importSorter.sortConfiguration.removeUnusedImports": true,
   "importSorter.importStringConfiguration.tabSize": 3,
-  "importSorter.importStringConfiguration.tabType": "tab"
+  "importSorter.importStringConfiguration.tabType": "tab",
+  "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.type": "newLineEachExpressionAfterCountLimit",
+  "importSorter.importStringConfiguration.trailingComma": "multiLine" 
 }

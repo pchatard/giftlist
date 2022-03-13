@@ -34,9 +34,7 @@ export const ListTestWithGranted: CreateListDTO = {
 
 export const GiftTest: CreateGiftDTO = {
 	title: "TestGiftTest",
-	isBooked: false,
 	isHidden: false,
 	isFavorite: false,
 	category: "book",
-	listId: "",
 };
