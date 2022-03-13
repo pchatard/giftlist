@@ -1,5 +1,11 @@
 import {
-	Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId, UpdateDateColumn
+	Column,
+	CreateDateColumn,
+	Entity,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+	RelationId,
+	UpdateDateColumn,
 } from "typeorm";
 
 import { UUID } from "../types/UUID";
