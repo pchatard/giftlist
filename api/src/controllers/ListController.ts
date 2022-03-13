@@ -169,9 +169,6 @@ export class ListController extends Controller {
 	@Put("{listId}/unshare")
 	async private(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.edit(request, listId, { isShared: false });
-		for (const grantedId of await ListService.listGrantedUsers(listId)) {
-			await ListService.forget(listId, grantedId);
-		}
 	}
 
 	/**
