@@ -20,9 +20,7 @@ export default function suite() {
 		const response = await put(Url_ListUnshare(ListOwned.id), {});
 		expect204(response);
 		const changedList = await get(Url_ListGetOne(ListOwned.id));
-		expect(changedList)
-			.to.have.property("body")
-			.to.eql({ ...castAsListDTO(ListOwned), grantedUsersIds: [] });
+		expect(changedList).to.have.property("body").to.eql(castAsListDTO(ListOwned));
 	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";

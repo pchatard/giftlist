@@ -27,7 +27,7 @@ export default function suite() {
 	it("Returns 204 and list is no more present", async () => {
 		const response = await del(Url_ListDelete(GlobalVar.ListTest_Id));
 		expect204(response);
-		let lists_user = await get(Url_ListGetAll("all"));
+		const lists_user = await get(Url_ListGetAll("all"));
 		const list1 = {
 			...ListOwned,
 			grantedUsersIds: [],
