@@ -53,7 +53,7 @@ export class UserManagementController extends Controller {
 	@Security("auth0")
 	@SuccessResponse(204)
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Delete("admin/{userId}")
+	@Delete("admin/{userAuth0Id}")
 	@Hidden() // TODO: Remove Hidden and add administration capabilities
 	async delete(@Path() userAuth0Id: string): Promise<void> {
 		await this.quickDelete(userAuth0Id);
