@@ -1,11 +1,12 @@
 import { expect } from "chai";
 import { v4 as uuidv4 } from "uuid";
 
-import { Url_ListGetOne, Url_ListInvite, UserTest } from "../global";
+import { Url_ListGetOne, Url_ListInvite } from "../global";
 import { get, put } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
 import { ListInvited, ListOwned } from "../seeder/lists.seed";
+import { UserTest } from "../seeder/users.seed";
 import { castAsListDTO } from "./cast";
 
 export default function suite() {
