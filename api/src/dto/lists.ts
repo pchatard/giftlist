@@ -11,7 +11,14 @@ export interface CreateListDTO
 export interface ListIdDTO extends Expand<Pick<List, "id">> {}
 export type ListDTO = Pick<
 	List,
-	"id" | "title" | "isShared" | "sharingCode" | "closureDate" | "ownersDTO" | "grantedUsersDTO"
+	| "id"
+	| "description"
+	| "title"
+	| "isShared"
+	| "sharingCode"
+	| "closureDate"
+	| "ownersDTO"
+	| "grantedUsersDTO"
 >;
 
 export interface EditListDTO extends Expand<Omit<ListDTO, "id">> {}

@@ -4,7 +4,6 @@ import { Factory, Seeder as TSeeder } from "typeorm-seeding";
 import Gift from "../../src/models/Gift";
 import List from "../../src/models/List";
 import User from "../../src/models/User";
-import { UserTest } from "../global";
 import { Gift1, Gift2, Gift3, Gift4, Gift5 } from "./gifts.seed";
 import {
 	ListGranted,
@@ -13,7 +12,7 @@ import {
 	ListOwned,
 	ListUnauthorized,
 } from "./lists.seed";
-import { User1, User2 } from "./users.seed";
+import { User1, User2, UserTest } from "./users.seed";
 
 export default class Seeder implements TSeeder {
 	public async run(_factory: Factory, connection: Connection): Promise<any> {

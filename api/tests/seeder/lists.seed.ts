@@ -1,20 +1,21 @@
 import { v4 as uuidv4 } from "uuid";
 
 import List from "../../src/models/List";
-import { UserTest } from "../global";
-import { User1, User2 } from "./users.seed";
+import { getDateFromNow } from "./helper";
+import { User1, User2, UserTest } from "./users.seed";
 
 export const ListOwned: List = {
 	id: uuidv4(),
 	title: "TestList1",
-	owners: [{ ...UserTest, createdDate: new Date() }],
+	description: "A description",
+	owners: [UserTest],
 	ownersIds: [UserTest.id],
 	isShared: false,
 	sharingCode: uuidv4(),
 	grantedUsers: [User1],
 	grantedUsersIds: [User1.id],
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-5),
+	updatedDate: getDateFromNow(-5),
 };
 
 export const ListGranted: List = {
@@ -24,10 +25,10 @@ export const ListGranted: List = {
 	ownersIds: [User2.id],
 	isShared: true,
 	sharingCode: uuidv4(),
-	grantedUsers: [{ ...UserTest, createdDate: new Date() }],
+	grantedUsers: [UserTest],
 	grantedUsersIds: [UserTest.id],
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-4),
+	updatedDate: getDateFromNow(-4),
 };
 
 export const ListGrantedButNotShared: List = {
@@ -37,10 +38,10 @@ export const ListGrantedButNotShared: List = {
 	ownersIds: [User2.id],
 	isShared: false,
 	sharingCode: uuidv4(),
-	grantedUsers: [{ ...UserTest, createdDate: new Date() }],
+	grantedUsers: [UserTest],
 	grantedUsersIds: [UserTest.id],
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-3),
+	updatedDate: getDateFromNow(-3),
 };
 
 export const ListInvited: List = {
@@ -51,8 +52,8 @@ export const ListInvited: List = {
 	isShared: true,
 	sharingCode: uuidv4(),
 	grantedUsersIds: [],
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-2),
+	updatedDate: getDateFromNow(-2),
 };
 
 export const ListUnauthorized: List = {
@@ -63,6 +64,6 @@ export const ListUnauthorized: List = {
 	isShared: true,
 	sharingCode: uuidv4(),
 	grantedUsersIds: [],
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-1),
+	updatedDate: getDateFromNow(-1),
 };

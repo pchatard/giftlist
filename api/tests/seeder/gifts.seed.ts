@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import Gift from "../../src/models/Gift";
+import { getDateFromNow } from "./helper";
 import { ListGranted, ListOwned, ListUnauthorized } from "./lists.seed";
 
 export const Gift1: Gift = {
@@ -12,8 +13,8 @@ export const Gift1: Gift = {
 	isHidden: false,
 	listId: ListOwned.id,
 	list: ListOwned,
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-5),
+	updatedDate: getDateFromNow(-5),
 };
 
 export const Gift2: Gift = {
@@ -25,8 +26,8 @@ export const Gift2: Gift = {
 	isHidden: true,
 	listId: ListOwned.id,
 	list: ListOwned,
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-4),
+	updatedDate: getDateFromNow(-4),
 };
 
 export const Gift3: Gift = {
@@ -38,8 +39,8 @@ export const Gift3: Gift = {
 	isHidden: false,
 	listId: ListGranted.id,
 	list: ListGranted,
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-3),
+	updatedDate: getDateFromNow(-3),
 };
 
 export const Gift4: Gift = {
@@ -51,8 +52,8 @@ export const Gift4: Gift = {
 	isHidden: true,
 	listId: ListGranted.id,
 	list: ListGranted,
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-2),
+	updatedDate: getDateFromNow(-2),
 };
 
 export const Gift5: Gift = {
@@ -64,6 +65,6 @@ export const Gift5: Gift = {
 	isHidden: false,
 	listId: ListUnauthorized.id,
 	list: ListUnauthorized,
-	createdDate: new Date(),
-	updatedDate: new Date(),
+	createdDate: getDateFromNow(-1),
+	updatedDate: getDateFromNow(-1),
 };
