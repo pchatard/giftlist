@@ -20,14 +20,17 @@ export default function suite() {
 		const response = await put(Url_ListInvite(ListInvited.sharingCode), {});
 		expect204(response);
 		const changedList = await get(Url_ListGetOne(ListInvited.id));
+		const { ownersDTO, ...rest } = castAsListDTO(ListInvited);
 		expect(changedList)
 			.to.have.property("body")
-			.to.deep.include(
-				castAsListDTO({
-					...ListInvited,
-					grantedUsers: [UserTest],
-				})
-			);
+			.to.deep.include({
+				...rest,
+				grantedUsersDTO: [{ id: UserTest.id, displayName: UserTest.displayName }],
+			});
+		expect(changedList)
+			.to.have.property("body")
+			.to.have.nested.property("ownersDTO")
+			.to.include.deep.members(ownersDTO || []);
 	});
 	it("Returns 404, with UnvalidSharingCode error, if sharing code does not exist", async () => {
 		const response = await put(Url_ListInvite(uuidv4()));
