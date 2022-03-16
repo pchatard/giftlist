@@ -22,7 +22,7 @@ export default function suite() {
 		const changedList = await get(Url_ListGetOne(ListInvited.id));
 		expect(changedList)
 			.to.have.property("body")
-			.to.deep.equal(
+			.to.deep.include(
 				castAsListDTO({
 					...ListInvited,
 					grantedUsers: [UserTest],
