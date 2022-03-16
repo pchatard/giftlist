@@ -3,20 +3,14 @@ import { config } from "dotenv";
 import { CreateGiftDTO } from "../../src/dto/gifts";
 import { CreateListDTO } from "../../src/dto/lists";
 import { CreateUserDTO } from "../../src/dto/users";
-import { User1 } from "../seeder/users.seed";
+import { User1, UserTest } from "../seeder/users.seed";
 
 config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
 export const NewUserTest: CreateUserDTO = {
-	id: "newUserId",
+	auth0Id: "newUserId",
 	email: "newUserMail@test.fr",
 	displayName: "Test NewUser",
-};
-
-export const UserTest: CreateUserDTO = {
-	id: process.env.AUTH0_CLIENT_ID + "@clients",
-	email: "testuser@test.fr",
-	displayName: "Test User",
 };
 
 export const ListTest: CreateListDTO = {

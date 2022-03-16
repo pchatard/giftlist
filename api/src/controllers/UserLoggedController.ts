@@ -30,7 +30,7 @@ export class UserLoggedController extends Controller {
 	@SuccessResponse(200, "Success response")
 	@Get()
 	async get(@Request() request: ERequest): Promise<UserDTO> {
-		const user: User = await UserService.getById(request.userId);
+		const user: User = await UserService.getByAuth0Id(request.userId);
 		const { id, createdDate, ...rest } = user;
 		return rest;
 	}

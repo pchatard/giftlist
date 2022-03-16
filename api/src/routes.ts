@@ -111,30 +111,28 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "title": {"dataType":"string","required":true},
+            "description": {"dataType":"string"},
             "closureDate": {"dataType":"datetime"},
-            "ownersIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "ownersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},
             "isShared": {"dataType":"boolean","required":true},
-            "grantedUsersIds": {"dataType":"array","array":{"dataType":"string"}},
+            "grantedUsersIds": {"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_EditListDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"string"}},"isShared":{"dataType":"boolean"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"title":{"dataType":"string"},"sharingCode":{"ref":"UUID"},"description":{"dataType":"string"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}},"isShared":{"dataType":"boolean"},"grantedUsersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersIds-or-grantedUsersIds_": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"id":{"ref":"UUID","required":true},"title":{"dataType":"string","required":true},"sharingCode":{"ref":"UUID","required":true},"description":{"dataType":"string"},"closureDate":{"dataType":"datetime"},"ownersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"},"required":true},"isShared":{"dataType":"boolean","required":true},"grantedUsersIds":{"dataType":"array","array":{"dataType":"refAlias","ref":"UUID"}}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ListDTO": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"ref":"UUID","required":true},
-            "title": {"dataType":"string","required":true},
-            "sharingCode": {"ref":"UUID","required":true},
-            "closureDate": {"dataType":"datetime"},
-            "ownersIds": {"dataType":"array","array":{"dataType":"string"},"required":true},
-            "isShared": {"dataType":"boolean","required":true},
-        },
-        "additionalProperties": false,
+        "dataType": "refAlias",
+        "type": {"ref":"Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersIds-or-grantedUsersIds_","validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "SelectKindList": {
@@ -145,7 +143,7 @@ const models: TsoaRoute.Models = {
     "UserIdDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"string","required":true},
+            "id": {"ref":"UUID","required":true},
         },
         "additionalProperties": false,
     },
@@ -158,7 +156,7 @@ const models: TsoaRoute.Models = {
     "CreateUserDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": {"dataType":"string","required":true},
+            "auth0Id": {"dataType":"string","required":true},
             "email": {"ref":"email","required":true},
             "displayName": {"dataType":"string","required":true},
         },
@@ -699,12 +697,12 @@ export function RegisterRoutes(app: express.Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.delete('/users/admin/:userId',
+        app.delete('/users/admin/:userAuth0Id',
             authenticateMiddleware([{"auth0":[]}]),
 
             function UserManagementController_delete(request: any, response: any, next: any) {
             const args = {
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
+                    userAuth0Id: {"in":"path","name":"userAuth0Id","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

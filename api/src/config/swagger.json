@@ -271,13 +271,16 @@
 					"title": {
 						"type": "string"
 					},
+					"description": {
+						"type": "string"
+					},
 					"closureDate": {
 						"type": "string",
 						"format": "date-time"
 					},
 					"ownersIds": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/UUID"
 						},
 						"type": "array"
 					},
@@ -286,7 +289,7 @@
 					},
 					"grantedUsersIds": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/UUID"
 						},
 						"type": "array"
 					}
@@ -307,24 +310,33 @@
 					"sharingCode": {
 						"$ref": "#/components/schemas/UUID"
 					},
+					"description": {
+						"type": "string"
+					},
 					"closureDate": {
 						"type": "string",
 						"format": "date-time"
 					},
 					"ownersIds": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/UUID"
 						},
 						"type": "array"
 					},
 					"isShared": {
 						"type": "boolean"
+					},
+					"grantedUsersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
 				"description": "Make all properties in T optional"
 			},
-			"ListDTO": {
+			"Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersIds-or-grantedUsersIds_": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
@@ -335,18 +347,27 @@
 					"sharingCode": {
 						"$ref": "#/components/schemas/UUID"
 					},
+					"description": {
+						"type": "string"
+					},
 					"closureDate": {
 						"type": "string",
 						"format": "date-time"
 					},
 					"ownersIds": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/UUID"
 						},
 						"type": "array"
 					},
 					"isShared": {
 						"type": "boolean"
+					},
+					"grantedUsersIds": {
+						"items": {
+							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -357,7 +378,10 @@
 					"isShared"
 				],
 				"type": "object",
-				"additionalProperties": false
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"ListDTO": {
+				"$ref": "#/components/schemas/Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersIds-or-grantedUsersIds_"
 			},
 			"SelectKindList": {
 				"description": "List Selection Kind",
@@ -371,7 +395,7 @@
 			"UserIdDTO": {
 				"properties": {
 					"id": {
-						"type": "string"
+						"$ref": "#/components/schemas/UUID"
 					}
 				},
 				"required": [
@@ -388,7 +412,7 @@
 			},
 			"CreateUserDTO": {
 				"properties": {
-					"id": {
+					"auth0Id": {
 						"type": "string"
 					},
 					"email": {
@@ -399,7 +423,7 @@
 					}
 				},
 				"required": [
-					"id",
+					"auth0Id",
 					"email",
 					"displayName"
 				],
