@@ -93,7 +93,14 @@ class UserService {
 		const userRepository: Repository<User> = getRepository(User);
 		const user: User = await userRepository.findOneOrFail({
 			where: { auth0Id: userAuth0Id },
-			relations: ["lists", "friendLists", "lists.owners", "friendLists.owners"],
+			relations: [
+				"lists",
+				"friendLists",
+				"lists.owners",
+				"lists.grantedUsers",
+				"friendLists.owners",
+				"friendLists.grantedUsers",
+			],
 		});
 		let res: List[] = [];
 		const grantedLists = (user.friendLists || []).filter((l) => reallyAll || l.isShared);

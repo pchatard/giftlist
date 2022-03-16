@@ -119,7 +119,7 @@ export class ListController extends Controller {
 	@Get()
 	async getAll(@Request() request: ERequest, @Query() select: SelectKindList): Promise<ListDTO[]> {
 		const lists: List[] = await UserService.getUserLists(request.userId, select);
-		return lists.map((list) => castListAsListDTO(list, false));
+		return lists.map((list) => castListAsListDTO(list));
 	}
 
 	/**

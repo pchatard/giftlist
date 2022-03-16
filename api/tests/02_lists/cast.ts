@@ -4,12 +4,12 @@ import List from "../../src/models/List";
 import { GlobalVar, ListTest, ListTestWithGranted } from "../global";
 import { User1, UserTest } from "../seeder/users.seed";
 
-export function castAsListDTO(list: List, showGrantedIds: boolean = true): ListDTO {
-	return castListAsListDTO(list, showGrantedIds);
+export function castAsListDTO(list: List): ListDTO {
+	return castListAsListDTO(list);
 }
 
 export function castArrayAsListDTO(lists: List[]): ListDTO[] {
-	return lists.map((l) => castAsListDTO(l, false));
+	return lists.map((l) => castAsListDTO(l));
 }
 
 export function ListTestAsList(changes?: Partial<List>): List {
