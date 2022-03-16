@@ -266,6 +266,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UserNameDTO": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"displayName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"displayName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CreateListDTO": {
 				"properties": {
 					"title": {
@@ -284,12 +300,24 @@
 						},
 						"type": "array"
 					},
+					"ownersDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
+						},
+						"type": "array"
+					},
 					"isShared": {
 						"type": "boolean"
 					},
 					"grantedUsersIds": {
 						"items": {
 							"$ref": "#/components/schemas/UUID"
+						},
+						"type": "array"
+					},
+					"grantedUsersDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					}
@@ -317,18 +345,18 @@
 						"type": "string",
 						"format": "date-time"
 					},
-					"ownersIds": {
+					"ownersDTO": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					},
 					"isShared": {
 						"type": "boolean"
 					},
-					"grantedUsersIds": {
+					"grantedUsersDTO": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					}
@@ -336,7 +364,7 @@
 				"type": "object",
 				"description": "Make all properties in T optional"
 			},
-			"Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersIds-or-grantedUsersIds_": {
+			"Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersDTO-or-grantedUsersDTO_": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
@@ -354,18 +382,18 @@
 						"type": "string",
 						"format": "date-time"
 					},
-					"ownersIds": {
+					"ownersDTO": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					},
 					"isShared": {
 						"type": "boolean"
 					},
-					"grantedUsersIds": {
+					"grantedUsersDTO": {
 						"items": {
-							"$ref": "#/components/schemas/UUID"
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					}
@@ -374,14 +402,13 @@
 					"id",
 					"title",
 					"sharingCode",
-					"ownersIds",
 					"isShared"
 				],
 				"type": "object",
 				"description": "From T, pick a set of properties whose keys are in the union K"
 			},
 			"ListDTO": {
-				"$ref": "#/components/schemas/Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersIds-or-grantedUsersIds_"
+				"$ref": "#/components/schemas/Pick_List.-or-id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersDTO-or-grantedUsersDTO_"
 			},
 			"SelectKindList": {
 				"description": "List Selection Kind",
@@ -412,47 +439,47 @@
 			},
 			"CreateUserDTO": {
 				"properties": {
+					"displayName": {
+						"type": "string"
+					},
 					"auth0Id": {
 						"type": "string"
 					},
 					"email": {
 						"$ref": "#/components/schemas/email"
-					},
-					"displayName": {
-						"type": "string"
 					}
 				},
 				"required": [
+					"displayName",
 					"auth0Id",
-					"email",
-					"displayName"
+					"email"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"UserDTO": {
 				"properties": {
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
 					"displayName": {
 						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
 					}
 				},
 				"required": [
-					"email",
-					"displayName"
+					"displayName",
+					"email"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"Partial_UserDTO_": {
 				"properties": {
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
 					"displayName": {
 						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
 					}
 				},
 				"type": "object",

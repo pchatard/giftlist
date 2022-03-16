@@ -10,6 +10,7 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 
+import { UserNameDTO } from "../dto/users";
 import { UUID } from "../types/UUID";
 import { Gift } from "./Gift";
 import User from "./User";
@@ -35,6 +36,8 @@ export class List {
 	@RelationId((list: List) => list.owners)
 	public ownersIds!: UUID[];
 
+	public ownersDTO?: UserNameDTO[];
+
 	@Column({ default: false })
 	public isShared!: boolean;
 
@@ -47,6 +50,8 @@ export class List {
 
 	@RelationId((list: List) => list.grantedUsers)
 	public grantedUsersIds?: UUID[];
+
+	public grantedUsersDTO?: UserNameDTO[];
 
 	@OneToMany(() => Gift, (gift) => gift.list)
 	public gifts?: Gift[];

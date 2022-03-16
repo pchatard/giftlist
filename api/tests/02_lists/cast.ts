@@ -1,35 +1,34 @@
 import { ListDTO } from "../../src/dto/lists";
-import { cleanObject } from "../../src/helpers/cleanObjects";
+import { castListAsListDTO } from "../../src/helpers/lists";
 import List from "../../src/models/List";
 import { GlobalVar, ListTest, ListTestWithGranted } from "../global";
+import { User1, UserTest } from "../seeder/users.seed";
 
-export function castAsListDTO(list: List, showGrantedIds: boolean = true): ListDTO {
-	const { grantedUsers, owners, updatedDate, createdDate, sharingCode, ...rest } = list;
-	return cleanObject({
-		...rest,
-		grantedUsersIds: showGrantedIds ? rest.grantedUsersIds : undefined,
-		sharingCode: rest.isShared ? sharingCode : "",
-	}) as ListDTO;
+export function castAsListDTO(list: List): ListDTO {
+	return castListAsListDTO(list);
 }
 
 export function castArrayAsListDTO(lists: List[]): ListDTO[] {
-	return lists.map((l) => castAsListDTO(l, false));
+	return lists.map((l) => castAsListDTO(l));
 }
 
 export function ListTestAsList(changes?: Partial<List>): List {
 	return {
 		...ListTest,
-		...changes,
 		id: GlobalVar.ListTest_Id,
 		sharingCode: GlobalVar.ListTest_SharingCode,
+		owners: [UserTest],
+		...changes,
 	} as List;
 }
 
 export function ListTestWithGrantedAsList(changes?: Partial<List>): List {
 	return {
 		...ListTestWithGranted,
-		...changes,
 		id: GlobalVar.ListTestWithGranted_Id,
 		sharingCode: GlobalVar.ListTestWithGranted_SharingCode,
+		owners: [UserTest],
+		grantedUsers: [User1],
+		...changes,
 	} as List;
 }

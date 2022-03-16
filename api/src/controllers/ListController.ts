@@ -20,7 +20,7 @@ import { CreateListDTO, EditListDTO, ListDTO, ListIdDTO } from "../dto/lists";
 import ResourceNotFoundError from "../errors/ResourceNotFoundError";
 import UnauthorizedError, { UnauthorizedErrorJSON } from "../errors/UnauthorizedError";
 import { ValidateErrorJSON } from "../errors/ValidationError";
-import { cleanObject } from "../helpers/cleanObjects";
+import { castListAsListDTO } from "../helpers/lists";
 import List from "../models/List";
 import User from "../models/User";
 import ListService from "../services/ListService";
@@ -119,11 +119,7 @@ export class ListController extends Controller {
 	@Get()
 	async getAll(@Request() request: ERequest, @Query() select: SelectKindList): Promise<ListDTO[]> {
 		const lists: List[] = await UserService.getUserLists(request.userId, select);
-		return lists.map((list) => {
-			const { grantedUsers, grantedUsersIds, owners, createdDate, updatedDate, ...rest } = list;
-			rest.sharingCode = rest.isShared ? rest.sharingCode : "";
-			return cleanObject(rest) as ListDTO;
-		});
+		return lists.map((list) => castListAsListDTO(list));
 	}
 
 	/**
@@ -142,10 +138,7 @@ export class ListController extends Controller {
 		) {
 			throw new UnauthorizedError();
 		}
-		const { grantedUsers, owners, createdDate, updatedDate, ...rest }: List =
-			await ListService.get(listId);
-		rest.sharingCode = rest.isShared ? rest.sharingCode : "";
-		return cleanObject(rest) as ListDTO;
+		return castListAsListDTO(await ListService.get(listId));
 	}
 
 	/**

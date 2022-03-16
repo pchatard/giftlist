@@ -9,8 +9,6 @@ export interface CreateListDTO
 		>
 	> {}
 export interface ListIdDTO extends Expand<Pick<List, "id">> {}
-
-// TODO: Understand why Expand make tsoa going to timeout
 export type ListDTO = Pick<
 	List,
 	| "id"
@@ -19,8 +17,8 @@ export type ListDTO = Pick<
 	| "isShared"
 	| "sharingCode"
 	| "closureDate"
-	| "ownersIds"
-	| "grantedUsersIds"
+	| "ownersDTO"
+	| "grantedUsersDTO"
 >;
 
 export interface EditListDTO extends Expand<Omit<ListDTO, "id">> {}
