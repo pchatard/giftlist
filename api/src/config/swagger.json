@@ -266,6 +266,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"UserNameDTO": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"displayName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"displayName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CreateListDTO": {
 				"properties": {
 					"title": {
@@ -281,12 +297,24 @@
 						},
 						"type": "array"
 					},
+					"ownersDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
+						},
+						"type": "array"
+					},
 					"isShared": {
 						"type": "boolean"
 					},
 					"grantedUsersIds": {
 						"items": {
 							"type": "string"
+						},
+						"type": "array"
+					},
+					"grantedUsersDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					}
@@ -311,20 +339,26 @@
 						"type": "string",
 						"format": "date-time"
 					},
-					"ownersIds": {
+					"ownersDTO": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					},
 					"isShared": {
 						"type": "boolean"
+					},
+					"grantedUsersDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
+						},
+						"type": "array"
 					}
 				},
 				"type": "object",
 				"description": "Make all properties in T optional"
 			},
-			"ListDTO": {
+			"Pick_List.id-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersDTO-or-grantedUsersDTO_": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
@@ -339,25 +373,33 @@
 						"type": "string",
 						"format": "date-time"
 					},
-					"ownersIds": {
+					"ownersDTO": {
 						"items": {
-							"type": "string"
+							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
 					},
 					"isShared": {
 						"type": "boolean"
+					},
+					"grantedUsersDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
 					"id",
 					"title",
 					"sharingCode",
-					"ownersIds",
 					"isShared"
 				],
 				"type": "object",
-				"additionalProperties": false
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"ListDTO": {
+				"$ref": "#/components/schemas/Pick_List.id-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersDTO-or-grantedUsersDTO_"
 			},
 			"SelectKindList": {
 				"description": "List Selection Kind",
@@ -391,44 +433,44 @@
 					"id": {
 						"type": "string"
 					},
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
 					"displayName": {
 						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
 					}
 				},
 				"required": [
 					"id",
-					"email",
-					"displayName"
+					"displayName",
+					"email"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"UserDTO": {
 				"properties": {
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
 					"displayName": {
 						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
 					}
 				},
 				"required": [
-					"email",
-					"displayName"
+					"displayName",
+					"email"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"Partial_UserDTO_": {
 				"properties": {
-					"email": {
-						"$ref": "#/components/schemas/email"
-					},
 					"displayName": {
 						"type": "string"
+					},
+					"email": {
+						"$ref": "#/components/schemas/email"
 					}
 				},
 				"type": "object",

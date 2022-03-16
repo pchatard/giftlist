@@ -23,7 +23,7 @@ export default function suite() {
 			.to.have.property("body")
 			.to.eql({
 				...castAsListDTO(ListInvited),
-				grantedUsersIds: [UserTest.id],
+				grantedUsersDTO: [{ id: UserTest.id, displayName: UserTest.displayName }],
 			});
 	});
 	it("Returns 404, with UnvalidSharingCode error, if sharing code does not exist", async () => {
