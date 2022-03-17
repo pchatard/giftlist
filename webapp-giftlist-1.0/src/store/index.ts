@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-import { gift, GiftState } from "./gift";
+import { gifts, GiftState } from "./gifts";
 import { lists, ListsState } from "./lists";
 import { preferences, PreferencesState } from "./preferences";
 import { snackbar, SnackbarState } from "./snackbar";
@@ -10,7 +10,7 @@ export default createStore({
 	modules: {
 		user,
 		lists,
-		gift,
+		gifts,
 		snackbar,
 		preferences,
 	},

@@ -13,6 +13,7 @@ import { Gift } from "@/types/api/Gift";
 import { CogIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { ListDTO } from "@/types/dto/ListDTO";
+import { GiftDTO } from "@/types/dto/GiftDTO";
 
 export default defineComponent({
 	name: "List",
@@ -35,7 +36,7 @@ export default defineComponent({
 
 		/******** Static data ********/
 		const listId = router.currentRoute.value.params.id as string;
-		const actionPayload: ListIdPayload = {
+		const listPayload: ListIdPayload = {
 			auth,
 			listId
 		};
@@ -60,12 +61,12 @@ export default defineComponent({
 			title: labels.modals.deleteGift.title,
 			confirmText: labels.modals.deleteGift.confirm,
 			confirm: () => handleDeleteConfirm(),
-			gift: {} as Gift,
+			gift: {} as GiftDTO,
 		});
 
 		/******** Computed data ********/
 		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
-		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
+		const gifts: ComputedRef<GiftDTO[]> = computed(() => state.gifts.all);
 		const isListView = computed(() => {
 			if (state.preferences.displayList === undefined) {
 				return true;
@@ -76,8 +77,9 @@ export default defineComponent({
 
 		/******** Fetch page data ********/
 		onMounted(async () => {
-			const success = await dispatch("getList", actionPayload);
-			loading.value = !success;
+			const successList = await dispatch("getList", listPayload);
+			const successGifts = await dispatch("getGifts", listPayload)
+			loading.value = !(successList && successGifts);
 		});
 
 		onUnmounted(() => {
@@ -96,7 +98,7 @@ export default defineComponent({
 			// dispatch("toggleListDisplayMode");
 		};
 
-		const handleDeleteModal = (gift: Gift) => {
+		const handleDeleteModal = (gift: GiftDTO) => {
 			modal.value.title = labels.modals.deleteGift.title + gift.title;
 			modal.value.showModal = true;
 			modal.value.confirm = handleDeleteConfirm;
@@ -110,12 +112,12 @@ export default defineComponent({
 
 		const shareList = async () => {
 			if (!list.value.isShared) {
-				await dispatch("shareList", actionPayload);
+				await dispatch("shareList", listPayload);
 			}
 		}
 		const unshareList = async () => {
 			if (list.value.isShared) {
-				await dispatch("unshareList", actionPayload);
+				await dispatch("unshareList", listPayload);
 			}
 		}
 
