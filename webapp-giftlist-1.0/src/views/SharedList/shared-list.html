@@ -1,4 +1,5 @@
-<DefaultLayout :title="listName" back :backButtonTitle="backButtonTitle"
+<div v-if="loading">Loading...</div>
+<DefaultLayout v-else :title="list.title" back :backButtonTitle="backButtonTitle"
     :backButtonLink="router.options.history.state.back">
     <template v-slot:commands>
         <GridListToggle :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />

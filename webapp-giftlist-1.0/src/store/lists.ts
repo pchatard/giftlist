@@ -13,14 +13,7 @@ export const lists: Module<ListsState, RootState> = {
 	state: () => ({
 		owned: [],
 		granted: [],
-		selected: {
-			id: "",
-			title: "",
-			sharingCode: "",
-			closureDate: "",
-			ownerIds: [],
-			isShared: false
-		}
+		selected: initSelectedList()
 	}),
 	getters: {
 		getListIndex: (state) => (listId: string) => {
@@ -37,6 +30,9 @@ export const lists: Module<ListsState, RootState> = {
 		FILL_LIST: (state, list: ListDTO) => {
 			state.selected = list;
 		},
+		EMPTY_LIST: (state) => {
+			state.selected = initSelectedList();
+		},
 		ADD_LIST: (state, newList: ListDTO) => {
 			state.owned.push(newList);
 		},
@@ -52,12 +48,14 @@ export const lists: Module<ListsState, RootState> = {
 			const lists = await Lists.get(auth, select);
 			if (lists) {
 				commit(`FILL_${select.toUpperCase()}_LISTS`, lists);
+				return true;
 			}
 		},
 		getList: async ({ commit }, { auth, listId }: ListIdPayload) => {
 			const list = await Lists.getOne(auth, listId);
 			if (list) {
-				commit("FILL_SELECTED_LIST", list);
+				commit("FILL_LIST", list);
+				return true;
 			}
 		},
 		createList: async ({ commit }, { auth, newList }: CreateListPayload) => {
@@ -66,6 +64,7 @@ export const lists: Module<ListsState, RootState> = {
 				const newList = await Lists.getOne(auth, result.id);
 				if (newList) {
 					commit('ADD_LIST', newList);
+					return true;
 				}
 			}
 			// Handle errors here
@@ -92,7 +91,7 @@ export const lists: Module<ListsState, RootState> = {
 						...partialList
 					};
 					commit("EDIT_LIST", { listIndex, editedList });
-					return;
+					return true;
 				}
 			}
 
@@ -108,6 +107,7 @@ export const lists: Module<ListsState, RootState> = {
 						isShared: true
 					};
 					commit("EDIT_LIST", { listIndex, editedList });
+					commit("FILL_LIST", editedList);
 					return;
 				}
 			}
@@ -123,21 +123,39 @@ export const lists: Module<ListsState, RootState> = {
 						isShared: false
 					};
 					commit("EDIT_LIST", { listIndex, editedList });
+					commit("FILL_LIST", editedList);
 					return;
 				}
 			}
 			// Handle errors here
 		},
-		accessList: async ({ dispatch }, { auth, sharingCode }: ListSharingCodePayload) => {
-			const success = await Lists.getAccessFromSharingCode(auth, sharingCode);
-			if (success) {
-				dispatch("getLists", { auth, select: "granted" });
-				return;
+		accessList: async ({ dispatch, commit, state }, { auth, sharingCode }: ListSharingCodePayload) => {
+			const successAccess = await Lists.getAccessFromSharingCode(auth, sharingCode);
+			if (successAccess) {
+				const successGet = await dispatch("getLists", { auth, select: "granted" });
+				if (successGet) {
+					const listIndex = state.granted.findIndex((list: ListDTO) => list.sharingCode === sharingCode);
+					if (listIndex >= 0) {
+						commit("FILL_LIST", state.granted[listIndex]);
+					}
+				}
+				return true;
 			}
 			// Handle errors here
 		}
 	},
 };
+
+const initSelectedList = (): ListDTO => {
+	return {
+		id: "",
+		title: "",
+		sharingCode: "",
+		closureDate: "",
+		ownersDTO: [],
+		isShared: false
+	};
+}
 
 export interface ListsState {
 	owned: ListDTO[],

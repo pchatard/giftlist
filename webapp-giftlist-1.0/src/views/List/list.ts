@@ -1,4 +1,4 @@
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -10,12 +10,16 @@ import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
-import { CogIcon } from "@heroicons/vue/outline";
+import { CogIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { ListDTO } from "@/types/dto/ListDTO";
 
 export default defineComponent({
 	name: "List",
 	components: {
 		CogIcon,
+		LockClosedIcon,
+		LockOpenIcon,
 		DefaultLayout,
 		GiftGridView,
 		GiftListView,
@@ -24,12 +28,20 @@ export default defineComponent({
 		Table,
 	},
 	setup() {
-		const { dispatch, state, getters } = useStore();
+		/******** Basic imports ********/
+		const { dispatch, state, getters, commit } = useStore();
 		const router = useRouter();
-		const listId = router.currentRoute.value.params.id;
-		const listName = "Ma liste";
-		const auth = ref(inject("Auth") as any);
+		const auth = inject("Auth") as any;
 
+		/******** Static data ********/
+		const listId = router.currentRoute.value.params.id as string;
+		const actionPayload: ListIdPayload = {
+			auth,
+			listId
+		};
+
+		/******** Reactive data ********/
+		const loading = ref(true);
 		const tableHeaders = ref([
 			{
 				title: labels.tables.gift.favorite,
@@ -43,14 +55,41 @@ export default defineComponent({
 			{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
 		]);
 
+		const modal = ref({
+			showModal: false,
+			title: labels.modals.deleteGift.title,
+			confirmText: labels.modals.deleteGift.confirm,
+			confirm: () => handleDeleteConfirm(),
+			gift: {} as Gift,
+		});
+
+		/******** Computed data ********/
+		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
+		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
+		const isListView = computed(() => {
+			if (state.preferences.displayList === undefined) {
+				return true;
+			} else {
+				return state.preferences.displayList;
+			}
+		})
+
+		/******** Fetch page data ********/
+		onMounted(async () => {
+			const success = await dispatch("getList", actionPayload);
+			loading.value = !success;
+		});
+
+		onUnmounted(() => {
+			commit("EMPTY_LIST");
+		})
+
+		/******** Methods ********/
 		const handleSort = (headers: Array<any>) => {
 			tableHeaders.value = headers;
 
 			// TODO : Sort displayed data depending on tableHeaders sorted properties
 		};
-
-		const list = computed(() => getters.getListById(listId));
-		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
 
 		const toggleDisplayMode = () => {
 			console.log("Grid mode is disabled for now");
@@ -69,29 +108,21 @@ export default defineComponent({
 			modal.value.showModal = false;
 		};
 
-		const modal = ref({
-			showModal: false,
-			title: labels.modals.deleteGift.title,
-			confirmText: labels.modals.deleteGift.confirm,
-			confirm: handleDeleteConfirm,
-			gift: {} as Gift,
-		});
-
-		onMounted(() => {
-			dispatch("initializePreferences", auth.value.user.sub);
-			dispatch("initializeGifts", listId);
-		});
+		const shareList = async () => {
+			if (!list.value.isShared) {
+				await dispatch("shareList", actionPayload);
+			}
+		}
+		const unshareList = async () => {
+			if (list.value.isShared) {
+				await dispatch("unshareList", actionPayload);
+			}
+		}
 
 		return {
-			isListView: computed(() => {
-				if (state.preferences.displayList === undefined) {
-					return true;
-				} else {
-					return state.preferences.displayList;
-				}
-			}),
+			loading,
+			isListView,
 			labels,
-			listName,
 			gifts,
 			handleDeleteModal,
 			list,
@@ -100,6 +131,8 @@ export default defineComponent({
 			tableHeaders,
 			toggleDisplayMode,
 			handleSort,
+			shareList,
+			unshareList,
 		};
 	},
 });

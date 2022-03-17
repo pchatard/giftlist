@@ -4,7 +4,6 @@ export interface PartialGiftDTO {
 	isFavorite?: boolean;
 	isHidden?: boolean;
 	category?: string;
-	listId?: string;
 	price?: number;
 	linkURL?: string;
 	brand?: string;

@@ -82,6 +82,7 @@ export default class Lists {
 			// TODO: Use this error in an error state module ?
 			// Errors: 401, 422
 			const axiosError = error as AxiosError;
+			console.log(axiosError);
 			router.push("/app/error");
 		}
 	}

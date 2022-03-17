@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -9,6 +9,9 @@ import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
 import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, XIcon } from "@heroicons/vue/outline";
+import { Auth0Client } from "@auth0/auth0-spa-js";
+import { CreateListPayload } from "@/types/payload/CreateListPayload";
+import { CreateListDTO } from "@/types/dto/CreateListDTO";
 
 export default defineComponent({
 	name: "NewList",
@@ -24,62 +27,59 @@ export default defineComponent({
 		ArrowRightIcon,
 	},
 	setup() {
+		/******** Basic imports ********/
 		const router = useRouter();
 		const { dispatch } = useStore();
+		const auth = inject("Auth") as Auth0Client;
 
-		const step = ref(1);
+		/******** Static data ********/
+		const formLabels = labels.newList;
 		const maxStep = 2;
-		const currentComponent = computed(() => {
-			switch (step.value) {
-				case 1:
-					return "ListFormOne";
-				case 2:
-					return "ListFormTwo";
-				default:
-					return "ListFormOne";
-			}
-		});
 
-		let date = new Date();
-		date.setDate(date.getDate() + 1);
-		const offset = date.getTimezoneOffset();
-		date = new Date(date.getTime() - offset * 60 * 1000);
+		const getInitDate = (): Date => {
+			const date = new Date();
+			date.setDate(date.getDate() + 1);
+			const offset = date.getTimezoneOffset();
+			return new Date(date.getTime() - offset * 60 * 1000);
+		}
 
+		/******** Reactive data ********/
+		const step = ref(1);
 		const listInformation = ref({
 			step1: {
 				title: {
-					label: labels.newList.step1.inputs.title.label,
+					label: formLabels.step1.inputs.title.label,
 					value: "",
 					errorMessage: "",
-					helperText: labels.newList.step1.inputs.title.helperText,
-					placeholder: labels.newList.step1.inputs.title.placeholder,
+					helperText: formLabels.step1.inputs.title.helperText,
+					placeholder: formLabels.step1.inputs.title.placeholder,
 					required: true,
 				},
 				description: {
-					label: labels.newList.step1.inputs.description.label,
+					label: formLabels.step1.inputs.description.label,
 					value: "",
-					placeholder: labels.newList.step1.inputs.description.placeholder,
-					helperText: labels.newList.step1.inputs.description.helperText,
+					placeholder: formLabels.step1.inputs.description.placeholder,
+					helperText: formLabels.step1.inputs.description.helperText,
 					errorMessage: "",
 					required: false,
 				},
 				activateTermDate: {
 					value: true,
-					label: labels.newList.step1.inputs.activateTermDate.label,
-					helperText: labels.newList.step1.inputs.activateTermDate.helperText,
+					label: formLabels.step1.inputs.activateTermDate.label,
+					helperText: formLabels.step1.inputs.activateTermDate.helperText,
 				},
 				termDate: {
-					label: labels.newList.step1.inputs.termDate.label,
-					value: date.toISOString().split("T")[0],
-					helperText: labels.newList.step1.inputs.termDate.label,
+					label: formLabels.step1.inputs.termDate.label,
+					value: getInitDate().toISOString().split("T")[0],
+					helperText: formLabels.step1.inputs.termDate.label,
 					errorMessage: "",
 				},
 			},
 			step2: {
 				shared: {
 					value: false,
-					label: labels.newList.step2.inputs.shared.label,
-					helperText: labels.newList.step2.inputs.shared.helperText,
+					label: formLabels.step2.inputs.shared.label,
+					helperText: formLabels.step2.inputs.shared.helperText,
 				},
 				friends: [
 					{ id: 1, name: "Arnold A." },
@@ -92,17 +92,94 @@ export default defineComponent({
 					{ id: 47, name: "Hans H." },
 				],
 				owners: {
-					label: labels.newList.step2.inputs.owners.label,
-					helperText: labels.newList.step2.inputs.owners.helperText,
+					label: formLabels.step2.inputs.owners.label,
+					helperText: formLabels.step2.inputs.owners.helperText,
 					value: [],
 				},
 				authorizedUsers: {
-					label: labels.newList.step2.inputs.authorizedUsers.label,
-					helperText: labels.newList.step2.inputs.authorizedUsers.helperText,
+					label: formLabels.step2.inputs.authorizedUsers.label,
+					helperText: formLabels.step2.inputs.authorizedUsers.helperText,
 					value: [],
 				},
 			},
 		});
+
+		/******** Computed data ********/
+		const currentComponent = computed(() => {
+			switch (step.value) {
+				case 1:
+					return "ListFormOne";
+				case 2:
+					return "ListFormTwo";
+				default:
+					return "ListFormOne";
+			}
+		});
+
+		const createListData: ComputedRef<CreateListDTO> = computed(() => {
+			const list: CreateListDTO = {
+				title: listInformation.value.step1.title.value,
+				description: listInformation.value.step1.description.value ? listInformation.value.step1.description.value : undefined,
+				closureDate: listInformation.value.step1.activateTermDate.value ? listInformation.value.step1.termDate.value : undefined,
+				ownersIds: listInformation.value.step2.owners.value,
+				isShared: listInformation.value.step2.shared.value,
+				grantedUsersIds: listInformation.value.step2.shared ? listInformation.value.step2.authorizedUsers.value : undefined
+			};
+			return list;
+		})
+
+		const nextButtonText = computed(() => {
+			if (step.value === 1) {
+				return formLabels.buttons.next.step2;
+			}
+			switch (step.value) {
+				case 1:
+					return formLabels.buttons.next.step2;
+				default:
+					return formLabels.buttons.next.default;
+			}
+		});
+
+		const stepTitle = computed(() => {
+			switch (step.value) {
+				case 1:
+					return formLabels.step1.title;
+				case 2:
+					return formLabels.step2.title;
+				default:
+					return "";
+			}
+		});
+
+
+		/******** Fetch page data ********/
+		// TODO: Fetch friends here
+
+
+		/******** Methods ********/
+		const cancel = () => {
+			router.push("/app/lists");
+		};
+
+		const createList = async () => {
+			// TODO: Make verifications
+
+			// Call Store action
+			const payload: CreateListPayload = {
+				auth,
+				newList: createListData.value
+			}
+			const success = await dispatch("createList", payload);
+			if (success) {
+				router.push("/app/lists");
+			}
+		};
+
+		const handleChangeStepFromStepper = (newStep: number) => {
+			if (checkStep(newStep - 1)) {
+				step.value = newStep;
+			}
+		};
 
 		const handleListInformationChange = (values: any) => {
 			switch (step.value) {
@@ -117,16 +194,6 @@ export default defineComponent({
 			}
 		};
 
-		const cancel = () => {
-			router.push("/app/lists");
-		};
-
-		const handleChangeStepFromStepper = (newStep: number) => {
-			if (checkStep(newStep - 1)) {
-				step.value = newStep;
-			}
-		};
-
 		const nextAction = () => {
 			if (step.value !== maxStep) {
 				if (checkStep(step.value)) {
@@ -134,42 +201,8 @@ export default defineComponent({
 				}
 				return;
 			} else {
-				// Call Store action
-				// Redirect to new list or new gift
 				router.push("/app/lists");
 			}
-		};
-
-		const nextButtonText = computed(() => {
-			if (step.value === 1) {
-				return labels.newList.buttons.next.step2;
-			}
-			switch (step.value) {
-				case 1:
-					return labels.newList.buttons.next.step2;
-				default:
-					return labels.newList.buttons.next.default;
-			}
-		});
-
-		const stepTitle = computed(() => {
-			switch (step.value) {
-				case 1:
-					return labels.newList.step1.title;
-				case 2:
-					return labels.newList.step2.title;
-				default:
-					return "";
-			}
-		});
-
-		const skipToList = () => {
-			// Make verifications
-
-			// Call Store action
-			dispatch("createList", listInformation.value);
-			// Redirect to new list or new gift
-			router.push("/app/lists");
 		};
 
 		const checkStep = (step: number): boolean => {
@@ -188,7 +221,7 @@ export default defineComponent({
 			// Check that title is filled
 			if (!listInformation.value.step1.title.value) {
 				listInformation.value.step1.title.errorMessage =
-					labels.newList.step1.inputs.title.errors.mandatory;
+					formLabels.step1.inputs.title.errors.mandatory;
 				validateStep1 = false;
 			}
 
@@ -196,7 +229,7 @@ export default defineComponent({
 			const dateIsInPast = new Date(listInformation.value.step1.termDate.value) <= new Date();
 			if (dateIsInPast) {
 				listInformation.value.step1.termDate.errorMessage =
-					labels.newList.step1.inputs.termDate.errors.pastDate;
+					formLabels.step1.inputs.termDate.errors.pastDate;
 				validateStep1 = false;
 			}
 
@@ -210,6 +243,7 @@ export default defineComponent({
 
 		return {
 			labels,
+			formLabels,
 			cancel,
 			currentComponent,
 			handleChangeStepFromStepper,
@@ -218,7 +252,7 @@ export default defineComponent({
 			nextAction,
 			nextButtonText,
 			maxStep,
-			skipToList,
+			createList,
 			listInformation,
 			handleListInformationChange,
 		};

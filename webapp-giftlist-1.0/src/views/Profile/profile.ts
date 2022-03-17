@@ -43,10 +43,7 @@ export default defineComponent({
 			console.log("Profile.vue - deleteAccount");
 			const deleteResult = await dispatch("deleteAccount", auth);
 			if (deleteResult) {
-				console.log(
-					"Profile.vue - Account successfully deleted -> TODO : Delete on Auth0 and logout"
-				);
-				auth.value.logout({
+				auth.logout({
 					returnTo: window.location.origin,
 				});
 			}
