@@ -1,24 +1,25 @@
 import { Module } from "vuex";
 
-import { RootState } from ".";
-import { ListDTO } from "@/types/dto/ListDTO";
 import Lists from "@/api/Lists";
+import { ListDTO } from "@/types/dto/ListDTO";
 import { CreateListPayload } from "@/types/payload/CreateListPayload";
 import { EditListPayload } from "@/types/payload/EditListPayload";
 import { GetListsPayload } from "@/types/payload/GetListsPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
 
+import { RootState } from "./";
+
 export const lists: Module<ListsState, RootState> = {
 	state: () => ({
 		owned: [],
 		granted: [],
-		selected: initSelectedList()
+		selected: initSelectedList(),
 	}),
 	getters: {
 		getListIndex: (state) => (listId: string) => {
 			return state.owned.findIndex((list: ListDTO) => list.id === listId);
-		}
+		},
 	},
 	mutations: {
 		FILL_OWNED_LISTS: (state, owned: ListDTO[]) => {
@@ -39,7 +40,7 @@ export const lists: Module<ListsState, RootState> = {
 		DELETE_LIST: (state, listIndex: number) => {
 			state.owned.splice(listIndex, 1);
 		},
-		EDIT_LIST: (state, { listIndex, editedList }: { listIndex: number, editedList: ListDTO }) => {
+		EDIT_LIST: (state, { listIndex, editedList }: { listIndex: number; editedList: ListDTO }) => {
 			state.owned.splice(listIndex, 1, editedList);
 		},
 	},
@@ -63,7 +64,7 @@ export const lists: Module<ListsState, RootState> = {
 			if (result) {
 				const newList = await Lists.getOne(auth, result.id);
 				if (newList) {
-					commit('ADD_LIST', newList);
+					commit("ADD_LIST", newList);
 					return true;
 				}
 			}
@@ -81,14 +82,17 @@ export const lists: Module<ListsState, RootState> = {
 
 			// Handle errors here
 		},
-		editList: async ({ commit, getters, state }, { auth, listId, partialList }: EditListPayload) => {
+		editList: async (
+			{ commit, getters, state },
+			{ auth, listId, partialList }: EditListPayload
+		) => {
 			const success = await Lists.edit(auth, listId, partialList);
 			if (success) {
 				const listIndex = getters.getListIndex(listId);
 				if (listIndex >= 0) {
 					const editedList: ListDTO = {
 						...state.owned[listIndex],
-						...partialList
+						...partialList,
 					};
 					commit("EDIT_LIST", { listIndex, editedList });
 					return true;
@@ -104,7 +108,7 @@ export const lists: Module<ListsState, RootState> = {
 				if (listIndex >= 0) {
 					const editedList: ListDTO = {
 						...state.owned[listIndex],
-						isShared: true
+						isShared: true,
 					};
 					commit("EDIT_LIST", { listIndex, editedList });
 					commit("FILL_LIST", editedList);
@@ -120,7 +124,7 @@ export const lists: Module<ListsState, RootState> = {
 				if (listIndex >= 0) {
 					const editedList: ListDTO = {
 						...state.owned[listIndex],
-						isShared: false
+						isShared: false,
 					};
 					commit("EDIT_LIST", { listIndex, editedList });
 					commit("FILL_LIST", editedList);
@@ -129,12 +133,17 @@ export const lists: Module<ListsState, RootState> = {
 			}
 			// Handle errors here
 		},
-		accessList: async ({ dispatch, commit, state }, { auth, sharingCode }: ListSharingCodePayload) => {
+		accessList: async (
+			{ dispatch, commit, state },
+			{ auth, sharingCode }: ListSharingCodePayload
+		) => {
 			const successAccess = await Lists.getAccessFromSharingCode(auth, sharingCode);
 			if (successAccess) {
 				const successGet = await dispatch("getLists", { auth, select: "granted" });
 				if (successGet) {
-					const listIndex = state.granted.findIndex((list: ListDTO) => list.sharingCode === sharingCode);
+					const listIndex = state.granted.findIndex(
+						(list: ListDTO) => list.sharingCode === sharingCode
+					);
 					if (listIndex >= 0) {
 						commit("FILL_LIST", state.granted[listIndex]);
 					}
@@ -142,7 +151,7 @@ export const lists: Module<ListsState, RootState> = {
 				return true;
 			}
 			// Handle errors here
-		}
+		},
 	},
 };
 
@@ -153,12 +162,12 @@ const initSelectedList = (): ListDTO => {
 		sharingCode: "",
 		closureDate: "",
 		ownersDTO: [],
-		isShared: false
+		isShared: false,
 	};
-}
+};
 
 export interface ListsState {
-	owned: ListDTO[],
-	granted: ListDTO[],
-	selected: ListDTO
+	owned: ListDTO[];
+	granted: ListDTO[];
+	selected: ListDTO;
 }

@@ -1,13 +1,21 @@
-import { defineComponent, ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import GiftForm from "@/components/GiftForm/GiftForm.vue";
+import Modal from "@/components/Modal/Modal.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
 import { GiftCategory } from "@/types/api/GiftCategory";
+import { GiftDTO } from "@/types/dto/GiftDTO";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { PartialGiftDTO } from "@/types/dto/PartialGiftDTO";
+import { EditGiftPayload } from "@/types/payload/EditGiftPayload";
+import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 import { TrashIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
@@ -16,22 +24,37 @@ export default defineComponent({
 		DefaultLayout,
 		GiftForm,
 		Button,
+		Modal,
 		TrashIcon,
 	},
 	setup() {
+		/******** Basic imports ********/
 		const router = useRouter();
-		const { dispatch } = useStore();
-		const giftName = "Cadeau";
-		const listName = "Ma liste";
-		const listId = router.currentRoute.value.params.id;
+		const { dispatch, state, commit } = useStore();
+		const auth = inject("Auth") as Auth0Client;
+
+		/******** Static imports ********/
+		const listId = router.currentRoute.value.params.id as string;
+		const giftId = router.currentRoute.value.params.giftId as string;
 
 		const giftCategories: GiftCategory[] = [
-			{ id: "x", name: "Type de cadeau" },
+			{ id: "x", name: "Général" },
 			{ id: "0", name: "Vêtements" },
 			{ id: "1", name: "Chaussures" },
 			{ id: "2", name: "High-Tech" },
 			{ id: "3", name: "Evènements" },
 		];
+
+		/******** Reactive data ********/
+		const loading = ref(true);
+
+		const modal = ref({
+			showModal: false,
+			title: labels.modals.deleteGift.title,
+			confirmText: labels.modals.deleteGift.confirm,
+			confirm: () => handleDeleteConfirm(),
+		});
+
 		const giftInformation = ref({
 			title: {
 				label: labels.gift.inputs.title.label,
@@ -108,6 +131,93 @@ export default defineComponent({
 			},
 		});
 
+		/******** Computed data ********/
+		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
+		const gift: ComputedRef<GiftDTO> = computed(() => state.gifts.selected);
+		const editedGift: ComputedRef<PartialGiftDTO> = computed(() => {
+			const editedGift: PartialGiftDTO = {};
+
+			if (giftInformation.value.title.value !== gift.value.title) {
+				editedGift.title = giftInformation.value.title.value;
+			}
+
+			if (giftInformation.value.isFavorite.value !== gift.value.isFavorite) {
+				editedGift.isFavorite = giftInformation.value.isFavorite.value;
+			}
+
+			if (giftInformation.value.category.value.name !== gift.value.category) {
+				editedGift.category = giftInformation.value.category.value.name;
+			}
+
+			if (giftInformation.value.price.value !== gift.value.price) {
+				editedGift.price = giftInformation.value.price.value;
+			}
+
+			if (giftInformation.value.link.value !== gift.value.linkURL) {
+				editedGift.linkURL = giftInformation.value.link.value;
+			}
+
+			if (giftInformation.value.brand.value !== gift.value.brand) {
+				editedGift.brand = giftInformation.value.brand.value;
+			}
+
+			if (giftInformation.value.color.value !== gift.value.color) {
+				editedGift.color = giftInformation.value.color.value;
+			}
+
+			if (giftInformation.value.size.value !== gift.value.size) {
+				editedGift.size = giftInformation.value.size.value;
+			}
+
+			if (giftInformation.value.comments.value !== gift.value.comments) {
+				editedGift.comments = giftInformation.value.comments.value;
+			}
+
+			return editedGift;
+		});
+
+		/******** Fetch page data ********/
+		onMounted(async () => {
+			const listIdPayload: ListIdPayload = {
+				auth,
+				listId,
+			};
+			const successList = await dispatch("getList", listIdPayload);
+			const giftIdPayload: GiftIdPayload = {
+				auth,
+				listId,
+				giftId,
+			};
+			const successGift = await dispatch("getGift", giftIdPayload);
+			if (successList && successGift) {
+				initializeFormData();
+				loading.value = false;
+			}
+		});
+
+		onUnmounted(() => {
+			commit("EMPTY_LIST");
+			commit("EMPTY_GIFT");
+		});
+
+		/******** Methods ********/
+		const initializeFormData = () => {
+			giftInformation.value.title.value = gift.value.title;
+			giftInformation.value.isFavorite.value = gift.value.isFavorite;
+			giftInformation.value.price.value = gift.value.price || 0;
+			giftInformation.value.category.value =
+				giftCategories.find((cat) => cat.name === gift.value.category) || giftCategories[0];
+			giftInformation.value.link.value = gift.value.linkURL || "";
+			giftInformation.value.showDetails.value = (gift.value.brand ||
+				gift.value.size ||
+				gift.value.color ||
+				gift.value.comments) as unknown as boolean;
+			giftInformation.value.brand.value = gift.value.brand || "";
+			giftInformation.value.size.value = gift.value.size || "";
+			giftInformation.value.color.value = gift.value.color || "";
+			giftInformation.value.comments.value = gift.value.comments || "";
+		};
+
 		const handleGiftInformationChange = (values: any) => {
 			giftInformation.value = values;
 		};
@@ -116,40 +226,24 @@ export default defineComponent({
 			router.go(-1);
 		};
 
-		const deleteGift = () => {
-			console.log("deleteGift");
-			router.go(-1);
-		};
-
-		const saveGiftChanges = () => {
+		const saveGiftChanges = async () => {
 			// Validate fields
 			if (!validateGiftFields()) {
 				return;
 			}
 
-			// Format giftInformation
-			const gift: Gift = {
-				title: giftInformation.value.title.value,
-				isFavorite: giftInformation.value.isFavorite.value,
-				category: giftInformation.value.category.value,
-				price: giftInformation.value.price.value,
-				link: giftInformation.value.link.value,
-				brand: giftInformation.value.brand.value,
-				color: giftInformation.value.color.value,
-				size: giftInformation.value.size.value,
-				comments: giftInformation.value.comments.value,
-				isBooked: false,
+			const editGiftPayload: EditGiftPayload = {
+				auth,
+				listId,
+				giftId,
+				partialGift: editedGift.value,
 			};
 
 			// Call store action
-			dispatch("updateGift", gift)
-				.then(() => {
-					// Redirect to list
-					router.push("/app/lists/" + listId);
-				})
-				.catch((error) => {
-					console.log(error);
-				});
+			const success = await dispatch("editGift", editGiftPayload);
+			if (success) {
+				router.push("/app/lists/" + listId);
+			}
 		};
 
 		const validateGiftFields = (): boolean => {
@@ -163,15 +257,35 @@ export default defineComponent({
 			return validate;
 		};
 
+		const handleDeleteModal = () => {
+			modal.value.title = labels.modals.deleteGift.title + giftInformation.value.title.value;
+			modal.value.showModal = true;
+			modal.value.confirm = handleDeleteConfirm;
+		};
+
+		const handleDeleteConfirm = async () => {
+			const giftIdPayload: GiftIdPayload = {
+				auth,
+				listId,
+				giftId,
+			};
+			const success = await dispatch("deleteGift", giftIdPayload);
+			if (success) {
+				modal.value.showModal = false;
+				router.go(-1);
+			}
+		};
+
 		return {
+			modal,
+			handleDeleteModal,
 			labels,
-			giftName,
-			listName,
-			listId,
+			loading,
+			gift,
+			list,
 			giftInformation,
 			handleGiftInformationChange,
 			cancel,
-			deleteGift,
 			saveGiftChanges,
 		};
 	},

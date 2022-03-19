@@ -3,8 +3,8 @@ import { useRouter } from "vue-router";
 
 import TableData from "@/components/TableData/TableData.vue";
 import labels from "@/labels/fr/labels.json";
-import { CogIcon, InformationCircleIcon, TrashIcon, ViewListIcon } from "@heroicons/vue/outline";
 import { ListDTO } from "@/types/dto/ListDTO";
+import { CogIcon, InformationCircleIcon, TrashIcon, ViewListIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "ListItem",

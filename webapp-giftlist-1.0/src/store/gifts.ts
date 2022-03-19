@@ -1,22 +1,23 @@
 import { Module } from "vuex";
 
-import { RootState } from ".";
+import Gifts from "@/api/Gifts";
 import { GiftDTO } from "@/types/dto/GiftDTO";
-import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { CreateGiftPayload } from "@/types/payload/CreateGiftPayload";
 import { EditGiftPayload } from "@/types/payload/EditGiftPayload";
-import Gifts from "@/api/Gifts";
+import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+
+import { RootState } from "./";
 
 export const gifts: Module<GiftState, RootState> = {
 	state: () => ({
 		all: [],
-		selected: initSelectedGift()
+		selected: initSelectedGift(),
 	}),
 	getters: {
 		getGiftIndex: (state) => (giftId: string) => {
 			return state.all.findIndex((gift: GiftDTO) => gift.id === giftId);
-		}
+		},
 	},
 	mutations: {
 		FILL_GIFTS: (state, gifts: GiftDTO[]) => {
@@ -34,9 +35,9 @@ export const gifts: Module<GiftState, RootState> = {
 		DELETE_GIFT: (state, giftIndex: number) => {
 			state.all.splice(giftIndex, 1);
 		},
-		EDIT_GIFT: (state, { giftIndex, editedGift }: { giftIndex: number, editedGift: GiftDTO }) => {
+		EDIT_GIFT: (state, { giftIndex, editedGift }: { giftIndex: number; editedGift: GiftDTO }) => {
 			state.all.splice(giftIndex, 1, editedGift);
-		}
+		},
 	},
 	actions: {
 		getGifts: async ({ commit }, { auth, listId }: ListIdPayload) => {
@@ -58,7 +59,7 @@ export const gifts: Module<GiftState, RootState> = {
 			if (result) {
 				const newGift = await Gifts.getOne(auth, listId, result.id);
 				if (newGift) {
-					commit('ADD_GIFT', newGift);
+					commit("ADD_GIFT", newGift);
 					return true;
 				}
 			}
@@ -73,27 +74,85 @@ export const gifts: Module<GiftState, RootState> = {
 				}
 			}
 		},
-		editGift: async ({ commit }, { auth, listId, giftId, gift }: EditGiftPayload) => {
-			console.log("editGift");
+		editGift: async (
+			{ commit, getters, state },
+			{ auth, listId, giftId, partialGift }: EditGiftPayload
+		) => {
+			const success = await Gifts.edit(auth, listId, giftId, partialGift);
+			if (success) {
+				const giftIndex = getters.getGiftIndex(giftId);
+				if (giftIndex >= 0) {
+					const editedGift: GiftDTO = {
+						...state.all[giftIndex],
+						...partialGift,
+					};
+					commit("EDIT_GIFT", { giftIndex, editedGift });
+					return true;
+				}
+			}
 		},
-		hideGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
-			console.log("hideGift");
+		hideGift: async ({ commit, getters, state }, { auth, listId, giftId }: GiftIdPayload) => {
+			const success = await Gifts.fav(auth, listId, giftId);
+			if (success) {
+				const giftIndex = getters.getGiftIndex(giftId);
+				if (giftIndex >= 0) {
+					const editedGift: GiftDTO = {
+						...state.all[giftIndex],
+						isHidden: true,
+					};
+					commit("EDIT_GIFT", { giftIndex, editedGift });
+					return true;
+				}
+			}
 		},
-		unhideGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
-			console.log("unhideGift");
+		unhideGift: async ({ commit, getters, state }, { auth, listId, giftId }: GiftIdPayload) => {
+			const success = await Gifts.fav(auth, listId, giftId);
+			if (success) {
+				const giftIndex = getters.getGiftIndex(giftId);
+				if (giftIndex >= 0) {
+					const editedGift: GiftDTO = {
+						...state.all[giftIndex],
+						isHidden: false,
+					};
+					commit("EDIT_GIFT", { giftIndex, editedGift });
+					return true;
+				}
+			}
 		},
-		favGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
-			console.log("favGift");
+		favGift: async ({ commit, getters, state }, { auth, listId, giftId }: GiftIdPayload) => {
+			const success = await Gifts.fav(auth, listId, giftId);
+			if (success) {
+				const giftIndex = getters.getGiftIndex(giftId);
+				if (giftIndex >= 0) {
+					const editedGift: GiftDTO = {
+						...state.all[giftIndex],
+						isFavorite: true,
+					};
+					commit("EDIT_GIFT", { giftIndex, editedGift });
+					return true;
+				}
+			}
 		},
-		unfavGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
-			console.log("unfavGift");
+		unfavGift: async ({ commit, state, getters }, { auth, listId, giftId }: GiftIdPayload) => {
+			const success = await Gifts.fav(auth, listId, giftId);
+			if (success) {
+				const giftIndex = getters.getGiftIndex(giftId);
+				if (giftIndex >= 0) {
+					const editedGift: GiftDTO = {
+						...state.all[giftIndex],
+						isFavorite: false,
+					};
+					commit("EDIT_GIFT", { giftIndex, editedGift });
+					return true;
+				}
+			}
 		},
 		bookGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
 			console.log("bookGift");
 		},
 		unbookGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
 			console.log("unbookGift");
-		}
+		},
 	},
 };
 
@@ -104,10 +163,10 @@ const initSelectedGift = (): GiftDTO => {
 		isFavorite: false,
 		isHidden: false,
 		category: "",
-		listId: ""
+		listId: "",
 	};
 	return emptyGift;
-}
+};
 
 export interface GiftState {
 	all: GiftDTO[];

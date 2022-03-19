@@ -11,9 +11,11 @@ import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
-import { Auth0Client } from "@auth0/auth0-spa-js";
-import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
+import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 
 export default defineComponent({
 	name: "SharedList",
@@ -61,7 +63,7 @@ export default defineComponent({
 
 		/******** Computed data ********/
 		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
-		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
+		const gifts: ComputedRef<GiftDTO[]> = computed(() => state.gifts.all);
 		const isListView = computed(() => {
 			if (state.preferences.displayList === undefined) {
 				return true;
@@ -79,16 +81,19 @@ export default defineComponent({
 			}
 		});
 
-		/******** Watch ********/
-
 		/******** Fetch page data ********/
 		onMounted(async () => {
-			const actionPayload: ListSharingCodePayload = {
+			const sharingCodePayload: ListSharingCodePayload = {
 				auth,
-				sharingCode: listCode
+				sharingCode: listCode,
 			};
-			const success = await dispatch("accessList", actionPayload);
-			loading.value = !success;
+			const successList = await dispatch("accessList", sharingCodePayload);
+			const listIdPayload: ListIdPayload = {
+				auth,
+				listId: list.value.id,
+			};
+			const successGifts = await dispatch("getGifts", listIdPayload);
+			loading.value = !(successGifts && successList);
 		});
 
 		onUnmounted(() => {

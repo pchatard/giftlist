@@ -1,4 +1,13 @@
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref, onUnmounted, Ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	onUnmounted,
+	ref,
+	Ref,
+} from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -7,13 +16,13 @@ import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListFormOne from "@/components/ListFormOne/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
 import labels from "@/labels/fr/labels.json";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronUpIcon } from "@heroicons/vue/solid";
-import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { Auth0Client } from "@auth0/auth0-spa-js";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { PartialListDTO } from "@/types/dto/PartialListDTO";
 import { EditListPayload } from "@/types/payload/EditListPayload";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { ChevronUpIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
 	name: "ListSettings",
@@ -31,7 +40,7 @@ export default defineComponent({
 		/******** Basic imports ********/
 		const router = useRouter();
 		const { dispatch, state, commit } = useStore();
-		const auth = inject('Auth') as Auth0Client;
+		const auth = inject("Auth") as Auth0Client;
 
 		/******** Static data ********/
 
@@ -100,8 +109,15 @@ export default defineComponent({
 		const initialList: ComputedRef<ListDTO> = computed(() => state.lists.selected);
 		const editedList: ComputedRef<PartialListDTO> = computed(() => {
 			const list: PartialListDTO = {
-				description: generalInformation.value.description.value !== initialList.value.description ? generalInformation.value.description.value : undefined,
-				closureDate: generalInformation.value.activateTermDate && generalInformation.value.termDate.value !== initialList.value.description ? generalInformation.value.description.value : undefined,
+				description:
+					generalInformation.value.description.value !== initialList.value.description
+						? generalInformation.value.description.value
+						: undefined,
+				closureDate:
+					generalInformation.value.activateTermDate &&
+					generalInformation.value.termDate.value !== initialList.value.description
+						? generalInformation.value.description.value
+						: undefined,
 			};
 
 			if (generalInformation.value.title.value !== initialList.value.title) {
@@ -112,7 +128,10 @@ export default defineComponent({
 				list.description = generalInformation.value.description.value;
 			}
 
-			if (generalInformation.value.activateTermDate.value && generalInformation.value.termDate.value !== initialList.value.closureDate) {
+			if (
+				generalInformation.value.activateTermDate.value &&
+				generalInformation.value.termDate.value !== initialList.value.closureDate
+			) {
 				list.closureDate = generalInformation.value.termDate.value;
 			}
 
@@ -130,18 +149,18 @@ export default defineComponent({
 		onMounted(async () => {
 			const actionPayload: ListIdPayload = {
 				auth,
-				listId: router.currentRoute.value.params.id as string
-			}
+				listId: router.currentRoute.value.params.id as string,
+			};
 			const success = await dispatch("getList", actionPayload);
 			if (success) {
 				initializeFormValues();
 				loading.value = false;
 			}
-		})
+		});
 
 		onUnmounted(() => {
 			commit("EMPTY_LIST");
-		})
+		});
 
 		/******** Methods ********/
 		const initializeDate = () => {
@@ -154,10 +173,16 @@ export default defineComponent({
 
 		const initializeFormValues = () => {
 			generalInformation.value.title.value = initialList.value.title;
-			generalInformation.value.description.value = initialList.value.description ? initialList.value.description : "";
-			generalInformation.value.activateTermDate.value = initialList.value.closureDate ? true : false;
-			generalInformation.value.termDate.value = initialList.value.closureDate ? new Date(initialList.value.closureDate).toISOString().split("T")[0] : initializeDate().toISOString().split("T")[0];
-		}
+			generalInformation.value.description.value = initialList.value.description
+				? initialList.value.description
+				: "";
+			generalInformation.value.activateTermDate.value = initialList.value.closureDate
+				? true
+				: false;
+			generalInformation.value.termDate.value = initialList.value.closureDate
+				? new Date(initialList.value.closureDate).toISOString().split("T")[0]
+				: initializeDate().toISOString().split("T")[0];
+		};
 
 		const handleOpen = (tab: string) => {
 			if (tab === "general") {
@@ -183,9 +208,9 @@ export default defineComponent({
 			if (validateListData()) {
 				const editPayload: EditListPayload = {
 					auth,
-					listId: initialList.value.id || router.currentRoute.value.params.id as string,
-					partialList: editedList.value
-				}
+					listId: initialList.value.id || (router.currentRoute.value.params.id as string),
+					partialList: editedList.value,
+				};
 				const success = await dispatch("editList", editPayload);
 				if (success) {
 					router.go(-1);

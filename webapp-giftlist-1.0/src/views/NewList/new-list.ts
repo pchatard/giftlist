@@ -8,10 +8,10 @@ import ListFormOne from "@/components/ListFormOne/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
 import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, XIcon } from "@heroicons/vue/outline";
-import { Auth0Client } from "@auth0/auth0-spa-js";
-import { CreateListPayload } from "@/types/payload/CreateListPayload";
 import { CreateListDTO } from "@/types/dto/CreateListDTO";
+import { CreateListPayload } from "@/types/payload/CreateListPayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, XIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "NewList",
@@ -41,7 +41,7 @@ export default defineComponent({
 			date.setDate(date.getDate() + 1);
 			const offset = date.getTimezoneOffset();
 			return new Date(date.getTime() - offset * 60 * 1000);
-		}
+		};
 
 		/******** Reactive data ********/
 		const step = ref(1);
@@ -119,14 +119,20 @@ export default defineComponent({
 		const createListData: ComputedRef<CreateListDTO> = computed(() => {
 			const list: CreateListDTO = {
 				title: listInformation.value.step1.title.value,
-				description: listInformation.value.step1.description.value ? listInformation.value.step1.description.value : undefined,
-				closureDate: listInformation.value.step1.activateTermDate.value ? listInformation.value.step1.termDate.value : undefined,
+				description: listInformation.value.step1.description.value
+					? listInformation.value.step1.description.value
+					: undefined,
+				closureDate: listInformation.value.step1.activateTermDate.value
+					? listInformation.value.step1.termDate.value
+					: undefined,
 				ownersIds: listInformation.value.step2.owners.value,
 				isShared: listInformation.value.step2.shared.value,
-				grantedUsersIds: listInformation.value.step2.shared ? listInformation.value.step2.authorizedUsers.value : undefined
+				grantedUsersIds: listInformation.value.step2.shared
+					? listInformation.value.step2.authorizedUsers.value
+					: undefined,
 			};
 			return list;
-		})
+		});
 
 		const nextButtonText = computed(() => {
 			if (step.value === 1) {
@@ -151,10 +157,8 @@ export default defineComponent({
 			}
 		});
 
-
 		/******** Fetch page data ********/
 		// TODO: Fetch friends here
-
 
 		/******** Methods ********/
 		const cancel = () => {
@@ -167,8 +171,8 @@ export default defineComponent({
 			// Call Store action
 			const payload: CreateListPayload = {
 				auth,
-				newList: createListData.value
-			}
+				newList: createListData.value,
+			};
 			const success = await dispatch("createList", payload);
 			if (success) {
 				router.push("/app/lists");

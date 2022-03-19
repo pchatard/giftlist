@@ -1,6 +1,6 @@
 import { CreateGiftDTO } from "../dto/CreateGiftDTO";
-import { GiftIdPayload } from "./GiftIdPayload";
+import { ListIdPayload } from "./ListIdPayload";
 
-export interface CreateGiftPayload extends GiftIdPayload {
-    gift: CreateGiftDTO;
+export interface CreateGiftPayload extends ListIdPayload {
+	gift: CreateGiftDTO;
 }

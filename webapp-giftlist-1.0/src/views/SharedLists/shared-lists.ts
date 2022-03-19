@@ -10,9 +10,9 @@ import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import { List } from "@/types/api/List";
 import { ListDTO } from "@/types/dto/ListDTO";
-import { Auth0Client } from "@auth0/auth0-spa-js";
 import { GetListsPayload } from "@/types/payload/GetListsPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 
 export default defineComponent({
 	name: "SharedLists",
@@ -80,16 +80,15 @@ export default defineComponent({
 			}
 		});
 
-
 		/******** Fetch page data ********/
 		onMounted(async () => {
 			const actionPayload: GetListsPayload = {
 				auth,
-				select: "granted"
-			}
+				select: "granted",
+			};
 			const success = await dispatch("getLists", actionPayload);
 			loading.value = !success;
-		})
+		});
 
 		/******** Methods ********/
 		const handleSort = (headers: Array<any>) => {
@@ -109,8 +108,8 @@ export default defineComponent({
 		const confirmNewSharingCode = async () => {
 			const actionPayload: ListSharingCodePayload = {
 				auth,
-				sharingCode: newSharingCodeData.value.code
-			}
+				sharingCode: newSharingCodeData.value.code,
+			};
 			const success = await dispatch("accessList", actionPayload);
 			if (success) {
 				router.push(`/app/shared/${newSharingCodeData.value.code}`);

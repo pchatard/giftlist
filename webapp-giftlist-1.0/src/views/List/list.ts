@@ -10,10 +10,11 @@ import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
-import { CogIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
-import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftDTO } from "@/types/dto/GiftDTO";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { CogIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "List",
@@ -38,7 +39,7 @@ export default defineComponent({
 		const listId = router.currentRoute.value.params.id as string;
 		const listPayload: ListIdPayload = {
 			auth,
-			listId
+			listId,
 		};
 
 		/******** Reactive data ********/
@@ -73,18 +74,18 @@ export default defineComponent({
 			} else {
 				return state.preferences.displayList;
 			}
-		})
+		});
 
 		/******** Fetch page data ********/
 		onMounted(async () => {
 			const successList = await dispatch("getList", listPayload);
-			const successGifts = await dispatch("getGifts", listPayload)
+			const successGifts = await dispatch("getGifts", listPayload);
 			loading.value = !(successList && successGifts);
 		});
 
 		onUnmounted(() => {
 			commit("EMPTY_LIST");
-		})
+		});
 
 		/******** Methods ********/
 		const handleSort = (headers: Array<any>) => {
@@ -105,21 +106,28 @@ export default defineComponent({
 			modal.value.gift = gift;
 		};
 
-		const handleDeleteConfirm = () => {
-			dispatch("deleteGift");
-			modal.value.showModal = false;
+		const handleDeleteConfirm = async () => {
+			const giftIdPayload: GiftIdPayload = {
+				auth,
+				listId,
+				giftId: modal.value.gift.id,
+			};
+			const success = await dispatch("deleteGift", giftIdPayload);
+			if (success) {
+				modal.value.showModal = false;
+			}
 		};
 
 		const shareList = async () => {
 			if (!list.value.isShared) {
 				await dispatch("shareList", listPayload);
 			}
-		}
+		};
 		const unshareList = async () => {
 			if (list.value.isShared) {
 				await dispatch("unshareList", listPayload);
 			}
-		}
+		};
 
 		return {
 			loading,

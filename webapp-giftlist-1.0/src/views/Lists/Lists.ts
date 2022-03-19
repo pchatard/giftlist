@@ -1,15 +1,15 @@
-import { computed, ComputedRef, defineComponent, inject, onMounted, Ref, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { computed, ComputedRef, defineComponent, inject, onMounted, Ref, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-import DefaultLayout from '@/components/DefaultLayout/DefaultLayout.vue';
-import ListItem from '@/components/ListItem/ListItem.vue';
-import Modal from '@/components/Modal/Modal.vue';
-import Table from '@/components/Table/Table.vue';
-import labels from '@/labels/fr/labels.json';
-import { ListDTO } from '@/types/dto/ListDTO';
-import { ListIdPayload } from '@/types/payload/ListIdPayload';
-import { Auth0Client } from '@auth0/auth0-spa-js';
+import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
+import ListItem from "@/components/ListItem/ListItem.vue";
+import Modal from "@/components/Modal/Modal.vue";
+import Table from "@/components/Table/Table.vue";
+import labels from "@/labels/fr/labels.json";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 
 export default defineComponent({
 	name: "Lists",
@@ -20,7 +20,6 @@ export default defineComponent({
 		Modal,
 	},
 	setup() {
-
 		/******** Basic imports ********/
 		const { dispatch, state } = useStore();
 		const router = useRouter();
@@ -44,7 +43,7 @@ export default defineComponent({
 		/******** Fetch page data ********/
 		onMounted(async () => {
 			await dispatch("getLists", { auth, select: "owned" });
-		})
+		});
 
 		/******** Methods ********/
 		const handleSort = (headers: Array<any>) => {
@@ -66,8 +65,8 @@ export default defineComponent({
 			if (listToDelete.value) {
 				const payload: ListIdPayload = {
 					auth,
-					listId: listToDelete.value.id
-				}
+					listId: listToDelete.value.id,
+				};
 				const success = await dispatch("deleteList", payload);
 				if (success) {
 					closeDeleteModal();
