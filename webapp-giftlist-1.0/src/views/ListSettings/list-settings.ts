@@ -1,4 +1,13 @@
-import { defineComponent, ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	inject,
+	onMounted,
+	onUnmounted,
+	ref,
+	Ref,
+} from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -7,6 +16,11 @@ import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListFormOne from "@/components/ListFormOne/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
 import labels from "@/labels/fr/labels.json";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { PartialListDTO } from "@/types/dto/PartialListDTO";
+import { EditListPayload } from "@/types/payload/EditListPayload";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/solid";
 
@@ -23,18 +37,17 @@ export default defineComponent({
 		ListFormTwo,
 	},
 	setup() {
+		/******** Basic imports ********/
 		const router = useRouter();
-		const { dispatch } = useStore();
+		const { dispatch, state, commit } = useStore();
+		const auth = inject("Auth") as Auth0Client;
 
-		const initializeDate = () => {
-			let date = new Date();
-			date.setDate(date.getDate() + 1);
-			const offset = date.getTimezoneOffset();
-			date = new Date(date.getTime() - offset * 60 * 1000);
-			return date;
-		};
+		/******** Static data ********/
 
-		// TODO: Fill with list data
+		/******** Reactive data ********/
+		const loading = ref(true);
+		const openGeneral = ref(true);
+		const openShare = ref(false);
 		const generalInformation = ref({
 			title: {
 				label: labels.listOptions.inputs.title.label,
@@ -59,13 +72,11 @@ export default defineComponent({
 			},
 			termDate: {
 				label: labels.listOptions.inputs.termDate.label,
-				value: initializeDate().toISOString().split("T")[0],
+				value: "",
 				helperText: labels.listOptions.inputs.termDate.helperText,
 				errorMessage: "",
 			},
 		});
-
-		// TODO: Fill with list data
 		const sharingOptions = ref({
 			shared: {
 				value: false,
@@ -94,8 +105,84 @@ export default defineComponent({
 			},
 		});
 
-		const openGeneral = ref(true);
-		const openShare = ref(false);
+		/******** Computed data ********/
+		const initialList: ComputedRef<ListDTO> = computed(() => state.lists.selected);
+		const editedList: ComputedRef<PartialListDTO> = computed(() => {
+			const list: PartialListDTO = {
+				description:
+					generalInformation.value.description.value !== initialList.value.description
+						? generalInformation.value.description.value
+						: undefined,
+				closureDate:
+					generalInformation.value.activateTermDate &&
+					generalInformation.value.termDate.value !== initialList.value.description
+						? generalInformation.value.description.value
+						: undefined,
+			};
+
+			if (generalInformation.value.title.value !== initialList.value.title) {
+				list.title = generalInformation.value.title.value;
+			}
+
+			if (generalInformation.value.description.value !== initialList.value.description) {
+				list.description = generalInformation.value.description.value;
+			}
+
+			if (
+				generalInformation.value.activateTermDate.value &&
+				generalInformation.value.termDate.value !== initialList.value.closureDate
+			) {
+				list.closureDate = generalInformation.value.termDate.value;
+			}
+
+			if (!generalInformation.value.activateTermDate.value) {
+				// TODO: Issue #77
+				list.closureDate = undefined;
+			}
+
+			list.grantedUsersDTO = initialList.value.grantedUsersDTO;
+
+			return list;
+		});
+
+		/******** Fetch page data ********/
+		onMounted(async () => {
+			const actionPayload: ListIdPayload = {
+				auth,
+				listId: router.currentRoute.value.params.id as string,
+			};
+			const success = await dispatch("getList", actionPayload);
+			if (success) {
+				initializeFormValues();
+				loading.value = false;
+			}
+		});
+
+		onUnmounted(() => {
+			commit("EMPTY_LIST");
+		});
+
+		/******** Methods ********/
+		const initializeDate = () => {
+			let date = new Date();
+			date.setDate(date.getDate() + 1);
+			const offset = date.getTimezoneOffset();
+			date = new Date(date.getTime() - offset * 60 * 1000);
+			return date;
+		};
+
+		const initializeFormValues = () => {
+			generalInformation.value.title.value = initialList.value.title;
+			generalInformation.value.description.value = initialList.value.description
+				? initialList.value.description
+				: "";
+			generalInformation.value.activateTermDate.value = initialList.value.closureDate
+				? true
+				: false;
+			generalInformation.value.termDate.value = initialList.value.closureDate
+				? new Date(initialList.value.closureDate).toISOString().split("T")[0]
+				: initializeDate().toISOString().split("T")[0];
+		};
 
 		const handleOpen = (tab: string) => {
 			if (tab === "general") {
@@ -117,16 +204,17 @@ export default defineComponent({
 			router.go(-1);
 		};
 
-		const saveChanges = () => {
+		const saveChanges = async () => {
 			if (validateListData()) {
-				dispatch("updateList")
-					.then(() => {
-						router.go(-1);
-						// Update data if necessary
-					})
-					.catch(() => {
-						// TODO
-					});
+				const editPayload: EditListPayload = {
+					auth,
+					listId: initialList.value.id || (router.currentRoute.value.params.id as string),
+					partialList: editedList.value,
+				};
+				const success = await dispatch("editList", editPayload);
+				if (success) {
+					router.go(-1);
+				}
 			}
 		};
 
@@ -138,6 +226,7 @@ export default defineComponent({
 
 		return {
 			labels,
+			loading,
 			generalInformation,
 			handleGeneralInformationChange,
 			handleSharingOptionsChange,

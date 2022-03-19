@@ -1,4 +1,4 @@
-import { computed, ComputedRef, defineComponent, ref, watch } from "vue";
+import { computed, ComputedRef, defineComponent, inject, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -9,6 +9,10 @@ import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import { List } from "@/types/api/List";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { GetListsPayload } from "@/types/payload/GetListsPayload";
+import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 
 export default defineComponent({
 	name: "SharedLists",
@@ -20,28 +24,21 @@ export default defineComponent({
 		InputText,
 	},
 	setup() {
+		/******** Basic imports ********/
 		const router = useRouter();
 		const { dispatch, state } = useStore();
-		const lists: ComputedRef<List[]> = computed(() => state.list.shared);
+		const auth = inject("Auth") as Auth0Client;
 
+		/******** Static data ********/
+
+		/******** Reactive data ********/
+		const loading = ref(true);
 		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
 			{ title: labels.tables.list.title, sortable: true, sorted: "none" },
 			{ title: labels.tables.list.owners, sortable: true, sorted: "none" },
 			{ title: labels.tables.list.termDate, sortable: true, sorted: "none" },
 		]);
-
-		const handleSort = (headers: Array<any>) => {
-			tableHeaders.value = headers;
-
-			// TODO : Sort displayed data depending on tableHeaders sorted properties
-		};
-
-		const openList = () => {
-			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
-		};
-
-		// NEW CODE MODAL
 		const newSharingCodeData = ref({
 			code: "",
 			errorMessage: "",
@@ -50,10 +47,18 @@ export default defineComponent({
 			label: labels.modals.code.input.label,
 			placeholder: labels.modals.code.input.placeholder,
 		});
+		const detailsModal = ref({
+			show: false,
+			list: {} as List,
+		});
+
+		/******** Computed data ********/
+		const lists: ComputedRef<ListDTO[]> = computed(() => state.lists.granted);
 		const newSharingCodeModalIsOpen = computed(
 			() => router.currentRoute.value.path === "/app/shared/new"
 		);
 
+		/******** Watch ********/
 		watch(
 			() => newSharingCodeData.value.code,
 			(val, old) => {
@@ -75,26 +80,44 @@ export default defineComponent({
 			}
 		});
 
+		/******** Fetch page data ********/
+		onMounted(async () => {
+			const actionPayload: GetListsPayload = {
+				auth,
+				select: "granted",
+			};
+			const success = await dispatch("getLists", actionPayload);
+			loading.value = !success;
+		});
+
+		/******** Methods ********/
+		const handleSort = (headers: Array<any>) => {
+			tableHeaders.value = headers;
+
+			// TODO : Sort displayed data depending on tableHeaders sorted properties
+		};
+
+		const openList = () => {
+			router.push("/app/shared/" + detailsModal.value.list.sharingCode);
+		};
+
 		const closeNewSharingCodeModal = () => {
 			router.push("/app/shared");
 		};
 
-		const confirmNewSharingCode = () => {
-			dispatch("getSharedList", newSharingCodeData.value.code)
-				.then(() => {
-					router.push(`/app/shared/${newSharingCodeData.value.code}`);
-				})
-				.catch((error) => {
-					newSharingCodeData.value.isError = true;
-					newSharingCodeData.value.errorMessage = error.message;
-				});
+		const confirmNewSharingCode = async () => {
+			const actionPayload: ListSharingCodePayload = {
+				auth,
+				sharingCode: newSharingCodeData.value.code,
+			};
+			const success = await dispatch("accessList", actionPayload);
+			if (success) {
+				router.push(`/app/shared/${newSharingCodeData.value.code}`);
+			} else {
+				newSharingCodeData.value.isError = true;
+				newSharingCodeData.value.errorMessage = "Une erreur s'est produite...";
+			}
 		};
-
-		// DETAILS MODAL
-		const detailsModal = ref({
-			show: false,
-			list: {} as List,
-		});
 
 		const handleDetailsModal = (list?: List) => {
 			detailsModal.value.show = !detailsModal.value.show;
@@ -104,6 +127,7 @@ export default defineComponent({
 		};
 
 		return {
+			loading,
 			labels,
 			router,
 			lists,

@@ -22,7 +22,6 @@ const API_PATH_UNBOOK = (listId: string, giftId: string) =>
 	`/lists/${listId}/gifts/${giftId}/unbook`;
 
 export default class Gifts {
-
 	// Create a gift
 	static async create(
 		auth: Auth0Client,

@@ -16,21 +16,21 @@
                     <template v-slot:icon>
                         <XIcon />
                     </template>
-                    {{ labels.newList.buttons.cancel }}
+                    {{ formLabels.buttons.cancel }}
                 </Button>
                 <Button btnStyle="secondary" hasIcon v-show="step > 1" @click="step--">
                     <template v-slot:icon>
                         <ArrowLeftIcon />
                     </template>
-                    {{ labels.newList.buttons.previous }}
+                    {{ formLabels.buttons.previous }}
                 </Button>
             </div>
             <div class="flex gap-4">
-                <Button :btnStyle="step === maxStep ? 'primary' : 'secondary'" hasIcon @click="skipToList">
+                <Button :btnStyle="step === maxStep ? 'primary' : 'secondary'" hasIcon @click="createList">
                     <template v-slot:icon>
                         <CheckIcon />
                     </template>
-                    {{ labels.newList.buttons.confirm }}
+                    {{ formLabels.buttons.confirm }}
                 </Button>
                 <Button btnStyle="primary" hasIcon v-show="step != maxStep" @click="nextAction">
                     <template v-slot:icon>

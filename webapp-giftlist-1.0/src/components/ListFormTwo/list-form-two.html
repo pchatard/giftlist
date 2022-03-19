@@ -1,8 +1,8 @@
 <div class="grid grid-cols-3 gap-4 divide-y">
     <div class="col-span-full grid grid-cols-3">
         <InputSelect class="col-span-1 py-4" :label="values.owners.label" :value="ownersSelectValue"
-            :options="ownersSelectOptions" writable :helperText="values.owners.helperText"
-            @change="handleSelectOwner" />
+            :options="ownersSelectOptions" writable :helperText="values.owners.helperText" @change="handleSelectOwner"
+            disabled />
         <div class="col-span-full flex items-center">
             <span>{{ labels.newList.step2.inputs.owners.title }}</span>
             <div class="flex flex-wrap gap-y-2 py-2 ml-4">
@@ -18,7 +18,7 @@
             @change="handleSharedChange" inline :helperText="values.shared.helperText" />
 
         <InputSelect v-show="values.shared.value" class="col-span-1 py-4" :label="values.authorizedUsers.label"
-            :helperText="values.authorizedUsers.helperText" writable :disabled="!values.shared.value"
+            :helperText="values.authorizedUsers.helperText" writable :disabled="true || !values.shared.value"
             :value="authorizedUsersSelectValue" :options="authorizedUsersSelectOptions"
             @change="handleSelectAuthorized" />
         <div class="col-span-full flex items-center" v-show="values.shared.value">

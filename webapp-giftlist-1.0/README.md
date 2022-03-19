@@ -17,10 +17,10 @@
 - [ ] Se conformer aux rules Vue ESLint https://eslint.vuejs.org/rules/
 
 ## State / Store
-- [ ] Réfléchir aux stores
-- [ ] Connecter l'API
-- [ ] Connecter les différentes datas des stores aux différentes pages
-- [ ] Connecter les différentes actions des stores aux boutons correspondants
+- [x] Réfléchir aux stores
+- [x] Connecter l'API
+- [x] Connecter les différentes datas des stores aux différentes pages
+- [x] Connecter les différentes actions des stores aux boutons correspondants
 
 ## Formulaires / Inputs
 - [ ] Réfléchir aux différentes règles de validation

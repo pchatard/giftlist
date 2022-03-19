@@ -1,4 +1,4 @@
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from "vue";
+import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -11,6 +11,11 @@ import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
+import { GiftDTO } from "@/types/dto/GiftDTO";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
+import { Auth0Client } from "@auth0/auth0-spa-js";
 
 export default defineComponent({
 	name: "SharedList",
@@ -24,27 +29,17 @@ export default defineComponent({
 		Table,
 	},
 	setup() {
-		const { dispatch, state } = useStore();
+		/******** Basic imports ********/
+		const { dispatch, state, commit } = useStore();
 		const router = useRouter();
-		const listCode = router.currentRoute.value.params.code;
-		const auth = ref(inject("Auth") as any);
+		const auth = inject("Auth") as Auth0Client;
 
-		const listName = "La liste de mon copain";
+		/******** Static data ********/
+		const listCode = router.currentRoute.value.params.code as string;
 
-		onMounted(() => {
-			dispatch("initializeGifts", listCode);
-			dispatch("initializePreferences", auth.value.user.sub);
-		});
-
-		const backButtonTitle = computed(() => {
-			const previous = router.options.history.state.back;
-			if (previous?.toString().includes("/app/booked")) {
-				return labels.titles.booked;
-			} else {
-				return labels.titles.shared;
-			}
-		});
-
+		/******** Reactive data ********/
+		const loading = ref(true);
+		const selectedGift = ref();
 		const tableHeaders = ref([
 			{
 				title: labels.tables.gift.favorite,
@@ -58,16 +53,60 @@ export default defineComponent({
 			{ title: labels.tables.gift.creationDate, sortable: true, sorted: "none" },
 			{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
 		]);
+		const modal = ref({
+			showModal: false,
+			title: "",
+			confirmText: "",
+			cancelText: "",
+			confirm: () => handleDetailsConfirm(),
+		});
+
+		/******** Computed data ********/
+		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
+		const gifts: ComputedRef<GiftDTO[]> = computed(() => state.gifts.all);
+		const isListView = computed(() => {
+			if (state.preferences.displayList === undefined) {
+				return true;
+			} else {
+				return state.preferences.displayList;
+			}
+		});
+
+		const backButtonTitle = computed(() => {
+			const previous = router.options.history.state.back;
+			if (previous?.toString().includes("/app/booked")) {
+				return labels.titles.booked;
+			} else {
+				return labels.titles.shared;
+			}
+		});
+
+		/******** Fetch page data ********/
+		onMounted(async () => {
+			const sharingCodePayload: ListSharingCodePayload = {
+				auth,
+				sharingCode: listCode,
+			};
+			const successList = await dispatch("accessList", sharingCodePayload);
+			const listIdPayload: ListIdPayload = {
+				auth,
+				listId: list.value.id,
+			};
+			const successGifts = await dispatch("getGifts", listIdPayload);
+			loading.value = !(successGifts && successList);
+		});
+
+		onUnmounted(() => {
+			commit("EMPTY_LIST");
+		});
+
+		/******** Methods ********/
 
 		const handleSort = (headers: Array<any>) => {
 			tableHeaders.value = headers;
 
 			// TODO : Sort displayed data depending on tableHeaders sorted properties
 		};
-
-		const gifts: ComputedRef<Gift[]> = computed(() => state.gift.gifts);
-
-		const selectedGift = ref();
 
 		const toggleDisplayMode = () => {
 			console.log("Grid mode is disabled for now");
@@ -107,23 +146,10 @@ export default defineComponent({
 			handleBookModal(selectedGift.value);
 		};
 
-		const modal = ref({
-			showModal: false,
-			title: "",
-			confirmText: "",
-			cancelText: "",
-			confirm: handleDetailsConfirm,
-		});
-
 		return {
-			listName,
-			isListView: computed(() => {
-				if (state.preferences.displayList === undefined) {
-					return true;
-				} else {
-					return state.preferences.displayList;
-				}
-			}),
+			loading,
+			list,
+			isListView,
 			gifts,
 			handleBookModal,
 			handleDetailsModal,

@@ -62,12 +62,5 @@
             </template>
             {{ confirmText }}
         </Button>
-
-        <Button v-if="action === 'create'" btnStyle="primary" hasIcon @click="$emit('confirm', true)">
-            <template v-slot:icon>
-                <CheckIcon />
-            </template>
-            {{ labels.gift.buttons.createAnother }}
-        </Button>
     </div>
 </div>

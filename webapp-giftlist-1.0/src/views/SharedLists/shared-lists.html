@@ -1,6 +1,7 @@
-<DefaultLayout :title="labels.titles.shared">
+<div v-if="loading">Loading...</div>
+<DefaultLayout v-else :title="labels.titles.shared">
     <Table :headers="tableHeaders" @sort="handleSort">
-        <tr v-for="list in lists" :key="list.sharingCode" class="cursor-pointer hover:bg-gray-50"
+        <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
             @click="router.push(`/app/shared/${list.sharingCode}`)">
             <ListItem :list="list" :shared="true" @details="handleDetailsModal" />
         </tr>

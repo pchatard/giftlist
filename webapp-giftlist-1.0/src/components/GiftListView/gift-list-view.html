@@ -1,22 +1,20 @@
-<TableData class="">
-    <HeartIcon v-show="gift.isFavorite" @click.stop="toggleFavoriteStatus"
-        class="w-7 h-7 mx-auto text-red-400 cursor-pointer" />
-    <HeartIconOutline v-show="!gift.isFavorite" class="w-7 h-7 mx-auto text-gray-400 cursor-pointer"
-        @click.stop="toggleFavoriteStatus" />
+<TableData>
+    <HeartIcon v-if="gift.isFavorite" @click.stop="unfavGift" class="w-7 h-7 mx-auto text-red-400 cursor-pointer" />
+    <HeartIconOutline v-else class="w-7 h-7 mx-auto text-gray-400 cursor-pointer" @click.stop="favGift" />
 </TableData>
 <TableData>
     <div>
         <div class="text-sm font-medium text-gray-900 whitespace-normal">
-            {{ gift.title || labels.gifts.title }}
+            {{ gift.title }}
         </div>
-        <div class="text-sm text-gray-500">Autres infos</div>
+        <div v-if="gift.brand" class="text-sm text-gray-500">{{ gift.brand }}</div>
     </div>
 </TableData>
 
 <TableData>
-    <div class="flex flex-col justify-center">
-        <ShoppingCartIcon class="w-5 h-5 mb-1 text-yellow-400" />
-        <div class="text-sm text-gray-500">Vêtements</div>
+    <div class="flex items-center">
+        <ShoppingCartIcon class="w-5 h-5 text-yellow-400" />
+        <div class="text-sm text-gray-500 ml-2">{{ gift.category }}</div>
     </div>
 </TableData>
 <TableData v-show="shared">
@@ -29,11 +27,13 @@
 </TableData>
 <TableData class="text-sm text-gray-500" content="Aujourd'hui" />
 <TableData>
-    <div class="text-sm text-gray-500">13.00€</div>
+    <div class="text-sm text-gray-500">{{ gift.price ? gift.price + "€" : "-" }}</div>
 </TableData>
 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-    <button @click.stop="openLinkInNewTab" class="ml-4 text-indigo-600 font-medium hover:text-indigo-900">
-        <span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
+    <button @click.stop="openLinkInNewTab" class="ml-4 font-medium"
+        :class="gift.linkURL ? 'text-indigo-600 hover:text-indigo-900' : 'text-gray-400 line-through'">
+        <span class="flex items-center px-2 py-1 rounded-md"
+            :class="gift.linkURL ? 'hover:bg-indigo-100' : 'hover:bg-gray-100'">
             <ExternalLinkIcon class="h-4 w-4 mr-2" />
             {{ labels.gifts.buttons.open }}
         </span>

@@ -1,6 +1,7 @@
-<DefaultLayout :title="giftName" back :backButtonTitle="listName" :backButtonLink="'/app/lists/' + listId">
+<div v-if="loading">Loading...</div>
+<DefaultLayout v-else :title="gift.title" back :backButtonTitle="list.title" :backButtonLink="'/app/lists/' + list.id">
     <template v-slot:commands>
-        <Button btnStyle="danger" hasIcon @click="deleteGift">
+        <Button btnStyle="danger" hasIcon @click="handleDeleteModal">
             <template v-slot:icon>
                 <TrashIcon />
             </template>
@@ -9,4 +10,8 @@
     </template>
     <GiftForm action="update" :values="giftInformation" @change="handleGiftInformationChange" @cancel="cancel"
         @confirm="saveGiftChanges" />
+
+    <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText"
+        @close="modal.showModal = false" @confirm="modal.confirm" type="danger">
+    </Modal>
 </DefaultLayout>

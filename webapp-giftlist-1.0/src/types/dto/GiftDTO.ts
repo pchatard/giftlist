@@ -1,7 +1,7 @@
 export interface GiftDTO {
 	id: string;
 	title: string;
-	isBooked: boolean;
+	isBooked?: boolean;
 	isFavorite: boolean;
 	isHidden: boolean;
 	category: string;
