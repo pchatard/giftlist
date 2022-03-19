@@ -1,11 +1,12 @@
 import { expect } from "chai";
 import { v4 as uuidv4 } from "uuid";
 
-import { Url_ListGetOne, Url_ListInvite, UserTest } from "../global";
+import { Url_ListGetOne, Url_ListInvite } from "../global";
 import { get, put } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
 import { ListInvited, ListOwned } from "../seeder/lists.seed";
+import { UserTest } from "../seeder/users.seed";
 import { castAsListDTO } from "./cast";
 
 export default function suite() {
@@ -19,12 +20,17 @@ export default function suite() {
 		const response = await put(Url_ListInvite(ListInvited.sharingCode), {});
 		expect204(response);
 		const changedList = await get(Url_ListGetOne(ListInvited.id));
+		const { ownersDTO, ...rest } = castAsListDTO(ListInvited);
 		expect(changedList)
 			.to.have.property("body")
-			.to.eql({
-				...castAsListDTO(ListInvited),
-				grantedUsersIds: [UserTest.id],
+			.to.deep.include({
+				...rest,
+				grantedUsersDTO: [{ id: UserTest.id, displayName: UserTest.displayName }],
 			});
+		expect(changedList)
+			.to.have.property("body")
+			.to.have.nested.property("ownersDTO")
+			.to.include.deep.members(ownersDTO || []);
 	});
 	it("Returns 404, with UnvalidSharingCode error, if sharing code does not exist", async () => {
 		const response = await put(Url_ListInvite(uuidv4()));

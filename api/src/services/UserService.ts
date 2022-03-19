@@ -4,6 +4,7 @@ import List from "../models/List";
 import User from "../models/User";
 import { email } from "../types/email";
 import { SelectKindList } from "../types/SelectKindList";
+import { UUID } from "../types/UUID";
 
 class UserService {
 	/**
@@ -20,23 +21,23 @@ class UserService {
 
 	/**
 	 * Edit user properties.
-	 * @param {string} userId id of user to update
+	 * @param {string} userAuth0Id id of user to update
 	 * @param {Partial<User>} userNewProps new props of user to apply
 	 * @returns {Promise<UpdateResult>}
 	 */
-	static async edit(userId: string, userNewProps: Partial<User>): Promise<UpdateResult> {
+	static async edit(userAuth0Id: string, userNewProps: Partial<User>): Promise<UpdateResult> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.update(userId, { ...userNewProps });
+		return await userRepository.update({ auth0Id: userAuth0Id }, { ...userNewProps });
 	}
 
 	/**
 	 * Delete a user from Database.
-	 * @param {string} userId id of user to delete
+	 * @param {string} userAuth0Id id of user to delete
 	 * @returns {Promise<DeleteResult>}
 	 */
-	static async delete(userId: string): Promise<DeleteResult> {
+	static async delete(userAuth0Id: string): Promise<DeleteResult> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.delete(userId);
+		return await userRepository.delete({ auth0Id: userAuth0Id });
 	}
 
 	/**
@@ -50,12 +51,12 @@ class UserService {
 
 	/**
 	 * Return a user from Database.
-	 * @param {string} userId id of user to get
+	 * @param {string} userAuth0Id id of user to get
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
-	static async getById(userId: string): Promise<User> {
+	static async getByAuth0Id(userAuth0Id: string): Promise<User> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.findOneOrFail(userId);
+		return await userRepository.findOneOrFail({ where: { auth0Id: userAuth0Id } });
 	}
 
 	/**
@@ -70,36 +71,49 @@ class UserService {
 
 	/**
 	 * Return a user from Database.
-	 * @param {string} userId id of user to get
+	 * @param {UUID[]} userIds id of user to get
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
-	static async getMany(userIds: string[]): Promise<User[]> {
+	static async getMany(userIds: UUID[]): Promise<User[]> {
 		const userRepository: Repository<User> = getRepository(User);
 		return await userRepository.findByIds(userIds);
 	}
 
 	/**
 	 * Returns all user lists.
-	 * @param {string} userId id of user which owns the list
+	 * @param {string} userAuth0Id id of user which owns the list
 	 * @param {SelectKindList} select filter tag to return "all" lists, "owns" or "granted" ones only
 	 * @returns {Promise<List[]>} the userId lists
 	 */
-	static async getUserLists(userId: string, select: SelectKindList): Promise<List[]> {
+	static async getUserLists(
+		userAuth0Id: string,
+		select: SelectKindList,
+		reallyAll: boolean = false
+	): Promise<List[]> {
 		const userRepository: Repository<User> = getRepository(User);
-		const user: User = await userRepository.findOneOrFail(userId, {
-			relations: ["lists", "friendLists", "lists.owners", "friendLists.owners"],
+		const user: User = await userRepository.findOneOrFail({
+			where: { auth0Id: userAuth0Id },
+			relations: [
+				"lists",
+				"friendLists",
+				"lists.owners",
+				"lists.grantedUsers",
+				"friendLists.owners",
+				"friendLists.grantedUsers",
+			],
 		});
 		let res: List[] = [];
+		const grantedLists = (user.friendLists || []).filter((l) => reallyAll || l.isShared);
 		switch (select) {
 			case SelectKindList.OWNED:
 				res = user.lists || [];
 				break;
 			case SelectKindList.GRANTED:
-				res = user.friendLists || [];
+				res = grantedLists;
 				break;
 			case SelectKindList.ALL:
 			default:
-				res = (user.lists || []).concat(user.friendLists || []);
+				res = (user.lists || []).concat(grantedLists);
 				break;
 		}
 		return res.sort((a, b) => a.createdDate.valueOf() - b.createdDate.valueOf());

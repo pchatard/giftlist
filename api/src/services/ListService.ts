@@ -45,13 +45,13 @@ class ListService {
 	 * @param {UUID} userId id of user which ask, uuid v4 formatted
 	 * @returns {Promise<List>} the forgotten list
 	 */
-	static async forget(listId: UUID, userId: UUID): Promise<List> {
+	static async forget(listId: UUID, userAuth0Id: UUID): Promise<List> {
 		const listRepository: Repository<List> = getRepository(List);
 		const list: List = await listRepository.findOneOrFail(listId, {
 			relations: ["owners", "grantedUsers"],
 		});
-		list.owners = list.owners.filter((owner) => owner.id !== userId);
-		list.grantedUsers = (list.grantedUsers || []).filter((user) => user.id !== userId);
+		list.owners = list.owners.filter((owner) => owner.auth0Id !== userAuth0Id);
+		list.grantedUsers = (list.grantedUsers || []).filter((user) => user.auth0Id !== userAuth0Id);
 		return await listRepository.save(list);
 	}
 
@@ -101,10 +101,10 @@ class ListService {
 	 * @param {UUID} listId id of list, uuid v4 formatted
 	 * @returns {Promise<UUID[]>} the listId owners
 	 */
-	static async listOwners(listId: UUID): Promise<UUID[]> {
+	static async ownersAuth0Ids(listId: UUID): Promise<UUID[]> {
 		const listRepository: Repository<List> = getRepository(List);
 		const list: List = await listRepository.findOneOrFail(listId, { relations: ["owners"] });
-		return list.owners.map((u) => u.id);
+		return list.owners.map((u) => u.auth0Id);
 	}
 
 	/**
@@ -112,12 +112,12 @@ class ListService {
 	 * @param {UUID} listId id of list, uuid v4 formatted
 	 * @returns {Promise<UUID[]>} the listId granted users
 	 */
-	static async listGrantedUsers(listId: UUID): Promise<UUID[]> {
+	static async grantedUsersAuth0Ids(listId: UUID): Promise<UUID[]> {
 		const listRepository: Repository<List> = getRepository(List);
 		const list: List = await listRepository.findOneOrFail(listId, {
 			relations: ["grantedUsers"],
 		});
-		return (list.grantedUsers || []).map((u) => u.id);
+		return (list.grantedUsers || []).map((u) => u.auth0Id);
 	}
 
 	/**

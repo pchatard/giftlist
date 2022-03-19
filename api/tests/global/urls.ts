@@ -5,7 +5,8 @@ export const Url_UserPost = (): string => BaseUrl_Users;
 
 export const Url_UserGetAll = (): string => BaseUrl_Users;
 
-export const Url_UserGetOne = (userId: string = ":userId"): string => BaseUrl_Users + "/" + userId;
+export const Url_UserGetOne = (userMail: string = ":userMail"): string =>
+	BaseUrl_Users + "/profiles/" + userMail;
 
 export const Url_UserPut = (userId: string = ":userId"): string =>
 	BaseUrl_Users + "/admin/" + userId;

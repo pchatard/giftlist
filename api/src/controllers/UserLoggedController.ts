@@ -1,14 +1,23 @@
 import { Request as ERequest } from "express";
 import {
-	Body, Controller, Delete, Get, Put, Request, Response, Route, Security, SuccessResponse, Tags
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Put,
+	Request,
+	Response,
+	Route,
+	Security,
+	SuccessResponse,
+	Tags,
 } from "tsoa";
 
 import { UserDTO } from "../dto/users";
 import { ValidateErrorJSON } from "../errors/ValidationError";
 import User from "../models/User";
 import UserService from "../services/UserService";
-import { SelectKindList } from "../types/SelectKindList";
-import { ListController } from "./ListController";
+import { UserManagementController } from "./UserManagementController";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
 @Route("users/me")
@@ -21,7 +30,7 @@ export class UserLoggedController extends Controller {
 	@SuccessResponse(200, "Success response")
 	@Get()
 	async get(@Request() request: ERequest): Promise<UserDTO> {
-		const user: User = await UserService.getById(request.userId);
+		const user: User = await UserService.getByAuth0Id(request.userId);
 		const { id, createdDate, ...rest } = user;
 		return rest;
 	}
@@ -43,10 +52,7 @@ export class UserLoggedController extends Controller {
 	@SuccessResponse(204)
 	@Delete()
 	async delete(@Request() request: ERequest): Promise<void> {
-		const listController: ListController = new ListController();
-		for (const list of await UserService.getUserLists(request.userId, SelectKindList.ALL)) {
-			await listController.delete(request, list.id);
-		}
-		await UserService.delete(request.userId);
+		const umc: UserManagementController = new UserManagementController();
+		await umc.quickDelete(request.userId);
 	}
 }

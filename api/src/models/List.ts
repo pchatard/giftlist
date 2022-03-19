@@ -1,8 +1,16 @@
 import {
-	Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn,
-	RelationId, UpdateDateColumn
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinTable,
+	ManyToMany,
+	OneToMany,
+	PrimaryGeneratedColumn,
+	RelationId,
+	UpdateDateColumn,
 } from "typeorm";
 
+import { UserNameDTO } from "../dto/users";
 import { UUID } from "../types/UUID";
 import { Gift } from "./Gift";
 import User from "./User";
@@ -16,6 +24,9 @@ export class List {
 	public title!: string;
 
 	@Column({ nullable: true })
+	public description?: string;
+
+	@Column({ nullable: true })
 	public closureDate?: Date;
 
 	@ManyToMany(() => User, (user) => user.lists)
@@ -23,7 +34,9 @@ export class List {
 	public owners!: User[];
 
 	@RelationId((list: List) => list.owners)
-	public ownersIds!: string[];
+	public ownersIds!: UUID[];
+
+	public ownersDTO?: UserNameDTO[];
 
 	@Column({ default: false })
 	public isShared!: boolean;
@@ -36,7 +49,9 @@ export class List {
 	public grantedUsers?: User[];
 
 	@RelationId((list: List) => list.grantedUsers)
-	public grantedUsersIds?: string[];
+	public grantedUsersIds?: UUID[];
+
+	public grantedUsersDTO?: UserNameDTO[];
 
 	@OneToMany(() => Gift, (gift) => gift.list)
 	public gifts?: Gift[];

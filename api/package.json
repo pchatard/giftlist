@@ -14,7 +14,7 @@
 		"start:watch": "nodemon",
 		"start:watch:dev": "nodemon",
 		"swagger": "tsoa spec-and-routes",
-		"test": "NODE_ENV=test mocha -r ts-node/register --timeout 20000 --exit ./tests/*.test.ts",
+		"test": "NODE_ENV=test mocha -r ts-node/register --timeout 30000 --exit ./tests/*.test.ts",
 		"coverage": "nyc npm run test"
 	},
 	"keywords": [],
@@ -22,6 +22,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@tsoa/runtime": "^3.13.0",
+		"auth0": "^2.40.0",
 		"cookie-parser": "^1.4.6",
 		"cors": "^2.8.5",
 		"dotenv": "^16.0.0",
@@ -40,6 +41,7 @@
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^1.0.2",
+		"@types/auth0": "^2.34.13",
 		"@types/chai": "^4.2.22",
 		"@types/cookie-parser": "^1.4.2",
 		"@types/cors": "^2.8.12",

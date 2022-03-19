@@ -4,7 +4,10 @@ import chai from "chai";
 
 import server from "../../src/index";
 import {
-	Url_DeleteUnauthorized, Url_GetUnauthorized, Url_PostUnauthorized, Url_PutUnauthorized
+	Url_DeleteUnauthorized,
+	Url_GetUnauthorized,
+	Url_PostUnauthorized,
+	Url_PutUnauthorized,
 } from "../global";
 import { expectError } from "../helpers/error";
 

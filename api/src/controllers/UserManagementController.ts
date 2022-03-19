@@ -1,9 +1,21 @@
+import { ManagementClient } from "auth0";
 import {
-	Body, Controller, Delete, Get, Hidden, Path, Post, Response, Route, Security, SuccessResponse,
-	Tags
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Hidden,
+	Path,
+	Post,
+	Response,
+	Route,
+	Security,
+	SuccessResponse,
+	Tags,
 } from "tsoa";
 
 import { CreateUserDTO, UserDTO, UserIdDTO } from "../dto/users";
+import ResourceNotFoundError from "../errors/ResourceNotFoundError";
 import { ValidateErrorJSON } from "../errors/ValidationError";
 import User from "../models/User";
 import UserService from "../services/UserService";
@@ -26,7 +38,7 @@ export class UserManagementController extends Controller {
 	@Post()
 	async create(@Body() body: CreateUserDTO): Promise<UserIdDTO> {
 		try {
-			const { id }: User = await UserService.getById(body.id);
+			const { id }: User = await UserService.getByAuth0Id(body.auth0Id);
 			return { id } as UserIdDTO;
 		} catch (err: unknown) {
 			const { id }: User = await UserService.create(body);
@@ -36,19 +48,35 @@ export class UserManagementController extends Controller {
 
 	/**
 	 * Delete logged user.
-	 * @param {UUID} userId the ID of user
+	 * @param {UUID} userAuth0Id the ID of user
 	 */
 	@Security("auth0")
 	@SuccessResponse(204)
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Delete("admin/{userId}")
+	@Delete("admin/{userAuth0Id}")
 	@Hidden() // TODO: Remove Hidden and add administration capabilities
-	async delete(@Path() userId: string): Promise<void> {
+	async delete(@Path() userAuth0Id: string): Promise<void> {
+		await this.quickDelete(userAuth0Id);
+	}
+
+	async quickDelete(userAuth0Id: string): Promise<void> {
 		const listController: ListController = new ListController();
-		for (const list of await UserService.getUserLists(userId, SelectKindList.ALL)) {
-			await listController.deleteById(list.id, userId);
+		await UserService.getUserLists(userAuth0Id, SelectKindList.ALL, true);
+		for (const list of await UserService.getUserLists(userAuth0Id, SelectKindList.ALL, true)) {
+			await listController.deleteById(list.id, userAuth0Id);
 		}
-		await UserService.delete(userId);
+		await UserService.delete(userAuth0Id);
+		const management = new ManagementClient({
+			domain: process.env.AUTH0_DOMAIN || "",
+			clientId: process.env.AUTH0_CLIENT_ID,
+			clientSecret: process.env.AUTH0_CLIENT_SECRET,
+			scope: "delete:users",
+		});
+		try {
+			await management.deleteUser({ id: userAuth0Id });
+		} catch (e: unknown) {
+			throw new ResourceNotFoundError();
+		}
 	}
 
 	/**
@@ -74,7 +102,7 @@ export class UserManagementController extends Controller {
 	@Security("auth0")
 	@SuccessResponse(200, "Success response")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Get("{userMail}")
+	@Get("profiles/{userMail}")
 	async get(@Path() userMail: email): Promise<UserDTO> {
 		const user: User = await UserService.getByMail(userMail);
 		const { id, createdDate, ...rest } = user;

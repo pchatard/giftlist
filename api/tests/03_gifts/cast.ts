@@ -3,7 +3,7 @@ import { cleanObject } from "../../src/helpers/cleanObjects";
 import Gift from "../../src/models/Gift";
 
 export function castAsCreateGiftDTO(gift: Gift): CreateGiftDTO {
-	const { id, list, updatedDate, createdDate, ...rest } = gift;
+	const { id, isBooked, list, listId, updatedDate, createdDate, ...rest } = gift;
 	return cleanObject({
 		...rest,
 	}) as CreateGiftDTO;

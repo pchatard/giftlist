@@ -1,7 +1,18 @@
 import { Request as ERequest } from "express";
 import {
-	Body, Controller, Delete, Get, Path, Post, Put, Request, Response, Route, Security,
-	SuccessResponse, Tags
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Path,
+	Post,
+	Put,
+	Request,
+	Response,
+	Route,
+	Security,
+	SuccessResponse,
+	Tags,
 } from "tsoa";
 
 import { CreateGiftDTO, EditGiftDTO, GiftDTO, GiftDTOForOwner, GiftIdDTO } from "../dto/gifts";
@@ -33,7 +44,7 @@ export class GiftController extends Controller {
 		@Path() listId: UUID,
 		@Body() body: CreateGiftDTO
 	): Promise<GiftIdDTO> {
-		if (!(await ListService.listOwners(listId)).includes(request.userId)) {
+		if (!(await ListService.ownersAuth0Ids(listId)).includes(request.userId)) {
 			throw new UnauthorizedError();
 		}
 		const list: List = await ListService.get(listId);
@@ -61,7 +72,7 @@ export class GiftController extends Controller {
 		@Body() body: Partial<EditGiftDTO>
 	): Promise<void> {
 		if (
-			!(await ListService.listOwners(listId)).includes(request.userId) ||
+			!(await ListService.ownersAuth0Ids(listId)).includes(request.userId) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new UnauthorizedError();
@@ -87,12 +98,12 @@ export class GiftController extends Controller {
 		@Path() giftId: UUID
 	): Promise<void> {
 		if (
-			!(await ListService.listOwners(listId)).includes(request.userId) ||
+			!(await ListService.ownersAuth0Ids(listId)).includes(request.userId) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new UnauthorizedError();
 		}
-		this.quickDelete(giftId);
+		await this.quickDelete(giftId);
 	}
 
 	async quickDelete(giftId: UUID): Promise<void> {
@@ -113,8 +124,8 @@ export class GiftController extends Controller {
 		@Path() listId: UUID
 	): Promise<GiftDTO[] | GiftDTOForOwner[]> {
 		let gifts: Gift[] = [];
-		const isOwner: boolean = (await ListService.listOwners(listId)).includes(request.userId);
-		if ((await ListService.listGrantedUsers(listId)).includes(request.userId)) {
+		const isOwner: boolean = (await ListService.ownersAuth0Ids(listId)).includes(request.userId);
+		if ((await ListService.grantedUsersAuth0Ids(listId)).includes(request.userId)) {
 			gifts = await ListService.getListGifts(listId, false);
 		} else if (isOwner) {
 			gifts = await ListService.getListGifts(listId, true);
@@ -144,9 +155,9 @@ export class GiftController extends Controller {
 		@Path() listId: UUID,
 		@Path() giftId: UUID
 	): Promise<GiftDTO | GiftDTOForOwner> {
-		const isOwner: boolean = (await ListService.listOwners(listId)).includes(request.userId);
+		const isOwner: boolean = (await ListService.ownersAuth0Ids(listId)).includes(request.userId);
 		if (
-			(!isOwner && !(await ListService.listGrantedUsers(listId)).includes(request.userId)) ||
+			(!isOwner && !(await ListService.grantedUsersAuth0Ids(listId)).includes(request.userId)) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new UnauthorizedError();
@@ -253,8 +264,8 @@ export class GiftController extends Controller {
 		@Path() giftId: UUID
 	): Promise<void> {
 		if (
-			((await ListService.listOwners(listId)).includes(request.userId) &&
-				!(await ListService.listGrantedUsers(listId)).includes(request.userId)) ||
+			((await ListService.ownersAuth0Ids(listId)).includes(request.userId) &&
+				!(await ListService.grantedUsersAuth0Ids(listId)).includes(request.userId)) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new UnauthorizedError();
@@ -280,8 +291,8 @@ export class GiftController extends Controller {
 		@Path() giftId: UUID
 	): Promise<void> {
 		if (
-			(await ListService.listOwners(listId)).includes(request.userId) ||
-			!(await ListService.listGrantedUsers(listId)).includes(request.userId) ||
+			(await ListService.ownersAuth0Ids(listId)).includes(request.userId) ||
+			!(await ListService.grantedUsersAuth0Ids(listId)).includes(request.userId) ||
 			!(await GiftService.checkGiftOfList(listId, giftId))
 		) {
 			throw new UnauthorizedError();
