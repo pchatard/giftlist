@@ -34,7 +34,7 @@ export default defineComponent({
 		},
 		confirmText: {
 			type: String,
-			required: true,
+			required: false,
 		},
 		cancelText: {
 			type: String,

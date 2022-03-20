@@ -76,6 +76,10 @@ export default defineComponent({
 			copied.value = false;
 		});
 
+		watch(props, (value) => {
+			refValue.value = value.value;
+		});
+
 		const onFocus = () => {
 			selected.value = true;
 		};

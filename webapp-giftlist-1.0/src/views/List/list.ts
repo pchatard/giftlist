@@ -2,14 +2,16 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted,
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import GiftGridView from "@/components/GiftGridView/GiftGridView.vue";
 import GiftListView from "@/components/GiftListView/GiftListView.vue";
 import GridListToggle from "@/components/GridListToggle/GridListToggle.vue";
+import InputLink from "@/components/InputLink/InputLink.vue";
+import InputText from "@/components/InputText/InputText.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
-import { Gift } from "@/types/api/Gift";
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
@@ -19,6 +21,7 @@ import { CogIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
 export default defineComponent({
 	name: "List",
 	components: {
+		Button,
 		CogIcon,
 		LockClosedIcon,
 		LockOpenIcon,
@@ -26,6 +29,8 @@ export default defineComponent({
 		GiftGridView,
 		GiftListView,
 		GridListToggle,
+		InputText,
+		InputLink,
 		Modal,
 		Table,
 	},
@@ -36,6 +41,7 @@ export default defineComponent({
 		const auth = inject("Auth") as any;
 
 		/******** Static data ********/
+		const label = labels;
 		const listId = router.currentRoute.value.params.id as string;
 		const listPayload: ListIdPayload = {
 			auth,
@@ -57,7 +63,17 @@ export default defineComponent({
 			{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
 		]);
 
-		const modal = ref({
+		const sharingOptionsModal = ref({
+			showModal: false,
+			title: "Options de partage",
+			confirmText: computed(() => {
+				return list.value.isShared ? "Passer en privé" : "Partager";
+			}),
+			cancelText: "Fermer",
+			confirm: () => handleSharingOptionsConfirm(),
+		});
+
+		const deleteModal = ref({
 			showModal: false,
 			title: labels.modals.deleteGift.title,
 			confirmText: labels.modals.deleteGift.confirm,
@@ -74,6 +90,10 @@ export default defineComponent({
 			} else {
 				return state.preferences.displayList;
 			}
+		});
+
+		const listSharingLink = computed(() => {
+			return list.value.sharingCode ? process.env.VUE_APP_FRONT_URL + "/app/shared/" + list.value.sharingCode : "";
 		});
 
 		/******** Fetch page data ********/
@@ -99,22 +119,35 @@ export default defineComponent({
 			// dispatch("toggleListDisplayMode");
 		};
 
+		const showSharingOptionsModal = () => {
+			sharingOptionsModal.value.showModal = true;
+		}
+
+		const handleSharingOptionsConfirm = async () => {
+			if (list.value.isShared) {
+				await unshareList();
+			} else {
+				await shareList();
+				await dispatch("getList", listPayload);
+			}
+		}
+
 		const handleDeleteModal = (gift: GiftDTO) => {
-			modal.value.title = labels.modals.deleteGift.title + gift.title;
-			modal.value.showModal = true;
-			modal.value.confirm = handleDeleteConfirm;
-			modal.value.gift = gift;
+			deleteModal.value.title = labels.modals.deleteGift.title + gift.title;
+			deleteModal.value.showModal = true;
+			deleteModal.value.confirm = handleDeleteConfirm;
+			deleteModal.value.gift = gift;
 		};
 
 		const handleDeleteConfirm = async () => {
 			const giftIdPayload: GiftIdPayload = {
 				auth,
 				listId,
-				giftId: modal.value.gift.id,
+				giftId: deleteModal.value.gift.id,
 			};
 			const success = await dispatch("deleteGift", giftIdPayload);
 			if (success) {
-				modal.value.showModal = false;
+				deleteModal.value.showModal = false;
 			}
 		};
 
@@ -132,11 +165,15 @@ export default defineComponent({
 		return {
 			loading,
 			isListView,
+			label,
 			labels,
 			gifts,
 			handleDeleteModal,
 			list,
-			modal,
+			deleteModal,
+			sharingOptionsModal,
+			showSharingOptionsModal,
+			listSharingLink,
 			router,
 			tableHeaders,
 			toggleDisplayMode,

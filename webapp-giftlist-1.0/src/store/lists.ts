@@ -125,6 +125,7 @@ export const lists: Module<ListsState, RootState> = {
 					const editedList: ListDTO = {
 						...state.owned[listIndex],
 						isShared: false,
+						sharingCode: ""
 					};
 					commit("EDIT_LIST", { listIndex, editedList });
 					commit("FILL_LIST", editedList);
