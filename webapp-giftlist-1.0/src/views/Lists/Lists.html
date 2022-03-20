@@ -1,4 +1,5 @@
-<DefaultLayout :title="labels.titles.lists">
+<div v-if="loading">Loading...</div>
+<DefaultLayout v-else :title="labels.titles.lists">
     <Table :headers="tableHeaders" @sort="handleSort">
         <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
             @click="router.push(`/app/lists/${list.id}`)">

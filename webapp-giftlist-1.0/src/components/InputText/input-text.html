@@ -1,5 +1,8 @@
 <InputWrapper :label="label" :isError="isError" :errorMessage="errorMessage" :helperText="helperText"
     :selected="selected" :copied="copied" :mandatory="mandatory">
+    <template v-slot:icon>
+        <slot />
+    </template>
     <input v-model="refValue" :type="type" :disabled="disabled" :placeholder="placeholder"
         class="outline-none px-3 py-2 flex-1 caret-indigo-600" @focus="onFocus" @blur="onBlur" :tabindex="tab" />
     <XIcon v-if="reset" class="text-gray-400 hover:text-gray-500 h-5 w-5 cursor-pointer self-center mr-2"

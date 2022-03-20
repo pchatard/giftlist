@@ -7,7 +7,8 @@ import InputSelect from "@/components/InputSelect/InputSelect.vue";
 import InputText from "@/components/InputText/InputText.vue";
 import InputToggle from "@/components/InputToggle/InputToggle.vue";
 import labels from "@/labels/fr/labels.json";
-import { CheckIcon, XIcon } from "@heroicons/vue/outline";
+import { CheckIcon, XIcon, InformationCircleIcon, HeartIcon, LinkIcon, GiftIcon, CurrencyEuroIcon, ChartBarIcon, ColorSwatchIcon, TagIcon, AnnotationIcon, FilterIcon } from "@heroicons/vue/outline";
+import { HeartIcon as HeartIconFull } from "@heroicons/vue/solid";
 
 export default defineComponent({
 	name: "GiftForm",
@@ -20,6 +21,13 @@ export default defineComponent({
 		Button,
 		XIcon,
 		CheckIcon,
+		HeartIcon,
+		HeartIconFull,
+		InformationCircleIcon,
+		LinkIcon,
+		GiftIcon,
+		CurrencyEuroIcon, ChartBarIcon, ColorSwatchIcon, TagIcon, AnnotationIcon,
+		FilterIcon
 	},
 	props: {
 		values: {

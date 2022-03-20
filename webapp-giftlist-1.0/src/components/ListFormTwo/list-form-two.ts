@@ -5,6 +5,8 @@ import InputToggle from "@/components/InputToggle/InputToggle.vue";
 import PersonTag from "@/components/PersonTag/PersonTag.vue";
 import labels from "@/labels/fr/labels.json";
 
+import { UserIcon, UsersIcon, ShareIcon } from "@heroicons/vue/outline";
+
 export default defineComponent({
 	name: "ListFormTwo",
 	props: {
@@ -16,6 +18,8 @@ export default defineComponent({
 		InputSelect,
 		InputToggle,
 		PersonTag,
+		ShareIcon,
+		UserIcon, UsersIcon
 	},
 	setup(props, context) {
 		const handleSharedChange = (shared: boolean) => {
@@ -113,7 +117,7 @@ export default defineComponent({
 			return props.values?.friends.filter(
 				(friend: any) =>
 					props.values?.authorizedUsers.value.findIndex((au: any) => au.id === friend.id) <
-						0 && props.values?.owners.value.findIndex((o: any) => o.id === friend.id) < 0
+					0 && props.values?.owners.value.findIndex((o: any) => o.id === friend.id) < 0
 			);
 		});
 

@@ -29,6 +29,7 @@ export default defineComponent({
 		const listTableHeaderLabels = (labels as any).tables.list;
 
 		/******** Reactive data ********/
+		const loading = ref(true);
 		const deleteModalIsOpen = ref(false);
 		const lists: ComputedRef<ListDTO[]> = computed(() => state.lists.owned);
 		const listToDelete: Ref<ListDTO | undefined> = ref();
@@ -42,7 +43,8 @@ export default defineComponent({
 
 		/******** Fetch page data ********/
 		onMounted(async () => {
-			await dispatch("getLists", { auth, select: "owned" });
+			const success = await dispatch("getLists", { auth, select: "owned" });
+			loading.value = !success;
 		});
 
 		/******** Methods ********/
@@ -75,6 +77,7 @@ export default defineComponent({
 		};
 
 		return {
+			loading,
 			labels,
 			router,
 			deleteModalIsOpen,

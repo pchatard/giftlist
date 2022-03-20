@@ -7,7 +7,6 @@ import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import GiftForm from "@/components/GiftForm/GiftForm.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import labels from "@/labels/fr/labels.json";
-import { Gift } from "@/types/api/Gift";
 import { GiftCategory } from "@/types/api/GiftCategory";
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
