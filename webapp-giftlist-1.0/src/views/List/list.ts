@@ -41,7 +41,6 @@ export default defineComponent({
 		const auth = inject("Auth") as any;
 
 		/******** Static data ********/
-		const label = labels;
 		const listId = router.currentRoute.value.params.id as string;
 		const listPayload: ListIdPayload = {
 			auth,
@@ -65,11 +64,11 @@ export default defineComponent({
 
 		const sharingOptionsModal = ref({
 			showModal: false,
-			title: "Options de partage",
+			title: labels.modals.sharingOptions.title,
 			confirmText: computed(() => {
-				return list.value.isShared ? "Passer en privé" : "Partager";
+				return list.value.isShared ? labels.modals.sharingOptions.confirmText.public : labels.modals.sharingOptions.confirmText.private;
 			}),
-			cancelText: "Fermer",
+			cancelText: labels.modals.sharingOptions.cancelText,
 			confirm: () => handleSharingOptionsConfirm(),
 		});
 
@@ -165,7 +164,6 @@ export default defineComponent({
 		return {
 			loading,
 			isListView,
-			label,
 			labels,
 			gifts,
 			handleDeleteModal,

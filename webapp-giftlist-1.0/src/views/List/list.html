@@ -40,25 +40,25 @@
 
     <Modal :show="sharingOptionsModal.showModal" :title="sharingOptionsModal.title"
         :cancelText="sharingOptionsModal.cancelText" @close="sharingOptionsModal.showModal = false">
-        <div>
-            <p>
-                Cette liste est actuellement :
-                <span>
-                    {{ list.isShared ? label.lists.status.public : label.lists.status.private }}
-                </span>
-            </p>
-            <Button class="mx-auto" :btnStyle="list.isShared ? 'danger' : 'primary'"
-                @click="sharingOptionsModal.confirm">{{
-                sharingOptionsModal.confirmText }}</Button>
+
+        <p class="mb-2">
+            {{ labels.modals.sharingOptions.statusText }}
+            <span class="font-semibold" :class="list.isShared ? 'text-green-600' : 'text-red-600'">
+                {{ list.isShared ? labels.lists.status.public.toLowerCase() :
+                labels.lists.status.private.toLowerCase() }}.
+            </span>
+        </p>
+        <div class="py-2">
+            <InputLink :label="labels.modals.sharingOptions.link.label" :value="listSharingLink"
+                :helperText="labels.modals.sharingOptions.link.helperText" copy :disabled="!list.isShared" />
         </div>
-        <div>
-            <InputLink :label="'Lien de partage'" :value="listSharingLink"
-                :helperText="'Le lien à donner à vos amis pour accéder à votre liste'" copy />
+        <div class="py-2">
+            <InputText :label="labels.modals.sharingOptions.code.label" :value="list.sharingCode"
+                :helperText="labels.modals.sharingOptions.code.helperText" copy :disabled="!list.isShared" />
         </div>
-        <div>
-            <InputText :label="'Code de partage'" :value="list.sharingCode"
-                :helperText="'Le code à donner à vos amis pour accéder à votre liste'" copy />
-        </div>
+        <Button class="mb-4 w-full" :btnStyle="list.isShared ? 'danger-soft' : 'green-soft'"
+            @click="sharingOptionsModal.confirm">{{
+            sharingOptionsModal.confirmText }}</Button>
     </Modal>
 
     <Modal :show="deleteModal.showModal" :title="deleteModal.title" :confirmText="deleteModal.confirmText"
