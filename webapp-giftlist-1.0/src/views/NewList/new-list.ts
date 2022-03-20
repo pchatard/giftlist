@@ -71,7 +71,7 @@ export default defineComponent({
 				termDate: {
 					label: formLabels.step1.inputs.termDate.label,
 					value: getInitDate().toISOString().split("T")[0],
-					helperText: formLabels.step1.inputs.termDate.label,
+					helperText: formLabels.step1.inputs.termDate.helperText,
 					errorMessage: "",
 				},
 			},

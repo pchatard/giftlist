@@ -2,11 +2,11 @@ import { defineComponent, ref, watch } from "vue";
 
 import InputWrapper from "@/components/InputWrapper/InputWrapper.vue";
 import { TransitionRoot } from "@headlessui/vue";
-import { ClipboardCheckIcon, ClipboardCopyIcon, XIcon } from "@heroicons/vue/outline";
+import { ClipboardCheckIcon, ClipboardCopyIcon, ExternalLinkIcon, XIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "InputLink",
-	components: { ClipboardCopyIcon, ClipboardCheckIcon, TransitionRoot, InputWrapper, XIcon },
+	components: { ClipboardCopyIcon, ClipboardCheckIcon, ExternalLinkIcon, TransitionRoot, InputWrapper, XIcon },
 	props: {
 		value: {
 			type: String,
@@ -44,6 +44,10 @@ export default defineComponent({
 			type: Boolean,
 			default: false,
 		},
+		open: {
+			type: Boolean,
+			default: false,
+		},
 		reset: {
 			type: Boolean,
 			default: false,
@@ -60,6 +64,11 @@ export default defineComponent({
 			input.select();
 			document.execCommand("copy");
 			copied.value = true;
+		};
+
+		const openInNewTab = (event: Event) => {
+			event.preventDefault();
+			console.log("open", refValue.value);
 		};
 
 		watch(refValue, (value) => {
@@ -81,6 +90,7 @@ export default defineComponent({
 		return {
 			copied,
 			copyToClipboard,
+			openInNewTab,
 			refValue,
 			onFocus,
 			onBlur,

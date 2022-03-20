@@ -25,11 +25,11 @@
 ## Formulaires / Inputs
 - [ ] Réfléchir aux différentes règles de validation
 - [ ] Ajouter les validations sur tous les formulaires
-- [ ] Compléter les composants Inputs 
+- [x] Compléter les composants Inputs 
     - [x] DatePicker
-    - [ ] Rendre le bouton et son action paramétrable (Open URL, Copy)
-    - [ ] Ajouter une Icon optionnelle
-- [ ] Compléter les formulaires avec des slots pour ajouter du texte
+    - [x] Ajouter une action Open sur l'input Link
+    - [x] Ajouter une Icon optionnelle
+- [ ] Compléter les formulaires avec des slots pour ajouter du texte        
 
 ## Pages existantes
 - [x] Nouveau cadeau : Bouton "Valider et créer un nouveau"
