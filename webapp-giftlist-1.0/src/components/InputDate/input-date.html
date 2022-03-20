@@ -6,7 +6,7 @@
     <input type="date" autocomplete="off" v-model="dateValue" class="outline-none cursor-text px-3 py-2 flex-1"
         @focus="onFocus" @blur="onBlur" :disabled="disabled" />
     <button @click="openModal" :disabled="disabled" class="relative w-8 border-l border-gray-100"
-        :class="disabled ? 'bg-gray-100' : 'hover:bg-gray-100'">
+        :class="disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-100'">
         <CalendarIcon class="
 					absolute
 					w-5

@@ -55,7 +55,7 @@
                                 " @click="$emit('close')">
                                 {{ cancelText }}
                             </button>
-                            <button type="button" class="
+                            <button v-if="confirmText" type="button" class="
                                     inline-flex
                                     justify-center
                                     px-4

@@ -4,13 +4,13 @@
     <template v-slot:commands>
         <span v-if="list.isShared"
             class="flex items-center mr-4 text-green-600 font-medium hover:text-green-900 hover:bg-green-100 px-2 py-1 rounded-md cursor-pointer"
-            @click="unshareList()">
+            @click="showSharingOptionsModal">
             <LockOpenIcon class="h-4 w-4 mr-2" />
             {{labels.lists.status.public}}
         </span>
         <span v-else
             class="flex items-center mr-4 text-red-600 font-medium hover:text-red-900 hover:bg-red-100 px-2 py-1 rounded-md cursor-pointer"
-            @click="shareList()">
+            @click="showSharingOptionsModal">
             <LockClosedIcon class="h-4 w-4 mr-2" />
             {{labels.lists.status.private}}
         </span>
@@ -38,8 +38,31 @@
         </tr>
     </Table>
 
-    <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText"
-        @close="modal.showModal = false" @confirm="modal.confirm" type="danger">
+    <Modal :show="sharingOptionsModal.showModal" :title="sharingOptionsModal.title"
+        :cancelText="sharingOptionsModal.cancelText" @close="sharingOptionsModal.showModal = false">
+
+        <p class="mb-2">
+            {{ labels.modals.sharingOptions.statusText }}
+            <span class="font-semibold" :class="list.isShared ? 'text-green-600' : 'text-red-600'">
+                {{ list.isShared ? labels.lists.status.public.toLowerCase() :
+                labels.lists.status.private.toLowerCase() }}.
+            </span>
+        </p>
+        <div class="py-2">
+            <InputLink :label="labels.modals.sharingOptions.link.label" :value="listSharingLink"
+                :helperText="labels.modals.sharingOptions.link.helperText" copy :disabled="!list.isShared" />
+        </div>
+        <div class="py-2">
+            <InputText :label="labels.modals.sharingOptions.code.label" :value="list.sharingCode"
+                :helperText="labels.modals.sharingOptions.code.helperText" copy :disabled="!list.isShared" />
+        </div>
+        <Button class="mb-4 w-full" :btnStyle="list.isShared ? 'danger-soft' : 'green-soft'"
+            @click="sharingOptionsModal.confirm">{{
+            sharingOptionsModal.confirmText }}</Button>
+    </Modal>
+
+    <Modal :show="deleteModal.showModal" :title="deleteModal.title" :confirmText="deleteModal.confirmText"
+        @close="deleteModal.showModal = false" @confirm="deleteModal.confirm" type="danger">
     </Modal>
 
 </DefaultLayout>
