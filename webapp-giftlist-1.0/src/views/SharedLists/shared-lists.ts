@@ -2,6 +2,7 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, ref, watch }
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import InputText from "@/components/InputText/InputText.vue";
 import ListItem from "@/components/ListItem/ListItem.vue";
@@ -13,8 +14,7 @@ import { ListDTO } from "@/types/dto/ListDTO";
 import { GetListsPayload } from "@/types/payload/GetListsPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
 import { Auth0Client } from "@auth0/auth0-spa-js";
-import { UserGroupIcon, QrcodeIcon } from "@heroicons/vue/outline";
-import Button from "@/components/Button/Button.vue";
+import { QrcodeIcon, UserGroupIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "SharedLists",
@@ -26,7 +26,7 @@ export default defineComponent({
 		Table,
 		InputText,
 		UserGroupIcon,
-		QrcodeIcon
+		QrcodeIcon,
 	},
 	setup() {
 		/******** Basic imports ********/

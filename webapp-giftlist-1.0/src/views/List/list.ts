@@ -16,7 +16,7 @@ import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { CogIcon, LockClosedIcon, LockOpenIcon, GiftIcon } from "@heroicons/vue/outline";
+import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "List",
@@ -67,7 +67,9 @@ export default defineComponent({
 			showModal: false,
 			title: labels.modals.sharingOptions.title,
 			confirmText: computed(() => {
-				return list.value.isShared ? labels.modals.sharingOptions.confirmText.public : labels.modals.sharingOptions.confirmText.private;
+				return list.value.isShared
+					? labels.modals.sharingOptions.confirmText.public
+					: labels.modals.sharingOptions.confirmText.private;
 			}),
 			cancelText: labels.modals.sharingOptions.cancelText,
 			confirm: () => handleSharingOptionsConfirm(),
@@ -93,7 +95,9 @@ export default defineComponent({
 		});
 
 		const listSharingLink = computed(() => {
-			return list.value.sharingCode ? process.env.VUE_APP_FRONT_URL + "/app/shared/" + list.value.sharingCode : "";
+			return list.value.sharingCode
+				? process.env.VUE_APP_FRONT_URL + "/app/shared/" + list.value.sharingCode
+				: "";
 		});
 
 		/******** Fetch page data ********/
@@ -121,7 +125,7 @@ export default defineComponent({
 
 		const showSharingOptionsModal = () => {
 			sharingOptionsModal.value.showModal = true;
-		}
+		};
 
 		const handleSharingOptionsConfirm = async () => {
 			if (list.value.isShared) {
@@ -130,7 +134,7 @@ export default defineComponent({
 				await shareList();
 				await dispatch("getList", listPayload);
 			}
-		}
+		};
 
 		const handleDeleteModal = (gift: GiftDTO) => {
 			deleteModal.value.title = labels.modals.deleteGift.title + gift.title;

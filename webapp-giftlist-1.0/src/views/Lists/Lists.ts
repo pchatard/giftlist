@@ -2,9 +2,9 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, Ref, ref } f
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListItem from "@/components/ListItem/ListItem.vue";
-import Button from "@/components/Button/Button.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
@@ -21,7 +21,7 @@ export default defineComponent({
 		ListItem,
 		Table,
 		Modal,
-		CollectionIcon
+		CollectionIcon,
 	},
 	setup() {
 		/******** Basic imports ********/

@@ -2,11 +2,23 @@ import { defineComponent, ref, watch } from "vue";
 
 import InputWrapper from "@/components/InputWrapper/InputWrapper.vue";
 import { TransitionRoot } from "@headlessui/vue";
-import { ClipboardCheckIcon, ClipboardCopyIcon, ExternalLinkIcon, XIcon } from "@heroicons/vue/outline";
+import {
+	ClipboardCheckIcon,
+	ClipboardCopyIcon,
+	ExternalLinkIcon,
+	XIcon,
+} from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "InputLink",
-	components: { ClipboardCopyIcon, ClipboardCheckIcon, ExternalLinkIcon, TransitionRoot, InputWrapper, XIcon },
+	components: {
+		ClipboardCopyIcon,
+		ClipboardCheckIcon,
+		ExternalLinkIcon,
+		TransitionRoot,
+		InputWrapper,
+		XIcon,
+	},
 	props: {
 		value: {
 			type: String,
