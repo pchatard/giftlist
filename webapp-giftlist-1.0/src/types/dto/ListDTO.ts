@@ -6,7 +6,7 @@ export interface ListDTO {
 	sharingCode: string;
 	isShared: boolean;
 	description?: string;
-	closureDate?: string;
+	closureDate?: string | null;
 	ownersDTO?: UserNameDTO[];
 	grantedUsersDTO?: UserNameDTO[];
 }

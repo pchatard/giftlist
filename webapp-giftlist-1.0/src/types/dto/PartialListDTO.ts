@@ -4,8 +4,8 @@ export interface PartialListDTO {
 	title?: string;
 	description?: string;
 	sharingCode?: string;
-	closureDate?: string;
-	ownersDTO?: UserNameDTO[];
+	closureDate?: string | null;
+	ownersIds?: string[];
 	isShared?: boolean;
-	grantedUsersDTO?: UserNameDTO[];
+	grantedUsersIds?: string[];
 }

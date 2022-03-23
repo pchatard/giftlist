@@ -161,8 +161,6 @@ const initSelectedList = (): ListDTO => {
 		id: "",
 		title: "",
 		sharingCode: "",
-		closureDate: "",
-		ownersDTO: [],
 		isShared: false,
 	};
 };

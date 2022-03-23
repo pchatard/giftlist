@@ -115,8 +115,8 @@ export default defineComponent({
 						: undefined,
 				closureDate:
 					generalInformation.value.activateTermDate &&
-					generalInformation.value.termDate.value !== initialList.value.description
-						? generalInformation.value.description.value
+						generalInformation.value.termDate.value !== initialList.value.closureDate
+						? generalInformation.value.termDate.value
 						: undefined,
 			};
 
@@ -136,11 +136,8 @@ export default defineComponent({
 			}
 
 			if (!generalInformation.value.activateTermDate.value) {
-				// TODO: Issue #77
-				list.closureDate = undefined;
+				list.closureDate = null;
 			}
-
-			list.grantedUsersDTO = initialList.value.grantedUsersDTO;
 
 			return list;
 		});
@@ -211,6 +208,8 @@ export default defineComponent({
 					listId: initialList.value.id || (router.currentRoute.value.params.id as string),
 					partialList: editedList.value,
 				};
+
+				console.log(editPayload.partialList);
 				const success = await dispatch("editList", editPayload);
 				if (success) {
 					router.go(-1);
