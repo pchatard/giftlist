@@ -8,6 +8,7 @@ export const ListOwned: List = {
 	id: uuidv4(),
 	title: "TestList1",
 	description: "A description",
+	closureDate: new Date(new Date().setTime(0)).toISOString(),
 	owners: [UserTest],
 	ownersIds: [UserTest.id],
 	isShared: false,

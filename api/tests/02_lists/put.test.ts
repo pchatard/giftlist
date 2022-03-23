@@ -31,6 +31,18 @@ export default function suite() {
 			.to.eql({ ...castAsListDTO(ListOwned), title: "ChangedList1" });
 		await put(Url_ListPut(ListOwned.id), { title: "TestList1" });
 	});
+	it("Returns 204, list nullable informations are mutable", async () => {
+		const oldDate = ListOwned.closureDate;
+		const response = await put(Url_ListPut(ListOwned.id), {
+			closureDate: null,
+		});
+		expect204(response);
+		const changedList = await get(Url_ListGetOne(ListOwned.id));
+		const withoutClosureDate = castAsListDTO(ListOwned);
+		delete withoutClosureDate.closureDate;
+		expect(changedList).to.have.property("body").to.eql(withoutClosureDate);
+		await put(Url_ListPut(ListOwned.id), { closureDate: oldDate });
+	});
 	it("Returns 422, with validation error, if path param is not UUID", async () => {
 		const wrongUUID: string = "toto";
 		const response = await put(Url_ListPut(wrongUUID));

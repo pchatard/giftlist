@@ -13,5 +13,7 @@ export function castListAsListDTO(list: List): ListDTO {
 	rest.grantedUsersDTO = (grantedUsers || []).map((u) => {
 		return { id: u.id, displayName: u.displayName } as UserNameDTO;
 	});
+	// Keep only date from ISO String
+	rest.closureDate = rest.closureDate?.slice(0, 10) || undefined;
 	return cleanObject(rest) as ListDTO;
 }
