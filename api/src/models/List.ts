@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 
 import { UserNameDTO } from "../dto/users";
+import { ISOString } from "../types/isostring";
 import { UUID } from "../types/UUID";
 import { Gift } from "./Gift";
 import User from "./User";
@@ -23,11 +24,11 @@ export class List {
 	@Column()
 	public title!: string;
 
-	@Column({ nullable: true })
+	@Column({ type: "string", nullable: true })
 	public description?: string;
 
-	@Column({ nullable: true })
-	public closureDate?: Date;
+	@Column({ type: "date", nullable: true })
+	public closureDate?: ISOString | null;
 
 	@ManyToMany(() => User, (user) => user.lists)
 	@JoinTable({ name: "List_Owners" })
