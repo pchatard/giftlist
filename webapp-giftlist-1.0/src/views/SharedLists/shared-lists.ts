@@ -13,15 +13,20 @@ import { ListDTO } from "@/types/dto/ListDTO";
 import { GetListsPayload } from "@/types/payload/GetListsPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
 import { Auth0Client } from "@auth0/auth0-spa-js";
+import { UserGroupIcon, QrcodeIcon } from "@heroicons/vue/outline";
+import Button from "@/components/Button/Button.vue";
 
 export default defineComponent({
 	name: "SharedLists",
 	components: {
+		Button,
 		DefaultLayout,
 		Modal,
 		ListItem,
 		Table,
 		InputText,
+		UserGroupIcon,
+		QrcodeIcon
 	},
 	setup() {
 		/******** Basic imports ********/

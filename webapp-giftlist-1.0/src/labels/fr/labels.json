@@ -134,6 +134,10 @@
         "back": "Retour"
     },
     "lists": {
+        "empty": {
+            "description": "Vous n'avez pas encore créé de listes.",
+            "button": "Créer une liste"
+        },
         "buttons": {
             "settings": "Options",
             "delete": "Supprimer",
@@ -145,6 +149,23 @@
             "private": "Privée"
         },
         "modal": {}
+    },
+    "list": {
+        "empty": {
+            "description": "Vous n'avez pas encore ajouté de cadeaux",
+            "button": "Ajouter une idée cadeau"
+        }
+    },
+    "sharedList": {
+        "empty": {
+            "description": "Cette liste ne contient pas encore d'idées cadeaux"
+        }
+    },
+    "sharedLists": {
+        "empty": {
+            "description": "Vous n'avez pas encore de listes partagées",
+            "button": "Entrer un code de partage"
+        }
     },
     "gifts": {
         "title": "Cadeau",
