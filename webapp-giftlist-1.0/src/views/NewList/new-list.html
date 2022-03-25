@@ -25,14 +25,15 @@
                     {{ formLabels.buttons.previous }}
                 </Button>
             </div>
-            <div class="flex gap-4">
-                <Button :btnStyle="step === maxStep ? 'primary' : 'secondary'" hasIcon @click="createList">
+            <div class="w-1/2 flex gap-4">
+                <Button :btnStyle="step === maxStep ? 'primary' : 'secondary'" class="flex-1" hasIcon
+                    :loading="createButtonIsLoading" @click="createList">
                     <template v-slot:icon>
                         <CheckIcon />
                     </template>
                     {{ formLabels.buttons.confirm }}
                 </Button>
-                <Button btnStyle="primary" hasIcon v-show="step != maxStep" @click="nextAction">
+                <Button btnStyle="primary" hasIcon v-show="step != maxStep" class="flex-1" @click="nextAction">
                     <template v-slot:icon>
                         <ArrowRightIcon />
                     </template>

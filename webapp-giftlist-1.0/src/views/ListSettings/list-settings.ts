@@ -115,7 +115,7 @@ export default defineComponent({
 						: undefined,
 				closureDate:
 					generalInformation.value.activateTermDate &&
-						generalInformation.value.termDate.value !== initialList.value.closureDate
+					generalInformation.value.termDate.value !== initialList.value.closureDate
 						? generalInformation.value.termDate.value
 						: undefined,
 			};
