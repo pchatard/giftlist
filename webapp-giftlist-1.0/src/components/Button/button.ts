@@ -38,6 +38,8 @@ export default defineComponent({
 					return "#4F46E5";
 				case ButtonStyleEnum.secondary:
 					return "#4F46E5";
+				case ButtonStyleEnum.secondarySoft:
+					return "#000000";
 				default:
 					return "#FFFFFF";
 			}

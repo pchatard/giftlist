@@ -99,7 +99,7 @@
             {{ labels.gift.buttons.cancel }}
         </Button>
 
-        <Button btnStyle="primary" hasIcon @click="$emit('confirm')">
+        <Button btnStyle="primary" :loading="loading" hasIcon @click="$emit('confirm')">
             <template v-slot:icon>
                 <CheckIcon />
             </template>

@@ -33,6 +33,7 @@ export default defineComponent({
 
 		/******** Reactive data ********/
 		const loading = ref(true);
+		const newSharingCodeButtonIsLoading = ref(false);
 		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
 			{ title: labels.tables.list.title, sortable: true, sorted: "none" },
@@ -106,6 +107,7 @@ export default defineComponent({
 		};
 
 		const confirmNewSharingCode = async () => {
+			newSharingCodeButtonIsLoading.value = true;
 			const actionPayload: ListSharingCodePayload = {
 				auth,
 				sharingCode: newSharingCodeData.value.code,
@@ -113,7 +115,11 @@ export default defineComponent({
 			const success = await dispatch("accessList", actionPayload);
 			if (success) {
 				router.push(`/app/shared/${newSharingCodeData.value.code}`);
+				setTimeout(() => {
+					newSharingCodeButtonIsLoading.value = false;
+				}, 300);
 			} else {
+				newSharingCodeButtonIsLoading.value = false;
 				newSharingCodeData.value.isError = true;
 				newSharingCodeData.value.errorMessage = "Une erreur s'est produite...";
 			}
@@ -140,6 +146,7 @@ export default defineComponent({
 			detailsModal,
 			handleDetailsModal,
 			handleSort,
+			newSharingCodeButtonIsLoading,
 		};
 	},
 });

@@ -49,6 +49,8 @@ export default defineComponent({
 
 		/******** Reactive data ********/
 		const loading = ref(true);
+		const deleteButtonIsLoading = ref(false);
+		const shareButtonIsLoading = ref(false);
 		const tableHeaders = ref([
 			{
 				title: labels.tables.gift.favorite,
@@ -127,10 +129,13 @@ export default defineComponent({
 		};
 
 		const handleSharingOptionsConfirm = async () => {
+			shareButtonIsLoading.value = true;
 			if (list.value.isShared) {
 				await unshareList();
+				shareButtonIsLoading.value = false;
 			} else {
 				await shareList();
+				shareButtonIsLoading.value = false;
 				await dispatch("getList", listPayload);
 			}
 		};
@@ -143,6 +148,7 @@ export default defineComponent({
 		};
 
 		const handleDeleteConfirm = async () => {
+			deleteButtonIsLoading.value = true;
 			const giftIdPayload: GiftIdPayload = {
 				auth,
 				listId,
@@ -151,6 +157,9 @@ export default defineComponent({
 			const success = await dispatch("deleteGift", giftIdPayload);
 			if (success) {
 				deleteModal.value.showModal = false;
+				setTimeout(() => {
+					deleteButtonIsLoading.value = false;
+				}, 300);
 			}
 		};
 
@@ -182,6 +191,8 @@ export default defineComponent({
 			handleSort,
 			shareList,
 			unshareList,
+			deleteButtonIsLoading,
+			shareButtonIsLoading,
 		};
 	},
 });

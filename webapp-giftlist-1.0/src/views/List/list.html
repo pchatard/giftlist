@@ -57,12 +57,13 @@
                 :helperText="labels.modals.sharingOptions.code.helperText" copy :disabled="!list.isShared" />
         </div>
         <Button class="mb-4 w-full" :btnStyle="list.isShared ? 'danger-soft' : 'green-soft'"
-            @click="sharingOptionsModal.confirm">{{
+            :loading="shareButtonIsLoading" @click="sharingOptionsModal.confirm">{{
             sharingOptionsModal.confirmText }}</Button>
     </Modal>
 
     <Modal :show="deleteModal.showModal" :title="deleteModal.title" :confirmText="deleteModal.confirmText"
-        @close="deleteModal.showModal = false" @confirm="deleteModal.confirm" type="danger">
+        @close="deleteModal.showModal = false" @confirm="deleteModal.confirm" :btnLoading="deleteButtonIsLoading"
+        type="danger">
     </Modal>
 
 </DefaultLayout>

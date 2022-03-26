@@ -33,6 +33,7 @@ export default defineComponent({
 		];
 
 		/******** Reactive data ********/
+		const buttonIsLoading = ref(false);
 		const giftInformation = ref({
 			title: {
 				label: labels.gift.inputs.title.label,
@@ -150,8 +151,11 @@ export default defineComponent({
 		};
 
 		const createGift = async () => {
+			buttonIsLoading.value = true;
+
 			// Validate fields
 			if (!validateGiftFields()) {
+				buttonIsLoading.value = false;
 				return;
 			}
 
@@ -163,6 +167,8 @@ export default defineComponent({
 			const success = await dispatch("createGift", giftPayload);
 			if (success) {
 				router.go(-1);
+			} else {
+				buttonIsLoading.value = false;
 			}
 		};
 
@@ -187,6 +193,7 @@ export default defineComponent({
 			handleGiftInformationChange,
 			cancel,
 			createGift,
+			buttonIsLoading,
 		};
 	},
 });

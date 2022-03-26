@@ -9,7 +9,7 @@
 
     <Modal :show="newSharingCodeModalIsOpen" @confirm="confirmNewSharingCode" @close="closeNewSharingCodeModal"
         :title="labels.modals.code.title" :confirmText="labels.modals.code.confirm"
-        :cancelText="labels.modals.code.cancel">
+        :cancelText="labels.modals.code.cancel" :btnLoading="newSharingCodeButtonIsLoading">
         <InputText :label="newSharingCodeData.label" :value="newSharingCodeData.code"
             :helperText="newSharingCodeData.helperText" :isError="newSharingCodeData.isError"
             :errorMessage="newSharingCodeData.errorMessage" :placeholder="newSharingCodeData.placeholder"

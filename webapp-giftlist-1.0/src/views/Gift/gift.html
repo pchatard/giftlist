@@ -9,9 +9,9 @@
         </Button>
     </template>
     <GiftForm action="update" :values="giftInformation" @change="handleGiftInformationChange" @cancel="cancel"
-        @confirm="saveGiftChanges" />
+        @confirm="saveGiftChanges" :loading="confirmButtonIsLoading" />
 
     <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText"
-        @close="modal.showModal = false" @confirm="modal.confirm" type="danger">
+        @close="modal.showModal = false" @confirm="modal.confirm" type="danger" :btnLoading="deleteButtonIsLoading">
     </Modal>
 </DefaultLayout>

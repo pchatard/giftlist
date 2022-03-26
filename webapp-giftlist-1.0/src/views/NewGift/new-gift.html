@@ -1,4 +1,4 @@
 <DefaultLayout :title="labels.titles.newGift" back>
-    <GiftForm action="create" :values="giftInformation" @change="handleGiftInformationChange" @cancel="cancel"
-        @confirm="createGift" />
+    <GiftForm action="create" :loading="buttonIsLoading" :values="giftInformation" @change="handleGiftInformationChange"
+        @cancel="cancel" @confirm="createGift" />
 </DefaultLayout>

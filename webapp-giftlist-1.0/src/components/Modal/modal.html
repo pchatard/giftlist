@@ -34,45 +34,14 @@
                             <slot />
                         </div>
 
-                        <div class="mt-4 flex justify-end">
-                            <button type="button" v-show="cancelText" class="
-                                    inline-flex
-                                    justify-center
-                                    px-4
-                                    py-2
-                                    mr-2
-                                    text-sm
-                                    font-medium
-                                    text-gray-900
-                                    bg-gray-100
-                                    border border-transparent
-                                    rounded-md
-                                    hover:bg-gray-200
-                                    focus:outline-none
-                                    focus-visible:ring-2
-                                    focus-visible:ring-offset-2
-                                    focus-visible:ring-gray-500
-                                " @click="$emit('close')">
+                        <div class="mt-4 flex gap-2 justify-end">
+                            <Button v-show="cancelText" btnStyle="secondary-soft" @click="$emit('close')">
                                 {{ cancelText }}
-                            </button>
-                            <button v-if="confirmText" type="button" class="
-                                    inline-flex
-                                    justify-center
-                                    px-4
-                                    py-2
-                                    text-sm
-                                    font-medium
-                                    border border-transparent
-                                    rounded-md
-                                    focus:outline-none
-                                    focus-visible:ring-2 focus-visible:ring-offset-2
-                                " :class="
-                                    type === 'danger'
-                                        ? 'text-red-900 bg-red-100 hover:bg-red-200 focus-visible:ring-red-500'
-                                        : 'text-blue-900 bg-blue-100 hover:bg-blue-200 focus-visible:ring-blue-500'
-                                " @click="$emit('confirm')">
+                            </Button>
+                            <Button v-if="confirmText" :btnStyle="type === 'danger' ? 'danger-soft' : 'primary-soft'"
+                                :loading="btnLoading" @click="$emit('confirm')">
                                 {{ confirmText }}
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </TransitionChild>

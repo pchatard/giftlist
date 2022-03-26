@@ -55,6 +55,10 @@ export default defineComponent({
 			type: String,
 			default: "create",
 		},
+		loading: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	setup(props, context) {
 		const handleChange = (field: string, value: any) => {

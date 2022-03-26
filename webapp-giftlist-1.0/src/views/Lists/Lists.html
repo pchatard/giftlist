@@ -9,7 +9,7 @@
 
     <Modal :show="deleteModalIsOpen" @confirm="deleteList" @close="closeDeleteModal" type="danger"
         :title="labels.modals.deleteList.title + listToDelete?.title" :confirmText="labels.modals.deleteList.confirm"
-        :cancelText="labels.modals.deleteList.cancel">
+        :cancelText="labels.modals.deleteList.cancel" :btnLoading="deleteModalButtonIsLoading">
         <p class="text-sm text-gray-500">{{ labels.modals.deleteList.text }}</p>
         <p class="text-sm text-gray-500">{{ labels.modals.deleteList.text2 }}</p>
     </Modal>

@@ -48,6 +48,7 @@ export default defineComponent({
 		const loading = ref(true);
 		const openGeneral = ref(true);
 		const openShare = ref(false);
+		const buttonIsLoading = ref(false);
 		const generalInformation = ref({
 			title: {
 				label: labels.listOptions.inputs.title.label,
@@ -202,6 +203,7 @@ export default defineComponent({
 		};
 
 		const saveChanges = async () => {
+			buttonIsLoading.value = true;
 			if (validateListData()) {
 				const editPayload: EditListPayload = {
 					auth,
@@ -215,6 +217,7 @@ export default defineComponent({
 					router.go(-1);
 				}
 			}
+			buttonIsLoading.value = false;
 		};
 
 		const validateListData = (): boolean => {
@@ -235,6 +238,7 @@ export default defineComponent({
 			handleOpen,
 			cancel,
 			saveChanges,
+			buttonIsLoading,
 		};
 	},
 });

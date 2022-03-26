@@ -4,8 +4,9 @@
 			'border border-indigo-600 text-indigo-600 hover:border-indigo-700 hover:text-indigo-700':
 				btnStyle === 'secondary',
 			'bg-red-600 text-white hover:bg-red-700': btnStyle === 'danger',
-			'bg-red-100 text-red-600 hover:bg-red-200': btnStyle === 'danger-soft',
+			'bg-red-100 text-red-900 hover:bg-red-200': btnStyle === 'danger-soft',
 			'bg-green-100 text-green-600 hover:bg-green-200': btnStyle === 'green-soft',
+			'bg-gray-100 text-gray-900 hover:bg-gray-200': btnStyle === 'secondary-soft',
 		}">
 	<div v-if="loading" class="flex items-center mt-1">
 		<PulseLoader :loading="loading" size="10px" :color="spinnerColor" />
