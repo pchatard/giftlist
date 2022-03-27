@@ -1,8 +1,14 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {
+	createRouter,
+	createWebHistory,
+	NavigationGuardWithThis,
+	RouteRecordRaw,
+} from "vue-router";
 
 import Auth0 from "@/auth";
 import labels from "@/labels/fr/labels.json";
 import BookedGifts from "@/views/BookedGifts/BookedGifts.vue";
+import Redirect from "@/views/Redirect/Redirect.vue";
 import ErrorView from "@/views/ErrorView/ErrorView.vue";
 import Friends from "@/views/Friends/Friends.vue";
 import Gift from "@/views/Gift/Gift.vue";
@@ -31,11 +37,26 @@ const listsNavbarCta = (): void => {
 	router.push("/app/lists/new");
 };
 
+const redirectNavigationGuard: NavigationGuardWithThis<undefined> = (to: any, from: any) => {
+	const redirect_route = localStorage.getItem("giftlist-redirect");
+	if (redirect_route) {
+		localStorage.removeItem("giftlist-redirect");
+		return redirect_route;
+	}
+	return { name: "Mes listes" };
+};
+
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
 		name: "Accueil",
 		component: Home,
+	},
+	{
+		path: "/app/redirect",
+		name: "Redirecting...",
+		component: Redirect,
+		beforeEnter: [Auth0.routeGuard, redirectNavigationGuard],
 	},
 	{
 		path: "/app/error",

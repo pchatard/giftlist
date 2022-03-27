@@ -87,10 +87,8 @@ const routeGuard: NavigationGuardWithThis<undefined> = (to: any, from: any, next
 		}
 
 		// Otherwise, log in
-		// await loginWithRedirect({ appState: { targetUrl: to.fullPath }, redirect_uri: "http://localhost:8080" + to.path });
 		await loginWithRedirect({
 			appState: { targetUrl: to.fullPath },
-			redirect_uri: "http://localhost:8080" + "/app/lists",
 		});
 	};
 
