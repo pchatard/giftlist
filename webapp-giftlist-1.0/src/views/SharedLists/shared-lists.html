@@ -1,40 +1,42 @@
-<div v-if="loading">Loading...</div>
-<DefaultLayout v-else :title="labels.titles.shared">
-
-    <div v-if="lists.length === 0"
-        class="absolute w-full h-full flex flex-col justify-center items-center text-gray-400 gap-8">
-        <div class="text-lg">{{labels.sharedLists.empty.description}}</div>
-        <UserGroupIcon class="w-1/6" />
-        <Button btnStyle="primary-soft" hasIcon @click="router.push(`/app/shared/new`)">
-            <template v-slot:icon>
-                <QrcodeIcon />
-            </template>
-            {{labels.sharedLists.empty.button}}
-        </Button>
+<DefaultLayout :title="labels.titles.shared">
+    <div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
+        <Loader class="w-16 h-16" />
     </div>
     <div v-else>
-        <Table :headers="tableHeaders" @sort="handleSort">
-            <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
-                @click="router.push(`/app/shared/${list.sharingCode}`)">
-                <ListItem :list="list" :shared="true" @details="handleDetailsModal" />
-            </tr>
-        </Table>
+        <div v-if="lists.length === 0"
+            class="absolute w-full h-full flex flex-col justify-center items-center text-gray-400 gap-8">
+            <div class="text-lg">{{labels.sharedLists.empty.description}}</div>
+            <UserGroupIcon class="w-1/6" />
+            <Button btnStyle="primary-soft" hasIcon @click="router.push(`/app/shared/new`)">
+                <template v-slot:icon>
+                    <QrcodeIcon />
+                </template>
+                {{labels.sharedLists.empty.button}}
+            </Button>
+        </div>
+        <div v-else>
+            <Table :headers="tableHeaders" @sort="handleSort">
+                <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
+                    @click="router.push(`/app/shared/${list.sharingCode}`)">
+                    <ListItem :list="list" :shared="true" @details="handleDetailsModal" />
+                </tr>
+            </Table>
+
+        </div>
+        <Modal :show="newSharingCodeModalIsOpen" @confirm="confirmNewSharingCode" @close="closeNewSharingCodeModal"
+            :title="labels.modals.code.title" :confirmText="labels.modals.code.confirm"
+            :cancelText="labels.modals.code.cancel" :btnLoading="newSharingCodeButtonIsLoading">
+            <InputText :label="newSharingCodeData.label" :value="newSharingCodeData.code"
+                :helperText="newSharingCodeData.helperText" :isError="newSharingCodeData.isError"
+                :errorMessage="newSharingCodeData.errorMessage" :placeholder="newSharingCodeData.placeholder"
+                @change="(newCode) => (newSharingCodeData.code = newCode)" focus reset
+                @keydown.enter="confirmNewSharingCode" />
+        </Modal>
+        <Modal :show="detailsModal.show" @close="handleDetailsModal" @confirm="openList"
+            :title="detailsModal.list.title || ''" :confirmText="labels.modals.listDetails.confirm">
+            <p>Détails de la liste</p>
+            <p>Propriétaire(s):</p>
+            <p>Nombre de cadeaux disponibles / réservés</p>
+        </Modal>
     </div>
-
-    <Modal :show="newSharingCodeModalIsOpen" @confirm="confirmNewSharingCode" @close="closeNewSharingCodeModal"
-        :title="labels.modals.code.title" :confirmText="labels.modals.code.confirm"
-        :cancelText="labels.modals.code.cancel">
-        <InputText :label="newSharingCodeData.label" :value="newSharingCodeData.code"
-            :helperText="newSharingCodeData.helperText" :isError="newSharingCodeData.isError"
-            :errorMessage="newSharingCodeData.errorMessage" :placeholder="newSharingCodeData.placeholder"
-            @change="(newCode) => (newSharingCodeData.code = newCode)" focus reset
-            @keydown.enter="confirmNewSharingCode" />
-    </Modal>
-
-    <Modal :show="detailsModal.show" @close="handleDetailsModal" @confirm="openList"
-        :title="detailsModal.list.title || ''" :confirmText="labels.modals.listDetails.confirm">
-        <p>Détails de la liste</p>
-        <p>Propriétaire(s):</p>
-        <p>Nombre de cadeaux disponibles / réservés</p>
-    </Modal>
 </DefaultLayout>

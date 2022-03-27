@@ -1,5 +1,15 @@
-<div v-if="loading">Loading...</div>
-<DefaultLayout v-else :title="gift.title" back :backButtonTitle="list.title" :backButtonLink="'/app/lists/' + list.id">
+<DefaultLayout :title="gift.title" back :backButtonTitle="list.title" :backButtonLink="'/app/lists/' + list.id">
+    <div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
+        <Loader class="w-16 h-16" />
+    </div>
+    <div v-else>
+        <GiftForm action="update" :values="giftInformation" @change="handleGiftInformationChange" @cancel="cancel"
+            @confirm="saveGiftChanges" :loading="confirmButtonIsLoading" />
+
+        <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText"
+            @close="modal.showModal = false" @confirm="modal.confirm" type="danger" :btnLoading="deleteButtonIsLoading">
+        </Modal>
+    </div>
     <template v-slot:commands>
         <Button btnStyle="danger" hasIcon @click="handleDeleteModal">
             <template v-slot:icon>
@@ -8,10 +18,4 @@
             {{ labels.gift.buttons.delete }}
         </Button>
     </template>
-    <GiftForm action="update" :values="giftInformation" @change="handleGiftInformationChange" @cancel="cancel"
-        @confirm="saveGiftChanges" />
-
-    <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText"
-        @close="modal.showModal = false" @confirm="modal.confirm" type="danger">
-    </Modal>
 </DefaultLayout>

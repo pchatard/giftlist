@@ -7,6 +7,7 @@ import GiftDetails from "@/components/GiftDetails/GiftDetails.vue";
 import GiftGridView from "@/components/GiftGridView/GiftGridView.vue";
 import GiftListView from "@/components/GiftListView/GiftListView.vue";
 import GridListToggle from "@/components/GridListToggle/GridListToggle.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
@@ -29,6 +30,7 @@ export default defineComponent({
 		GiftIcon,
 		Modal,
 		Table,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/

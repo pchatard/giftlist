@@ -45,6 +45,7 @@ export default defineComponent({
 
 		/******** Reactive data ********/
 		const step = ref(1);
+		const createButtonIsLoading = ref(false);
 		const listInformation = ref({
 			step1: {
 				title: {
@@ -64,7 +65,7 @@ export default defineComponent({
 					required: false,
 				},
 				activateTermDate: {
-					value: true,
+					value: false,
 					label: formLabels.step1.inputs.activateTermDate.label,
 					helperText: formLabels.step1.inputs.activateTermDate.helperText,
 				},
@@ -166,17 +167,25 @@ export default defineComponent({
 		};
 
 		const createList = async () => {
-			// TODO: Make verifications
+			createButtonIsLoading.value = true;
 
-			// Call Store action
-			const payload: CreateListPayload = {
-				auth,
-				newList: createListData.value,
-			};
-			const success = await dispatch("createList", payload);
-			if (success) {
-				router.push("/app/lists");
+			const check1 = checkStep1();
+			const check2 = checkStep2();
+
+			if (check1 && check2) {
+				// Call Store action
+				const payload: CreateListPayload = {
+					auth,
+					newList: createListData.value,
+				};
+				const success = await dispatch("createList", payload);
+				if (success) {
+					router.push("/app/lists");
+					return;
+				}
 			}
+
+			createButtonIsLoading.value = false;
 		};
 
 		const handleChangeStepFromStepper = (newStep: number) => {
@@ -259,6 +268,7 @@ export default defineComponent({
 			createList,
 			listInformation,
 			handleListInformationChange,
+			createButtonIsLoading,
 		};
 	},
 });

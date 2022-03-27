@@ -5,6 +5,7 @@ import { useStore } from "vuex";
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListItem from "@/components/ListItem/ListItem.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
@@ -21,6 +22,7 @@ export default defineComponent({
 		ListItem,
 		Table,
 		Modal,
+		Loader,
 		CollectionIcon,
 	},
 	setup() {
@@ -35,6 +37,7 @@ export default defineComponent({
 		/******** Reactive data ********/
 		const loading = ref(true);
 		const deleteModalIsOpen = ref(false);
+		const deleteModalButtonIsLoading = ref(false);
 		const lists: ComputedRef<ListDTO[]> = computed(() => state.lists.owned);
 		const listToDelete: Ref<ListDTO | undefined> = ref();
 		const tableHeaders = ref([
@@ -68,6 +71,7 @@ export default defineComponent({
 		};
 
 		const deleteList = async () => {
+			deleteModalButtonIsLoading.value = true;
 			if (listToDelete.value) {
 				const payload: ListIdPayload = {
 					auth,
@@ -78,6 +82,9 @@ export default defineComponent({
 					closeDeleteModal();
 				}
 			}
+			setTimeout(() => {
+				deleteModalButtonIsLoading.value = false;
+			}, 300);
 		};
 
 		return {
@@ -92,6 +99,7 @@ export default defineComponent({
 			openDeleteModal,
 			closeDeleteModal,
 			deleteList,
+			deleteModalButtonIsLoading,
 		};
 	},
 });

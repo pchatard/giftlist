@@ -15,6 +15,7 @@ import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListFormOne from "@/components/ListFormOne/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import labels from "@/labels/fr/labels.json";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { PartialListDTO } from "@/types/dto/PartialListDTO";
@@ -35,6 +36,7 @@ export default defineComponent({
 		DisclosurePanel,
 		ListFormOne,
 		ListFormTwo,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/
@@ -48,6 +50,7 @@ export default defineComponent({
 		const loading = ref(true);
 		const openGeneral = ref(true);
 		const openShare = ref(false);
+		const buttonIsLoading = ref(false);
 		const generalInformation = ref({
 			title: {
 				label: labels.listOptions.inputs.title.label,
@@ -202,6 +205,7 @@ export default defineComponent({
 		};
 
 		const saveChanges = async () => {
+			buttonIsLoading.value = true;
 			if (validateListData()) {
 				const editPayload: EditListPayload = {
 					auth,
@@ -215,6 +219,7 @@ export default defineComponent({
 					router.go(-1);
 				}
 			}
+			buttonIsLoading.value = false;
 		};
 
 		const validateListData = (): boolean => {
@@ -235,6 +240,7 @@ export default defineComponent({
 			handleOpen,
 			cancel,
 			saveChanges,
+			buttonIsLoading,
 		};
 	},
 });

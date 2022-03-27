@@ -6,6 +6,7 @@ import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import InputText from "@/components/InputText/InputText.vue";
 import ListItem from "@/components/ListItem/ListItem.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
@@ -25,6 +26,7 @@ export default defineComponent({
 		ListItem,
 		Table,
 		InputText,
+		Loader,
 		UserGroupIcon,
 		QrcodeIcon,
 	},
@@ -38,6 +40,7 @@ export default defineComponent({
 
 		/******** Reactive data ********/
 		const loading = ref(true);
+		const newSharingCodeButtonIsLoading = ref(false);
 		const tableHeaders = ref([
 			{ title: "", width: "w-8", sortable: false },
 			{ title: labels.tables.list.title, sortable: true, sorted: "none" },
@@ -111,6 +114,7 @@ export default defineComponent({
 		};
 
 		const confirmNewSharingCode = async () => {
+			newSharingCodeButtonIsLoading.value = true;
 			const actionPayload: ListSharingCodePayload = {
 				auth,
 				sharingCode: newSharingCodeData.value.code,
@@ -118,7 +122,11 @@ export default defineComponent({
 			const success = await dispatch("accessList", actionPayload);
 			if (success) {
 				router.push(`/app/shared/${newSharingCodeData.value.code}`);
+				setTimeout(() => {
+					newSharingCodeButtonIsLoading.value = false;
+				}, 300);
 			} else {
+				newSharingCodeButtonIsLoading.value = false;
 				newSharingCodeData.value.isError = true;
 				newSharingCodeData.value.errorMessage = "Une erreur s'est produite...";
 			}
@@ -145,6 +153,7 @@ export default defineComponent({
 			detailsModal,
 			handleDetailsModal,
 			handleSort,
+			newSharingCodeButtonIsLoading,
 		};
 	},
 });

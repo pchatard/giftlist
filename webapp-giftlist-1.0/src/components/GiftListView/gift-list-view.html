@@ -32,8 +32,7 @@
 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
     <button @click.stop="openLinkInNewTab" class="ml-4 font-medium"
         :class="gift.linkURL ? 'text-indigo-600 hover:text-indigo-900' : 'text-gray-400 line-through'">
-        <span class="flex items-center px-2 py-1 rounded-md"
-            :class="gift.linkURL ? 'hover:bg-indigo-100' : 'hover:bg-gray-100'">
+        <span class="flex items-center px-2 py-1 rounded-md" :class="gift.linkURL ? 'hover:bg-indigo-100' : ''">
             <ExternalLinkIcon class="h-4 w-4 mr-2" />
             {{ labels.gifts.buttons.open }}
         </span>

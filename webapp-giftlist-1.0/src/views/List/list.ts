@@ -9,6 +9,7 @@ import GiftListView from "@/components/GiftListView/GiftListView.vue";
 import GridListToggle from "@/components/GridListToggle/GridListToggle.vue";
 import InputLink from "@/components/InputLink/InputLink.vue";
 import InputText from "@/components/InputText/InputText.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
@@ -34,6 +35,7 @@ export default defineComponent({
 		InputLink,
 		Modal,
 		Table,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/
@@ -50,6 +52,8 @@ export default defineComponent({
 
 		/******** Reactive data ********/
 		const loading = ref(true);
+		const deleteButtonIsLoading = ref(false);
+		const shareButtonIsLoading = ref(false);
 		const tableHeaders = ref([
 			{
 				title: labels.tables.gift.favorite,
@@ -128,10 +132,13 @@ export default defineComponent({
 		};
 
 		const handleSharingOptionsConfirm = async () => {
+			shareButtonIsLoading.value = true;
 			if (list.value.isShared) {
 				await unshareList();
+				shareButtonIsLoading.value = false;
 			} else {
 				await shareList();
+				shareButtonIsLoading.value = false;
 				await dispatch("getList", listPayload);
 			}
 		};
@@ -144,6 +151,7 @@ export default defineComponent({
 		};
 
 		const handleDeleteConfirm = async () => {
+			deleteButtonIsLoading.value = true;
 			const giftIdPayload: GiftIdPayload = {
 				auth,
 				listId,
@@ -152,6 +160,9 @@ export default defineComponent({
 			const success = await dispatch("deleteGift", giftIdPayload);
 			if (success) {
 				deleteModal.value.showModal = false;
+				setTimeout(() => {
+					deleteButtonIsLoading.value = false;
+				}, 300);
 			}
 		};
 
@@ -183,6 +194,8 @@ export default defineComponent({
 			handleSort,
 			shareList,
 			unshareList,
+			deleteButtonIsLoading,
+			shareButtonIsLoading,
 		};
 	},
 });

@@ -5,6 +5,7 @@ import { useStore } from "vuex";
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import GiftForm from "@/components/GiftForm/GiftForm.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import labels from "@/labels/fr/labels.json";
 import { GiftCategory } from "@/types/api/GiftCategory";
@@ -25,6 +26,7 @@ export default defineComponent({
 		Button,
 		Modal,
 		TrashIcon,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/
@@ -46,6 +48,8 @@ export default defineComponent({
 
 		/******** Reactive data ********/
 		const loading = ref(true);
+		const confirmButtonIsLoading = ref(false);
+		const deleteButtonIsLoading = ref(false);
 
 		const modal = ref({
 			showModal: false,
@@ -207,10 +211,12 @@ export default defineComponent({
 			giftInformation.value.category.value =
 				giftCategories.find((cat) => cat.name === gift.value.category) || giftCategories[0];
 			giftInformation.value.link.value = gift.value.linkURL || "";
-			giftInformation.value.showDetails.value = (gift.value.brand ||
+			giftInformation.value.showDetails.value = ((gift.value.brand ||
 				gift.value.size ||
 				gift.value.color ||
-				gift.value.comments) as unknown as boolean;
+				gift.value.comments) as unknown as boolean)
+				? true
+				: false;
 			giftInformation.value.brand.value = gift.value.brand || "";
 			giftInformation.value.size.value = gift.value.size || "";
 			giftInformation.value.color.value = gift.value.color || "";
@@ -226,8 +232,11 @@ export default defineComponent({
 		};
 
 		const saveGiftChanges = async () => {
+			confirmButtonIsLoading.value = true;
+
 			// Validate fields
 			if (!validateGiftFields()) {
+				confirmButtonIsLoading.value = false;
 				return;
 			}
 
@@ -243,6 +252,7 @@ export default defineComponent({
 			if (success) {
 				router.push("/app/lists/" + listId);
 			}
+			confirmButtonIsLoading.value = false;
 		};
 
 		const validateGiftFields = (): boolean => {
@@ -263,6 +273,7 @@ export default defineComponent({
 		};
 
 		const handleDeleteConfirm = async () => {
+			deleteButtonIsLoading.value = true;
 			const giftIdPayload: GiftIdPayload = {
 				auth,
 				listId,
@@ -286,6 +297,8 @@ export default defineComponent({
 			handleGiftInformationChange,
 			cancel,
 			saveGiftChanges,
+			confirmButtonIsLoading,
+			deleteButtonIsLoading,
 		};
 	},
 });

@@ -1,5 +1,6 @@
 import { defineComponent, PropType } from "vue";
 
+import Button from "@/components/Button/Button.vue";
 import labels from "@/labels/fr/labels.json";
 import { ModalTypeEnum } from "@/types/ModalTypeEnum";
 import {
@@ -13,6 +14,7 @@ import {
 export default defineComponent({
 	name: "Modal",
 	components: {
+		Button,
 		TransitionRoot,
 		TransitionChild,
 		Dialog,
@@ -40,6 +42,11 @@ export default defineComponent({
 			type: String,
 			required: false,
 			default: labels.modals.defaults.cancel,
+		},
+		btnLoading: {
+			type: Boolean,
+			required: false,
+			default: false,
 		},
 	},
 	emits: ["close", "confirm"],
