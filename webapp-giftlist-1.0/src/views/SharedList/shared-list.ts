@@ -16,6 +16,7 @@ import { ListDTO } from "@/types/dto/ListDTO";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
 import { Auth0Client } from "@auth0/auth0-spa-js";
+import { GiftIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "SharedList",
@@ -25,6 +26,7 @@ export default defineComponent({
 		GiftGridView,
 		GiftListView,
 		GridListToggle,
+		GiftIcon,
 		Modal,
 		Table,
 	},
@@ -147,6 +149,7 @@ export default defineComponent({
 		};
 
 		return {
+			labels,
 			loading,
 			list,
 			isListView,

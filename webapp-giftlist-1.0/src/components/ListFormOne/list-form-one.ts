@@ -3,8 +3,7 @@ import { defineComponent } from "vue";
 import InputDate from "@/components/InputDate/InputDate.vue";
 import InputText from "@/components/InputText/InputText.vue";
 import InputToggle from "@/components/InputToggle/InputToggle.vue";
-
-import { CalendarIcon, CollectionIcon, AnnotationIcon } from "@heroicons/vue/outline"
+import { AnnotationIcon, CalendarIcon, CollectionIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "ListFormOne",
@@ -14,7 +13,7 @@ export default defineComponent({
 		InputToggle,
 		CalendarIcon,
 		CollectionIcon,
-		AnnotationIcon
+		AnnotationIcon,
 	},
 	props: {
 		values: {

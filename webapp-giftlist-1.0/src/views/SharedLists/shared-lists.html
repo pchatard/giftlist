@@ -1,11 +1,25 @@
 <div v-if="loading">Loading...</div>
 <DefaultLayout v-else :title="labels.titles.shared">
-    <Table :headers="tableHeaders" @sort="handleSort">
-        <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
-            @click="router.push(`/app/shared/${list.sharingCode}`)">
-            <ListItem :list="list" :shared="true" @details="handleDetailsModal" />
-        </tr>
-    </Table>
+
+    <div v-if="lists.length === 0"
+        class="absolute w-full h-full flex flex-col justify-center items-center text-gray-400 gap-8">
+        <div class="text-lg">{{labels.sharedLists.empty.description}}</div>
+        <UserGroupIcon class="w-1/6" />
+        <Button btnStyle="primary-soft" hasIcon @click="router.push(`/app/shared/new`)">
+            <template v-slot:icon>
+                <QrcodeIcon />
+            </template>
+            {{labels.sharedLists.empty.button}}
+        </Button>
+    </div>
+    <div v-else>
+        <Table :headers="tableHeaders" @sort="handleSort">
+            <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
+                @click="router.push(`/app/shared/${list.sharingCode}`)">
+                <ListItem :list="list" :shared="true" @details="handleDetailsModal" />
+            </tr>
+        </Table>
+    </div>
 
     <Modal :show="newSharingCodeModalIsOpen" @confirm="confirmNewSharingCode" @close="closeNewSharingCodeModal"
         :title="labels.modals.code.title" :confirmText="labels.modals.code.confirm"
