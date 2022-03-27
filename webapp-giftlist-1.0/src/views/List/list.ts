@@ -9,6 +9,7 @@ import GiftListView from "@/components/GiftListView/GiftListView.vue";
 import GridListToggle from "@/components/GridListToggle/GridListToggle.vue";
 import InputLink from "@/components/InputLink/InputLink.vue";
 import InputText from "@/components/InputText/InputText.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
@@ -33,6 +34,7 @@ export default defineComponent({
 		InputLink,
 		Modal,
 		Table,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/

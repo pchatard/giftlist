@@ -4,6 +4,7 @@ import { useStore } from "vuex";
 
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListItem from "@/components/ListItem/ListItem.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
 import labels from "@/labels/fr/labels.json";
@@ -18,6 +19,7 @@ export default defineComponent({
 		ListItem,
 		Table,
 		Modal,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/

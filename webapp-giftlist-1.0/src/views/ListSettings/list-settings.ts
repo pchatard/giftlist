@@ -15,6 +15,7 @@ import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListFormOne from "@/components/ListFormOne/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo/ListFormTwo.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import labels from "@/labels/fr/labels.json";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { PartialListDTO } from "@/types/dto/PartialListDTO";
@@ -35,6 +36,7 @@ export default defineComponent({
 		DisclosurePanel,
 		ListFormOne,
 		ListFormTwo,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/

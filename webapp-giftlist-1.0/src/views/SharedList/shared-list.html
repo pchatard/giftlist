@@ -1,22 +1,27 @@
-<div v-if="loading">Loading...</div>
-<DefaultLayout v-else :title="list.title" back :backButtonTitle="backButtonTitle"
+<DefaultLayout :title="list.title" back :backButtonTitle="backButtonTitle"
     :backButtonLink="router.options.history.state.back">
+    <div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
+        <Loader class="w-16 h-16" />
+    </div>
+    <div v-else>
+        <div v-if="!isListView"
+            class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-row gap-x-4 gap-y-8">
+            <GiftGridView v-for="gift in gifts" :key="gift.id" :gift="gift" :shared="true" />
+        </div>
+        <Table v-else :headers="tableHeaders" @sort="handleSort">
+            <tr v-for="gift in gifts" :key="gift.id" class="cursor-pointer hover:bg-gray-50"
+                @click="handleDetailsModal(gift)">
+                <GiftListView :gift="gift" :shared="true" @book="handleBookModal" />
+            </tr>
+        </Table>
+
+        <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText"
+            :cancelText="modal.cancelText" @close="modal.showModal = false" @confirm="modal.confirm">
+            <GiftDetails v-if="selectedGift" :gift="selectedGift" />
+        </Modal>
+    </div>
     <template v-slot:commands>
         <GridListToggle :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
     </template>
 
-    <div v-if="!isListView" class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-row gap-x-4 gap-y-8">
-        <GiftGridView v-for="gift in gifts" :key="gift.id" :gift="gift" :shared="true" />
-    </div>
-    <Table v-else :headers="tableHeaders" @sort="handleSort">
-        <tr v-for="gift in gifts" :key="gift.id" class="cursor-pointer hover:bg-gray-50"
-            @click="handleDetailsModal(gift)">
-            <GiftListView :gift="gift" :shared="true" @book="handleBookModal" />
-        </tr>
-    </Table>
-
-    <Modal :show="modal.showModal" :title="modal.title" :confirmText="modal.confirmText" :cancelText="modal.cancelText"
-        @close="modal.showModal = false" @confirm="modal.confirm">
-        <GiftDetails v-if="selectedGift" :gift="selectedGift" />
-    </Modal>
 </DefaultLayout>

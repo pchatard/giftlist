@@ -5,6 +5,7 @@ import { useStore } from "vuex";
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import GiftForm from "@/components/GiftForm/GiftForm.vue";
+import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import labels from "@/labels/fr/labels.json";
 import { GiftCategory } from "@/types/api/GiftCategory";
@@ -25,6 +26,7 @@ export default defineComponent({
 		Button,
 		Modal,
 		TrashIcon,
+		Loader,
 	},
 	setup() {
 		/******** Basic imports ********/

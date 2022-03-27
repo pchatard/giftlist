@@ -1,7 +1,11 @@
 <DefaultLayout :title="labels.titles.listSettings" back>
-    <div class="w-10/12 mx-auto">
-        <Disclosure v-slot="{ open }">
-            <DisclosureButton @click="handleOpen('general')" class="
+    <div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
+        <Loader class="w-16 h-16" />
+    </div>
+    <div v-else>
+        <div class="w-10/12 mx-auto">
+            <Disclosure v-slot="{ open }">
+                <DisclosureButton @click="handleOpen('general')" class="
                     flex
                     justify-between
                     w-full
@@ -16,19 +20,19 @@
                     focus:outline-none
                     focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75
                 ">
-                <span>{{ labels.listOptions.generalTitle }}</span>
-                <ChevronUpIcon :class="open ? 'transform rotate-180' : ''" class="w-5 h-5 text-indigo-500" />
-            </DisclosureButton>
-            <transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform opacity-0"
-                enter-to-class="transform opacity-100">
-                <DisclosurePanel v-show="openGeneral" static class="px-4 pt-4 pb-2 text-sm text-black">
-                    <div v-if="loading">Loading...</div>
-                    <ListFormOne v-else :values="generalInformation" @change="handleGeneralInformationChange" />
-                </DisclosurePanel>
-            </transition>
-        </Disclosure>
-        <Disclosure as="div" class="mt-2" v-slot="{ open }">
-            <DisclosureButton @click="handleOpen('share')" class="
+                    <span>{{ labels.listOptions.generalTitle }}</span>
+                    <ChevronUpIcon :class="open ? 'transform rotate-180' : ''" class="w-5 h-5 text-indigo-500" />
+                </DisclosureButton>
+                <transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform opacity-0"
+                    enter-to-class="transform opacity-100">
+                    <DisclosurePanel v-show="openGeneral" static class="px-4 pt-4 pb-2 text-sm text-black">
+                        <div v-if="loading">Loading...</div>
+                        <ListFormOne v-else :values="generalInformation" @change="handleGeneralInformationChange" />
+                    </DisclosurePanel>
+                </transition>
+            </Disclosure>
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+                <DisclosureButton @click="handleOpen('share')" class="
                     flex
                     justify-between
                     w-full
@@ -43,22 +47,23 @@
                     focus:outline-none
                     focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75
                 ">
-                <span>{{ labels.listOptions.sharingTitle }}</span>
-                <ChevronUpIcon :class="open ? 'transform rotate-180' : ''" class="w-5 h-5 text-indigo-500" />
-            </DisclosureButton>
-            <transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform opacity-0"
-                enter-to-class="transform opacity-100">
-                <DisclosurePanel v-show="openShare" static class="px-4 pt-4 pb-2 text-sm text-black">
-                    <div v-if="loading">Loading...</div>
-                    <ListFormTwo v-else :values="sharingOptions" @change="handleSharingOptionsChange" />
-                </DisclosurePanel>
-            </transition>
-        </Disclosure>
+                    <span>{{ labels.listOptions.sharingTitle }}</span>
+                    <ChevronUpIcon :class="open ? 'transform rotate-180' : ''" class="w-5 h-5 text-indigo-500" />
+                </DisclosureButton>
+                <transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform opacity-0"
+                    enter-to-class="transform opacity-100">
+                    <DisclosurePanel v-show="openShare" static class="px-4 pt-4 pb-2 text-sm text-black">
+                        <div v-if="loading">Loading...</div>
+                        <ListFormTwo v-else :values="sharingOptions" @change="handleSharingOptionsChange" />
+                    </DisclosurePanel>
+                </transition>
+            </Disclosure>
 
-        <div class="flex justify-end gap-4 mt-4">
-            <Button btnStyle="danger" @click="cancel">Retour</Button>
-            <Button btnStyle="primary" :loading="buttonIsLoading" @click="saveChanges">Enregistrer les
-                changements</Button>
+            <div class="flex justify-end gap-4 mt-4">
+                <Button btnStyle="danger" @click="cancel">Retour</Button>
+                <Button btnStyle="primary" :loading="buttonIsLoading" @click="saveChanges">Enregistrer les
+                    changements</Button>
+            </div>
         </div>
     </div>
 </DefaultLayout>
