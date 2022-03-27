@@ -17,7 +17,7 @@ import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { CogIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
+import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "List",
@@ -27,6 +27,7 @@ export default defineComponent({
 		LockClosedIcon,
 		LockOpenIcon,
 		DefaultLayout,
+		GiftIcon,
 		GiftGridView,
 		GiftListView,
 		GridListToggle,
@@ -38,7 +39,7 @@ export default defineComponent({
 	},
 	setup() {
 		/******** Basic imports ********/
-		const { dispatch, state, getters, commit } = useStore();
+		const { dispatch, state, commit } = useStore();
 		const router = useRouter();
 		const auth = inject("Auth") as any;
 

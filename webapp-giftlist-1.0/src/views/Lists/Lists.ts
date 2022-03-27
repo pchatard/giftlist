@@ -2,6 +2,7 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, Ref, ref } f
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import ListItem from "@/components/ListItem/ListItem.vue";
 import Loader from "@/components/Loader/Loader.vue";
@@ -11,15 +12,18 @@ import labels from "@/labels/fr/labels.json";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { Auth0Client } from "@auth0/auth0-spa-js";
+import { CollectionIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "Lists",
 	components: {
+		Button,
 		DefaultLayout,
 		ListItem,
 		Table,
 		Modal,
 		Loader,
+		CollectionIcon,
 	},
 	setup() {
 		/******** Basic imports ********/

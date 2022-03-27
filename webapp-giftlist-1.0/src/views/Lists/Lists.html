@@ -3,13 +3,22 @@
         <Loader class="w-16 h-16" />
     </div>
     <div v-else>
-
-        <Table :headers="tableHeaders" @sort="handleSort">
-            <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
-                @click="router.push(`/app/lists/${list.id}`)">
-                <ListItem :list="list" @delete="openDeleteModal" />
-            </tr>
-        </Table>
+        <div v-if="lists.length === 0"
+            class="absolute w-full h-full flex flex-col justify-center items-center text-gray-400 gap-8">
+            <div class="text-lg">{{labels.lists.empty.description}}</div>
+            <CollectionIcon class="w-1/6" />
+            <Button btnStyle="primary-soft" @click="router.push(`/app/lists/new`)">
+                {{labels.lists.empty.button}}
+            </Button>
+        </div>
+        <div v-else>
+            <Table :headers="tableHeaders" @sort="handleSort">
+                <tr v-for="list in lists" :key="list.id" class="cursor-pointer hover:bg-gray-50"
+                    @click="router.push(`/app/lists/${list.id}`)">
+                    <ListItem :list="list" @delete="openDeleteModal" />
+                </tr>
+            </Table>
+        </div>
 
 
 
