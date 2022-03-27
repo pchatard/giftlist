@@ -62,6 +62,7 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/app/error",
 		name: "Erreur",
 		component: ErrorView,
+		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/profile",

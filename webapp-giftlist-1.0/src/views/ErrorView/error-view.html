@@ -1,3 +1,7 @@
-<div>
-    Error
-</div>
+<ErrorLayout back>
+    <div class="absolute top-0 right-0 left-0 bottom-0 flex flex-col justify-center items-center gap-4">
+        <ExclamationIcon class="w-1/6 text-red-800" />
+        <div>Une erreur est survenue...</div>
+        <Button btnStyle="danger-soft" @click="router.go(-1)">Retour</Button>
+    </div>
+</ErrorLayout>
