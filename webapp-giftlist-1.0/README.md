@@ -38,13 +38,13 @@
 
 ## Autres
 - [ ] Ecrire des tests
-- [ ] Gérer le refresh Auth0
 - [ ] Gestion des erreurs : Retravailler la snackbar
 - [ ] Accessibilité
 - [ ] (Clic droit personnalisé)
 - [x] Bouton retour
 - [x] Externaliser tous les labels dans des fichiers JSON
 - [x] Skeletons et animations chargement
+- [x] Gérer le refresh Auth0
 
 ## CSS
 - [ ] Uniformiser les styles
