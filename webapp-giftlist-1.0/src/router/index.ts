@@ -8,7 +8,6 @@ import {
 import Auth0 from "@/auth";
 import labels from "@/labels/fr/labels.json";
 import BookedGifts from "@/views/BookedGifts/BookedGifts.vue";
-import Redirect from "@/views/Redirect/Redirect.vue";
 import ErrorView from "@/views/ErrorView/ErrorView.vue";
 import Friends from "@/views/Friends/Friends.vue";
 import Gift from "@/views/Gift/Gift.vue";
@@ -19,6 +18,7 @@ import ListSettings from "@/views/ListSettings/ListSettings.vue";
 import NewGift from "@/views/NewGift/NewGift.vue";
 import NewList from "@/views/NewList/NewList.vue";
 import Profile from "@/views/Profile/Profile.vue";
+import Redirect from "@/views/Redirect/Redirect.vue";
 import Settings from "@/views/Settings/Settings.vue";
 import SharedList from "@/views/SharedList/SharedList.vue";
 import SharedLists from "@/views/SharedLists/SharedLists.vue";
