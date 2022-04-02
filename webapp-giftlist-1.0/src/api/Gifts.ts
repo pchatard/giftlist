@@ -23,78 +23,77 @@ const API_PATH_UNBOOK = (listId: string, giftId: string) =>
 
 export default class Gifts {
 	// Create a gift
+	// Possible Errors: 401, 422
 	static async create(
 		auth: Auth0Client,
 		listId: string,
 		gift: CreateGiftDTO
 	): Promise<GiftIdDTO | undefined> {
 		try {
-			const apiResponse: AxiosResponse<GiftIdDTO> = await GiftlistAPI.post(
+			const apiResponse: AxiosResponse<GiftIdDTO> | undefined = await GiftlistAPI.post(
 				auth,
 				API_PATH_GIFTS(listId),
 				{ ...gift }
 			);
 
-			if (apiResponse.status == APIStatusCodeEnum.OK) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.OK) {
 				return apiResponse.data;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar("Une erreur est survenue lors de la création du cadeau.");
+			}
 		}
 	}
 
 	// Get one list's gifts
+	// Possible Errors: 401, 422
 	static async getAll(auth: Auth0Client, listId: string): Promise<GiftDTO[] | undefined> {
 		try {
-			const apiResponse: AxiosResponse<GiftDTO[]> = await GiftlistAPI.get(
+			const apiResponse: AxiosResponse<GiftDTO[]> | undefined = await GiftlistAPI.get(
 				auth,
-				API_PATH_GIFTS(listId)
+				API_PATH_GIFTS(listId),
+				{},
+				true
 			);
 
-			if (apiResponse.status == APIStatusCodeEnum.OK) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.OK) {
 				return apiResponse.data;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				router.push("/app/error");
+			}
 		}
 	}
 
 	// Get a gift by its ID
+	// Possible Errors: 401, 422
 	static async getOne(
 		auth: Auth0Client,
 		listId: string,
 		giftId: string
 	): Promise<GiftDTO | undefined> {
 		try {
-			const apiResponse: AxiosResponse<GiftDTO> = await GiftlistAPI.get(
+			const apiResponse: AxiosResponse<GiftDTO> | undefined = await GiftlistAPI.get(
 				auth,
-				API_PATH_GIFT(listId, giftId)
+				API_PATH_GIFT(listId, giftId),
+				{},
+				true
 			);
 
-			if (apiResponse.status == APIStatusCodeEnum.OK) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.OK) {
 				return apiResponse.data;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				router.push("/app/error");
+			}
 		}
 	}
 
 	// Delete a gift
+	// Possible Errors: 401, 422
 	static async delete(
 		auth: Auth0Client,
 		listId: string,
@@ -103,20 +102,20 @@ export default class Gifts {
 		try {
 			const apiResponse = await GiftlistAPI.delete(auth, API_PATH_GIFT(listId, giftId));
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la suppression du cadeau."
+				);
+			}
 		}
 	}
 
 	// Edit a gift
+	// Possible Errors: 401, 422
 	static async edit(
 		auth: Auth0Client,
 		listId: string,
@@ -128,20 +127,20 @@ export default class Gifts {
 				...gift,
 			});
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la modification du cadeau."
+				);
+			}
 		}
 	}
 
 	// Hide a gift
+	// Possible Errors: 401, 422
 	static async hide(
 		auth: Auth0Client,
 		listId: string,
@@ -150,20 +149,20 @@ export default class Gifts {
 		try {
 			const apiResponse = await GiftlistAPI.put(auth, API_PATH_HIDE(listId, giftId));
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la modification du cadeau."
+				);
+			}
 		}
 	}
 
 	// Unhide a gift
+	// Possible Errors: 401, 422
 	static async unhide(
 		auth: Auth0Client,
 		listId: string,
@@ -172,20 +171,20 @@ export default class Gifts {
 		try {
 			const apiResponse = await GiftlistAPI.put(auth, API_PATH_UNHIDE(listId, giftId));
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la modification du cadeau."
+				);
+			}
 		}
 	}
 
 	// Fav a gift
+	// Possible Errors: 401, 422
 	static async fav(
 		auth: Auth0Client,
 		listId: string,
@@ -194,20 +193,20 @@ export default class Gifts {
 		try {
 			const apiResponse = await GiftlistAPI.put(auth, API_PATH_FAV(listId, giftId));
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la modification du cadeau."
+				);
+			}
 		}
 	}
 
 	// Unfav a gift
+	// Possible Errors: 401, 422
 	static async unfav(
 		auth: Auth0Client,
 		listId: string,
@@ -216,20 +215,20 @@ export default class Gifts {
 		try {
 			const apiResponse = await GiftlistAPI.put(auth, API_PATH_UNFAV(listId, giftId));
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la modification du cadeau."
+				);
+			}
 		}
 	}
 
 	// Book a gift
+	// Possible Errors: 401, 422
 	static async book(
 		auth: Auth0Client,
 		listId: string,
@@ -238,20 +237,20 @@ export default class Gifts {
 		try {
 			const apiResponse = await GiftlistAPI.put(auth, API_PATH_BOOK(listId, giftId));
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la réservation du cadeau."
+				);
+			}
 		}
 	}
 
 	// Unbook a gift
+	// Possible Errors: 401, 422
 	static async unbook(
 		auth: Auth0Client,
 		listId: string,
@@ -260,16 +259,15 @@ export default class Gifts {
 		try {
 			const apiResponse = await GiftlistAPI.put(auth, API_PATH_UNBOOK(listId, giftId));
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			// Errors: 401, 422
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de l'annulation de la réservation du cadeau."
+				);
+			}
 		}
 	}
 }

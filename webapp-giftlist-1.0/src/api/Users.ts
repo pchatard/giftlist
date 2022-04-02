@@ -10,95 +10,105 @@ import GiftlistAPI from "./GiftlistAPI";
 
 const API_PATH_ME = "/users/me";
 const API_PATH_GET_ALL = "/users";
-const API_PATH_GET_BY_EMAIL = (email: string) => `/users/${email}`;
+const API_PATH_GET_BY_EMAIL = (email: string) => `/users/profiles/${email}`;
 
 export default class Users {
 	// Get my information
 	static async me(auth: Auth0Client): Promise<UserDTO | undefined> {
 		try {
-			const apiResponse: AxiosResponse<UserDTO> = await GiftlistAPI.get(auth, API_PATH_ME);
+			const apiResponse: AxiosResponse<UserDTO> | undefined = await GiftlistAPI.get(
+				auth,
+				API_PATH_ME,
+				{},
+				true
+			);
 
-			if (apiResponse.status == APIStatusCodeEnum.OK) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.OK) {
 				return apiResponse.data;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: Use this error in an error state module ?
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				router.push("/app/error");
+			}
 		}
 	}
 
 	// Edit my information
+	// Possible errors (401, 422)
 	static async edit(auth: Auth0Client, user: PartialUserDTO): Promise<boolean | undefined> {
 		try {
-			const apiResponse: AxiosResponse<void> = await GiftlistAPI.put(auth, API_PATH_ME, {
-				...user,
-			});
+			const apiResponse: AxiosResponse<void> | undefined = await GiftlistAPI.put(
+				auth,
+				API_PATH_ME,
+				{
+					...user,
+				}
+			);
 
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			// TODO: errors (401, 422)
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la modification de l'utilisateur."
+				);
+			}
 		}
 	}
 
 	// Delete my account
-	static async delete(auth: Auth0Client): Promise<boolean> {
+	static async delete(auth: Auth0Client): Promise<boolean | undefined> {
 		try {
 			const apiResponse = await GiftlistAPI.delete(auth, API_PATH_ME);
-			if (apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.NO_CONTENT) {
 				return true;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			const axiosError = error as AxiosError;
-			GiftlistAPI.showErrorSnackbar(axiosError);
-			return false;
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la suppression de l'utilisateur."
+				);
+			}
 		}
 	}
 
 	// Get all users
 	static async getAll(auth: Auth0Client): Promise<UserDTO[] | undefined> {
 		try {
-			const apiResponse: AxiosResponse<UserDTO[]> = await GiftlistAPI.get(
+			const apiResponse: AxiosResponse<UserDTO[]> | undefined = await GiftlistAPI.get(
 				auth,
-				API_PATH_GET_ALL
+				API_PATH_GET_ALL,
+				{},
+				true
 			);
 
-			if (apiResponse.status == APIStatusCodeEnum.OK) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.OK) {
 				return apiResponse.data;
-			} else {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				router.push("/app/error");
+			}
 		}
 	}
 
 	// Get one user by email
 	static async getByEmail(auth: Auth0Client, email: string): Promise<UserDTO | undefined> {
 		try {
-			const apiResponse: AxiosResponse<UserDTO> = await GiftlistAPI.get(
+			const apiResponse: AxiosResponse<UserDTO> | undefined = await GiftlistAPI.get(
 				auth,
 				API_PATH_GET_BY_EMAIL(email)
 			);
-			if (apiResponse.status == APIStatusCodeEnum.OK) {
+			if (apiResponse && apiResponse.status == APIStatusCodeEnum.OK) {
 				return apiResponse.data;
-			} else if (apiResponse.status == APIStatusCodeEnum.VALIDATION_ERROR) {
-				throw new Error(apiResponse.statusText);
 			}
 		} catch (error) {
-			const axiosError = error as AxiosError;
-			router.push("/app/error");
+			if ((error as AxiosError).response?.status !== APIStatusCodeEnum.UNAUTHORIZED) {
+				GiftlistAPI.showErrorSnackbar(
+					"Une erreur est survenue lors de la récupération de l'utilisateur."
+				);
+			}
 		}
 	}
 }

@@ -38,9 +38,9 @@
 
 ## Autres
 - [ ] Ecrire des tests
-- [ ] Gestion des erreurs : Retravailler la snackbar
 - [ ] Accessibilité
 - [ ] (Clic droit personnalisé)
+- [x] Gestion des erreurs : Retravailler la snackbar
 - [x] Bouton retour
 - [x] Externaliser tous les labels dans des fichiers JSON
 - [x] Skeletons et animations chargement
