@@ -16,15 +16,16 @@
             <div class="flex items-center">
                 <UserCircleIcon class="w-5 mr-2 text-indigo-600" />
                 <span>
-                    {{ gift.owner }}
+                    <!-- {{ gift.owner }} -->
                 </span>
             </div>
             <div class="flex items-center text-sm text-gray-500">
                 <span>
-                    {{ gift.list.name }}
+                    {{ gift.category }}
                 </span>
             </div>
         </div>
-        <ExternalLinkIcon class="w-5 text-gray-400 cursor-pointer hover:text-indigo-600" @click.stop="openInNewTab" />
+        <ExternalLinkIcon v-if="gift.linkURL" class="w-5 text-gray-400 cursor-pointer hover:text-indigo-600"
+            @click.stop="openInNewTab" />
     </div>
 </div>

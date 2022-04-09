@@ -1,4 +1,4 @@
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 
 import {
 	CurrencyEuroIcon,
@@ -6,6 +6,7 @@ import {
 	ShoppingCartIcon,
 	UserCircleIcon,
 } from "@heroicons/vue/outline";
+import { GiftDTO } from "@/types/dto/GiftDTO";
 
 export default defineComponent({
 	name: "BookedGift",
@@ -17,17 +18,21 @@ export default defineComponent({
 	},
 	props: {
 		gift: {
-			type: Object,
+			type: Object as PropType<GiftDTO>,
 			required: true,
 		},
 	},
 	setup(props) {
 		const price = computed(() => {
-			return props.gift.price.toFixed(2) + "€";
+			const giftPrice = props.gift.price;
+			if (giftPrice) {
+				return giftPrice.toFixed(2) + "€";
+			}
+			return "-";
 		});
 
 		const openInNewTab = () => {
-			const link = "https://www.google.com";
+			const link = props.gift.linkURL;
 			window.open(link, "_blank");
 			self.focus();
 		};
