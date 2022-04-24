@@ -17,7 +17,7 @@ import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
+import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon, PlusIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "List",
@@ -36,6 +36,7 @@ export default defineComponent({
 		Modal,
 		Table,
 		Loader,
+		PlusIcon,
 	},
 	setup() {
 		/******** Basic imports ********/
@@ -91,10 +92,10 @@ export default defineComponent({
 		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
 		const gifts: ComputedRef<GiftDTO[]> = computed(() => state.gifts.all);
 		const isListView = computed(() => {
-			if (state.preferences.displayList === undefined) {
+			if (state.preferences.listView === undefined) {
 				return true;
 			} else {
-				return state.preferences.displayList;
+				return state.preferences.listView;
 			}
 		});
 
@@ -123,8 +124,7 @@ export default defineComponent({
 		};
 
 		const toggleDisplayMode = () => {
-			console.log("Grid mode is disabled for now");
-			// dispatch("toggleListDisplayMode");
+			dispatch("toggleListView", !isListView.value);
 		};
 
 		const showSharingOptionsModal = () => {

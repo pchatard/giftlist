@@ -1,10 +1,31 @@
-<div class="flex border border-indigo-600 rounded-md overflow-hidden">
-    <div :class="{ 'bg-indigo-600': !isGridView }" class="flex flex-1 justify-center items-center py-3 cursor-pointer"
-        @click="$emit('change')">
-        <ViewListIcon :class="isGridView ? 'text-indigo-600' : 'text-white'" class="h-5 w-5" />
-    </div>
-    <div :class="{ 'bg-indigo-600': isGridView }" class="flex flex-1 justify-center items-center py-3 cursor-pointer"
-        @click="$emit('change')">
-        <ViewGridIcon class="h-5 w-5" :class="isGridView ? 'text-white' : 'text-indigo-600'" />
-    </div>
+<div class="flex items-center">
+    <ViewListIcon class="w-4" :class="isGrid ? 'text-gray-400' : 'text-indigo-600'" />
+
+    <Switch v-model="isGrid" :class="{
+        'bg-indigo-600 hover:bg-indigo-600': isGrid,
+        'bg-gray-200': !isGrid,
+    }" class="
+        relative
+        inline-flex
+        items-center
+        h-6
+        transition-colors
+        rounded-full
+        w-11
+        mx-2
+        my-1
+        focus:outline-none
+        hover:bg-gray-300
+    ">
+        <span :class="isGrid ? 'translate-x-6' : 'translate-x-1'" class="
+            inline-block
+            w-4
+            h-4
+            transition-transform
+            transform
+            bg-white
+            rounded-full
+        " />
+    </Switch>
+    <ViewGridIcon class="w-4" :class="isGrid ? 'text-indigo-600' : 'text-gray-400'" />
 </div>

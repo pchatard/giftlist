@@ -1,13 +1,4 @@
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	inject,
-	onMounted,
-	onUnmounted,
-	ref,
-	Ref,
-} from "vue";
+import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 

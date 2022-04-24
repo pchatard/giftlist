@@ -1,4 +1,4 @@
-import { defineComponent, inject, PropType, toRefs } from "vue";
+import { defineComponent, inject, PropType } from "vue";
 import { useStore } from "vuex";
 
 import TableData from "@/components/TableData/TableData.vue";
@@ -36,7 +36,7 @@ export default defineComponent({
 			default: false,
 		},
 	},
-	emits: ["book", "details", "delete"],
+	emits: ["book", "delete"],
 	setup(props, { emit }) {
 		const auth = inject("Auth") as Auth0Client;
 		const { dispatch } = useStore();

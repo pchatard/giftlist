@@ -1,43 +1,47 @@
-<div class="max-w-sm min-w-sm border border-gray-200 shadow-md rounded-md p-4 relative">
-    <HeartIcon v-show="gift.favorite" class="
-            absolute
-            w-10
-            text-red-400
-            top-0
-            left-0
-            transform
-            -translate-x-1/2 -translate-y-1/3
-            -rotate-12
-            cursor-pointer
-        " />
-    <div class="absolute top-2 right-2 flex" v-if="!shared">
-        <router-link to="">
-            <PencilIcon class="w-8 cursor-pointer rounded-md text-gray-400 p-1 hover:bg-gray-200" />
-        </router-link>
-        <a href="#" ref="noopener noreferrer">
-            <ExternalLinkIcon class="w-8 cursor-pointer rounded-md text-gray-400 p-1 hover:bg-gray-200" />
-        </a>
-        <TrashIcon class="
-                w-8
-                cursor-pointer
-                rounded-md
-                text-gray-400
-                p-1
-                hover:bg-red-200 hover:text-red-400
-            " />
-    </div>
-    <div class="flex items-stretch">
-        <div class="w-1/4 p-4 pl-0 grid place-items-center">
-            <ShoppingCartIcon class="w-10 text-indigo-600" />
+<div class="border border-gray-200 shadow-sm rounded-md p-4 flex flex-col cursor-pointer">
+    <div class="flex items-center">
+        <ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-gray-100 text-yellow-400" />
+        <div class="flex flex-col">
+            <span class="font-semibold">
+                {{ gift.title }}
+            </span>
+            <div class="flex items-center">
+                <CurrencyEuroIcon class="w-4 mr-1 text-indigo-600" />
+                <span class="text-sm">{{ price }}</span>
+            </div>
         </div>
-        <div class="flex flex-col items-start justify-center flex-1 pl-2">
-            <div class="text-md font-bold">Titre</div>
-            <div class="text-sm">Autres infos</div>
-            <div class="text-md">13€</div>
+        <div class="ml-auto self-start flex gap-2 flex-col items-end justify-between">
+            <HeartIcon v-if="gift.isFavorite" @click.stop="unfavGift" class="w-6 h-6 text-red-400 cursor-pointer" />
+            <HeartIconOutline v-else class="w-6 h-6 text-gray-400 cursor-pointer" @click.stop="favGift" />
+            <span v-if="shared" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="{
+                'bg-red-100 text-red-800': gift.isBooked,
+                'bg-green-100 text-green-800': !gift.isBooked,
+            }">
+                {{ gift.isBooked ? labels.gifts.status.booked : labels.gifts.status.available }}
+            </span>
         </div>
     </div>
-    <div class="mt-4 flex gap-2" v-if="shared">
-        <Button class="flex-1" btnStyle="secondary">Détails</Button>
-        <Button class="flex-1">Réserver</Button>
+    <div class="mt-4 flex justify-between items-center">
+        <div>
+            <div class="flex items-center text-sm text-gray-500">
+                <span>
+                    {{ gift.category }}
+                </span>
+            </div>
+            <div class="flex items-center">
+                <UserCircleIcon class="w-5 mr-2 text-indigo-600" />
+                <span>
+                    Creator name
+                </span>
+            </div>
+        </div>
+        <div class="flex self-end gap-4">
+            <ExternalLinkIcon v-if="gift.linkURL" class="w-6 text-gray-400 cursor-pointer hover:text-indigo-600"
+                @click.stop="openInNewTab" />
+            <TicketIcon v-if="shared" class="w-6 text-gray-400 cursor-pointer hover:text-red-600"
+                @click.stop="openBookGiftModal" />
+            <TrashIcon v-else class="w-6 text-gray-400 cursor-pointer hover:text-red-600"
+                @click.stop="openDeleteGiftModal" />
+        </div>
     </div>
 </div>

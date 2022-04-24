@@ -1,11 +1,9 @@
-import { defineComponent, inject, onMounted, ref, watch } from "vue";
-import { useStore } from "vuex";
+import { defineComponent, onMounted, ref } from "vue";
 
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
-import { PreferencesState } from "@/store/preferences";
 import {
 	RadioGroup,
 	RadioGroupDescription,
@@ -27,21 +25,18 @@ export default defineComponent({
 		Subtitle,
 	},
 	setup() {
-		const { dispatch, state } = useStore();
-		const auth = ref(inject("Auth") as any);
-
 		const selectedDisplayList = ref();
 		const selectedBookingShowOthers = ref();
 
 		onMounted(async () => {
-			dispatch("initializePreferences", auth.value.user.sub).then((data: PreferencesState) => {
-				selectedDisplayList.value = displayListOptions.find(
-					(opt) => opt.value === data.displayList
-				);
-				selectedBookingShowOthers.value = bookingShowOthersOptions.find(
-					(opt) => opt.value === data.bookingShowOthers
-				);
-			});
+			// dispatch("initializePreferences", auth.value.user.sub).then((data: PreferencesState) => {
+			// 	selectedDisplayList.value = displayListOptions.find(
+			// 		(opt) => opt.value === data.displayList
+			// 	);
+			// 	selectedBookingShowOthers.value = bookingShowOthersOptions.find(
+			// 		(opt) => opt.value === data.bookingShowOthers
+			// 	);
+			// });
 		});
 
 		const displayListOptions = [
@@ -69,28 +64,28 @@ export default defineComponent({
 			},
 		];
 
-		watch(selectedDisplayList, () => {
-			console.log("Grid mode is disabled for now");
+		// watch(selectedDisplayList, () => {
+		// 	console.log("Grid mode is disabled for now");
 
-			const metadata = {
-				...state.preferences,
-				displayList: selectedDisplayList.value?.value,
-			};
+		// 	const metadata = {
+		// 		...state.preferences,
+		// 		displayList: selectedDisplayList.value?.value,
+		// 	};
 
-			dispatch("changePreferences", metadata);
-		});
+		// 	dispatch("changePreferences", metadata);
+		// });
 
-		watch(selectedBookingShowOthers, () => {
-			const metadata = {
-				...state.preferences,
-				bookingShowOthers: selectedBookingShowOthers.value?.value,
-			};
-			dispatch("changePreferences", metadata);
-		});
+		// watch(selectedBookingShowOthers, () => {
+		// 	const metadata = {
+		// 		...state.preferences,
+		// 		bookingShowOthers: selectedBookingShowOthers.value?.value,
+		// 	};
+		// 	dispatch("changePreferences", metadata);
+		// });
 
-		const savePreferences = async () => {
-			dispatch("savePreferences", auth.value.user.sub);
-		};
+		// const savePreferences = async () => {
+		// 	dispatch("savePreferences", auth.value.user.sub);
+		// };
 
 		return {
 			labels,
@@ -98,7 +93,6 @@ export default defineComponent({
 			displayListOptions,
 			selectedBookingShowOthers,
 			bookingShowOthersOptions,
-			savePreferences,
 		};
 	},
 });

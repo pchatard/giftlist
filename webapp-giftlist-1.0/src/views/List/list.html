@@ -14,8 +14,14 @@
         </div>
         <div v-else>
             <div v-if="!isListView"
-                class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid-flow-row gap-x-4 gap-y-8">
-                <GiftGridView v-for="gift in gifts" :key="gift.id" :gift="gift" />
+                class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 grid-flow-row gap-x-4 gap-y-8">
+                <div @click="router.push(`/app/lists/${list.id}/new-gift`)"
+                    class="border border-gray-200  shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer">
+                    <PlusIcon class="w-8 text-gray-400" />
+                    <span class="">{{ labels.list.empty.button }}</span>
+                </div>
+                <GiftGridView @click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)" v-for="gift in gifts"
+                    :key="gift.id" :gift="gift" @delete="handleDeleteModal" />
             </div>
             <Table v-else :headers="tableHeaders" @sort="handleSort">
                 <tr v-for="gift in gifts" :key="gift.id" class="cursor-pointer hover:bg-gray-50"
@@ -77,7 +83,7 @@
             <CogIcon class="h-4 w-4 mr-2" />
             {{ labels.lists.buttons.settings }}
         </span>
-        <GridListToggle :isGridView="!isListView" class="w-28" @change="toggleDisplayMode" />
+        <GridListToggle :isGridView="!isListView" class="ml-4 w-28" @change="toggleDisplayMode" />
     </template>
 
 </DefaultLayout>
