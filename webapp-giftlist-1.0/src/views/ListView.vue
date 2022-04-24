@@ -6,54 +6,31 @@
 		back-button-link="/app/lists"
 	>
 		<div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
-			<Loader class="w-16 h-16" />
+			<GiftlistLoader class="w-16 h-16" />
 		</div>
 
 		<div v-else>
 			<div
 				v-if="gifts.length === 0"
-				class="
-					absolute
-					w-full
-					h-full
-					flex flex-col
-					justify-center
-					items-center
-					text-gray-400
-					gap-8
-				"
+				class="absolute w-full h-full flex flex-col justify-center items-center text-gray-400 gap-8"
 			>
 				<div class="text-lg">{{ labels.list.empty.description }}</div>
 				<GiftIcon class="w-1/6" />
-				<Button btn-style="primary-soft" @click="router.push(`/app/lists/${list.id}/new-gift`)">
+				<GiftlistButton
+					btn-style="primary-soft"
+					@click="router.push(`/app/lists/${list.id}/new-gift`)"
+				>
 					{{ labels.list.empty.button }}
-				</Button>
+				</GiftlistButton>
 			</div>
 			<div v-else>
 				<div
 					v-if="!isListView"
-					class="
-						my-4
-						grid grid-cols-1
-						sm:grid-cols-2
-						md:grid-cols-4
-						grid-flow-row
-						gap-x-4 gap-y-8
-					"
+					class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 grid-flow-row gap-x-4 gap-y-8"
 				>
 					<div
 						@click="router.push(`/app/lists/${list.id}/new-gift`)"
-						class="
-							border border-gray-200
-							shadow-sm
-							rounded-md
-							p-4
-							flex flex-col
-							gap-2
-							items-center
-							justify-center
-							cursor-pointer
-						"
+						class="border border-gray-200 shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer"
 					>
 						<PlusIcon class="w-8 text-gray-400" />
 						<span class="">{{ labels.list.empty.button }}</span>
@@ -66,7 +43,7 @@
 						@delete="handleDeleteModal"
 					/>
 				</div>
-				<Table v-else :headers="tableHeaders" @sort="handleSort">
+				<GiftlistTable v-else :headers="tableHeaders" @sort="handleSort">
 					<tr
 						v-for="gift in gifts"
 						:key="gift.id"
@@ -75,9 +52,9 @@
 					>
 						<GiftListView :gift="gift" @delete="handleDeleteModal" />
 					</tr>
-				</Table>
+				</GiftlistTable>
 			</div>
-			<Modal
+			<GiftlistModal
 				:show="sharingOptionsModal.showModal"
 				:title="sharingOptionsModal.title"
 				:cancel-text="sharingOptionsModal.cancelText"
@@ -114,16 +91,16 @@
 						:disabled="!list.isShared"
 					/>
 				</div>
-				<Button
+				<GiftlistButton
 					class="mb-4 w-full"
 					:btn-style="list.isShared ? 'danger-soft' : 'green-soft'"
 					:loading="shareButtonIsLoading"
 					@click="sharingOptionsModal.confirm"
-					>{{ sharingOptionsModal.confirmText }}</Button
+					>{{ sharingOptionsModal.confirmText }}</GiftlistButton
 				>
-			</Modal>
+			</GiftlistModal>
 
-			<Modal
+			<GiftlistModal
 				:show="deleteModal.showModal"
 				:title="deleteModal.title"
 				:confirm-text="deleteModal.confirmText"
@@ -132,23 +109,12 @@
 				:btn-loading="deleteButtonIsLoading"
 				type="danger"
 			>
-			</Modal>
+			</GiftlistModal>
 		</div>
 		<template #commands>
 			<span
 				v-if="list.isShared"
-				class="
-					flex
-					items-center
-					mr-4
-					text-green-600
-					font-medium
-					hover:text-green-900 hover:bg-green-100
-					px-2
-					py-1
-					rounded-md
-					cursor-pointer
-				"
+				class="flex items-center mr-4 text-green-600 font-medium hover:text-green-900 hover:bg-green-100 px-2 py-1 rounded-md cursor-pointer"
 				@click="showSharingOptionsModal"
 			>
 				<LockOpenIcon class="h-4 w-4 mr-2" />
@@ -156,39 +122,20 @@
 			</span>
 			<span
 				v-else
-				class="
-					flex
-					items-center
-					mr-4
-					text-red-600
-					font-medium
-					hover:text-red-900 hover:bg-red-100
-					px-2
-					py-1
-					rounded-md
-					cursor-pointer
-				"
+				class="flex items-center mr-4 text-red-600 font-medium hover:text-red-900 hover:bg-red-100 px-2 py-1 rounded-md cursor-pointer"
 				@click="showSharingOptionsModal"
 			>
 				<LockClosedIcon class="h-4 w-4 mr-2" />
 				{{ labels.lists.status.private }}
 			</span>
 			<span
-				class="
-					flex
-					items-center
-					mr-4
-					text-indigo-600
-					font-medium
-					hover:text-indigo-900
-					cursor-pointer
-				"
+				class="flex items-center mr-4 text-indigo-600 font-medium hover:text-indigo-900 cursor-pointer"
 				@click="router.push(`/app/lists/${list.id}/settings`)"
 			>
 				<CogIcon class="h-4 w-4 mr-2" />
 				{{ labels.lists.buttons.settings }}
 			</span>
-			<GridListToggle
+			<ToggleViewMode
 				:is-grid-view="!isListView"
 				class="ml-4 w-28"
 				@change="toggleDisplayMode"
@@ -202,27 +149,30 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted,
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import Button from "@/components/Button/Button.vue";
+import labels from "@/labels/fr/labels.json";
+
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftGridView from "@/components/GiftGridView.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
+import GiftlistLoader from "@/components/GiftlistLoader.vue";
+import GiftlistModal from "@/components/GiftlistModal.vue";
+import GiftlistTable from "@/components/GiftlistTable.vue";
 import GiftListView from "@/components/GiftListView.vue";
-import GridListToggle from "@/components/GridListToggle/ToggleListView.vue";
 import InputLink from "@/components/InputLink.vue";
-import InputText from "@/components/InputText/InputText.vue";
-import Loader from "@/components/Loader/Loader.vue";
-import Modal from "@/components/Modal/GiftlistModal.vue";
-import Table from "@/components/GiftlistTable.vue";
-import labels from "@/labels/fr/labels.json";
+import InputText from "@/components/InputText.vue";
+import ToggleViewMode from "@/components/ToggleViewMode.vue";
+
+import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon, PlusIcon } from "@heroicons/vue/outline";
+
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon, PlusIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "ListView",
 	components: {
-		Button,
+		GiftlistButton,
 		CogIcon,
 		LockClosedIcon,
 		LockOpenIcon,
@@ -230,12 +180,12 @@ export default defineComponent({
 		GiftIcon,
 		GiftGridView,
 		GiftListView,
-		GridListToggle,
+		ToggleViewMode,
 		InputText,
 		InputLink,
-		Modal,
-		Table,
-		Loader,
+		GiftlistModal,
+		GiftlistTable,
+		GiftlistLoader,
 		PlusIcon,
 	},
 	setup() {

@@ -29,7 +29,7 @@
 				:class="disabled ? 'text-gray-600' : 'text-indigo-600'"
 			/>
 		</button>
-		<Modal
+		<GiftlistModal
 			:show="showDatePicker"
 			:title="label"
 			confirm-text="Confirmer"
@@ -68,19 +68,19 @@
 					@year="handleYearChange"
 				/>
 			</div>
-		</Modal>
+		</GiftlistModal>
 	</InputWrapper>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from "vue";
 
-import DatePickerDay from "@/components/DatePickerDay/DatePickerDay.vue";
-import DatePickerHeader from "@/components/DatePickerHeader/DatePickerHeader.vue";
-import DatePickerMonth from "@/components/DatePickerMonth/DatePickerMonth.vue";
-import DatePickerYear from "@/components/DatePickerYear/DatePickerYear.vue";
-import InputWrapper from "@/components/InputWrapper/InputWrapper.vue";
-import Modal from "@/components/Modal/Modal.vue";
+import DatePickerDay from "@/components/DatePickerDay.vue";
+import DatePickerHeader from "@/components/DatePickerHeader.vue";
+import DatePickerMonth from "@/components/DatePickerMonth.vue";
+import DatePickerYear from "@/components/DatePickerYear.vue";
+import InputWrapper from "@/components/InputWrapper.vue";
+import GiftlistModal from "@/components/GiftlistModal.vue";
 import labels from "@/labels/fr/labels.json";
 import { CalendarIcon } from "@heroicons/vue/outline";
 
@@ -89,7 +89,7 @@ export default defineComponent({
 	components: {
 		CalendarIcon,
 		InputWrapper,
-		Modal,
+		GiftlistModal,
 		DatePickerHeader,
 		DatePickerDay,
 		DatePickerMonth,

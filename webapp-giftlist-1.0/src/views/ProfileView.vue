@@ -10,7 +10,7 @@
 				</div>
 
 				<div class="w-1/4">
-					<Subtitle>{{ user.displayName }}</Subtitle>
+					<GiftlistSubtitle>{{ user.displayName }}</GiftlistSubtitle>
 					<div>{{ labels.profile.email }} {{ user.email }}</div>
 					<button
 						v-if="!auth.user.email_verified"
@@ -72,7 +72,7 @@
 			<div class="flex items-stretch divide-x">
 				<div class="flex-1 p-8">
 					<div class="pb-5">
-						<Subtitle>{{ labels.profile.editEmailTitle }}</Subtitle>
+						<GiftlistSubtitle>{{ labels.profile.editEmailTitle }}</GiftlistSubtitle>
 						<div class="mt-2 mb-4">
 							<p>
 								{{ labels.profile.editEmailCurrent }} <strong>{{ user.email }}</strong>
@@ -81,38 +81,38 @@
 								{{ labels.profile.editEmailText }}
 							</p>
 						</div>
-						<Button btn-style="secondary" class="w-1/2" @click="changeEmail">
+						<GiftlistButton btn-style="secondary" class="w-1/2" @click="changeEmail">
 							{{ labels.profile.editEmailButton }}
-						</Button>
+						</GiftlistButton>
 					</div>
 					<div class="pt-5">
-						<Subtitle>{{ labels.profile.editPasswordTitle }}</Subtitle>
+						<GiftlistSubtitle>{{ labels.profile.editPasswordTitle }}</GiftlistSubtitle>
 						<p class="mt-2 mb-4">
 							{{ labels.profile.editPasswordText }}
 						</p>
-						<Button btn-style="secondary" class="w-1/2" @click="changePassword">
+						<GiftlistButton btn-style="secondary" class="w-1/2" @click="changePassword">
 							{{ labels.profile.editPasswordButton }}
-						</Button>
+						</GiftlistButton>
 					</div>
 				</div>
 				<div class="flex-1 flex flex-col p-8">
 					<div class="pb-5">
-						<Subtitle>{{ labels.profile.dataTitle }}</Subtitle>
+						<GiftlistSubtitle>{{ labels.profile.dataTitle }}</GiftlistSubtitle>
 						<p class="mt-2 mb-4">
 							{{ labels.profile.dataText }}
 						</p>
-						<Button btn-style="secondary" class="w-1/2" @click="downloadData">
+						<GiftlistButton btn-style="secondary" class="w-1/2" @click="downloadData">
 							{{ labels.profile.dataButton }}
-						</Button>
+						</GiftlistButton>
 					</div>
 					<div class="pt-5">
-						<Subtitle>{{ labels.profile.deleteTitle }}</Subtitle>
+						<GiftlistSubtitle>{{ labels.profile.deleteTitle }}</GiftlistSubtitle>
 						<p class="mt-2 mb-4">
 							{{ labels.profile.deleteText }}
 						</p>
-						<Button btn-style="danger" class="w-1/2" @click="deleteAccount">
+						<GiftlistButton btn-style="danger" class="w-1/2" @click="deleteAccount">
 							{{ labels.profile.deleteButton }}
-						</Button>
+						</GiftlistButton>
 					</div>
 				</div>
 			</div>
@@ -124,15 +124,15 @@
 import { computed, defineComponent, inject, onMounted, Ref } from "vue";
 import { useStore } from "vuex";
 
-import Button from "@/components/Button/Button.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
-import Subtitle from "@/components/Subtitle.vue";
+import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
 import labels from "@/labels/fr/labels.json";
 import { UserDTO } from "@/types/dto/UserDTO";
 
 export default defineComponent({
 	name: "ProfileView",
-	components: { Button, DefaultLayout, Subtitle },
+	components: { GiftlistButton, DefaultLayout, GiftlistSubtitle },
 	setup() {
 		onMounted(async () => {
 			await dispatch("getUser", auth);

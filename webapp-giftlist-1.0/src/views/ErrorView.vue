@@ -5,7 +5,7 @@
 		>
 			<ExclamationIcon class="w-1/6 text-red-800" />
 			<div>Une erreur est survenue...</div>
-			<Button btn-style="danger-soft" @click="router.go(-1)">Retour</Button>
+			<GiftlistButton btn-style="danger-soft" @click="router.go(-1)">Retour</GiftlistButton>
 		</div>
 	</ErrorLayout>
 </template>
@@ -13,9 +13,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 
-import Button from "@/components/Button/Button.vue";
-import ErrorLayout from "@/components/DefaultLayout.vue";
 import router from "@/router";
+
+import ErrorLayout from "@/components/DefaultLayout.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
+
 import { ExclamationIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
@@ -23,7 +25,7 @@ export default defineComponent({
 	components: {
 		ErrorLayout,
 		ExclamationIcon,
-		Button,
+		GiftlistButton,
 	},
 	setup() {
 		return {

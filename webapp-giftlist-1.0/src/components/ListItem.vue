@@ -1,16 +1,16 @@
 <template>
-	<TableData>
+	<GiftlistTableData>
 		<ViewListIcon class="w-5 h-5 mx-auto text-yellow-400" />
-	</TableData>
-	<TableData>
+	</GiftlistTableData>
+	<GiftlistTableData>
 		<div class="flex items-center">
 			<div class="text-sm font-medium text-gray-900 whitespace-normal">{{ list.title }}</div>
 		</div>
-	</TableData>
-	<TableData>
+	</GiftlistTableData>
+	<GiftlistTableData>
 		<div class="text-sm text-gray-500">{{ shared ? "Mon copain" : "Moi" }}</div>
-	</TableData>
-	<TableData v-show="!shared">
+	</GiftlistTableData>
+	<GiftlistTableData v-show="!shared">
 		<span
 			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
 			:class="{
@@ -20,10 +20,10 @@
 		>
 			{{ list.isShared ? labels.lists.status.public : labels.lists.status.private }}
 		</span>
-	</TableData>
-	<TableData class="text-sm text-gray-500">
+	</GiftlistTableData>
+	<GiftlistTableData class="text-sm text-gray-500">
 		{{ list.closureDate ? list.closureDate : "-" }}
-	</TableData>
+	</GiftlistTableData>
 
 	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 		<button
@@ -63,7 +63,7 @@
 import { defineComponent, PropType } from "vue";
 import { useRouter } from "vue-router";
 
-import TableData from "@/components/TableData/GiftlistTableData.vue";
+import GiftlistTableData from "@/components/GiftlistTableData.vue";
 import labels from "@/labels/fr/labels.json";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { CogIcon, InformationCircleIcon, TrashIcon, ViewListIcon } from "@heroicons/vue/outline";
@@ -72,7 +72,7 @@ export default defineComponent({
 	name: "ListItem",
 	components: {
 		InformationCircleIcon,
-		TableData,
+		GiftlistTableData,
 		TrashIcon,
 		ViewListIcon,
 		CogIcon,

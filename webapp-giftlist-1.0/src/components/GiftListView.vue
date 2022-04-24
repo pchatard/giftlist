@@ -1,5 +1,5 @@
 <template>
-	<TableData>
+	<GiftlistTableData>
 		<HeartIcon
 			v-if="gift.isFavorite"
 			@click.stop="unfavGift"
@@ -10,23 +10,23 @@
 			class="w-7 h-7 mx-auto text-gray-400 cursor-pointer"
 			@click.stop="favGift"
 		/>
-	</TableData>
-	<TableData>
+	</GiftlistTableData>
+	<GiftlistTableData>
 		<div>
 			<div class="text-sm font-medium text-gray-900 whitespace-normal">
 				{{ gift.title }}
 			</div>
 			<div v-if="gift.brand" class="text-sm text-gray-500">{{ gift.brand }}</div>
 		</div>
-	</TableData>
+	</GiftlistTableData>
 
-	<TableData>
+	<GiftlistTableData>
 		<div class="flex items-center">
 			<ShoppingCartIcon class="w-5 h-5 text-yellow-400" />
 			<div class="text-sm text-gray-500 ml-2">{{ gift.category }}</div>
 		</div>
-	</TableData>
-	<TableData v-show="shared">
+	</GiftlistTableData>
+	<GiftlistTableData v-show="shared">
 		<span
 			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
 			:class="{
@@ -36,11 +36,11 @@
 		>
 			{{ gift.isBooked ? labels.gifts.status.booked : labels.gifts.status.available }}
 		</span>
-	</TableData>
-	<TableData class="text-sm text-gray-500" content="Aujourd'hui" />
-	<TableData>
+	</GiftlistTableData>
+	<GiftlistTableData class="text-sm text-gray-500" content="Aujourd'hui" />
+	<GiftlistTableData>
 		<div class="text-sm text-gray-500">{{ gift.price ? gift.price + "€" : "-" }}</div>
-	</TableData>
+	</GiftlistTableData>
 	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 		<button
 			@click.stop="openLinkInNewTab"
@@ -88,7 +88,7 @@
 import { defineComponent, inject, PropType } from "vue";
 import { useStore } from "vuex";
 
-import TableData from "@/components/TableData/TableData.vue";
+import GiftlistTableData from "@/components/GiftlistTableData.vue";
 import labels from "@/labels/fr/labels.json";
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
@@ -109,7 +109,7 @@ export default defineComponent({
 		HeartIcon,
 		HeartIconOutline,
 		ShoppingCartIcon,
-		TableData,
+		GiftlistTableData,
 		TicketIcon,
 		TrashIcon,
 	},

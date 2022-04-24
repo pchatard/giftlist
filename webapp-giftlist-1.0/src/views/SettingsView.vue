@@ -1,7 +1,7 @@
 <template>
 	<DefaultLayout :title="labels.titles.settings" back>
 		<section class="my-4">
-			<Subtitle>Affichage</Subtitle>
+			<GiftlistSubtitle>Affichage</GiftlistSubtitle>
 			<div>
 				<h3 class="font-medium text-xl">Mode d'affichage des cadeaux</h3>
 				<RadioGroup v-model="selectedDisplayList">
@@ -53,7 +53,7 @@
 			</div>
 		</section>
 		<section class="my-4">
-			<Subtitle>Fonctionnement</Subtitle>
+			<GiftlistSubtitle>Fonctionnement</GiftlistSubtitle>
 			<div>
 				<h3 class="font-medium text-xl">Réservations</h3>
 				<RadioGroup v-model="selectedBookingShowOthers">
@@ -102,7 +102,7 @@
 			</div>
 		</section>
 		<section class="my-4">
-			<Button @click="savePreferences">Sauvegarder</Button>
+			<GiftlistButton @click="savePreferences">Sauvegarder</GiftlistButton>
 		</section>
 	</DefaultLayout>
 </template>
@@ -110,9 +110,9 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 
-import Button from "@/components/Button/Button.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
-import Subtitle from "@/components/Subtitle.vue";
+import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
 import labels from "@/labels/fr/labels.json";
 import {
 	RadioGroup,
@@ -125,14 +125,14 @@ import { CheckCircleIcon } from "@heroicons/vue/outline";
 export default defineComponent({
 	name: "SettingsView",
 	components: {
-		Button,
+		GiftlistButton,
 		CheckCircleIcon,
 		DefaultLayout,
 		RadioGroup,
 		RadioGroupLabel,
 		RadioGroupDescription,
 		RadioGroupOption,
-		Subtitle,
+		GiftlistSubtitle,
 	},
 	setup() {
 		const selectedDisplayList = ref();

@@ -80,8 +80,8 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 
-import InputSelect from "@/components/InputSelect/InputSelect.vue";
-import InputToggle from "@/components/InputToggle/InputToggle.vue";
+import InputSelect from "@/components/InputSelect.vue";
+import InputToggle from "@/components/InputToggle.vue";
 import PersonTag from "@/components/PersonTag.vue";
 import labels from "@/labels/fr/labels.json";
 import { ShareIcon, UserIcon, UsersIcon } from "@heroicons/vue/outline";

@@ -1,7 +1,7 @@
 <template>
 	<DefaultLayout :title="labels.titles.shared">
 		<div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
-			<Loader class="w-16 h-16" />
+			<GiftlistLoader class="w-16 h-16" />
 		</div>
 		<div v-else>
 			<div
@@ -10,12 +10,16 @@
 			>
 				<div class="text-lg">{{ labels.sharedLists.empty.description }}</div>
 				<UserGroupIcon class="w-1/6" />
-				<Button btn-style="primary-soft" has-icon @click="router.push(`/app/shared/new`)">
+				<GiftlistButton
+					btn-style="primary-soft"
+					has-icon
+					@click="router.push(`/app/shared/new`)"
+				>
 					<template #icon>
 						<QrcodeIcon />
 					</template>
 					{{ labels.sharedLists.empty.button }}
-				</Button>
+				</GiftlistButton>
 			</div>
 			<div v-else>
 				<Table :headers="tableHeaders" @sort="handleSort">
@@ -29,7 +33,7 @@
 					</tr>
 				</Table>
 			</div>
-			<Modal
+			<GiftlistModal
 				:show="newSharingCodeModalIsOpen"
 				@confirm="confirmNewSharingCode"
 				@close="closeNewSharingCodeModal"
@@ -50,8 +54,8 @@
 					reset
 					@keydown.enter="confirmNewSharingCode"
 				/>
-			</Modal>
-			<Modal
+			</GiftlistModal>
+			<GiftlistModal
 				:show="detailsModal.show"
 				@close="handleDetailsModal"
 				@confirm="openList"
@@ -61,7 +65,7 @@
 				<p>Détails de la liste</p>
 				<p>Propriétaire(s):</p>
 				<p>Nombre de cadeaux disponibles / réservés</p>
-			</Modal>
+			</GiftlistModal>
 		</div>
 	</DefaultLayout>
 </template>
@@ -71,12 +75,12 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, ref, watch }
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import Button from "@/components/Button/Button.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
-import InputText from "@/components/InputText/InputText.vue";
+import InputText from "@/components/InputText.vue";
 import ListItem from "@/components/ListItem.vue";
-import Loader from "@/components/Loader/Loader.vue";
-import Modal from "@/components/Modal/GiftlistModal.vue";
+import GiftlistLoader from "@/components/GiftlistLoader.vue";
+import GiftlistModal from "@/components/GiftlistModal.vue";
 import Table from "@/components/GiftlistTable.vue";
 import labels from "@/labels/fr/labels.json";
 import { List } from "@/types/api/List";
@@ -89,13 +93,13 @@ import { QrcodeIcon, UserGroupIcon } from "@heroicons/vue/outline";
 export default defineComponent({
 	name: "SharedListsView",
 	components: {
-		Button,
+		GiftlistButton,
 		DefaultLayout,
-		Modal,
+		GiftlistModal,
 		ListItem,
 		Table,
 		InputText,
-		Loader,
+		GiftlistLoader,
 		UserGroupIcon,
 		QrcodeIcon,
 	},

@@ -6,14 +6,14 @@
 			>
 		</router-link>
 		<ul class="flex flex-row items-center justify-between">
-			<Button
+			<GiftlistButton
 				v-if="!auth.loading && !auth.isAuthenticated"
 				@click="login"
 				class="mx-1"
 				btn-style="secondary"
 			>
 				{{ labels.navbar.links.login }}
-			</Button>
+			</GiftlistButton>
 		</ul>
 	</div>
 </template>
@@ -21,13 +21,13 @@
 <script lang="ts">
 import { defineComponent, inject, ref } from "vue";
 
-import Button from "@/components/Button/Button.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
 import labels from "@/labels/fr/labels.json";
 
 export default defineComponent({
 	name: "GiftlistNavbarLoggedOut",
 	components: {
-		Button,
+		GiftlistButton,
 	},
 	setup() {
 		const auth = ref(inject("Auth") as any);

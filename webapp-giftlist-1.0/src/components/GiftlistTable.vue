@@ -2,7 +2,7 @@
 	<table class="min-w-full">
 		<thead>
 			<tr class="sticky bg-white top-16">
-				<TableHeader
+				<GiftlistTableHeader
 					v-for="header in headers"
 					:key="header.title"
 					:content="header.title"
@@ -27,13 +27,13 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import TableHeader from "@/components/GiftlistTableHeader.vue";
+import GiftlistTableHeader from "@/components/GiftlistTableHeader.vue";
 import { TableHeader as TableHeaderType } from "@/types/TableHeader";
 
 export default defineComponent({
 	name: "GiftlistTable",
 	components: {
-		TableHeader,
+		GiftlistTableHeader,
 	},
 	props: {
 		headers: {

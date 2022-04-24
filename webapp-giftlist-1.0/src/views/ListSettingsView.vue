@@ -1,7 +1,7 @@
 <template>
 	<DefaultLayout :title="labels.titles.listSettings" back>
 		<div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
-			<Loader class="w-16 h-16" />
+			<GiftlistLoader class="w-16 h-16" />
 		</div>
 		<div v-else>
 			<div class="w-10/12 mx-auto">
@@ -67,9 +67,9 @@
 				</Disclosure>
 
 				<div class="flex justify-end gap-4 mt-4">
-					<Button btn-style="danger" @click="cancel">Retour</Button>
-					<Button btn-style="primary" :loading="buttonIsLoading" @click="saveChanges"
-						>Enregistrer les changements</Button
+					<GiftlistButton btn-style="danger" @click="cancel">Retour</GiftlistButton>
+					<GiftlistButton btn-style="primary" :loading="buttonIsLoading" @click="saveChanges"
+						>Enregistrer les changements</GiftlistButton
 					>
 				</div>
 			</div>
@@ -82,24 +82,28 @@ import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted,
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import Button from "@/components/Button/Button.vue";
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
+import labels from "@/labels/fr/labels.json";
+
 import DefaultLayout from "@/components/DefaultLayout.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
+import GiftlistLoader from "@/components/GiftlistLoader.vue";
 import ListFormOne from "@/components/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo.vue";
-import Loader from "@/components/Loader/Loader.vue";
-import labels from "@/labels/fr/labels.json";
+
+import { ChevronUpIcon } from "@heroicons/vue/solid";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+
 import { ListDTO } from "@/types/dto/ListDTO";
 import { PartialListDTO } from "@/types/dto/PartialListDTO";
 import { EditListPayload } from "@/types/payload/EditListPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { Auth0Client } from "@auth0/auth0-spa-js";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronUpIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
 	name: "ListSettingsView",
 	components: {
-		Button,
+		GiftlistButton,
 		ChevronUpIcon,
 		DefaultLayout,
 		Disclosure,
@@ -107,7 +111,7 @@ export default defineComponent({
 		DisclosurePanel,
 		ListFormOne,
 		ListFormTwo,
-		Loader,
+		GiftlistLoader,
 	},
 	setup() {
 		/******** Basic imports ********/

@@ -6,7 +6,7 @@
 		:back-button-link="router.options.history.state.back"
 	>
 		<div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
-			<Loader class="w-16 h-16" />
+			<GiftlistLoader class="w-16 h-16" />
 		</div>
 		<div v-else>
 			<div
@@ -30,7 +30,7 @@
 						@book="handleBookModal(gift)"
 					/>
 				</div>
-				<Table v-else :headers="tableHeaders" @sort="handleSort">
+				<GiftlistTable v-else :headers="tableHeaders" @sort="handleSort">
 					<tr
 						v-for="gift in gifts"
 						:key="gift.id"
@@ -39,10 +39,10 @@
 					>
 						<GiftListView :gift="gift" :shared="true" @book="handleBookModal(gift)" />
 					</tr>
-				</Table>
+				</GiftlistTable>
 			</div>
 
-			<Modal
+			<GiftlistModal
 				:show="modal.showModal"
 				:title="modal.title"
 				:confirm-text="modal.confirmText"
@@ -51,10 +51,10 @@
 				@confirm="modal.confirm"
 			>
 				<GiftDetails v-if="selectedGift" :gift="selectedGift" />
-			</Modal>
+			</GiftlistModal>
 		</div>
 		<template #commands>
-			<GridListToggle :is-grid-view="!isListView" class="w-28" @change="toggleDisplayMode" />
+			<ToggleViewMode :is-grid-view="!isListView" class="w-28" @change="toggleDisplayMode" />
 		</template>
 	</DefaultLayout>
 </template>
@@ -68,10 +68,10 @@ import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftDetails from "@/components/GiftDetails.vue";
 import GiftGridView from "@/components/GiftGridView.vue";
 import GiftListView from "@/components/GiftListView.vue";
-import GridListToggle from "@/components/GridListToggle/ToggleListView.vue";
-import Loader from "@/components/Loader/Loader.vue";
-import Modal from "@/components/Modal/GiftlistModal.vue";
-import Table from "@/components/GiftlistTable.vue";
+import ToggleViewMode from "@/components/ToggleViewMode.vue";
+import GiftlistLoader from "@/components/GiftlistLoader.vue";
+import GiftlistModal from "@/components/GiftlistModal.vue";
+import GiftlistTable from "@/components/GiftlistTable.vue";
 import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
 import { GiftDTO } from "@/types/dto/GiftDTO";
@@ -89,11 +89,11 @@ export default defineComponent({
 		GiftDetails,
 		GiftGridView,
 		GiftListView,
-		GridListToggle,
+		ToggleViewMode,
 		GiftIcon,
-		Modal,
-		Table,
-		Loader,
+		GiftlistModal,
+		GiftlistTable,
+		GiftlistLoader,
 	},
 	setup() {
 		/******** Basic imports ********/

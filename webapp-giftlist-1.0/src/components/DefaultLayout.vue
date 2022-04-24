@@ -10,7 +10,7 @@
 					<ArrowLeftIcon class="w-4" />
 					<span>{{ backText }}</span>
 				</div>
-				<Title class="mb-4">{{ title }}</Title>
+				<GiftlistTitle class="mb-4">{{ title }}</GiftlistTitle>
 			</div>
 			<div class="flex items-center">
 				<slot name="commands" />
@@ -26,13 +26,13 @@
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
-import Title from "@/components/GiftlistTitle.vue";
+import GiftlistTitle from "@/components/GiftlistTitle.vue";
 import labels from "@/labels/fr/labels.json";
 import { ArrowLeftIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "DefaultLayout",
-	components: { Title, ArrowLeftIcon },
+	components: { GiftlistTitle, ArrowLeftIcon },
 	props: {
 		title: String,
 		back: Boolean,

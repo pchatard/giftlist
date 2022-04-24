@@ -70,8 +70,8 @@
 import { defineComponent } from "vue";
 
 import InputDate from "@/components/InputDate.vue";
-import InputText from "@/components/InputText/InputText.vue";
-import InputToggle from "@/components/InputToggle/InputToggle.vue";
+import InputText from "@/components/InputText.vue";
+import InputToggle from "@/components/InputToggle.vue";
 import { AnnotationIcon, CalendarIcon, CollectionIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({

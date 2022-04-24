@@ -1,7 +1,7 @@
 <template>
 	<DefaultLayout title="Home">
 		<div>
-			<Subtitle>Resources</Subtitle>
+			<GiftlistSubtitle>Resources</GiftlistSubtitle>
 			<ul>
 				<li>
 					<a href="https://heroicons.com/" rel="noreferrer noopener" class="text-blue-500"
@@ -43,10 +43,10 @@
 import { defineComponent } from "vue";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
-import Subtitle from "@/components/Subtitle.vue";
+import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
 
 export default defineComponent({
 	name: "HomeView",
-	components: { DefaultLayout, Subtitle },
+	components: { DefaultLayout, GiftlistSubtitle },
 });
 </script>

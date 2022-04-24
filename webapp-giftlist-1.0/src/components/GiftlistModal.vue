@@ -37,21 +37,21 @@
 							</div>
 
 							<div class="mt-4 flex gap-2 justify-end">
-								<Button
+								<GiftlistButton
 									v-show="cancelText"
 									btn-style="secondary-soft"
 									@click="$emit('close')"
 								>
 									{{ cancelText }}
-								</Button>
-								<Button
+								</GiftlistButton>
+								<GiftlistButton
 									v-if="confirmText"
 									:btn-style="type === 'danger' ? 'danger-soft' : 'primary-soft'"
 									:loading="btnLoading"
 									@click="$emit('confirm')"
 								>
 									{{ confirmText }}
-								</Button>
+								</GiftlistButton>
 							</div>
 						</div>
 					</TransitionChild>
@@ -64,7 +64,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 
-import Button from "@/components/Button/Button.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
 import labels from "@/labels/fr/labels.json";
 import { ModalTypeEnum } from "@/types/ModalTypeEnum";
 import {
@@ -78,7 +78,7 @@ import {
 export default defineComponent({
 	name: "GiftlistModal",
 	components: {
-		Button,
+		GiftlistButton,
 		TransitionRoot,
 		TransitionChild,
 		Dialog,

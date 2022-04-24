@@ -1,8 +1,8 @@
 <template>
-	<Header />
+	<GiftlistHeader />
 	<main class="mt-16 p-8">
 		<router-view />
-		<Snackbar :snack="snack" />
+		<GiftlistSnackbar :snack="snack" />
 	</main>
 	<footer></footer>
 </template>
@@ -10,13 +10,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
-import Header from "@/components/Header/Header.vue";
-import Snackbar from "@/components/GiftlistSnackbar.vue";
+import GiftlistHeader from "@/components/GiftlistHeader.vue";
+import GiftlistSnackbar from "@/components/GiftlistSnackbar.vue";
 
 export default defineComponent({
 	components: {
-		Header,
-		Snackbar,
+		GiftlistHeader,
+		GiftlistSnackbar,
 	},
 	setup() {
 		const store = useStore();

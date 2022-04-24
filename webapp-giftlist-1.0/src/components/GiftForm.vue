@@ -161,19 +161,19 @@
 			</div>
 		</form>
 		<div class="flex justify-end gap-4">
-			<Button btn-style="danger" has-icon @click="$emit('cancel')">
+			<GiftlistButton btn-style="danger" has-icon @click="$emit('cancel')">
 				<template #icon>
 					<XIcon />
 				</template>
 				{{ labels.gift.buttons.cancel }}
-			</Button>
+			</GiftlistButton>
 
-			<Button btn-style="primary" :loading="loading" has-icon @click="$emit('confirm')">
+			<GiftlistButton btn-style="primary" :loading="loading" has-icon @click="$emit('confirm')">
 				<template #icon>
 					<CheckIcon />
 				</template>
 				{{ confirmText }}
-			</Button>
+			</GiftlistButton>
 		</div>
 	</div>
 </template>
@@ -181,12 +181,12 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 
-import Button from "@/components/Button/Button.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
 import InputLink from "@/components/InputLink.vue";
 import InputNumber from "@/components/InputNumber.vue";
-import InputSelect from "@/components/InputSelect/InputSelect.vue";
-import InputText from "@/components/InputText/InputText.vue";
-import InputToggle from "@/components/InputToggle/InputToggle.vue";
+import InputSelect from "@/components/InputSelect.vue";
+import InputText from "@/components/InputText.vue";
+import InputToggle from "@/components/InputToggle.vue";
 import labels from "@/labels/fr/labels.json";
 import {
 	AnnotationIcon,
@@ -212,7 +212,7 @@ export default defineComponent({
 		InputNumber,
 		InputLink,
 		InputSelect,
-		Button,
+		GiftlistButton,
 		XIcon,
 		CheckIcon,
 		HeartIcon,

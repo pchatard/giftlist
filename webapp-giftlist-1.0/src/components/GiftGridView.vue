@@ -71,7 +71,6 @@
 import { computed, defineComponent, inject, PropType } from "vue";
 import { useStore } from "vuex";
 
-import Button from "@/components/Button/Button.vue";
 import labels from "@/labels/fr/labels.json";
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
@@ -90,7 +89,6 @@ import { HeartIcon } from "@heroicons/vue/solid";
 export default defineComponent({
 	name: "GiftGridView",
 	components: {
-		Button,
 		CurrencyEuroIcon,
 		ExternalLinkIcon,
 		HeartIcon,

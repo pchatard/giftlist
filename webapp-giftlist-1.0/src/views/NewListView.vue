@@ -2,9 +2,11 @@
 	<DefaultLayout :title="labels.titles.newList" back>
 		<div class="flex flex-col">
 			<div class="relative my-4 flex flex-col border rounded-lg">
-				<Subtitle class="absolute top-0 left-4 transform -translate-y-1/2 bg-white px-4">
+				<GiftlistSubtitle
+					class="absolute top-0 left-4 transform -translate-y-1/2 bg-white px-4"
+				>
 					{{ stepTitle }}
-				</Subtitle>
+				</GiftlistSubtitle>
 
 				<component
 					class="p-4 my-4 rounded-md"
@@ -17,21 +19,21 @@
 
 			<div class="flex justify-between">
 				<div class="flex gap-4">
-					<Button btn-style="danger" has-icon @click="cancel">
+					<GiftlistButton btn-style="danger" has-icon @click="cancel">
 						<template #icon>
 							<XIcon />
 						</template>
 						{{ formLabels.buttons.cancel }}
-					</Button>
-					<Button btn-style="secondary" has-icon v-show="step > 1" @click="step--">
+					</GiftlistButton>
+					<GiftlistButton btn-style="secondary" has-icon v-show="step > 1" @click="step--">
 						<template #icon>
 							<ArrowLeftIcon />
 						</template>
 						{{ formLabels.buttons.previous }}
-					</Button>
+					</GiftlistButton>
 				</div>
 				<div class="w-1/2 flex gap-4">
-					<Button
+					<GiftlistButton
 						:btn-style="step === maxStep ? 'primary' : 'secondary'"
 						class="flex-1"
 						has-icon
@@ -42,8 +44,8 @@
 							<CheckIcon />
 						</template>
 						{{ formLabels.buttons.confirm }}
-					</Button>
-					<Button
+					</GiftlistButton>
+					<GiftlistButton
 						btn-style="primary"
 						has-icon
 						v-show="step != maxStep"
@@ -54,7 +56,7 @@
 							<ArrowRightIcon />
 						</template>
 						{{ nextButtonText }}
-					</Button>
+					</GiftlistButton>
 				</div>
 			</div>
 		</div>
@@ -66,11 +68,11 @@ import { computed, ComputedRef, defineComponent, inject, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
-import Button from "@/components/Button/Button.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import ListFormOne from "@/components/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo.vue";
-import Subtitle from "@/components/Subtitle.vue";
+import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
 import labels from "@/labels/fr/labels.json";
 import { CreateListDTO } from "@/types/dto/CreateListDTO";
 import { CreateListPayload } from "@/types/payload/CreateListPayload";
@@ -80,8 +82,8 @@ import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, XIcon } from "@heroicons/vue/
 export default defineComponent({
 	name: "NewListView",
 	components: {
-		Button,
-		Subtitle,
+		GiftlistButton,
+		GiftlistSubtitle,
 		DefaultLayout,
 		ListFormOne,
 		ListFormTwo,

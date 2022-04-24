@@ -10,13 +10,13 @@ import labels from "@/labels/fr/labels.json";
 
 import BookedGiftsView from "@/views/BookedGiftsView.vue";
 import ErrorView from "@/views/ErrorView.vue";
-import FriendsView from "@/views/Friends/FriendsView.vue";
-import GiftView from "@/views/Gift/GiftView.vue";
-import HomeView from "@/views/Home/HomeView.vue";
-import ListView from "@/views/List/ListView.vue";
+import FriendsView from "@/views/FriendsView.vue";
+import GiftView from "@/views/GiftView.vue";
+import HomeView from "@/views/HomeView.vue";
+import ListView from "@/views/ListView.vue";
 import ListsView from "@/views/ListsView.vue";
 import ListSettingsView from "@/views/ListSettingsView.vue";
-import NewGiftView from "@/views/NewGift/NewGiftView.vue";
+import NewGiftView from "@/views/NewGiftView.vue";
 import NewListView from "@/views/NewListView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import RedirectView from "@/views/RedirectView.vue";

@@ -66,7 +66,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 
-import InputWrapper from "@/components/InputWrapper/InputWrapper.vue";
+import InputWrapper from "@/components/InputWrapper.vue";
 import { TransitionRoot } from "@headlessui/vue";
 import { ClipboardCheckIcon, ClipboardCopyIcon, XIcon } from "@heroicons/vue/outline";
 

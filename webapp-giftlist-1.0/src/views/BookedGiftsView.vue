@@ -9,7 +9,7 @@
 			/>
 		</div>
 
-		<Modal
+		<GiftlistModal
 			:show="modal.showModal"
 			:title="modal.title"
 			:confirm-text="modal.confirmText"
@@ -18,7 +18,7 @@
 			@confirm="modal.confirm"
 		>
 			<GiftDetails v-if="selectedGift" :gift="selectedGift" />
-		</Modal>
+		</GiftlistModal>
 	</DefaultLayout>
 </template>
 
@@ -26,18 +26,19 @@
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import BookedGift from "@/components/BookedGift/BookedGift.vue";
+import labels from "@/labels/fr/labels.json";
+
+import BookedGift from "@/components/BookedGift.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftDetails from "@/components/GiftDetails.vue";
-import Modal from "@/components/Modal/Modal.vue";
-import labels from "@/labels/fr/labels.json";
+import GiftlistModal from "@/components/GiftlistModal.vue";
 
 export default defineComponent({
 	name: "BookedGiftsView",
 	components: {
 		DefaultLayout,
 		BookedGift,
-		Modal,
+		GiftlistModal,
 		GiftDetails,
 	},
 	setup() {

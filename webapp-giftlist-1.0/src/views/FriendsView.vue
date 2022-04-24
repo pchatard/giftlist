@@ -59,7 +59,9 @@
 			</div>
 			<div class="w-2/3 px-4 py-2 flex flex-col divide-y">
 				<div class="h-3/5 flex flex-col justify-center pb-4">
-					<Subtitle class="pb-2">{{ labels.friends.addFriendsTitle }}</Subtitle>
+					<GiftlistSubtitle class="pb-2">{{
+						labels.friends.addFriendsTitle
+					}}</GiftlistSubtitle>
 					<p>{{ labels.friends.addFriendsText }}</p>
 					<div class="flex items-center my-2">
 						<InputText
@@ -74,16 +76,16 @@
 							@change="handleEmailInputChange"
 							reset
 						/>
-						<Button class="ml-4 w-2/5" @click="sendFriendRequest">{{
+						<GiftlistButton class="ml-4 w-2/5" @click="sendFriendRequest">{{
 							labels.friends.addFriendsButton
-						}}</Button>
+						}}</GiftlistButton>
 					</div>
 					<p>
 						{{ labels.friends.addFriendsDescription }}
 					</p>
 				</div>
 				<div class="h-2/5 flex flex-col justify-center py-4">
-					<Subtitle class="pb-2">{{ labels.friends.inviteTitle }}</Subtitle>
+					<GiftlistSubtitle class="pb-2">{{ labels.friends.inviteTitle }}</GiftlistSubtitle>
 					<div class="flex items-center mt-2">
 						<InputText
 							class="w-2/5"
@@ -97,9 +99,9 @@
 							@change="handleEmailInvitationInputChange"
 							reset
 						/>
-						<Button class="ml-4 w-2/5" @click="sendInvitationRequest">
+						<GiftlistButton class="ml-4 w-2/5" @click="sendInvitationRequest">
 							{{ labels.friends.inviteButton }}
-						</Button>
+						</GiftlistButton>
 					</div>
 					<p>
 						{{ labels.friends.inviteButton }}
@@ -113,16 +115,25 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
-import Button from "@/components/Button/Button.vue";
-import DefaultLayout from "@/components/DefaultLayout.vue";
-import InputText from "@/components/InputText/InputText.vue";
-import Subtitle from "@/components/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
+
+import DefaultLayout from "@/components/DefaultLayout.vue";
+import GiftlistButton from "@/components/GiftlistButton.vue";
+import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
+import InputText from "@/components/InputText.vue";
+
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "FriendsView",
-	components: { Button, DefaultLayout, InputText, Subtitle, CheckCircleIcon, XCircleIcon },
+	components: {
+		GiftlistButton,
+		DefaultLayout,
+		InputText,
+		GiftlistSubtitle,
+		CheckCircleIcon,
+		XCircleIcon,
+	},
 	setup() {
 		const acceptFriendRequest = () => {
 			console.log("Friends.vue - acceptFriendRequest");
