@@ -134,7 +134,7 @@ export const gifts: Module<GiftState, RootState> = {
 			}
 		},
 		unfavGift: async ({ commit, state, getters }, { auth, listId, giftId }: GiftIdPayload) => {
-			const success = await Gifts.fav(auth, listId, giftId);
+			const success = await Gifts.unfav(auth, listId, giftId);
 			if (success) {
 				const giftIndex = getters.getGiftIndex(giftId);
 				if (giftIndex >= 0) {
@@ -147,11 +147,33 @@ export const gifts: Module<GiftState, RootState> = {
 				}
 			}
 		},
-		bookGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
-			console.log("bookGift");
+		bookGift: async ({ commit, getters, state }, { auth, listId, giftId }: GiftIdPayload) => {
+			const success = await Gifts.book(auth, listId, giftId);
+			if (success) {
+				const giftIndex = getters.getGiftIndex(giftId);
+				if (giftIndex >= 0) {
+					const editedGift: GiftDTO = {
+						...state.all[giftIndex],
+						isBooked: true,
+					};
+					commit("EDIT_GIFT", { giftIndex, editedGift });
+					return true;
+				}
+			}
 		},
-		unbookGift: async ({ commit }, { auth, listId, giftId }: GiftIdPayload) => {
-			console.log("unbookGift");
+		unbookGift: async ({ commit, getters, state }, { auth, listId, giftId }: GiftIdPayload) => {
+			const success = await Gifts.unbook(auth, listId, giftId);
+			if (success) {
+				const giftIndex = getters.getGiftIndex(giftId);
+				if (giftIndex >= 0) {
+					const editedGift: GiftDTO = {
+						...state.all[giftIndex],
+						isBooked: false,
+					};
+					commit("EDIT_GIFT", { giftIndex, editedGift });
+					return true;
+				}
+			}
 		},
 	},
 };

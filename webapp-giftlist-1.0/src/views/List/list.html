@@ -15,8 +15,13 @@
         <div v-else>
             <div v-if="!isListView"
                 class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 grid-flow-row gap-x-4 gap-y-8">
-                <BookedGift @click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)" v-for="gift in gifts"
-                    :key="gift.id" :gift="gift" />
+                <div @click="router.push(`/app/lists/${list.id}/new-gift`)"
+                    class="border border-gray-200  shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer">
+                    <PlusIcon class="w-8 text-gray-400" />
+                    <span class="">{{ labels.list.empty.button }}</span>
+                </div>
+                <GiftGridView @click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)" v-for="gift in gifts"
+                    :key="gift.id" :gift="gift" @delete="handleDeleteModal" />
             </div>
             <Table v-else :headers="tableHeaders" @sort="handleSort">
                 <tr v-for="gift in gifts" :key="gift.id" class="cursor-pointer hover:bg-gray-50"

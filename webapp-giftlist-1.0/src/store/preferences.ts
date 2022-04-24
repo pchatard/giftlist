@@ -14,7 +14,7 @@ export const preferences: Module<PreferencesState, RootState> = {
 	actions: {
 		toggleListView: ({ commit }, isListView) => {
 			commit("SET_LIST_VIEW", isListView);
-		}
+		},
 	},
 };
 

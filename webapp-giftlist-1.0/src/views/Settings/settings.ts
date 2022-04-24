@@ -1,11 +1,9 @@
-import { defineComponent, inject, onMounted, ref, watch } from "vue";
-import { useStore } from "vuex";
+import { defineComponent, onMounted, ref } from "vue";
 
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
 import Subtitle from "@/components/Subtitle/Subtitle.vue";
 import labels from "@/labels/fr/labels.json";
-import { PreferencesState } from "@/store/preferences";
 import {
 	RadioGroup,
 	RadioGroupDescription,
@@ -27,7 +25,6 @@ export default defineComponent({
 		Subtitle,
 	},
 	setup() {
-
 		const selectedDisplayList = ref();
 		const selectedBookingShowOthers = ref();
 

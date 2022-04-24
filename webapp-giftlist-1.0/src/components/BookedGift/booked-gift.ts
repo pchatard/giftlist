@@ -1,12 +1,12 @@
 import { computed, defineComponent, PropType } from "vue";
 
+import { GiftDTO } from "@/types/dto/GiftDTO";
 import {
 	CurrencyEuroIcon,
 	ExternalLinkIcon,
 	ShoppingCartIcon,
 	UserCircleIcon,
 } from "@heroicons/vue/outline";
-import { GiftDTO } from "@/types/dto/GiftDTO";
 
 export default defineComponent({
 	name: "BookedGift",

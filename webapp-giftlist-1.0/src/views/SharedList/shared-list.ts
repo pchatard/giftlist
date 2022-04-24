@@ -14,6 +14,7 @@ import labels from "@/labels/fr/labels.json";
 import { Gift } from "@/types/api/Gift";
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
+import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
 import { Auth0Client } from "@auth0/auth0-spa-js";
@@ -44,6 +45,7 @@ export default defineComponent({
 		/******** Reactive data ********/
 		const loading = ref(true);
 		const selectedGift = ref();
+		const bookingGift = ref();
 		const tableHeaders = ref([
 			{
 				title: labels.tables.gift.favorite,
@@ -69,10 +71,10 @@ export default defineComponent({
 		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
 		const gifts: ComputedRef<GiftDTO[]> = computed(() => state.gifts.all);
 		const isListView = computed(() => {
-			if (state.preferences.displayList === undefined) {
+			if (state.preferences.listView === undefined) {
 				return true;
 			} else {
-				return state.preferences.displayList;
+				return state.preferences.listView;
 			}
 		});
 
@@ -113,8 +115,7 @@ export default defineComponent({
 		};
 
 		const toggleDisplayMode = () => {
-			console.log("Grid mode is disabled for now");
-			// dispatch("toggleListDisplayMode");
+			dispatch("toggleListView", !isListView.value);
 		};
 
 		const openLinkInNewTab = () => {
@@ -130,10 +131,16 @@ export default defineComponent({
 			modal.value.showModal = true;
 			modal.value.confirm = handleBookConfirm;
 			selectedGift.value = null;
+			bookingGift.value = gift;
 		};
 
 		const handleBookConfirm = () => {
-			dispatch("bookGift");
+			const bookPayload: GiftIdPayload = {
+				auth,
+				listId: list.value.id,
+				giftId: bookingGift.value.id,
+			};
+			dispatch("bookGift", bookPayload);
 			modal.value.showModal = false;
 		};
 
@@ -164,6 +171,7 @@ export default defineComponent({
 			tableHeaders,
 			toggleDisplayMode,
 			selectedGift,
+			bookingGift,
 			handleSort,
 			backButtonTitle,
 		};

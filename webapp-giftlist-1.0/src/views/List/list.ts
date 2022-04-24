@@ -4,7 +4,7 @@ import { useStore } from "vuex";
 
 import Button from "@/components/Button/Button.vue";
 import DefaultLayout from "@/components/DefaultLayout/DefaultLayout.vue";
-// import GiftGridView from "@/components/GiftGridView/GiftGridView.vue";
+import GiftGridView from "@/components/GiftGridView/GiftGridView.vue";
 import GiftListView from "@/components/GiftListView/GiftListView.vue";
 import GridListToggle from "@/components/GridListToggle/GridListToggle.vue";
 import InputLink from "@/components/InputLink/InputLink.vue";
@@ -12,13 +12,12 @@ import InputText from "@/components/InputText/InputText.vue";
 import Loader from "@/components/Loader/Loader.vue";
 import Modal from "@/components/Modal/Modal.vue";
 import Table from "@/components/Table/Table.vue";
-import BookedGift from "@/components/BookedGift/BookedGift.vue";
 import labels from "@/labels/fr/labels.json";
 import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon } from "@heroicons/vue/outline";
+import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon, PlusIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
 	name: "List",
@@ -29,7 +28,7 @@ export default defineComponent({
 		LockOpenIcon,
 		DefaultLayout,
 		GiftIcon,
-		// GiftGridView,
+		GiftGridView,
 		GiftListView,
 		GridListToggle,
 		InputText,
@@ -37,7 +36,7 @@ export default defineComponent({
 		Modal,
 		Table,
 		Loader,
-		BookedGift
+		PlusIcon,
 	},
 	setup() {
 		/******** Basic imports ********/

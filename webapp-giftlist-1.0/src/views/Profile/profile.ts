@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject, onMounted, Ref, ref } from "vue";
+import { computed, defineComponent, inject, onMounted, Ref } from "vue";
 import { useStore } from "vuex";
 
 import Button from "@/components/Button/Button.vue";

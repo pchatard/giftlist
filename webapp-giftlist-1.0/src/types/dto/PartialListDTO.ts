@@ -1,5 +1,3 @@
-import { UserNameDTO } from "./UserNameDTO";
-
 export interface PartialListDTO {
 	title?: string;
 	description?: string;

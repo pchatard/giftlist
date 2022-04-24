@@ -24,8 +24,8 @@ export default defineComponent({
 		});
 
 		return {
-			isGrid
-		}
+			isGrid,
+		};
 	},
-	emits: ["change"]
+	emits: ["change"],
 });
