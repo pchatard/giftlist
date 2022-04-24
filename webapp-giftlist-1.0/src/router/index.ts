@@ -7,21 +7,22 @@ import {
 
 import Auth0 from "@/auth";
 import labels from "@/labels/fr/labels.json";
-import BookedGifts from "@/views/BookedGifts/BookedGifts.vue";
-import ErrorView from "@/views/ErrorView/ErrorView.vue";
-import Friends from "@/views/Friends/Friends.vue";
-import Gift from "@/views/Gift/Gift.vue";
-import Home from "@/views/Home/Home.vue";
-import List from "@/views/List/List.vue";
-import Lists from "@/views/Lists/Lists.vue";
-import ListSettings from "@/views/ListSettings/ListSettings.vue";
-import NewGift from "@/views/NewGift/NewGift.vue";
-import NewList from "@/views/NewList/NewList.vue";
-import Profile from "@/views/Profile/Profile.vue";
-import Redirect from "@/views/Redirect/Redirect.vue";
-import Settings from "@/views/Settings/Settings.vue";
-import SharedList from "@/views/SharedList/SharedList.vue";
-import SharedLists from "@/views/SharedLists/SharedLists.vue";
+
+import BookedGiftsView from "@/views/BookedGiftsView.vue";
+import ErrorView from "@/views/ErrorView.vue";
+import FriendsView from "@/views/Friends/FriendsView.vue";
+import GiftView from "@/views/Gift/GiftView.vue";
+import HomeView from "@/views/Home/HomeView.vue";
+import ListView from "@/views/List/ListView.vue";
+import ListsView from "@/views/ListsView.vue";
+import ListSettingsView from "@/views/ListSettingsView.vue";
+import NewGiftView from "@/views/NewGift/NewGiftView.vue";
+import NewListView from "@/views/NewListView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import RedirectView from "@/views/RedirectView.vue";
+import SettingsView from "@/views/SettingsView.vue";
+import SharedListView from "@/views/SharedListView.vue";
+import SharedListsView from "@/views/SharedListsView.vue";
 
 const sharedListsNavbarCta = (): void => {
 	console.debug("SharedLists - sharedListsNavbarCta - Opening new sharing code modal");
@@ -50,12 +51,12 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/",
 		name: "Accueil",
-		component: Home,
+		component: HomeView,
 	},
 	{
 		path: "/app/redirect",
 		name: "Redirecting...",
-		component: Redirect,
+		component: RedirectView,
 		beforeEnter: [Auth0.routeGuard, redirectNavigationGuard],
 	},
 	{
@@ -67,25 +68,25 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/app/profile",
 		name: "Mon compte",
-		component: Profile,
+		component: ProfileView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/profile/friends",
 		name: "Mes amis",
-		component: Friends,
+		component: FriendsView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/settings",
 		name: "Mes préférences",
-		component: Settings,
+		component: SettingsView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/lists",
 		name: "Mes listes",
-		component: Lists,
+		component: ListsView,
 		beforeEnter: Auth0.routeGuard,
 		meta: {
 			navbarCta: {
@@ -97,13 +98,13 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/app/lists/new",
 		name: "Nouvelle liste",
-		component: NewList,
+		component: NewListView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/lists/:id",
 		name: "Liste",
-		component: List,
+		component: ListView,
 		beforeEnter: Auth0.routeGuard,
 		meta: {
 			navbarCta: {
@@ -115,25 +116,25 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/app/lists/:id/settings",
 		name: "Paramètres de la liste",
-		component: ListSettings,
+		component: ListSettingsView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/lists/:id/new-gift",
 		name: "Nouveau cadeau",
-		component: NewGift,
+		component: NewGiftView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/lists/:id/gift/:giftId",
 		name: "Cadeau",
-		component: Gift,
+		component: GiftView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/shared",
 		name: "Mes listes partagées",
-		component: SharedLists,
+		component: SharedListsView,
 		beforeEnter: Auth0.routeGuard,
 		meta: {
 			navbarCta: {
@@ -145,19 +146,19 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/app/shared/new",
 		name: "Nouvelle liste partagée",
-		component: SharedLists,
+		component: SharedListsView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/shared/:code",
 		name: "Liste partagée",
-		component: SharedList,
+		component: SharedListView,
 		beforeEnter: Auth0.routeGuard,
 	},
 	{
 		path: "/app/booked",
 		name: "Mes cadeaux réservés",
-		component: BookedGifts,
+		component: BookedGiftsView,
 		beforeEnter: Auth0.routeGuard,
 	},
 ];

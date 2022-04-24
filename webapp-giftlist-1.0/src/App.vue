@@ -11,7 +11,7 @@
 import { defineComponent } from "vue";
 import { useStore } from "vuex";
 import Header from "@/components/Header/Header.vue";
-import Snackbar from "@/components/Snackbar/Snackbar.vue";
+import Snackbar from "@/components/GiftlistSnackbar.vue";
 
 export default defineComponent({
 	components: {
