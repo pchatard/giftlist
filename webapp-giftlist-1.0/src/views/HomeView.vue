@@ -39,14 +39,9 @@
 	</DefaultLayout>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent } from "vue";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
-
-export default defineComponent({
-	name: "HomeView",
-	components: { DefaultLayout, GiftlistSubtitle },
-});
 </script>

@@ -10,7 +10,7 @@
 	</ErrorLayout>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { defineComponent } from "vue";
 
 import router from "@/router";
@@ -19,18 +19,4 @@ import ErrorLayout from "@/components/DefaultLayout.vue";
 import GiftlistButton from "@/components/GiftlistButton.vue";
 
 import { ExclamationIcon } from "@heroicons/vue/outline";
-
-export default defineComponent({
-	name: "ErrorView",
-	components: {
-		ErrorLayout,
-		ExclamationIcon,
-		GiftlistButton,
-	},
-	setup() {
-		return {
-			router,
-		};
-	},
-});
 </script>

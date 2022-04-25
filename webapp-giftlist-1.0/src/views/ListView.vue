@@ -144,8 +144,8 @@
 	</DefaultLayout>
 </template>
 
-<script lang="ts">
-import { computed, ComputedRef, defineComponent, inject, onMounted, onUnmounted, ref } from "vue";
+<script setup lang="ts">
+import { computed, ComputedRef, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -169,184 +169,141 @@ import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 
-export default defineComponent({
-	name: "ListView",
-	components: {
-		GiftlistButton,
-		CogIcon,
-		LockClosedIcon,
-		LockOpenIcon,
-		DefaultLayout,
-		GiftIcon,
-		GiftGridView,
-		GiftListView,
-		ToggleViewMode,
-		InputText,
-		InputLink,
-		GiftlistModal,
-		GiftlistTable,
-		GiftlistLoader,
-		PlusIcon,
+/******** Basic imports ********/
+const { dispatch, state, commit } = useStore();
+const router = useRouter();
+const auth = inject("Auth") as any;
+
+/******** Static data ********/
+const listId = router.currentRoute.value.params.id as string;
+const listPayload: ListIdPayload = {
+	auth,
+	listId,
+};
+
+/******** Reactive data ********/
+const loading = ref(true);
+const deleteButtonIsLoading = ref(false);
+const shareButtonIsLoading = ref(false);
+const tableHeaders = ref([
+	{
+		title: labels.tables.gift.favorite,
+		width: "w-10 text-center",
+		sortable: true,
+		sorted: "none",
 	},
-	setup() {
-		/******** Basic imports ********/
-		const { dispatch, state, commit } = useStore();
-		const router = useRouter();
-		const auth = inject("Auth") as any;
+	{ title: labels.tables.gift.title, sortable: true, sorted: "none" },
+	{ title: labels.tables.gift.type, sortable: true, sorted: "none" },
+	{ title: labels.tables.gift.creationDate, sortable: true, sorted: "none" },
+	{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
+]);
 
-		/******** Static data ********/
-		const listId = router.currentRoute.value.params.id as string;
-		const listPayload: ListIdPayload = {
-			auth,
-			listId,
-		};
-
-		/******** Reactive data ********/
-		const loading = ref(true);
-		const deleteButtonIsLoading = ref(false);
-		const shareButtonIsLoading = ref(false);
-		const tableHeaders = ref([
-			{
-				title: labels.tables.gift.favorite,
-				width: "w-10 text-center",
-				sortable: true,
-				sorted: "none",
-			},
-			{ title: labels.tables.gift.title, sortable: true, sorted: "none" },
-			{ title: labels.tables.gift.type, sortable: true, sorted: "none" },
-			{ title: labels.tables.gift.creationDate, sortable: true, sorted: "none" },
-			{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
-		]);
-
-		const sharingOptionsModal = ref({
-			showModal: false,
-			title: labels.modals.sharingOptions.title,
-			confirmText: computed(() => {
-				return list.value.isShared
-					? labels.modals.sharingOptions.confirmText.public
-					: labels.modals.sharingOptions.confirmText.private;
-			}),
-			cancelText: labels.modals.sharingOptions.cancelText,
-			confirm: () => handleSharingOptionsConfirm(),
-		});
-
-		const deleteModal = ref({
-			showModal: false,
-			title: labels.modals.deleteGift.title,
-			confirmText: labels.modals.deleteGift.confirm,
-			confirm: () => handleDeleteConfirm(),
-			gift: {} as GiftDTO,
-		});
-
-		/******** Computed data ********/
-		const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
-		const gifts: ComputedRef<GiftDTO[]> = computed(() => state.gifts.all);
-		const isListView = computed(() => {
-			if (state.preferences.listView === undefined) {
-				return true;
-			} else {
-				return state.preferences.listView;
-			}
-		});
-
-		const listSharingLink = computed(() => {
-			return list.value.sharingCode
-				? process.env.VUE_APP_FRONT_URL + "/app/shared/" + list.value.sharingCode
-				: "";
-		});
-
-		/******** Fetch page data ********/
-		onMounted(async () => {
-			const successList = await dispatch("getList", listPayload);
-			const successGifts = await dispatch("getGifts", listPayload);
-			loading.value = !(successList && successGifts);
-		});
-
-		onUnmounted(() => {
-			commit("EMPTY_LIST");
-		});
-
-		/******** Methods ********/
-		const handleSort = (headers: Array<any>) => {
-			tableHeaders.value = headers;
-
-			// TODO : Sort displayed data depending on tableHeaders sorted properties
-		};
-
-		const toggleDisplayMode = () => {
-			dispatch("toggleListView", !isListView.value);
-		};
-
-		const showSharingOptionsModal = () => {
-			sharingOptionsModal.value.showModal = true;
-		};
-
-		const handleSharingOptionsConfirm = async () => {
-			shareButtonIsLoading.value = true;
-			if (list.value.isShared) {
-				await unshareList();
-				shareButtonIsLoading.value = false;
-			} else {
-				await shareList();
-				shareButtonIsLoading.value = false;
-				await dispatch("getList", listPayload);
-			}
-		};
-
-		const handleDeleteModal = (gift: GiftDTO) => {
-			deleteModal.value.title = labels.modals.deleteGift.title + gift.title;
-			deleteModal.value.showModal = true;
-			deleteModal.value.confirm = handleDeleteConfirm;
-			deleteModal.value.gift = gift;
-		};
-
-		const handleDeleteConfirm = async () => {
-			deleteButtonIsLoading.value = true;
-			const giftIdPayload: GiftIdPayload = {
-				auth,
-				listId,
-				giftId: deleteModal.value.gift.id,
-			};
-			const success = await dispatch("deleteGift", giftIdPayload);
-			if (success) {
-				deleteModal.value.showModal = false;
-				setTimeout(() => {
-					deleteButtonIsLoading.value = false;
-				}, 300);
-			}
-		};
-
-		const shareList = async () => {
-			if (!list.value.isShared) {
-				await dispatch("shareList", listPayload);
-			}
-		};
-		const unshareList = async () => {
-			if (list.value.isShared) {
-				await dispatch("unshareList", listPayload);
-			}
-		};
-
-		return {
-			loading,
-			isListView,
-			labels,
-			gifts,
-			handleDeleteModal,
-			list,
-			deleteModal,
-			sharingOptionsModal,
-			showSharingOptionsModal,
-			listSharingLink,
-			router,
-			tableHeaders,
-			toggleDisplayMode,
-			handleSort,
-			shareList,
-			unshareList,
-			deleteButtonIsLoading,
-			shareButtonIsLoading,
-		};
-	},
+const sharingOptionsModal = ref({
+	showModal: false,
+	title: labels.modals.sharingOptions.title,
+	confirmText: computed(() => {
+		return list.value.isShared
+			? labels.modals.sharingOptions.confirmText.public
+			: labels.modals.sharingOptions.confirmText.private;
+	}),
+	cancelText: labels.modals.sharingOptions.cancelText,
+	confirm: () => handleSharingOptionsConfirm(),
 });
+
+const deleteModal = ref({
+	showModal: false,
+	title: labels.modals.deleteGift.title,
+	confirmText: labels.modals.deleteGift.confirm,
+	confirm: () => handleDeleteConfirm(),
+	gift: {} as GiftDTO,
+});
+
+/******** Computed data ********/
+const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
+const gifts: ComputedRef<GiftDTO[]> = computed(() => state.gifts.all);
+const isListView = computed(() => {
+	if (state.preferences.listView === undefined) {
+		return true;
+	} else {
+		return state.preferences.listView;
+	}
+});
+
+const listSharingLink = computed(() => {
+	return list.value.sharingCode
+		? process.env.VUE_APP_FRONT_URL + "/app/shared/" + list.value.sharingCode
+		: "";
+});
+
+/******** Fetch page data ********/
+onMounted(async () => {
+	const successList = await dispatch("getList", listPayload);
+	const successGifts = await dispatch("getGifts", listPayload);
+	loading.value = !(successList && successGifts);
+});
+
+onUnmounted(() => {
+	commit("EMPTY_LIST");
+});
+
+/******** Methods ********/
+const handleSort = (headers: Array<any>) => {
+	tableHeaders.value = headers;
+
+	// TODO : Sort displayed data depending on tableHeaders sorted properties
+};
+
+const toggleDisplayMode = () => {
+	dispatch("toggleListView", !isListView.value);
+};
+
+const showSharingOptionsModal = () => {
+	sharingOptionsModal.value.showModal = true;
+};
+
+const handleSharingOptionsConfirm = async () => {
+	shareButtonIsLoading.value = true;
+	if (list.value.isShared) {
+		await unshareList();
+		shareButtonIsLoading.value = false;
+	} else {
+		await shareList();
+		shareButtonIsLoading.value = false;
+		await dispatch("getList", listPayload);
+	}
+};
+
+const handleDeleteModal = (gift: GiftDTO) => {
+	deleteModal.value.title = labels.modals.deleteGift.title + gift.title;
+	deleteModal.value.showModal = true;
+	deleteModal.value.confirm = handleDeleteConfirm;
+	deleteModal.value.gift = gift;
+};
+
+const handleDeleteConfirm = async () => {
+	deleteButtonIsLoading.value = true;
+	const giftIdPayload: GiftIdPayload = {
+		auth,
+		listId,
+		giftId: deleteModal.value.gift.id,
+	};
+	const success = await dispatch("deleteGift", giftIdPayload);
+	if (success) {
+		deleteModal.value.showModal = false;
+		setTimeout(() => {
+			deleteButtonIsLoading.value = false;
+		}, 300);
+	}
+};
+
+const shareList = async () => {
+	if (!list.value.isShared) {
+		await dispatch("shareList", listPayload);
+	}
+};
+const unshareList = async () => {
+	if (list.value.isShared) {
+		await dispatch("unshareList", listPayload);
+	}
+};
 </script>

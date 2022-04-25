@@ -7,27 +7,15 @@
 	<footer></footer>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { useStore } from "vuex";
+
 import GiftlistHeader from "@/components/GiftlistHeader.vue";
 import GiftlistSnackbar from "@/components/GiftlistSnackbar.vue";
 
-export default defineComponent({
-	components: {
-		GiftlistHeader,
-		GiftlistSnackbar,
-	},
-	setup() {
-		const store = useStore();
+const store = useStore();
 
-		const snack = store.state.snackbar;
-
-		return {
-			snack,
-		};
-	},
-});
+const snack = store.state.snackbar;
 </script>
 
 <style lang="scss">
