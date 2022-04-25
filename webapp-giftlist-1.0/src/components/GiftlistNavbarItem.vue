@@ -10,17 +10,14 @@
 	</li>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+interface Props {
+	path: string;
+	text: string;
+	outline: boolean;
+}
 
-export default defineComponent({
-	name: "GiftlistNavbarItem",
-	props: {
-		path: String,
-		text: String,
-		outline: Boolean,
-	},
-});
+defineProps<Props>();
 </script>
 
 <style lang="scss" scoped>

@@ -61,12 +61,12 @@
 	</TransitionRoot>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script setup lang="ts">
+import labels from "@/labels/fr/labels.json";
+
+import { ModalTypeEnum } from "@/types/ModalTypeEnum";
 
 import GiftlistButton from "@/components/GiftlistButton.vue";
-import labels from "@/labels/fr/labels.json";
-import { ModalTypeEnum } from "@/types/ModalTypeEnum";
 import {
 	Dialog,
 	DialogOverlay,
@@ -75,44 +75,22 @@ import {
 	TransitionRoot,
 } from "@headlessui/vue";
 
-export default defineComponent({
-	name: "GiftlistModal",
-	components: {
-		GiftlistButton,
-		TransitionRoot,
-		TransitionChild,
-		Dialog,
-		DialogOverlay,
-		DialogTitle,
-	},
-	props: {
-		type: {
-			type: String as PropType<ModalTypeEnum>,
-			default: ModalTypeEnum.NORMAL,
-		},
-		show: {
-			type: Boolean,
-			required: true,
-		},
-		title: {
-			type: String,
-			required: true,
-		},
-		confirmText: {
-			type: String,
-			required: false,
-		},
-		cancelText: {
-			type: String,
-			required: false,
-			default: labels.modals.defaults.cancel,
-		},
-		btnLoading: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-	},
-	emits: ["close", "confirm"],
+interface Props {
+	show: boolean;
+	title: string;
+	type?: ModalTypeEnum;
+	btnLoading?: boolean;
+	confirmText?: string;
+	cancelText?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	type: ModalTypeEnum.NORMAL,
+	btnLoading: false,
 });
+
+defineEmits<{
+	(e: "close"): void;
+	(e: "confirm"): void;
+}>();
 </script>

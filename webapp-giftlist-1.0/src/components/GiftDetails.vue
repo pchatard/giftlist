@@ -60,10 +60,10 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script setup lang="ts">
 import labels from "@/labels/fr/labels.json";
+import { GiftDTO } from "@/types/dto/GiftDTO.ts";
+
 import {
 	AnnotationIcon,
 	ChartBarIcon,
@@ -74,24 +74,9 @@ import {
 	TagIcon,
 } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "GiftDetails",
-	components: {
-		AnnotationIcon,
-		CurrencyEuroIcon,
-		ChartBarIcon,
-		ColorSwatchIcon,
-		ExternalLinkIcon,
-		ShoppingCartIcon,
-		TagIcon,
-	},
-	props: {
-		gift: Object,
-	},
-	setup() {
-		return {
-			labels,
-		};
-	},
-});
+interface Props {
+	gift: GiftDTO;
+}
+
+defineProps<Props>();
 </script>

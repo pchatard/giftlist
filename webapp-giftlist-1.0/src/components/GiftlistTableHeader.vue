@@ -23,35 +23,25 @@
 	</th>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script setup lang="ts">
 import { ArrowSmDownIcon, ArrowSmUpIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "GiftlistTableHeader",
-	components: {
-		ArrowSmDownIcon,
-		ArrowSmUpIcon,
-	},
-	props: {
-		sortable: {
-			type: Boolean,
-			default: false,
-		},
-		sorted: {
-			type: String,
-			default: "up",
-		},
-		scope: {
-			type: String,
-			default: "col",
-		},
-		content: {
-			type: String,
-			required: true,
-		},
-	},
-	emits: ["sort", "up", "down"],
+interface Props {
+	content: string;
+	sortable?: boolean;
+	sorted?: string;
+	scope?: string;
+}
+
+withDefaults(defineProps<Props>(), {
+	sortable: false,
+	sorted: "up",
+	scope: "col",
 });
+
+defineEmits<{
+	(e: "sort"): void;
+	(e: "up"): void;
+	(e: "down"): void;
+}>();
 </script>

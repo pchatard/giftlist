@@ -22,52 +22,40 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 
-import GiftlistTitle from "@/components/GiftlistTitle.vue";
 import labels from "@/labels/fr/labels.json";
+
+import GiftlistTitle from "@/components/GiftlistTitle.vue";
+
 import { ArrowLeftIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "DefaultLayout",
-	components: { GiftlistTitle, ArrowLeftIcon },
-	props: {
-		title: String,
-		back: Boolean,
-		backButtonTitle: {
-			type: String,
-			required: false,
-		},
-		backButtonLink: {
-			type: String,
-			required: false,
-		},
-	},
-	setup(props) {
-		const router = useRouter();
+interface Props {
+	title: string;
+	back: boolean;
+	backButtonTitle?: string;
+	backButtonLink?: string;
+}
 
-		const backText = computed(() => {
-			const back = labels.defaultLayout.back;
-			if (props.backButtonTitle) {
-				return `${back} vers ${props.backButtonTitle}`;
-			}
-			return back;
-		});
+const props = defineProps<Props>();
 
-		const handleBackButtonClick = () => {
-			if (props.backButtonLink) {
-				router.push(props.backButtonLink);
-			} else {
-				router.go(-1);
-			}
-		};
+const router = useRouter();
 
-		return {
-			backText,
-			handleBackButtonClick,
-		};
-	},
+const backText = computed(() => {
+	const back = labels.defaultLayout.back;
+	if (props.backButtonTitle) {
+		return `${back} vers ${props.backButtonTitle}`;
+	}
+	return back;
 });
+
+const handleBackButtonClick = () => {
+	if (props.backButtonLink) {
+		router.push(props.backButtonLink);
+	} else {
+		router.go(-1);
+	}
+};
 </script>

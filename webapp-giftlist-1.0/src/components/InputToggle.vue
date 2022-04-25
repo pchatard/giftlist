@@ -28,50 +28,28 @@
 	</fieldset>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 
-export default defineComponent({
-	name: "InputToggle",
-	components: {
-		SwitchGroup,
-		Switch,
-		SwitchLabel,
-	},
-	props: {
-		value: {
-			type: Boolean,
-			required: true,
-		},
-		label: {
-			type: String,
-			required: true,
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		helperText: {
-			type: String,
-		},
-		inline: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	setup(props, context) {
-		const refValue = ref(props.value);
+interface Props {
+	value: boolean;
+	label: string;
+	disabled?: boolean;
+	helperText?: string;
+	inline?: boolean;
+}
 
-		watch(refValue, (value: boolean) => {
-			context.emit("change", value);
-		});
+withDefaults(defineProps<Props>(), { disabled: false, inline: false });
 
-		return {
-			refValue,
-		};
-	},
-	emits: ["change"],
+const emit = defineEmits<{
+	(e: "change", value: boolean): void;
+}>();
+
+const refValue = ref(props.value);
+
+watch(refValue, (value: boolean) => {
+	emit("change", value);
 });
 </script>

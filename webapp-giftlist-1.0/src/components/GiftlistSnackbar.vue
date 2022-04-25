@@ -13,34 +13,24 @@
 	</transition>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script setup lang="ts">
 import { useStore } from "vuex";
 
 import labels from "@/labels/fr/labels.json";
+
 import { SnackbarState } from "@/store/snackbar";
 
-export default defineComponent({
-	name: "GiftlistSnackbar",
-	props: {
-		snack: {
-			type: Object as PropType<SnackbarState>,
-			required: true,
-		},
-	},
-	setup() {
-		const { dispatch } = useStore();
+interface Props {
+	snack: SnackbarState;
+}
 
-		const hideSnackbar = () => {
-			dispatch("hideSnackbar");
-		};
+defineProps<Props>();
 
-		return {
-			labels,
-			hideSnackbar,
-		};
-	},
-});
+const { dispatch } = useStore();
+
+const hideSnackbar = () => {
+	dispatch("hideSnackbar");
+};
 </script>
 
 <style lang="scss">

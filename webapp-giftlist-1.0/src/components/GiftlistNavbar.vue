@@ -5,26 +5,13 @@
 	</nav>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, ref } from "vue";
+<script setup lang="ts">
+import { inject, ref } from "vue";
 
 import GiftlistNavbarLoggedIn from "@/components/GiftlistNavbarLoggedIn.vue";
 import GiftlistNavbarLoggedOut from "@/components/GiftlistNavbarLoggedOut.vue";
 
-export default defineComponent({
-	name: "GiftlistNavbar",
-	components: {
-		GiftlistNavbarLoggedIn,
-		GiftlistNavbarLoggedOut,
-	},
-	setup() {
-		const auth = ref(inject("Auth") as any);
+const auth = ref(inject("Auth") as any);
 
-		const isAuthenticated = auth.value.isAuthenticated;
-
-		return {
-			isAuthenticated,
-		};
-	},
-});
+const isAuthenticated = auth.value.isAuthenticated;
 </script>

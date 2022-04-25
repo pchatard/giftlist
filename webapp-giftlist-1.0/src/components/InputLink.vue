@@ -77,8 +77,8 @@
 	</InputWrapper>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
 import InputWrapper from "@/components/InputWrapper.vue";
 import { TransitionRoot } from "@headlessui/vue";
@@ -89,111 +89,67 @@ import {
 	XIcon,
 } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "InputLink",
-	components: {
-		ClipboardCopyIcon,
-		ClipboardCheckIcon,
-		ExternalLinkIcon,
-		TransitionRoot,
-		InputWrapper,
-		XIcon,
-	},
-	props: {
-		value: {
-			type: String,
-			required: true,
-		},
-		label: {
-			type: String,
-			required: true,
-		},
-		type: {
-			type: String,
-			default: "text",
-			validator: (value: string) => {
-				return ["text", "email", "password"].includes(value.toLowerCase());
-			},
-		},
-		placeholder: {
-			type: String,
-		},
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		isError: {
-			type: Boolean,
-			default: false,
-		},
-		errorMessage: {
-			type: String,
-		},
-		helperText: {
-			type: String,
-		},
-		copy: {
-			type: Boolean,
-			default: false,
-		},
-		open: {
-			type: Boolean,
-			default: false,
-		},
-		reset: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	setup(props, context) {
-		const refValue = ref(props.value);
-		const selected = ref(false);
-		const copied = ref(false);
+interface Props {
+	value: string;
+	label: string;
+	type?: "text" | "email" | "password";
+	placeholder?: string;
+	disabled?: boolean;
+	isError?: boolean;
+	errorMessage?: string;
+	helperText?: string;
+	copy?: boolean;
+	open?: boolean;
+	reset?: boolean;
+}
 
-		const copyToClipboard = (event: Event) => {
-			const button = event.currentTarget as HTMLElement;
-			const input = button.previousElementSibling as HTMLInputElement;
-			input.select();
-			document.execCommand("copy");
-			copied.value = true;
-		};
-
-		const openInNewTab = (event: Event) => {
-			event.preventDefault();
-			console.log("open", refValue.value);
-		};
-
-		watch(refValue, (value) => {
-			context.emit("change", value);
-			copied.value = false;
-		});
-
-		watch(props, (value) => {
-			refValue.value = value.value;
-		});
-
-		const onFocus = () => {
-			selected.value = true;
-		};
-		const onBlur = () => {
-			selected.value = false;
-		};
-
-		const onResetText = () => {
-			refValue.value = "";
-		};
-
-		return {
-			copied,
-			copyToClipboard,
-			openInNewTab,
-			refValue,
-			onFocus,
-			onBlur,
-			selected,
-			onResetText,
-		};
-	},
-	emits: ["change"],
+const props = withDefaults(defineProps<Props>(), {
+	type: "text",
+	disabled: false,
+	isError: false,
+	copy: false,
+	open: false,
+	reset: false,
 });
+
+const emit = defineEmits<{
+	(e: "change", value: string): void;
+}>();
+
+const refValue = ref(props.value);
+const selected = ref(false);
+const copied = ref(false);
+
+const copyToClipboard = (event: Event) => {
+	const button = event.currentTarget as HTMLElement;
+	const input = button.previousElementSibling as HTMLInputElement;
+	input.select();
+	document.execCommand("copy");
+	copied.value = true;
+};
+
+const openInNewTab = (event: Event) => {
+	event.preventDefault();
+	console.log("open", refValue.value);
+};
+
+watch(refValue, (value) => {
+	emit("change", value);
+	copied.value = false;
+});
+
+watch(props, (value) => {
+	refValue.value = value.value;
+});
+
+const onFocus = () => {
+	selected.value = true;
+};
+const onBlur = () => {
+	selected.value = false;
+};
+
+const onResetText = () => {
+	refValue.value = "";
+};
 </script>

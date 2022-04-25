@@ -19,36 +19,25 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
 import { Switch } from "@headlessui/vue";
 import { ViewGridIcon, ViewListIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "ToggleViewMode",
-	components: {
-		Switch,
-		ViewGridIcon,
-		ViewListIcon,
-	},
-	props: {
-		isGridView: {
-			type: Boolean,
-			required: true,
-		},
-	},
-	setup(props, context) {
-		const isGrid = ref(props.isGridView);
+interface Props {
+	isGridView: boolean;
+}
 
-		watch(isGrid, (value: boolean) => {
-			context.emit("change", value);
-		});
+defineProps<Props>();
 
-		return {
-			isGrid,
-		};
-	},
-	emits: ["change"],
+const emit = defineEmits<{
+	(e: "change", isGridView: boolean): void;
+}>();
+
+const isGrid = ref(props.isGridView);
+
+watch(isGrid, (value: boolean) => {
+	emit("change", value);
 });
 </script>

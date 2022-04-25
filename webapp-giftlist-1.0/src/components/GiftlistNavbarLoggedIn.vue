@@ -43,46 +43,30 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, inject, ref } from "vue";
+<script setup lang="ts">
+import { computed, inject, ref } from "vue";
 import { useRouter } from "vue-router";
+
+import labels from "@/labels/fr/labels.json";
 
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import GiftlistNavbarDropdownMenu from "@/components/GiftlistNavbarDropdownMenu.vue";
 import GiftlistNavbarItem from "@/components/GiftlistNavbarItem.vue";
-import labels from "@/labels/fr/labels.json";
+
 import { CollectionIcon, GiftIcon, PlusCircleIcon, UserGroupIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "GiftlistNavbarLoggedIn",
-	components: {
-		GiftlistButton,
-		GiftlistNavbarItem,
-		GiftlistNavbarDropdownMenu,
-		CollectionIcon,
-		PlusCircleIcon,
-		UserGroupIcon,
-		GiftIcon,
-	},
-	setup() {
-		const router = useRouter();
-		const currentRoute = router.currentRoute;
-		const auth = ref(inject("Auth") as any);
+const router = useRouter();
+const auth = ref(inject("Auth") as any);
 
-		const logout = () => {
-			auth.value.logout({
-				returnTo: window.location.origin,
-			});
-		};
-		const cta = computed(() => currentRoute.value.meta.navbarCta);
+const currentRoute = router.currentRoute;
 
-		return {
-			labels,
-			logout,
-			cta,
-		};
-	},
-});
+const cta = computed(() => currentRoute.value.meta.navbarCta);
+
+const logout = () => {
+	auth.value.logout({
+		returnTo: window.location.origin,
+	});
+};
 </script>
 
 <style lang="scss" scoped>

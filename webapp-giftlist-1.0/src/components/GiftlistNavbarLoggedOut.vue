@@ -18,30 +18,18 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, ref } from "vue";
+<script setup lang="ts">
+import { inject, ref } from "vue";
 
-import GiftlistButton from "@/components/GiftlistButton.vue";
 import labels from "@/labels/fr/labels.json";
 
-export default defineComponent({
-	name: "GiftlistNavbarLoggedOut",
-	components: {
-		GiftlistButton,
-	},
-	setup() {
-		const auth = ref(inject("Auth") as any);
-		const login = async () => {
-			await auth.value.loginWithRedirect({
-				redirect_uri: window.location.origin + "/app/lists",
-			});
-		};
+import GiftlistButton from "@/components/GiftlistButton.vue";
 
-		return {
-			labels,
-			auth,
-			login,
-		};
-	},
-});
+const auth = ref(inject("Auth") as any);
+
+const login = async () => {
+	await auth.value.loginWithRedirect({
+		redirect_uri: window.location.origin + "/app/lists",
+	});
+};
 </script>

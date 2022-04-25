@@ -66,84 +66,65 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script setup lang="ts">
 import InputDate from "@/components/InputDate.vue";
 import InputText from "@/components/InputText.vue";
 import InputToggle from "@/components/InputToggle.vue";
 import { AnnotationIcon, CalendarIcon, CollectionIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "ListFormOne",
-	components: {
-		InputText,
-		InputDate,
-		InputToggle,
-		CalendarIcon,
-		CollectionIcon,
-		AnnotationIcon,
-	},
-	props: {
-		values: {
-			type: Object,
+interface Props {
+	values: Record<string, unknown>;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits<{
+	(e: "change", values: Record<string, unknown>): void;
+}>();
+
+const handleTitleChange = (title: string) => {
+	const values = {
+		...props.values,
+		title: {
+			...props.values?.title,
+			errorMessage: "",
+			value: title,
 		},
-	},
-	setup(props, context) {
-		const handleTitleChange = (title: string) => {
-			const values = {
-				...props.values,
-				title: {
-					...props.values?.title,
-					errorMessage: "",
-					value: title,
-				},
-			};
-			context.emit("change", values);
-		};
+	};
+	emit("change", values);
+};
 
-		const handleDescriptionChange = (description: string) => {
-			const values = {
-				...props.values,
-				description: {
-					...props.values?.description,
-					errorMessage: "",
-					value: description,
-				},
-			};
-			context.emit("change", values);
-		};
+const handleDescriptionChange = (description: string) => {
+	const values = {
+		...props.values,
+		description: {
+			...props.values?.description,
+			errorMessage: "",
+			value: description,
+		},
+	};
+	emit("change", values);
+};
 
-		const handleActivateTermDateChange = (activateTermDate: boolean) => {
-			const values = {
-				...props.values,
-				activateTermDate: {
-					...props.values?.activateTermDate,
-					value: activateTermDate,
-				},
-			};
-			context.emit("change", values);
-		};
+const handleActivateTermDateChange = (activateTermDate: boolean) => {
+	const values = {
+		...props.values,
+		activateTermDate: {
+			...props.values?.activateTermDate,
+			value: activateTermDate,
+		},
+	};
+	emit("change", values);
+};
 
-		const handleTermDateChange = (termDate: string) => {
-			const values = {
-				...props.values,
-				termDate: {
-					...props.values?.termDate,
-					errorMessage: "",
-					value: termDate,
-				},
-			};
-			context.emit("change", values);
-		};
-
-		return {
-			handleTitleChange,
-			handleDescriptionChange,
-			handleActivateTermDateChange,
-			handleTermDateChange,
-		};
-	},
-	emits: ["change"],
-});
+const handleTermDateChange = (termDate: string) => {
+	const values = {
+		...props.values,
+		termDate: {
+			...props.values?.termDate,
+			errorMessage: "",
+			value: termDate,
+		},
+	};
+	emit("change", values);
+};
 </script>

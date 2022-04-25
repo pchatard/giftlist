@@ -59,42 +59,26 @@
 	</td>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script setup lang="ts">
 import { useRouter } from "vue-router";
+import labels from "@/labels/fr/labels.json";
+
+import { ListDTO } from "@/types/dto/ListDTO";
 
 import GiftlistTableData from "@/components/GiftlistTableData.vue";
-import labels from "@/labels/fr/labels.json";
-import { ListDTO } from "@/types/dto/ListDTO";
 import { CogIcon, InformationCircleIcon, TrashIcon, ViewListIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "ListItem",
-	components: {
-		InformationCircleIcon,
-		GiftlistTableData,
-		TrashIcon,
-		ViewListIcon,
-		CogIcon,
-	},
-	emits: ["delete", "details"],
-	props: {
-		list: {
-			type: Object as PropType<ListDTO>,
-			required: true,
-		},
-		shared: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	setup() {
-		const router = useRouter();
+interface Props {
+	list: ListDTO;
+	shared?: boolean;
+}
 
-		return {
-			router,
-			labels,
-		};
-	},
-});
+withDefaults(defineProps<Props>(), { shared: false });
+
+defineEmits<{
+	(e: "delete"): void;
+	(e: "details"): void;
+}>();
+
+const router = useRouter();
 </script>

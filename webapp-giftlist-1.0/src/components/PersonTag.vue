@@ -11,29 +11,17 @@
 	</span>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script setup lang="ts">
 import { XIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "PersonTag",
-	props: {
-		text: {
-			type: String,
-			required: true,
-		},
-		hideDelete: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	components: {
-		XIcon,
-	},
-	setup() {
-		return {};
-	},
-	emits: ["delete"],
-});
+interface Props {
+	text: string;
+	hideDelete?: boolean;
+}
+
+withDefaults(defineProps<Props>(), { hideDelete: false });
+
+defineEmits<{
+	(e: "delete"): void;
+}>();
 </script>

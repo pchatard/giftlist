@@ -35,10 +35,11 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 
 import { GiftDTO } from "@/types/dto/GiftDTO";
+
 import {
 	CurrencyEuroIcon,
 	ExternalLinkIcon,
@@ -46,36 +47,23 @@ import {
 	UserCircleIcon,
 } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "BookedGift",
-	components: {
-		ShoppingCartIcon,
-		ExternalLinkIcon,
-		UserCircleIcon,
-		CurrencyEuroIcon,
-	},
-	props: {
-		gift: {
-			type: Object as PropType<GiftDTO>,
-			required: true,
-		},
-	},
-	setup(props) {
-		const price = computed(() => {
-			const giftPrice = props.gift.price;
-			if (giftPrice) {
-				return giftPrice.toFixed(2) + "€";
-			}
-			return "-";
-		});
+interface Props {
+	gift: GiftDTO;
+}
 
-		const openInNewTab = () => {
-			const link = props.gift.linkURL;
-			window.open(link, "_blank");
-			self.focus();
-		};
+const props = defineProps<Props>();
 
-		return { price, openInNewTab };
-	},
+const price = computed(() => {
+	const giftPrice = props.gift.price;
+	if (giftPrice) {
+		return giftPrice.toFixed(2) + "€";
+	}
+	return "-";
 });
+
+const openInNewTab = () => {
+	const link = props.gift.linkURL;
+	window.open(link, "_blank");
+	self.focus();
+};
 </script>

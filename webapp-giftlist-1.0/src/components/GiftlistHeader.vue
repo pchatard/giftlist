@@ -4,15 +4,6 @@
 	</header>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
+<script setup lang="ts">
 import GiftlistNavbar from "@/components/GiftlistNavbar.vue";
-
-export default defineComponent({
-	name: "GiftlistHeader",
-	components: {
-		GiftlistNavbar,
-	},
-});
 </script>

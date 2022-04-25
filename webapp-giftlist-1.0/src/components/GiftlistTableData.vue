@@ -5,15 +5,10 @@
 	</td>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+interface Props {
+	content?: string;
+}
 
-export default defineComponent({
-	name: "GiftlistTableData",
-	props: {
-		content: {
-			type: String,
-		},
-	},
-});
+defineProps<Props>();
 </script>

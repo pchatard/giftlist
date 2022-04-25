@@ -178,8 +178,10 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
+
+import labels from "@/labels/fr/labels.json";
 
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import InputLink from "@/components/InputLink.vue";
@@ -187,7 +189,7 @@ import InputNumber from "@/components/InputNumber.vue";
 import InputSelect from "@/components/InputSelect.vue";
 import InputText from "@/components/InputText.vue";
 import InputToggle from "@/components/InputToggle.vue";
-import labels from "@/labels/fr/labels.json";
+
 import {
 	AnnotationIcon,
 	ChartBarIcon,
@@ -204,71 +206,41 @@ import {
 } from "@heroicons/vue/outline";
 import { HeartIcon as HeartIconFull } from "@heroicons/vue/solid";
 
-export default defineComponent({
-	name: "GiftForm",
-	components: {
-		InputText,
-		InputToggle,
-		InputNumber,
-		InputLink,
-		InputSelect,
-		GiftlistButton,
-		XIcon,
-		CheckIcon,
-		HeartIcon,
-		HeartIconFull,
-		InformationCircleIcon,
-		LinkIcon,
-		GiftIcon,
-		CurrencyEuroIcon,
-		ChartBarIcon,
-		ColorSwatchIcon,
-		TagIcon,
-		AnnotationIcon,
-		FilterIcon,
-	},
-	props: {
-		values: {
-			type: Object,
-			required: true,
-		},
-		action: {
-			type: String,
-			default: "create",
-		},
-		loading: {
-			type: Boolean,
-			default: false,
-		},
-	},
-	setup(props, context) {
-		const handleChange = (field: string, value: any) => {
-			const fieldContent = { ...props.values[field], value };
-			if (!["isFavorite", "showDetails"].includes(field)) {
-				fieldContent.errorMessage = "";
-			}
+interface Props {
+	values: Record<string, unknown>;
+	action?: string;
+	loading?: boolean;
+}
 
-			const values = {
-				...props.values,
-				[field]: fieldContent,
-			};
-			context.emit("change", values);
-		};
+const props = withDefaults(defineProps<Props>(), {
+	action: "create",
+	loading: false,
+});
 
-		const confirmText = computed(() => {
-			if (props.action === "create") {
-				return labels.gift.buttons.create;
-			}
+const emit = defineEmits<{
+	(e: "change", values: Record<string, unknown>): void;
+	(e: "cancel"): void;
+	(e: "confirm"): void;
+}>();
 
-			return labels.gift.buttons.save;
-		});
+const handleChange = (field: string, value: any) => {
+	const fieldContent = { ...props.values[field], value };
+	if (!["isFavorite", "showDetails"].includes(field)) {
+		fieldContent.errorMessage = "";
+	}
 
-		return {
-			labels,
-			confirmText,
-			handleChange,
-		};
-	},
-	emits: ["change", "cancel", "confirm"],
+	const values = {
+		...props.values,
+		[field]: fieldContent,
+	};
+	emit("change", values);
+};
+
+const confirmText = computed(() => {
+	if (props.action === "create") {
+		return labels.gift.buttons.create;
+	}
+
+	return labels.gift.buttons.save;
 });
 </script>

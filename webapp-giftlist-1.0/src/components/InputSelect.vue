@@ -94,8 +94,8 @@
 	</fieldset>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch } from "vue";
+<script setup lang="ts">
+import { onMounted, ref, watch } from "vue";
 
 import {
 	Listbox,
@@ -106,93 +106,62 @@ import {
 } from "@headlessui/vue";
 import { CheckIcon, SelectorIcon } from "@heroicons/vue/outline";
 
-export default defineComponent({
-	name: "InputSelect",
-	components: {
-		Listbox,
-		ListboxLabel,
-		ListboxButton,
-		ListboxOptions,
-		ListboxOption,
-		CheckIcon,
-		SelectorIcon,
-	},
-	props: {
-		value: {
-			type: Object,
-			required: true,
-		},
-		options: {
-			type: Array,
-			required: true,
-		},
-		writable: {
-			type: Boolean,
-			default: false,
-		},
-		isError: {
-			type: Boolean,
-			default: false,
-		},
-		errorMessage: {
-			type: String,
-		},
-		label: {
-			type: String,
-			required: true,
-		},
-		helperText: {
-			type: String,
-		},
-	},
-	setup(props, context) {
-		const selectedOption = ref(props.value);
-		const openWithInput = ref(false);
-		const inputSelect = ref(props.value.name);
-		const filteredOptions = ref(props.options);
+interface Props {
+	value: string;
+	label: string;
+	options: Record<string, unknown>[];
+	isError?: boolean;
+	errorMessage?: string;
+	helperText?: string;
+	writable?: boolean;
+}
 
-		watch(selectedOption, (value) => {
-			if (selectedOption.value.id) {
-				inputSelect.value = value.name;
-				context.emit("change", value);
-			}
-		});
+const props = withDefaults(defineProps<Props>(), {
+	type: "text",
+	isError: false,
+	writable: false,
+});
 
-		watch(props, (value) => {
-			filteredOptions.value = value.options;
-			inputSelect.value = "";
-			selectedOption.value = value.value;
-		});
+const emit = defineEmits<{
+	(e: "change", value: Record<string, unknown>): void;
+}>();
 
-		const openOrHideOptions = () => {
-			openWithInput.value = inputSelect.value ? true : false;
-			filterOptions(inputSelect.value);
-		};
+const selectedOption = ref(props.value);
+const openWithInput = ref(false);
+const inputSelect = ref(props.value.name);
+const filteredOptions = ref(props.options);
 
-		const filterOptions = (queryFilter: string) => {
-			if (!queryFilter) {
-				filteredOptions.value = props.options;
-				return;
-			}
-			filteredOptions.value = props.options.filter((opt: any) => {
-				return opt.name.includes(queryFilter);
-			});
-		};
+watch(selectedOption, (value) => {
+	if (selectedOption.value.id) {
+		inputSelect.value = value.name;
+		emit("change", value);
+	}
+});
 
-		onMounted(() => {
-			window.addEventListener("click", () => {
-				openWithInput.value = false;
-			});
-		});
+watch(props, (value) => {
+	filteredOptions.value = value.options;
+	inputSelect.value = "";
+	selectedOption.value = value.value;
+});
 
-		return {
-			inputSelect,
-			openOrHideOptions,
-			openWithInput,
-			selectedOption,
-			filteredOptions,
-		};
-	},
-	emits: ["change"],
+const openOrHideOptions = () => {
+	openWithInput.value = inputSelect.value ? true : false;
+	filterOptions(inputSelect.value);
+};
+
+const filterOptions = (queryFilter: string) => {
+	if (!queryFilter) {
+		filteredOptions.value = props.options;
+		return;
+	}
+	filteredOptions.value = props.options.filter((opt: any) => {
+		return opt.name.includes(queryFilter);
+	});
+};
+
+onMounted(() => {
+	window.addEventListener("click", () => {
+		openWithInput.value = false;
+	});
 });
 </script>
