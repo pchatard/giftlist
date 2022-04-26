@@ -15,7 +15,7 @@
 			:confirm-text="modal.confirmText"
 			:cancel-text="modal.cancelText"
 			@close="modal.showModal = false"
-			@confirm="modal.confirm"
+			@confirm="openList()"
 		>
 			<GiftDetails v-if="selectedGift" :gift="selectedGift" />
 		</GiftlistModal>
@@ -27,6 +27,8 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import labels from "@/labels/fr/labels.json";
+
+import { GiftDTO } from "@/types/dto/GiftDTO.ts";
 
 import BookedGift from "@/components/BookedGift.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
@@ -82,24 +84,22 @@ const bookedGifts = [
 
 const selectedGift = ref();
 
-const handleDetailsModal = (gift: any) => {
+const modal = ref({
+	showModal: false,
+	title: "",
+	confirmText: "",
+	cancelText: "",
+});
+
+const handleDetailsModal = (gift: GiftDTO) => {
 	modal.value.title = gift.title;
 	modal.value.confirmText = "Ouvrir la liste";
 	modal.value.cancelText = "Fermer";
 	modal.value.showModal = true;
-	modal.value.confirm = openList;
 	selectedGift.value = gift;
 };
 
 const openList = () => {
 	router.push("/app/shared/" + selectedGift.value.list.code);
 };
-
-const modal = ref({
-	showModal: false,
-	title: "",
-	confirmText: "",
-	cancelText: "",
-	confirm: openList,
-});
 </script>

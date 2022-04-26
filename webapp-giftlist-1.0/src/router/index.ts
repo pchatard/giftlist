@@ -24,21 +24,7 @@ import SettingsView from "@/views/SettingsView.vue";
 import SharedListView from "@/views/SharedListView.vue";
 import SharedListsView from "@/views/SharedListsView.vue";
 
-const sharedListsNavbarCta = (): void => {
-	console.debug("SharedLists - sharedListsNavbarCta - Opening new sharing code modal");
-	router.push("/app/shared/new");
-};
-
-const listNavbarCta = (): void => {
-	const listId = router.currentRoute.value.params.id;
-	router.push(`/app/lists/${listId}/new-gift`);
-};
-
-const listsNavbarCta = (): void => {
-	router.push("/app/lists/new");
-};
-
-const redirectNavigationGuard: NavigationGuardWithThis<undefined> = (to: any, from: any) => {
+const redirectNavigationGuard: NavigationGuardWithThis<undefined> = () => {
 	const redirect_route = localStorage.getItem("giftlist-redirect");
 	if (redirect_route) {
 		localStorage.removeItem("giftlist-redirect");
@@ -90,7 +76,6 @@ const routes: Array<RouteRecordRaw> = [
 		beforeEnter: Auth0.routeGuard,
 		meta: {
 			navbarCta: {
-				action: listsNavbarCta,
 				name: labels.navbar.actions.lists,
 			},
 		},
@@ -108,7 +93,6 @@ const routes: Array<RouteRecordRaw> = [
 		beforeEnter: Auth0.routeGuard,
 		meta: {
 			navbarCta: {
-				action: listNavbarCta,
 				name: labels.navbar.actions.list,
 			},
 		},
@@ -138,7 +122,6 @@ const routes: Array<RouteRecordRaw> = [
 		beforeEnter: Auth0.routeGuard,
 		meta: {
 			navbarCta: {
-				action: sharedListsNavbarCta,
 				name: labels.navbar.actions.shared,
 			},
 		},

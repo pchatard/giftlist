@@ -4,6 +4,12 @@ import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
 
 import { RootState } from "./";
 
+export interface SnackbarState {
+	show?: boolean;
+	message: string;
+	type?: SnackbarEventEnum;
+}
+
 export const snackbar: Module<SnackbarState, RootState> = {
 	state: () => ({
 		show: false,
@@ -36,9 +42,3 @@ export const snackbar: Module<SnackbarState, RootState> = {
 		},
 	},
 };
-
-export interface SnackbarState {
-	show?: boolean;
-	message: string;
-	type?: SnackbarEventEnum;
-}

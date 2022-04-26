@@ -29,17 +29,17 @@
 					class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 grid-flow-row gap-x-4 gap-y-8"
 				>
 					<div
-						@click="router.push(`/app/lists/${list.id}/new-gift`)"
 						class="border border-gray-200 shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer"
+						@click="router.push(`/app/lists/${list.id}/new-gift`)"
 					>
 						<PlusIcon class="w-8 text-gray-400" />
 						<span class="">{{ labels.list.empty.button }}</span>
 					</div>
 					<GiftGridView
-						@click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)"
 						v-for="gift in gifts"
 						:key="gift.id"
 						:gift="gift"
+						@click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)"
 						@delete="handleDeleteModal"
 					/>
 				</div>
@@ -95,7 +95,7 @@
 					class="mb-4 w-full"
 					:btn-style="list.isShared ? 'danger-soft' : 'green-soft'"
 					:loading="shareButtonIsLoading"
-					@click="sharingOptionsModal.confirm"
+					@click="handleSharingOptionsConfirm()"
 					>{{ sharingOptionsModal.confirmText }}</GiftlistButton
 				>
 			</GiftlistModal>
@@ -104,10 +104,10 @@
 				:show="deleteModal.showModal"
 				:title="deleteModal.title"
 				:confirm-text="deleteModal.confirmText"
-				@close="deleteModal.showModal = false"
-				@confirm="deleteModal.confirm"
 				:btn-loading="deleteButtonIsLoading"
 				type="danger"
+				@close="deleteModal.showModal = false"
+				@confirm="handleDeleteConfirm()"
 			>
 			</GiftlistModal>
 		</div>
@@ -145,11 +145,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, inject, onMounted, onUnmounted, ref } from "vue";
+import { computed, ComputedRef, Ref, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
 import labels from "@/labels/fr/labels.json";
+
+import { GiftDTO } from "@/types/dto/GiftDTO";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { TableHeader } from "@/types/TableHeader.ts";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftGridView from "@/components/GiftGridView.vue";
@@ -164,15 +172,10 @@ import ToggleViewMode from "@/components/ToggleViewMode.vue";
 
 import { CogIcon, GiftIcon, LockClosedIcon, LockOpenIcon, PlusIcon } from "@heroicons/vue/outline";
 
-import { GiftDTO } from "@/types/dto/GiftDTO";
-import { ListDTO } from "@/types/dto/ListDTO";
-import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
-import { ListIdPayload } from "@/types/payload/ListIdPayload";
-
 /******** Basic imports ********/
 const { dispatch, state, commit } = useStore();
 const router = useRouter();
-const auth = inject("Auth") as any;
+const auth = inject("Auth") as Auth0Client;
 
 /******** Static data ********/
 const listId = router.currentRoute.value.params.id as string;
@@ -185,7 +188,7 @@ const listPayload: ListIdPayload = {
 const loading = ref(true);
 const deleteButtonIsLoading = ref(false);
 const shareButtonIsLoading = ref(false);
-const tableHeaders = ref([
+const tableHeaders: Ref<TableHeader[]> = ref([
 	{
 		title: labels.tables.gift.favorite,
 		width: "w-10 text-center",
@@ -198,23 +201,10 @@ const tableHeaders = ref([
 	{ title: labels.tables.gift.price, sortable: true, sorted: "none" },
 ]);
 
-const sharingOptionsModal = ref({
-	showModal: false,
-	title: labels.modals.sharingOptions.title,
-	confirmText: computed(() => {
-		return list.value.isShared
-			? labels.modals.sharingOptions.confirmText.public
-			: labels.modals.sharingOptions.confirmText.private;
-	}),
-	cancelText: labels.modals.sharingOptions.cancelText,
-	confirm: () => handleSharingOptionsConfirm(),
-});
-
 const deleteModal = ref({
 	showModal: false,
 	title: labels.modals.deleteGift.title,
 	confirmText: labels.modals.deleteGift.confirm,
-	confirm: () => handleDeleteConfirm(),
 	gift: {} as GiftDTO,
 });
 
@@ -247,7 +237,7 @@ onUnmounted(() => {
 });
 
 /******** Methods ********/
-const handleSort = (headers: Array<any>) => {
+const handleSort = (headers: TableHeader[]) => {
 	tableHeaders.value = headers;
 
 	// TODO : Sort displayed data depending on tableHeaders sorted properties
@@ -256,6 +246,28 @@ const handleSort = (headers: Array<any>) => {
 const toggleDisplayMode = () => {
 	dispatch("toggleListView", !isListView.value);
 };
+
+const shareList = async () => {
+	if (!list.value.isShared) {
+		await dispatch("shareList", listPayload);
+	}
+};
+const unshareList = async () => {
+	if (list.value.isShared) {
+		await dispatch("unshareList", listPayload);
+	}
+};
+
+const sharingOptionsModal = ref({
+	showModal: false,
+	title: labels.modals.sharingOptions.title,
+	confirmText: computed(() => {
+		return list.value.isShared
+			? labels.modals.sharingOptions.confirmText.public
+			: labels.modals.sharingOptions.confirmText.private;
+	}),
+	cancelText: labels.modals.sharingOptions.cancelText,
+});
 
 const showSharingOptionsModal = () => {
 	sharingOptionsModal.value.showModal = true;
@@ -271,13 +283,6 @@ const handleSharingOptionsConfirm = async () => {
 		shareButtonIsLoading.value = false;
 		await dispatch("getList", listPayload);
 	}
-};
-
-const handleDeleteModal = (gift: GiftDTO) => {
-	deleteModal.value.title = labels.modals.deleteGift.title + gift.title;
-	deleteModal.value.showModal = true;
-	deleteModal.value.confirm = handleDeleteConfirm;
-	deleteModal.value.gift = gift;
 };
 
 const handleDeleteConfirm = async () => {
@@ -296,14 +301,10 @@ const handleDeleteConfirm = async () => {
 	}
 };
 
-const shareList = async () => {
-	if (!list.value.isShared) {
-		await dispatch("shareList", listPayload);
-	}
-};
-const unshareList = async () => {
-	if (list.value.isShared) {
-		await dispatch("unshareList", listPayload);
-	}
+const handleDeleteModal = (gift: GiftDTO) => {
+	deleteModal.value.title = labels.modals.deleteGift.title + gift.title;
+	deleteModal.value.showModal = true;
+	deleteModal.value.confirm = handleDeleteConfirm;
+	deleteModal.value.gift = gift;
 };
 </script>

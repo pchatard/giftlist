@@ -48,7 +48,7 @@
 				:confirm-text="modal.confirmText"
 				:cancel-text="modal.cancelText"
 				@close="modal.showModal = false"
-				@confirm="modal.confirm"
+				@confirm="selectedGift ? handleDetailsConfirm() : handleBookConfirm()"
 			>
 				<GiftDetails v-if="selectedGift" :gift="selectedGift" />
 			</GiftlistModal>
@@ -60,9 +60,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, inject, onMounted, onUnmounted, ref } from "vue";
+import { computed, ComputedRef, Ref, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
+import labels from "@/labels/fr/labels.json";
+
+import { Gift } from "@/types/api/Gift";
+import { GiftDTO } from "@/types/dto/GiftDTO";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
+import { TableHeader } from "@/types/TableHeader.ts";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftDetails from "@/components/GiftDetails.vue";
@@ -72,14 +84,7 @@ import ToggleViewMode from "@/components/ToggleViewMode.vue";
 import GiftlistLoader from "@/components/GiftlistLoader.vue";
 import GiftlistModal from "@/components/GiftlistModal.vue";
 import GiftlistTable from "@/components/GiftlistTable.vue";
-import labels from "@/labels/fr/labels.json";
-import { Gift } from "@/types/api/Gift";
-import { GiftDTO } from "@/types/dto/GiftDTO";
-import { ListDTO } from "@/types/dto/ListDTO";
-import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
-import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
-import { Auth0Client } from "@auth0/auth0-spa-js";
+
 import { GiftIcon } from "@heroicons/vue/outline";
 
 /******** Basic imports ********/
@@ -94,7 +99,7 @@ const listCode = router.currentRoute.value.params.code as string;
 const loading = ref(true);
 const selectedGift = ref();
 const bookingGift = ref();
-const tableHeaders = ref([
+const tableHeaders: Ref<TableHeader[]> = ref([
 	{
 		title: labels.tables.gift.favorite,
 		width: "w-10 text-center",
@@ -112,7 +117,6 @@ const modal = ref({
 	title: "",
 	confirmText: "",
 	cancelText: "",
-	confirm: () => handleDetailsConfirm(),
 });
 
 /******** Computed data ********/
@@ -156,7 +160,7 @@ onUnmounted(() => {
 
 /******** Methods ********/
 
-const handleSort = (headers: Array<any>) => {
+const handleSort = (headers: Array<TableHeader[]>) => {
 	tableHeaders.value = headers;
 
 	// TODO : Sort displayed data depending on tableHeaders sorted properties
@@ -166,20 +170,17 @@ const toggleDisplayMode = () => {
 	dispatch("toggleListView", !isListView.value);
 };
 
-const openLinkInNewTab = () => {
-	const link = "https://www.google.com";
-	window.open(link, "_blank");
-	self.focus();
-};
-
 const handleBookModal = (gift: Gift) => {
 	modal.value.title = labels.modals.bookGift.title + gift.title;
 	modal.value.confirmText = labels.modals.bookGift.confirm;
 	modal.value.cancelText = labels.modals.bookGift.cancel;
 	modal.value.showModal = true;
-	modal.value.confirm = handleBookConfirm;
 	selectedGift.value = null;
 	bookingGift.value = gift;
+};
+
+const handleDetailsConfirm = () => {
+	handleBookModal(selectedGift.value);
 };
 
 const handleBookConfirm = () => {
@@ -197,11 +198,6 @@ const handleDetailsModal = (gift: Gift) => {
 	modal.value.confirmText = labels.modals.giftDetails.confirm;
 	modal.value.cancelText = labels.modals.giftDetails.cancel;
 	modal.value.showModal = true;
-	modal.value.confirm = handleDetailsConfirm;
 	selectedGift.value = gift;
-};
-
-const handleDetailsConfirm = () => {
-	handleBookModal(selectedGift.value);
 };
 </script>

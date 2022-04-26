@@ -6,7 +6,7 @@
 			class="fixed bottom-0 right-0 shadow-md rounded-md p-4 m-4"
 		>
 			<span> {{ snack.message }} </span>
-			<button @click="hideSnackbar" class="ml-4 px-4 py-2 shadow-sm rounded-md">
+			<button class="ml-4 px-4 py-2 shadow-sm rounded-md" @click="hideSnackbar">
 				{{ labels.snackbar.close }}
 			</button>
 		</div>

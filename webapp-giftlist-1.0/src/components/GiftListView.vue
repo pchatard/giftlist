@@ -2,8 +2,8 @@
 	<GiftlistTableData>
 		<HeartIcon
 			v-if="gift.isFavorite"
-			@click.stop="unfavGift"
 			class="w-7 h-7 mx-auto text-red-400 cursor-pointer"
+			@click.stop="unfavGift"
 		/>
 		<HeartIconOutline
 			v-else
@@ -43,11 +43,11 @@
 	</GiftlistTableData>
 	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 		<button
-			@click.stop="openLinkInNewTab"
 			class="ml-4 font-medium"
 			:class="
 				gift.linkURL ? 'text-indigo-600 hover:text-indigo-900' : 'text-gray-400 line-through'
 			"
+			@click.stop="openLinkInNewTab"
 		>
 			<span
 				class="flex items-center px-2 py-1 rounded-md"
@@ -59,9 +59,9 @@
 		</button>
 		<button
 			v-if="shared"
-			@click.stop="openBookGiftModal"
 			class="ml-4 font-medium"
 			:class="!gift.isBooked ? 'text-red-600 hover:text-red-900' : 'text-gray-400 line-through'"
+			@click.stop="openBookGiftModal"
 		>
 			<span
 				class="flex items-center px-2 py-1 rounded-md"
@@ -73,8 +73,8 @@
 		</button>
 		<button
 			v-else
-			@click.stop="openDeleteGiftModal"
 			class="ml-4 items-center text-red-600 font-medium hover:text-red-900"
+			@click.stop="openDeleteGiftModal"
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-red-100 rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />

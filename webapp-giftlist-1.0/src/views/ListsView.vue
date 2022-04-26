@@ -29,13 +29,13 @@
 
 			<GiftlistModal
 				:show="deleteModalIsOpen"
-				@confirm="deleteList"
-				@close="closeDeleteModal"
 				type="danger"
 				:title="labels.modals.deleteList.title + listToDelete?.title"
 				:confirm-text="labels.modals.deleteList.confirm"
 				:cancel-text="labels.modals.deleteList.cancel"
 				:btn-loading="deleteModalButtonIsLoading"
+				@confirm="deleteList"
+				@close="closeDeleteModal"
 			>
 				<p class="text-sm text-gray-500">{{ labels.modals.deleteList.text }}</p>
 				<p class="text-sm text-gray-500">{{ labels.modals.deleteList.text2 }}</p>
@@ -53,6 +53,10 @@ import { Auth0Client } from "@auth0/auth0-spa-js";
 
 import labels from "@/labels/fr/labels.json";
 
+import { ListDTO } from "@/types/dto/ListDTO";
+import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { TableHeader } from "@/types/TableHeader.ts";
+
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import GiftlistLoader from "@/components/GiftlistLoader.vue";
@@ -60,8 +64,6 @@ import GiftlistModal from "@/components/GiftlistModal.vue";
 import GiftlistTable from "@/components/GiftlistTable.vue";
 import ListItem from "@/components/ListItem.vue";
 
-import { ListDTO } from "@/types/dto/ListDTO";
-import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { CollectionIcon } from "@heroicons/vue/outline";
 
 /******** Basic imports ********/
@@ -69,21 +71,18 @@ const { dispatch, state } = useStore();
 const router = useRouter();
 const auth = inject("Auth") as Auth0Client;
 
-/******** Static imports ********/
-const listTableHeaderLabels = (labels as any).tables.list;
-
 /******** Reactive data ********/
 const loading = ref(true);
 const deleteModalIsOpen = ref(false);
 const deleteModalButtonIsLoading = ref(false);
 const lists: ComputedRef<ListDTO[]> = computed(() => state.lists.owned);
 const listToDelete: Ref<ListDTO | undefined> = ref();
-const tableHeaders = ref([
+const tableHeaders: Ref<TableHeader[]> = ref([
 	{ title: "", width: "w-8", sortable: false },
-	{ title: listTableHeaderLabels.title, sortable: true, sorted: "none" },
-	{ title: listTableHeaderLabels.owners, sortable: true, sorted: "none" },
-	{ title: listTableHeaderLabels.status, sortable: true, sorted: "none" },
-	{ title: listTableHeaderLabels.termDate, sortable: true, sorted: "none" },
+	{ title: labels.tables.list.title, sortable: true, sorted: "none" },
+	{ title: labels.tables.list.owners, sortable: true, sorted: "none" },
+	{ title: labels.tables.list.status, sortable: true, sorted: "none" },
+	{ title: labels.tables.list.termDate, sortable: true, sorted: "none" },
 ]);
 
 /******** Fetch page data ********/
@@ -93,7 +92,7 @@ onMounted(async () => {
 });
 
 /******** Methods ********/
-const handleSort = (headers: Array<any>) => {
+const handleSort = (headers: TableHeader[]) => {
 	tableHeaders.value = headers;
 
 	// TODO : Sort displayed data depending on tableHeaders sorted properties

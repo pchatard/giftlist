@@ -24,8 +24,6 @@ import { useRouter } from "vue-router";
 
 import labels from "@/labels/fr/labels.json";
 
-import Title from "@/components/GiftlistTitle.vue";
-
 import { ArrowLeftIcon } from "@heroicons/vue/outline";
 
 interface Props {

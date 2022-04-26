@@ -2,6 +2,10 @@ import { Module } from "vuex";
 
 import { RootState } from "./";
 
+export interface PreferencesState {
+	listView?: boolean;
+}
+
 export const preferences: Module<PreferencesState, RootState> = {
 	state: () => ({
 		listView: undefined,
@@ -17,7 +21,3 @@ export const preferences: Module<PreferencesState, RootState> = {
 		},
 	},
 };
-
-export interface PreferencesState {
-	listView?: boolean;
-}

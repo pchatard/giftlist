@@ -8,8 +8,8 @@
 				:options="ownersSelectOptions"
 				writable
 				:helper-text="values.owners.helperText"
-				@change="handleSelectOwner"
 				disabled
+				@change="handleSelectOwner"
 			/>
 			<div class="col-span-full flex items-center">
 				<UserIcon v-if="values.owners.value.length <= 1" class="w-4 h-4 mr-2 text-indigo-600" />
@@ -18,9 +18,9 @@
 				<div class="flex flex-wrap gap-y-2 py-2 ml-4">
 					<PersonTag text="Moi" class="px-4" hide-delete />
 					<PersonTag
-						class="ml-2"
 						v-for="owner in values.owners.value"
 						:key="owner.id"
+						class="ml-2"
 						:text="owner.name"
 						@delete="handleOwnersDelete(owner.id)"
 					/>
@@ -33,9 +33,9 @@
 				class="col-span-full pt-4"
 				:label="values.shared.label"
 				:value="values.shared.value"
-				@change="handleSharedChange"
 				inline
 				:helper-text="values.shared.helperText"
+				@change="handleSharedChange"
 			>
 				<div class="mr-4">
 					<ShareIcon
@@ -56,15 +56,15 @@
 				:options="authorizedUsersSelectOptions"
 				@change="handleSelectAuthorized"
 			/>
-			<div class="col-span-full flex items-center" v-show="values.shared.value">
+			<div v-show="values.shared.value" class="col-span-full flex items-center">
 				<UserIcon v-if="values.owners.value.length <= 1" class="w-4 h-4 mr-2 text-indigo-600" />
 				<UsersIcon v-else class="w-4 h-4 mr-2 text-indigo-600" />
 				<span>{{ labels.newList.step2.inputs.authorizedUsers.title }}</span>
-				<div class="flex py-2 ml-4" v-if="values.authorizedUsers.value.length">
+				<div v-if="values.authorizedUsers.value.length" class="flex py-2 ml-4">
 					<PersonTag
-						class="ml-2"
 						v-for="person in values.authorizedUsers.value"
 						:key="person.id"
+						class="ml-2"
 						:text="person.name"
 						@delete="handleAuthorizedDelete(person.id)"
 					/>
@@ -97,6 +97,23 @@ const emit = defineEmits<{
 	(e: "change", values: Record<string, unknown>): void;
 }>();
 
+const ownersSelectValue = ref({});
+const ownersSelectOptions = computed(() => {
+	return props.values?.friends.filter(
+		(friend) => props.values?.owners.value.findIndex((o) => o.id === friend.id) < 0
+	);
+});
+
+const authorizedUsersSelectValue = ref({});
+const authorizedUsersSelectOptions = computed(() => {
+	// Only keep friends that are not already added or in the owners list.
+	return props.values?.friends.filter(
+		(friend) =>
+			props.values?.authorizedUsers.value.findIndex((au) => au.id === friend.id) < 0 &&
+			props.values?.owners.value.findIndex((o) => o.id === friend.id) < 0
+	);
+});
+
 const handleSharedChange = (shared: boolean) => {
 	const values = {
 		...props.values,
@@ -108,12 +125,12 @@ const handleSharedChange = (shared: boolean) => {
 	emit("change", values);
 };
 
-const handleSelectOwner = (selectedOwner: any) => {
-	const owners = [...props.values!.owners.value];
-	const authorizedUsers = [...props.values!.authorizedUsers.value];
+const handleSelectOwner = (selectedOwner: Record<string, unknown>) => {
+	const owners = [...props.values.owners.value];
+	const authorizedUsers = [...props.values.authorizedUsers.value];
 	owners.push(selectedOwner);
 	const selectedOwnerIndex = props.values?.authorizedUsers.value.findIndex(
-		(user: any) => user.id === selectedOwner.id
+		(user) => user.id === selectedOwner.id
 	);
 	if (selectedOwnerIndex >= 0) {
 		authorizedUsers.splice(selectedOwnerIndex, 1);
@@ -132,8 +149,8 @@ const handleSelectOwner = (selectedOwner: any) => {
 	emit("change", values);
 };
 
-const handleOwnersDelete = (id: any) => {
-	const owners = [...props.values!.owners.value];
+const handleOwnersDelete = (id: string) => {
+	const owners = [...props.values.owners.value];
 	owners.splice(
 		owners.findIndex((owner) => owner.id === id),
 		1
@@ -149,8 +166,8 @@ const handleOwnersDelete = (id: any) => {
 	emit("change", values);
 };
 
-const handleSelectAuthorized = (selectedUser: any) => {
-	const authorizedUsers = [...props.values!.authorizedUsers.value];
+const handleSelectAuthorized = (selectedUser) => {
+	const authorizedUsers = [...props.values.authorizedUsers.value];
 	authorizedUsers.push(selectedUser);
 	const values = {
 		...props.values,
@@ -162,8 +179,8 @@ const handleSelectAuthorized = (selectedUser: any) => {
 	emit("change", values);
 };
 
-const handleAuthorizedDelete = (id: any) => {
-	const authorizedUsers = [...props.values!.authorizedUsers.value];
+const handleAuthorizedDelete = (id: string) => {
+	const authorizedUsers = [...props.values.authorizedUsers.value];
 	authorizedUsers.splice(
 		authorizedUsers.findIndex((user) => user.id === id),
 		1
@@ -177,21 +194,4 @@ const handleAuthorizedDelete = (id: any) => {
 	};
 	emit("change", values);
 };
-
-const ownersSelectValue = ref({});
-const ownersSelectOptions = computed(() => {
-	return props.values?.friends.filter(
-		(friend: any) => props.values?.owners.value.findIndex((o: any) => o.id === friend.id) < 0
-	);
-});
-
-const authorizedUsersSelectValue = ref({});
-const authorizedUsersSelectOptions = computed(() => {
-	// Only keep friends that are not already added or in the owners list.
-	return props.values?.friends.filter(
-		(friend: any) =>
-			props.values?.authorizedUsers.value.findIndex((au: any) => au.id === friend.id) < 0 &&
-			props.values?.owners.value.findIndex((o: any) => o.id === friend.id) < 0
-	);
-});
 </script>

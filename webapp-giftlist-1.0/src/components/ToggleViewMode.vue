@@ -29,7 +29,7 @@ interface Props {
 	isGridView: boolean;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
 	(e: "change", isGridView: boolean): void;

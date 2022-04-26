@@ -17,9 +17,9 @@
 			:disabled="disabled"
 			:placeholder="placeholder"
 			class="outline-none px-3 py-2 flex-1 caret-indigo-600"
+			:tabindex="tab"
 			@focus="onFocus"
 			@blur="onBlur"
-			:tabindex="tab"
 		/>
 		<XIcon
 			v-if="reset"
@@ -28,9 +28,9 @@
 		/>
 		<button
 			v-if="copy"
-			@click="copyToClipboard"
 			class="relative w-8 border-l border-gray-100 hover:bg-gray-100"
 			:class="disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-100'"
+			@click="copyToClipboard"
 		>
 			<TransitionRoot
 				:show="!copied"
@@ -92,6 +92,10 @@ const props = withDefaults(defineProps<Props>(), {
 	copy: false,
 	reset: false,
 	mandatory: false,
+	placeholder: "",
+	errorMessage: "",
+	helperText: "",
+	tab: 0,
 });
 
 const emit = defineEmits<{

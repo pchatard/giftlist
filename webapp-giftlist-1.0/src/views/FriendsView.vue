@@ -73,8 +73,8 @@
 							:placeholder="emailInput.placeholder"
 							:error-message="emailInput.errorMessage"
 							:is-error="emailInput.errorMessage !== ''"
-							@change="handleEmailInputChange"
 							reset
+							@change="handleEmailInputChange"
 						/>
 						<GiftlistButton class="ml-4 w-2/5" @click="sendFriendRequest">{{
 							labels.friends.addFriendsButton
@@ -96,8 +96,8 @@
 							:placeholder="emailInvitationInput.placeholder"
 							:error-message="emailInvitationInput.errorMessage"
 							:is-error="emailInvitationInput.errorMessage !== ''"
-							@change="handleEmailInvitationInputChange"
 							reset
+							@change="handleEmailInvitationInputChange"
 						/>
 						<GiftlistButton class="ml-4 w-2/5" @click="sendInvitationRequest">
 							{{ labels.friends.inviteButton }}
@@ -125,15 +125,15 @@ import InputText from "@/components/InputText.vue";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/outline";
 
 const acceptFriendRequest = () => {
-	console.log("Friends.vue - acceptFriendRequest");
+	alert("Friends.vue - acceptFriendRequest");
 };
 
 const declineFriendRequest = () => {
-	console.log("Friends.vue - declineFriendRequest");
+	alert("Friends.vue - declineFriendRequest");
 };
 
 const deleteFriend = () => {
-	console.log("Friends.vue - deleteFriend");
+	alert("Friends.vue - deleteFriend");
 };
 
 const emailInput = ref({
@@ -149,7 +149,7 @@ const handleEmailInputChange = (value: string) => {
 };
 
 const sendFriendRequest = () => {
-	console.log("Friends.vue - sendFriendRequest");
+	alert("Friends.vue - sendFriendRequest");
 };
 
 const emailInvitationInput = ref({
@@ -165,7 +165,7 @@ const handleEmailInvitationInputChange = (value: string) => {
 };
 
 const sendInvitationRequest = () => {
-	console.log("Friends.vue - sendInvitationRequest");
+	alert("Friends.vue - sendInvitationRequest");
 };
 </script>
 

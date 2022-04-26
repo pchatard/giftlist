@@ -28,8 +28,8 @@
 	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 		<button
 			v-show="shared"
-			@click.stop="$emit('details', list)"
 			class="mx-2 text-indigo-600 font-medium hover:text-indigo-900"
+			@click.stop="$emit('details', list)"
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<InformationCircleIcon class="h-4 w-4 mr-2" />
@@ -38,8 +38,8 @@
 		</button>
 		<button
 			v-show="!shared"
-			@click.stop="router.push(`/app/lists/${list.id}/settings`)"
 			class="mx-2 text-indigo-600 font-medium hover:text-indigo-900"
+			@click.stop="router.push(`/app/lists/${list.id}/settings`)"
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-indigo-100 rounded-md">
 				<CogIcon class="h-4 w-4 mr-2" />
@@ -48,8 +48,8 @@
 		</button>
 		<button
 			v-show="!shared"
-			@click.stop="$emit('delete', list)"
 			class="ml-2 text-red-600 font-medium hover:text-red-900"
+			@click.stop="$emit('delete', list)"
 		>
 			<span class="flex items-center px-2 py-1 hover:bg-red-100 rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />

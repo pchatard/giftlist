@@ -24,8 +24,8 @@
 		/>
 		<button
 			v-if="copy"
-			@click="copyToClipboard"
 			class="relative w-8 border-l border-gray-100 hover:bg-gray-100"
+			@click="copyToClipboard"
 		>
 			<TransitionRoot
 				:show="!copied"
@@ -79,9 +79,13 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
 	min: 0,
+	max: Math.pow(10, 100),
 	disabled: false,
 	isError: false,
 	copy: false,
+	placeholder: "",
+	helperText: "",
+	errorMessage: "",
 });
 
 const emit = defineEmits<{
@@ -102,7 +106,7 @@ const copyToClipboard = (event: Event) => {
 
 watch(refValue, (value) => {
 	if (value || value === 0) {
-		context.emit("change", value);
+		emit("change", value);
 	} else {
 		refValue.value = 0;
 	}

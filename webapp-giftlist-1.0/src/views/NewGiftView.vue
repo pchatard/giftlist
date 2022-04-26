@@ -153,6 +153,17 @@ const cancel = () => {
 	router.go(-1);
 };
 
+const validateGiftFields = (): boolean => {
+	let validate = true;
+
+	if (!giftInformation.value.title.value) {
+		giftInformation.value.title.errorMessage = "Ce champ est requis";
+		validate = false;
+	}
+
+	return validate;
+};
+
 const createGift = async () => {
 	buttonIsLoading.value = true;
 
@@ -175,18 +186,7 @@ const createGift = async () => {
 	}
 };
 
-const validateGiftFields = (): boolean => {
-	let validate = true;
-
-	if (!giftInformation.value.title.value) {
-		giftInformation.value.title.errorMessage = "Ce champ est requis";
-		validate = false;
-	}
-
-	return validate;
-};
-
-const handleGiftInformationChange = (values: any) => {
+const handleGiftInformationChange = (values: Record<string, unknown>) => {
 	giftInformation.value = values;
 };
 </script>

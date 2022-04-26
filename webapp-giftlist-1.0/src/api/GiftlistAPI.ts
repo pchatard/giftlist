@@ -64,7 +64,7 @@ export default class GiftlistAPI {
 		auth: Auth0Client,
 		path: string,
 		body?: Record<string, unknown>,
-		queryParams?: Record<any, unknown>,
+		queryParams?: Record<string, unknown>,
 		redirectError = false
 	) {
 		await this.getAuthToken(auth);

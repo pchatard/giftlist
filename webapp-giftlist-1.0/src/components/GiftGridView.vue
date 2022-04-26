@@ -14,8 +14,8 @@
 			<div class="ml-auto self-start flex gap-2 flex-col items-end justify-between">
 				<HeartIcon
 					v-if="gift.isFavorite"
-					@click.stop="unfavGift"
 					class="w-6 h-6 text-red-400 cursor-pointer"
+					@click.stop="unfavGift"
 				/>
 				<HeartIconOutline
 					v-else

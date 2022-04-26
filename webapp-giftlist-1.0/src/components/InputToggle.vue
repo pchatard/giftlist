@@ -41,7 +41,11 @@ interface Props {
 	inline?: boolean;
 }
 
-withDefaults(defineProps<Props>(), { disabled: false, inline: false });
+const props = withDefaults(defineProps<Props>(), {
+	disabled: false,
+	inline: false,
+	helperText: "",
+});
 
 const emit = defineEmits<{
 	(e: "change", value: boolean): void;

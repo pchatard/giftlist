@@ -124,19 +124,19 @@
 import { computed, inject, onMounted, Ref } from "vue";
 import { useStore } from "vuex";
 
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
+import labels from "@/labels/fr/labels.json";
+
+import { UserDTO } from "@/types/dto/UserDTO";
+
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
-import labels from "@/labels/fr/labels.json";
-import { UserDTO } from "@/types/dto/UserDTO";
-
-onMounted(async () => {
-	await dispatch("getUser", auth);
-});
 
 const { state, dispatch } = useStore();
 const user: Ref<UserDTO> = computed(() => state.user);
-const auth = inject("Auth") as any;
+const auth = inject("Auth") as Auth0Client;
 
 const friends = [
 	{ id: 0, name: "ND" },
@@ -145,21 +145,28 @@ const friends = [
 	{ id: 3, name: "ML" },
 ];
 
+onMounted(async () => {
+	await dispatch("getUser", auth);
+});
+
 const verifyEmail = () => {
-	console.log("Profile.vue - verifyEmail");
+	// TODO
+	alert("Not implemented yet");
 };
 const changeEmail = () => {
-	console.log("Profile.vue - changeEmail");
+	// TODO
+	alert("Not implemented yet");
 };
 const changePassword = () => {
-	console.log("Profile.vue - changePassword");
+	// TODO
+	alert("Not implemented yet");
 };
 const downloadData = () => {
-	console.log("Profile.vue - downloadData");
+	// TODO
+	alert("Not implemented yet");
 };
 
 const deleteAccount = async () => {
-	console.log("Profile.vue - deleteAccount");
 	const deleteResult = await dispatch("deleteAccount", auth);
 	if (deleteResult) {
 		auth.logout({

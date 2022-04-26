@@ -7,8 +7,8 @@
 			<div class="w-10/12 mx-auto">
 				<Disclosure v-slot="{ open }">
 					<DisclosureButton
-						@click="handleOpen('general')"
 						class="flex justify-between w-full px-4 py-4 text-sm font-medium text-left text-indigo-900 bg-indigo-100 rounded-lg hover:bg-indigo-200 focus:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75"
+						@click="handleOpen('general')"
 					>
 						<span>{{ labels.listOptions.generalTitle }}</span>
 						<ChevronUpIcon
@@ -35,10 +35,10 @@
 						</DisclosurePanel>
 					</transition>
 				</Disclosure>
-				<Disclosure as="div" class="mt-2" v-slot="{ open }">
+				<Disclosure v-slot="{ open }" as="div" class="mt-2">
 					<DisclosureButton
-						@click="handleOpen('share')"
 						class="flex justify-between w-full px-4 py-4 text-sm font-medium text-left text-indigo-900 bg-indigo-100 rounded-lg hover:bg-indigo-200 focus:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75"
+						@click="handleOpen('share')"
 					>
 						<span>{{ labels.listOptions.sharingTitle }}</span>
 						<ChevronUpIcon
@@ -206,24 +206,6 @@ const editedList: ComputedRef<PartialListDTO> = computed(() => {
 	return list;
 });
 
-/******** Fetch page data ********/
-onMounted(async () => {
-	const actionPayload: ListIdPayload = {
-		auth,
-		listId: router.currentRoute.value.params.id as string,
-	};
-	const success = await dispatch("getList", actionPayload);
-	if (success) {
-		initializeFormValues();
-		loading.value = false;
-	}
-});
-
-onUnmounted(() => {
-	commit("EMPTY_LIST");
-});
-
-/******** Methods ********/
 const initializeDate = () => {
 	let date = new Date();
 	date.setDate(date.getDate() + 1);
@@ -243,6 +225,22 @@ const initializeFormValues = () => {
 		: initializeDate().toISOString().split("T")[0];
 };
 
+onMounted(async () => {
+	const actionPayload: ListIdPayload = {
+		auth,
+		listId: router.currentRoute.value.params.id as string,
+	};
+	const success = await dispatch("getList", actionPayload);
+	if (success) {
+		initializeFormValues();
+		loading.value = false;
+	}
+});
+
+onUnmounted(() => {
+	commit("EMPTY_LIST");
+});
+
 const handleOpen = (tab: string) => {
 	if (tab === "general") {
 		openGeneral.value = !openGeneral.value;
@@ -251,16 +249,22 @@ const handleOpen = (tab: string) => {
 	}
 };
 
-const handleGeneralInformationChange = (values: any) => {
+const handleGeneralInformationChange = (values: Record<string, unknown>) => {
 	generalInformation.value = values;
 };
 
-const handleSharingOptionsChange = (values: any) => {
+const handleSharingOptionsChange = (values: Record<string, unknown>) => {
 	sharingOptions.value = values;
 };
 
 const cancel = () => {
 	router.go(-1);
+};
+
+const validateListData = (): boolean => {
+	// TODO
+	const validate = true;
+	return validate;
 };
 
 const saveChanges = async () => {
@@ -272,18 +276,11 @@ const saveChanges = async () => {
 			partialList: editedList.value,
 		};
 
-		console.log(editPayload.partialList);
 		const success = await dispatch("editList", editPayload);
 		if (success) {
 			router.go(-1);
 		}
 	}
 	buttonIsLoading.value = false;
-};
-
-const validateListData = (): boolean => {
-	// TODO
-	const validate = true;
-	return validate;
 };
 </script>

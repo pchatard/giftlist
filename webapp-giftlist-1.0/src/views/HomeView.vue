@@ -40,8 +40,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from "vue";
-
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
 </script>

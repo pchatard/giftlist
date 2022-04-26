@@ -34,7 +34,7 @@ import { ArrowLeftIcon } from "@heroicons/vue/outline";
 
 interface Props {
 	title: string;
-	back: boolean;
+	back?: boolean;
 	backButtonTitle?: string;
 	backButtonLink?: string;
 }

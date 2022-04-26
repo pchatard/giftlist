@@ -35,12 +35,12 @@
 			</div>
 			<GiftlistModal
 				:show="newSharingCodeModalIsOpen"
-				@confirm="confirmNewSharingCode"
-				@close="closeNewSharingCodeModal"
 				:title="labels.modals.code.title"
 				:confirm-text="labels.modals.code.confirm"
 				:cancel-text="labels.modals.code.cancel"
 				:btn-loading="newSharingCodeButtonIsLoading"
+				@confirm="confirmNewSharingCode"
+				@close="closeNewSharingCodeModal"
 			>
 				<InputText
 					:label="newSharingCodeData.label"
@@ -49,18 +49,18 @@
 					:is-error="newSharingCodeData.isError"
 					:error-message="newSharingCodeData.errorMessage"
 					:placeholder="newSharingCodeData.placeholder"
-					@change="(newCode) => (newSharingCodeData.code = newCode)"
 					focus
 					reset
+					@change="(newCode) => (newSharingCodeData.code = newCode)"
 					@keydown.enter="confirmNewSharingCode"
 				/>
 			</GiftlistModal>
 			<GiftlistModal
 				:show="detailsModal.show"
-				@close="handleDetailsModal"
-				@confirm="openList"
 				:title="detailsModal.list.title || ''"
 				:confirm-text="labels.modals.listDetails.confirm"
+				@close="handleDetailsModal"
+				@confirm="openList"
 			>
 				<p>Détails de la liste</p>
 				<p>Propriétaire(s):</p>
@@ -71,9 +71,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, inject, onMounted, ref, watch } from "vue";
+import { computed, ComputedRef, Ref, inject, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
+import labels from "@/labels/fr/labels.json";
+
+import { List } from "@/types/api/List";
+import { ListDTO } from "@/types/dto/ListDTO";
+import { GetListsPayload } from "@/types/payload/GetListsPayload";
+import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
+import { TableHeader } from "@/types/TableHeader.ts";
 
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
@@ -82,12 +92,7 @@ import ListItem from "@/components/ListItem.vue";
 import GiftlistLoader from "@/components/GiftlistLoader.vue";
 import GiftlistModal from "@/components/GiftlistModal.vue";
 import Table from "@/components/GiftlistTable.vue";
-import labels from "@/labels/fr/labels.json";
-import { List } from "@/types/api/List";
-import { ListDTO } from "@/types/dto/ListDTO";
-import { GetListsPayload } from "@/types/payload/GetListsPayload";
-import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
-import { Auth0Client } from "@auth0/auth0-spa-js";
+
 import { QrcodeIcon, UserGroupIcon } from "@heroicons/vue/outline";
 
 /******** Basic imports ********/
@@ -100,7 +105,7 @@ const auth = inject("Auth") as Auth0Client;
 /******** Reactive data ********/
 const loading = ref(true);
 const newSharingCodeButtonIsLoading = ref(false);
-const tableHeaders = ref([
+const tableHeaders: Ref<TableHeader[]> = ref([
 	{ title: "", width: "w-8", sortable: false },
 	{ title: labels.tables.list.title, sortable: true, sorted: "none" },
 	{ title: labels.tables.list.owners, sortable: true, sorted: "none" },
@@ -158,7 +163,7 @@ onMounted(async () => {
 });
 
 /******** Methods ********/
-const handleSort = (headers: Array<any>) => {
+const handleSort = (headers: Array<TableHeader[]>) => {
 	tableHeaders.value = headers;
 
 	// TODO : Sort displayed data depending on tableHeaders sorted properties

@@ -82,14 +82,20 @@
 import { inject, ref } from "vue";
 import { useRouter } from "vue-router";
 
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
 import labels from "@/labels/fr/labels.json";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { CogIcon, LogoutIcon, UserCircleIcon, UserIcon, UsersIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 
+defineEmits<{
+	(e: "logout"): void;
+}>();
+
 const router = useRouter();
-const auth = ref(inject("Auth") as any);
+const auth = ref(inject("Auth") as Auth0Client);
 
 const redirectToProfile = () => {
 	router.push("/app/profile");

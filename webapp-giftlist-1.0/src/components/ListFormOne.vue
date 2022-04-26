@@ -5,13 +5,13 @@
 				class="col-span-1"
 				:label="values.title.label"
 				:value="values.title.value"
-				@change="handleTitleChange"
 				:helper-text="values.title.helperText"
 				:placeholder="values.title.placeholder"
 				:is-error="values.title.errorMessage !== ''"
 				:error-message="values.title.errorMessage"
 				:mandatory="values.title.required"
 				reset
+				@change="handleTitleChange"
 			>
 				<div class="mr-4">
 					<CollectionIcon class="w-5 h-5 text-indigo-600" />
@@ -40,9 +40,9 @@
 				class="col-span-full"
 				:label="values.activateTermDate.label"
 				:value="values.activateTermDate.value"
-				@change="handleActivateTermDateChange"
 				inline
 				:helper-text="values.activateTermDate.helperText"
+				@change="handleActivateTermDateChange"
 			>
 				<div class="mr-4">
 					<CalendarIcon

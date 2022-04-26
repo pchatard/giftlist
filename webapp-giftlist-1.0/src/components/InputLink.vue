@@ -42,9 +42,9 @@
 		</a>
 		<button
 			v-if="copy"
-			@click="copyToClipboard"
 			class="relative w-8 border-l border-gray-100 hover:bg-gray-100"
 			:class="disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-100'"
+			@click="copyToClipboard"
 		>
 			<TransitionRoot
 				:show="!copied"
@@ -110,6 +110,9 @@ const props = withDefaults(defineProps<Props>(), {
 	copy: false,
 	open: false,
 	reset: false,
+	placeholder: "",
+	errorMessage: "",
+	helperText: "",
 });
 
 const emit = defineEmits<{
@@ -126,11 +129,6 @@ const copyToClipboard = (event: Event) => {
 	input.select();
 	document.execCommand("copy");
 	copied.value = true;
-};
-
-const openInNewTab = (event: Event) => {
-	event.preventDefault();
-	console.log("open", refValue.value);
 };
 
 watch(refValue, (value) => {

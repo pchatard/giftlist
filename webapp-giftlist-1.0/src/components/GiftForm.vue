@@ -94,7 +94,7 @@
 					</div>
 				</InputToggle>
 
-				<div class="flex gap-12" v-show="values.showDetails.value">
+				<div v-show="values.showDetails.value" class="flex gap-12">
 					<InputText
 						class="flex-1"
 						:label="values.brand.label"
@@ -223,7 +223,7 @@ const emit = defineEmits<{
 	(e: "confirm"): void;
 }>();
 
-const handleChange = (field: string, value: any) => {
+const handleChange = (field: string, value: unknown) => {
 	const fieldContent = { ...props.values[field], value };
 	if (!["isFavorite", "showDetails"].includes(field)) {
 		fieldContent.errorMessage = "";

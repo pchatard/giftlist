@@ -7,7 +7,7 @@
 			<span :class="{ 'mr-2 cursor-pointer': sortable }" @click.stop="$emit('sort')">
 				{{ content }}
 			</span>
-			<span class="flex" v-show="sortable && content">
+			<span v-show="sortable && content" class="flex">
 				<ArrowSmUpIcon
 					class="w-3 cursor-pointer"
 					:class="[sorted != 'up' ? 'text-gray-300' : 'text-black']"

@@ -9,6 +9,23 @@ import { ListIdPayload } from "@/types/payload/ListIdPayload";
 
 import { RootState } from "./";
 
+const initSelectedGift = (): GiftDTO => {
+	const emptyGift: GiftDTO = {
+		id: "",
+		title: "",
+		isFavorite: false,
+		isHidden: false,
+		category: "",
+		listId: "",
+	};
+	return emptyGift;
+};
+
+export interface GiftState {
+	all: GiftDTO[];
+	selected: GiftDTO;
+}
+
 export const gifts: Module<GiftState, RootState> = {
 	state: () => ({
 		all: [],
@@ -177,20 +194,3 @@ export const gifts: Module<GiftState, RootState> = {
 		},
 	},
 };
-
-const initSelectedGift = (): GiftDTO => {
-	const emptyGift: GiftDTO = {
-		id: "",
-		title: "",
-		isFavorite: false,
-		isHidden: false,
-		category: "",
-		listId: "",
-	};
-	return emptyGift;
-};
-
-export interface GiftState {
-	all: GiftDTO[];
-	selected: GiftDTO;
-}

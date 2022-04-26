@@ -12,20 +12,20 @@
 			<GiftForm
 				action="update"
 				:values="giftInformation"
+				:loading="confirmButtonIsLoading"
 				@change="handleGiftInformationChange"
 				@cancel="cancel"
 				@confirm="saveGiftChanges"
-				:loading="confirmButtonIsLoading"
 			/>
 
 			<GiftlistModal
 				:show="modal.showModal"
 				:title="modal.title"
 				:confirm-text="modal.confirmText"
-				@close="modal.showModal = false"
-				@confirm="modal.confirm"
 				type="danger"
 				:btn-loading="deleteButtonIsLoading"
+				@close="modal.showModal = false"
+				@confirm="handleDeleteConfirm()"
 			>
 			</GiftlistModal>
 		</div>
@@ -91,7 +91,6 @@ const modal = ref({
 	showModal: false,
 	title: labels.modals.deleteGift.title,
 	confirmText: labels.modals.deleteGift.confirm,
-	confirm: () => handleDeleteConfirm(),
 });
 
 const giftInformation = ref({
@@ -215,7 +214,26 @@ const editedGift: ComputedRef<PartialGiftDTO> = computed(() => {
 	return editedGift;
 });
 
-/******** Fetch page data ********/
+/******** Methods ********/
+const initializeFormData = () => {
+	giftInformation.value.title.value = gift.value.title;
+	giftInformation.value.isFavorite.value = gift.value.isFavorite;
+	giftInformation.value.price.value = gift.value.price || 0;
+	giftInformation.value.category.value =
+		giftCategories.find((cat) => cat.name === gift.value.category) || giftCategories[0];
+	giftInformation.value.link.value = gift.value.linkURL || "";
+	giftInformation.value.showDetails.value = ((gift.value.brand ||
+		gift.value.size ||
+		gift.value.color ||
+		gift.value.comments) as unknown as boolean)
+		? true
+		: false;
+	giftInformation.value.brand.value = gift.value.brand || "";
+	giftInformation.value.size.value = gift.value.size || "";
+	giftInformation.value.color.value = gift.value.color || "";
+	giftInformation.value.comments.value = gift.value.comments || "";
+};
+
 onMounted(async () => {
 	const listIdPayload: ListIdPayload = {
 		auth,
@@ -239,32 +257,23 @@ onUnmounted(() => {
 	commit("EMPTY_GIFT");
 });
 
-/******** Methods ********/
-const initializeFormData = () => {
-	giftInformation.value.title.value = gift.value.title;
-	giftInformation.value.isFavorite.value = gift.value.isFavorite;
-	giftInformation.value.price.value = gift.value.price || 0;
-	giftInformation.value.category.value =
-		giftCategories.find((cat) => cat.name === gift.value.category) || giftCategories[0];
-	giftInformation.value.link.value = gift.value.linkURL || "";
-	giftInformation.value.showDetails.value = ((gift.value.brand ||
-		gift.value.size ||
-		gift.value.color ||
-		gift.value.comments) as unknown as boolean)
-		? true
-		: false;
-	giftInformation.value.brand.value = gift.value.brand || "";
-	giftInformation.value.size.value = gift.value.size || "";
-	giftInformation.value.color.value = gift.value.color || "";
-	giftInformation.value.comments.value = gift.value.comments || "";
-};
-
-const handleGiftInformationChange = (values: any) => {
+const handleGiftInformationChange = (values: Record<string, unknown>) => {
 	giftInformation.value = values;
 };
 
 const cancel = () => {
 	router.go(-1);
+};
+
+const validateGiftFields = (): boolean => {
+	let validate = true;
+
+	if (!giftInformation.value.title.value) {
+		giftInformation.value.title.errorMessage = labels.gift.inputs.title.errors.mandatory;
+		validate = false;
+	}
+
+	return validate;
 };
 
 const saveGiftChanges = async () => {
@@ -291,21 +300,9 @@ const saveGiftChanges = async () => {
 	confirmButtonIsLoading.value = false;
 };
 
-const validateGiftFields = (): boolean => {
-	let validate = true;
-
-	if (!giftInformation.value.title.value) {
-		giftInformation.value.title.errorMessage = labels.gift.inputs.title.errors.mandatory;
-		validate = false;
-	}
-
-	return validate;
-};
-
 const handleDeleteModal = () => {
 	modal.value.title = labels.modals.deleteGift.title + giftInformation.value.title.value;
 	modal.value.showModal = true;
-	modal.value.confirm = handleDeleteConfirm;
 };
 
 const handleDeleteConfirm = async () => {

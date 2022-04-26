@@ -37,6 +37,8 @@ const props = withDefaults(defineProps<Props>(), {
 	selected: false,
 	copied: false,
 	mandatory: false,
+	errorMessage: "",
+	helperText: "",
 });
 
 const computedLabelClass = computed(() => {

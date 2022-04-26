@@ -11,8 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from "vue";
-
 import router from "@/router";
 
 import ErrorLayout from "@/components/DefaultLayout.vue";

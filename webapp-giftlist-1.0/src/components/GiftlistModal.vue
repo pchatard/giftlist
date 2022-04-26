@@ -62,8 +62,6 @@
 </template>
 
 <script setup lang="ts">
-import labels from "@/labels/fr/labels.json";
-
 import { ModalTypeEnum } from "@/types/ModalTypeEnum";
 
 import GiftlistButton from "@/components/GiftlistButton.vue";
@@ -84,9 +82,11 @@ interface Props {
 	cancelText?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
 	type: ModalTypeEnum.NORMAL,
 	btnLoading: false,
+	confirmText: "",
+	cancelText: "",
 });
 
 defineEmits<{

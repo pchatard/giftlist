@@ -2,7 +2,7 @@
 	<fieldset class="flex items-center">
 		<slot />
 		<div class="self-baseline flex-1">
-			<Listbox v-model="selectedOption" v-slot="{ open }">
+			<Listbox v-slot="{ open }" v-model="selectedOption">
 				<ListboxLabel>{{ label }}</ListboxLabel>
 				<div class="relative mt-1">
 					<ListboxButton
@@ -14,11 +14,11 @@
 							class="input-container flex items-stretch overflow-hidden rounded-md w-full"
 						>
 							<input
-								type="text"
 								v-model="inputSelect"
+								type="text"
+								class="outline-none px-3 py-2 flex-1"
 								@click.stop="() => (openWithInput = true)"
 								@input.stop="openOrHideOptions"
-								class="outline-none px-3 py-2 flex-1"
 							/>
 							<span
 								class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
@@ -46,7 +46,7 @@
 								class="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
 								static
 							>
-								<ListboxOption as="template" v-if="!filteredOptions.length">
+								<ListboxOption v-if="!filteredOptions.length" as="template">
 									<li
 										class="cursor-pointer text-gray-900 hover:bg-gray-100 select-none relative py-2 pl-10 pr-4"
 									>
@@ -56,8 +56,8 @@
 									</li>
 								</ListboxOption>
 								<ListboxOption
-									v-slot="{ active, selected }"
 									v-for="opt in filteredOptions"
+									v-slot="{ active, selected }"
 									:key="opt.id"
 									:value="opt"
 									:disabled="opt.id === 'x'"
@@ -120,6 +120,8 @@ const props = withDefaults(defineProps<Props>(), {
 	type: "text",
 	isError: false,
 	writable: false,
+	errorMessage: "",
+	helperText: "",
 });
 
 const emit = defineEmits<{
@@ -144,19 +146,19 @@ watch(props, (value) => {
 	selectedOption.value = value.value;
 });
 
-const openOrHideOptions = () => {
-	openWithInput.value = inputSelect.value ? true : false;
-	filterOptions(inputSelect.value);
-};
-
 const filterOptions = (queryFilter: string) => {
 	if (!queryFilter) {
 		filteredOptions.value = props.options;
 		return;
 	}
-	filteredOptions.value = props.options.filter((opt: any) => {
+	filteredOptions.value = props.options.filter((opt) => {
 		return opt.name.includes(queryFilter);
 	});
+};
+
+const openOrHideOptions = () => {
+	openWithInput.value = inputSelect.value ? true : false;
+	filterOptions(inputSelect.value);
 };
 
 onMounted(() => {

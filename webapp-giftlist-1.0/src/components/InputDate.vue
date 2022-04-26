@@ -10,19 +10,19 @@
 			<slot />
 		</template>
 		<input
+			v-model="dateValue"
 			type="date"
 			autocomplete="off"
-			v-model="dateValue"
 			class="outline-none cursor-text px-3 py-2 flex-1"
+			:disabled="disabled"
 			@focus="onFocus"
 			@blur="onBlur"
-			:disabled="disabled"
 		/>
 		<button
-			@click="openModal"
 			:disabled="disabled"
 			class="relative w-8 border-l border-gray-100"
 			:class="disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-100'"
+			@click="openModal"
 		>
 			<CalendarIcon
 				class="absolute w-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
@@ -127,7 +127,6 @@ const monthes = [
 	labels.inputs.datePicker.monthes.november,
 	labels.inputs.datePicker.monthes.december,
 ];
-const datePickerErrorMessage = ref("");
 
 const currentDay = computed(() => {
 	return parseInt(datePickerValue.value.split("-")[2]);
@@ -186,6 +185,12 @@ const handleDatePickerHeaderClick = (type: "day" | "month" | "year") => {
 	}
 };
 
+const handleDateChange = (day: Date) => {
+	if (day >= new Date()) {
+		datePickerValue.value = day.toISOString().split("T")[0];
+	}
+};
+
 const handleDatePickerHeaderArrowClick = (direction: "previous" | "next") => {
 	let date = new Date(datePickerValue.value);
 	date.setHours(12);
@@ -232,12 +237,6 @@ watch(dateValue, (value: string) => {
 watch(props, (value) => {
 	dateValue.value = value.value;
 });
-
-const handleDateChange = (day: Date) => {
-	if (day >= new Date()) {
-		datePickerValue.value = day.toISOString().split("T")[0];
-	}
-};
 
 const handleMonthChange = (month: number) => {
 	let date = new Date(datePickerValue.value);

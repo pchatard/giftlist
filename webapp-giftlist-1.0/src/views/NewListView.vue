@@ -8,13 +8,18 @@
 					{{ stepTitle }}
 				</GiftlistSubtitle>
 
-				<component
+				<ListFormOne
+					v-if="step === 1"
 					class="p-4 my-4 rounded-md"
-					:is="currentComponent"
-					:values="listInformation['step' + step]"
+					:values="listInformation.step1"
 					@change="handleListInformationChange"
-				>
-				</component>
+				/>
+				<ListFormTwo
+					v-else
+					class="p-4 my-4 rounded-md"
+					:values="listInformation.step2"
+					@change="handleListInformationChange"
+				/>
 			</div>
 
 			<div class="flex justify-between">
@@ -25,7 +30,7 @@
 						</template>
 						{{ formLabels.buttons.cancel }}
 					</GiftlistButton>
-					<GiftlistButton btn-style="secondary" has-icon v-show="step > 1" @click="step--">
+					<GiftlistButton v-show="step > 1" btn-style="secondary" has-icon @click="step--">
 						<template #icon>
 							<ArrowLeftIcon />
 						</template>
@@ -46,9 +51,9 @@
 						{{ formLabels.buttons.confirm }}
 					</GiftlistButton>
 					<GiftlistButton
+						v-show="step != maxStep"
 						btn-style="primary"
 						has-icon
-						v-show="step != maxStep"
 						class="flex-1"
 						@click="nextAction"
 					>
@@ -68,15 +73,18 @@ import { computed, ComputedRef, inject, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
+import labels from "@/labels/fr/labels.json";
+
+import { CreateListDTO } from "@/types/dto/CreateListDTO";
+import { CreateListPayload } from "@/types/payload/CreateListPayload";
+
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import ListFormOne from "@/components/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo.vue";
 import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
-import labels from "@/labels/fr/labels.json";
-import { CreateListDTO } from "@/types/dto/CreateListDTO";
-import { CreateListPayload } from "@/types/payload/CreateListPayload";
-import { Auth0Client } from "@auth0/auth0-spa-js";
 import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, XIcon } from "@heroicons/vue/outline";
 
 /******** Basic imports ********/
@@ -158,17 +166,6 @@ const listInformation = ref({
 });
 
 /******** Computed data ********/
-const currentComponent = computed(() => {
-	switch (step.value) {
-		case 1:
-			return "ListFormOne";
-		case 2:
-			return "ListFormTwo";
-		default:
-			return "ListFormOne";
-	}
-});
-
 const createListData: ComputedRef<CreateListDTO> = computed(() => {
 	const list: CreateListDTO = {
 		title: listInformation.value.step1.title.value,
@@ -218,69 +215,6 @@ const cancel = () => {
 	router.push("/app/lists");
 };
 
-const createList = async () => {
-	createButtonIsLoading.value = true;
-
-	const check1 = checkStep1();
-	const check2 = checkStep2();
-
-	if (check1 && check2) {
-		// Call Store action
-		const payload: CreateListPayload = {
-			auth,
-			newList: createListData.value,
-		};
-		const success = await dispatch("createList", payload);
-		if (success) {
-			router.push("/app/lists");
-			return;
-		}
-	}
-
-	createButtonIsLoading.value = false;
-};
-
-const handleChangeStepFromStepper = (newStep: number) => {
-	if (checkStep(newStep - 1)) {
-		step.value = newStep;
-	}
-};
-
-const handleListInformationChange = (values: any) => {
-	switch (step.value) {
-		case 1:
-			listInformation.value.step1 = values;
-			return;
-		case 2:
-			listInformation.value.step2 = values;
-			return;
-		default:
-			return;
-	}
-};
-
-const nextAction = () => {
-	if (step.value !== maxStep) {
-		if (checkStep(step.value)) {
-			step.value++;
-		}
-		return;
-	} else {
-		router.push("/app/lists");
-	}
-};
-
-const checkStep = (step: number): boolean => {
-	switch (step) {
-		case 1:
-			return checkStep1();
-		case 2:
-			return checkStep2();
-		default:
-			return false;
-	}
-};
-
 const checkStep1 = (): boolean => {
 	let validateStep1 = true;
 	// Check that title is filled
@@ -304,5 +238,62 @@ const checkStep1 = (): boolean => {
 const checkStep2 = (): boolean => {
 	const validateStep2 = true;
 	return validateStep2;
+};
+
+const checkStep = (step: number): boolean => {
+	switch (step) {
+		case 1:
+			return checkStep1();
+		case 2:
+			return checkStep2();
+		default:
+			return false;
+	}
+};
+
+const createList = async () => {
+	createButtonIsLoading.value = true;
+
+	const check1 = checkStep1();
+	const check2 = checkStep2();
+
+	if (check1 && check2) {
+		// Call Store action
+		const payload: CreateListPayload = {
+			auth,
+			newList: createListData.value,
+		};
+		const success = await dispatch("createList", payload);
+		if (success) {
+			router.push("/app/lists");
+			return;
+		}
+	}
+
+	createButtonIsLoading.value = false;
+};
+
+const handleListInformationChange = (values: Record<string, unknown>) => {
+	switch (step.value) {
+		case 1:
+			listInformation.value.step1 = values;
+			return;
+		case 2:
+			listInformation.value.step2 = values;
+			return;
+		default:
+			return;
+	}
+};
+
+const nextAction = () => {
+	if (step.value !== maxStep) {
+		if (checkStep(step.value)) {
+			step.value++;
+		}
+		return;
+	} else {
+		router.push("/app/lists");
+	}
 };
 </script>

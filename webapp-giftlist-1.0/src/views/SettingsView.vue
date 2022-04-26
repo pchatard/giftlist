@@ -8,11 +8,11 @@
 					<RadioGroupLabel class="sr-only">Mode d'affichage des cadeaux</RadioGroupLabel>
 					<div class="flex flex-row space-x-4 my-4">
 						<RadioGroupOption
-							as="template"
 							v-for="opt in displayListOptions"
 							:key="opt.title"
-							:value="opt"
 							v-slot="{ checked }"
+							as="template"
+							:value="opt"
 						>
 							<div
 								:class="[
@@ -60,11 +60,11 @@
 					<RadioGroupLabel class="sr-only">Server size</RadioGroupLabel>
 					<div class="flex flex-row space-x-4 my-4">
 						<RadioGroupOption
-							as="template"
 							v-for="opt in bookingShowOthersOptions"
 							:key="opt.title"
-							:value="opt"
 							v-slot="{ checked }"
+							as="template"
+							:value="opt"
 						>
 							<div
 								:class="[
