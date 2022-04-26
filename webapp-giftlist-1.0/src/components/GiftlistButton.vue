@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { ButtonStyleEnum } from "@/types/ButtonStyleEnum";
+import { ButtonStyleEnum } from "@/types/enums/ButtonStyleEnum";
 
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 

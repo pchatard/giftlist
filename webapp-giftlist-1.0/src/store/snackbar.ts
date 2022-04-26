@@ -1,6 +1,6 @@
 import { Module } from "vuex";
 
-import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
+import { SnackbarEventEnum } from "@/types/enums/SnackbarEventEnum";
 
 import { RootState } from "./";
 

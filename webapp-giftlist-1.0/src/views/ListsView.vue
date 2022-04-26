@@ -55,7 +55,7 @@ import labels from "@/labels/fr/labels.json";
 
 import { ListDTO } from "@/types/dto/ListDTO";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { TableHeader } from "@/types/TableHeader.ts";
+import { TableHeader } from "@/types/front/TableHeader.ts";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftlistButton from "@/components/GiftlistButton.vue";

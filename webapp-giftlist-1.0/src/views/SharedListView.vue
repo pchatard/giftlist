@@ -74,7 +74,7 @@ import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
-import { TableHeader } from "@/types/TableHeader.ts";
+import { TableHeader } from "@/types/front/TableHeader.ts";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftDetails from "@/components/GiftDetails.vue";

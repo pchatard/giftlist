@@ -83,7 +83,7 @@ import { List } from "@/types/api/List";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GetListsPayload } from "@/types/payload/GetListsPayload";
 import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
-import { TableHeader } from "@/types/TableHeader.ts";
+import { TableHeader } from "@/types/front/TableHeader.ts";
 
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import DefaultLayout from "@/components/DefaultLayout.vue";

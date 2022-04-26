@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 
 import router from "@/router";
-import { APIStatusCodeEnum } from "@/types/APIStatusCodeEnum";
+import { APIStatusCodeEnum } from "@/types/enums/APIStatusCodeEnum";
 import { PartialUserDTO } from "@/types/dto/PartialUserDTO";
 import { UserDTO } from "@/types/dto/UserDTO";
 import { Auth0Client } from "@auth0/auth0-spa-js";

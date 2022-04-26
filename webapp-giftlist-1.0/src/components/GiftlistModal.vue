@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ModalTypeEnum } from "@/types/ModalTypeEnum";
+import { ModalTypeEnum } from "@/types/enums/ModalTypeEnum";
 
 import GiftlistButton from "@/components/GiftlistButton.vue";
 import {

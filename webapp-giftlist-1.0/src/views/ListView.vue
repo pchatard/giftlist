@@ -157,7 +157,7 @@ import { GiftDTO } from "@/types/dto/GiftDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
-import { TableHeader } from "@/types/TableHeader.ts";
+import { TableHeader } from "@/types/front/TableHeader.ts";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftGridView from "@/components/GiftGridView.vue";

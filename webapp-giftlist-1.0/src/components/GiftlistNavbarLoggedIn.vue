@@ -88,10 +88,14 @@ const cta = computed(() => {
 				action: sharedListsNavbarCta,
 			};
 		default:
-			return {
-				...currentRoute.value.meta.navbarCta,
-				action: listNavbarCta,
-			};
+			if (currentRoute.value.path.includes("/app/lists")) {
+				return {
+					...currentRoute.value.meta.navbarCta,
+					action: listNavbarCta,
+				};
+			} else {
+				return null;
+			}
 	}
 });
 

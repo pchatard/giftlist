@@ -107,7 +107,7 @@ import {
 import { CheckIcon, SelectorIcon } from "@heroicons/vue/outline";
 
 interface Props {
-	value: string;
+	value: Record<string, unknown>;
 	label: string;
 	options: Record<string, unknown>[];
 	isError?: boolean;

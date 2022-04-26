@@ -4,8 +4,8 @@ import { axiosInstance as axios } from "@/main";
 import router from "@/router";
 import store from "@/store";
 import { SnackbarState } from "@/store/snackbar";
-import { APIStatusCodeEnum } from "@/types/APIStatusCodeEnum";
-import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
+import { APIStatusCodeEnum } from "@/types/enums/APIStatusCodeEnum";
+import { SnackbarEventEnum } from "@/types/enums/SnackbarEventEnum";
 import { Auth0Client } from "@auth0/auth0-spa-js";
 
 const UNAUTHORIZED_ERROR_MSG = "Vous n'êtes pas autorisé à effectuer cette action.";

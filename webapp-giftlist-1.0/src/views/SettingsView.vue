@@ -102,7 +102,7 @@
 			</div>
 		</section>
 		<section class="my-4">
-			<GiftlistButton @click="savePreferences">Sauvegarder</GiftlistButton>
+			<GiftlistButton>Sauvegarder</GiftlistButton>
 		</section>
 	</DefaultLayout>
 </template>
