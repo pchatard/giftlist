@@ -5,6 +5,18 @@ import { UserDTO } from "@/types/dto/UserDTO";
 
 import { RootState } from "./";
 
+export interface UserState extends UserDTO {
+	errorText: "";
+}
+
+function initAuthState(): UserState {
+	return {
+		displayName: "",
+		email: "",
+		errorText: "",
+	};
+}
+
 export const user: Module<UserState, RootState> = {
 	state: initAuthState,
 	getters: {},
@@ -37,15 +49,3 @@ export const user: Module<UserState, RootState> = {
 		},
 	},
 };
-
-export interface UserState extends UserDTO {
-	errorText: "";
-}
-
-function initAuthState(): UserState {
-	return {
-		displayName: "",
-		email: "",
-		errorText: "",
-	};
-}

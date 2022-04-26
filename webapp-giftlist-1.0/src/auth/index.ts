@@ -20,7 +20,7 @@ interface Auth0PluginState {
 	isAuthenticated: boolean;
 	user: User | undefined;
 	popupOpen: boolean;
-	error: any;
+	error: unknown;
 }
 
 const state = reactive<Auth0PluginState>({
@@ -77,6 +77,7 @@ const authPlugin = {
 	logout,
 };
 
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 const routeGuard: NavigationGuardWithThis<undefined> = (to: any, from: any, next: any) => {
 	const { isAuthenticated, loading, loginWithRedirect } = authPlugin;
 

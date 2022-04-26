@@ -15,7 +15,7 @@ export const axiosInstance = axios.create({
 
 async function init() {
 	const AuthPlugin = await Auth0.init({
-		onRedirectCallback: (appState: any) => {
+		onRedirectCallback: (appState: Record<string, string>) => {
 			localStorage.setItem("giftlist-redirect", appState.targetUrl);
 		},
 		clientId: process.env.VUE_APP_AUTH0_CLIENT_ID || "",

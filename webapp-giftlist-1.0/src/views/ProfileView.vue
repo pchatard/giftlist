@@ -1,0 +1,177 @@
+<template>
+	<DefaultLayout :title="labels.titles.profile" back>
+		<div class="flex flex-col my-4">
+			<div class="flex items-center justify-between border rounded-lg px-4 my-4">
+				<div
+					class="bg-indigo-600 text-white text-4xl font-semibold w-1/12 my-4 grid place-items-center rounded-full"
+					style="aspect-ratio: 1"
+				>
+					{{ user.displayName.toUpperCase()[0] }}
+				</div>
+
+				<div class="w-1/4">
+					<GiftlistSubtitle>{{ user.displayName }}</GiftlistSubtitle>
+					<div>{{ labels.profile.email }} {{ user.email }}</div>
+					<button
+						v-if="!auth.user.email_verified"
+						class="text-indigo-600"
+						@click="verifyEmail"
+					>
+						{{ labels.profile.verifyEmail }}
+					</button>
+				</div>
+				<div class="w-1/4">
+					<div class="flex">
+						<span
+							v-for="(friend, i) in friends"
+							:key="friend.id"
+							class="w-12 h-12 bg-gray-300 rounded-full grid place-items-center font-bold text-sm text-black border border-white shadow-sm"
+							:class="i > 0 ? '-ml-2' : null"
+							>{{ friend.name }}</span
+						>
+						<span
+							class="w-12 h-12 bg-gray-300 rounded-full grid place-items-center font-bold text-sm text-black border border-white shadow-sm -ml-2"
+							>8+</span
+						>
+					</div>
+					<div class="pl-1">12 {{ labels.profile.friendsNumber }}</div>
+					<router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600">
+						{{ labels.profile.manageFriends }}
+					</router-link>
+				</div>
+				<div class="w-1/4">
+					<div class="flex items-center justify-between mb-4">
+						<div class="flex flex-col items-center">
+							<span>
+								<strong> 3 </strong>
+							</span>
+							<span class="text-center leading-tight">
+								{{ labels.profile.createdLists }}
+							</span>
+						</div>
+						<div class="flex flex-col items-center">
+							<span>
+								<strong> 12 </strong>
+							</span>
+							<span class="text-center leading-tight">
+								{{ labels.profile.createdGifts }}
+							</span>
+						</div>
+						<div class="flex flex-col items-center">
+							<span>
+								<strong> 5 </strong>
+							</span>
+							<span class="text-center leading-tight">
+								{{ labels.profile.bookedGifts }}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="flex items-stretch divide-x">
+				<div class="flex-1 p-8">
+					<div class="pb-5">
+						<GiftlistSubtitle>{{ labels.profile.editEmailTitle }}</GiftlistSubtitle>
+						<div class="mt-2 mb-4">
+							<p>
+								{{ labels.profile.editEmailCurrent }} <strong>{{ user.email }}</strong>
+							</p>
+							<p>
+								{{ labels.profile.editEmailText }}
+							</p>
+						</div>
+						<GiftlistButton btn-style="secondary" class="w-1/2" @click="changeEmail">
+							{{ labels.profile.editEmailButton }}
+						</GiftlistButton>
+					</div>
+					<div class="pt-5">
+						<GiftlistSubtitle>{{ labels.profile.editPasswordTitle }}</GiftlistSubtitle>
+						<p class="mt-2 mb-4">
+							{{ labels.profile.editPasswordText }}
+						</p>
+						<GiftlistButton btn-style="secondary" class="w-1/2" @click="changePassword">
+							{{ labels.profile.editPasswordButton }}
+						</GiftlistButton>
+					</div>
+				</div>
+				<div class="flex-1 flex flex-col p-8">
+					<div class="pb-5">
+						<GiftlistSubtitle>{{ labels.profile.dataTitle }}</GiftlistSubtitle>
+						<p class="mt-2 mb-4">
+							{{ labels.profile.dataText }}
+						</p>
+						<GiftlistButton btn-style="secondary" class="w-1/2" @click="downloadData">
+							{{ labels.profile.dataButton }}
+						</GiftlistButton>
+					</div>
+					<div class="pt-5">
+						<GiftlistSubtitle>{{ labels.profile.deleteTitle }}</GiftlistSubtitle>
+						<p class="mt-2 mb-4">
+							{{ labels.profile.deleteText }}
+						</p>
+						<GiftlistButton btn-style="danger" class="w-1/2" @click="deleteAccount">
+							{{ labels.profile.deleteButton }}
+						</GiftlistButton>
+					</div>
+				</div>
+			</div>
+		</div>
+	</DefaultLayout>
+</template>
+
+<script setup lang="ts">
+import { computed, inject, onMounted, Ref } from "vue";
+import { useStore } from "vuex";
+
+import { Auth0Client } from "@auth0/auth0-spa-js";
+
+import labels from "@/labels/fr/labels.json";
+
+import { UserDTO } from "@/types/dto/UserDTO";
+
+import GiftlistButton from "@/components/GiftlistButton.vue";
+import DefaultLayout from "@/components/DefaultLayout.vue";
+import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
+
+const { state, dispatch } = useStore();
+const user: Ref<UserDTO> = computed(() => state.user);
+const auth = inject("Auth") as Auth0Client;
+
+const friends = [
+	{ id: 0, name: "ND" },
+	{ id: 1, name: "ML" },
+	{ id: 2, name: "PC" },
+	{ id: 3, name: "ML" },
+];
+
+onMounted(async () => {
+	await dispatch("getUser", auth);
+});
+
+const verifyEmail = () => {
+	// TODO
+	alert("Not implemented yet");
+};
+const changeEmail = () => {
+	// TODO
+	alert("Not implemented yet");
+};
+const changePassword = () => {
+	// TODO
+	alert("Not implemented yet");
+};
+const downloadData = () => {
+	// TODO
+	alert("Not implemented yet");
+};
+
+const deleteAccount = async () => {
+	const deleteResult = await dispatch("deleteAccount", auth);
+	if (deleteResult) {
+		auth.logout({
+			returnTo: window.location.origin,
+		});
+	}
+};
+</script>

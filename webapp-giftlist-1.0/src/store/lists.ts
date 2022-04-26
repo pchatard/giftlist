@@ -10,6 +10,21 @@ import { ListSharingCodePayload } from "@/types/payload/ListSharingCodePayload";
 
 import { RootState } from "./";
 
+const initSelectedList = (): ListDTO => {
+	return {
+		id: "",
+		title: "",
+		sharingCode: "",
+		isShared: false,
+	};
+};
+
+export interface ListsState {
+	owned: ListDTO[];
+	granted: ListDTO[];
+	selected: ListDTO;
+}
+
 export const lists: Module<ListsState, RootState> = {
 	state: () => ({
 		owned: [],
@@ -155,18 +170,3 @@ export const lists: Module<ListsState, RootState> = {
 		},
 	},
 };
-
-const initSelectedList = (): ListDTO => {
-	return {
-		id: "",
-		title: "",
-		sharingCode: "",
-		isShared: false,
-	};
-};
-
-export interface ListsState {
-	owned: ListDTO[];
-	granted: ListDTO[];
-	selected: ListDTO;
-}

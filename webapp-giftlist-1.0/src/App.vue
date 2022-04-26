@@ -1,33 +1,21 @@
 <template>
-	<Header />
+	<GiftlistHeader />
 	<main class="mt-16 p-8">
 		<router-view />
-		<Snackbar :snack="snack" />
+		<GiftlistSnackbar :snack="snack" />
 	</main>
 	<footer></footer>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { useStore } from "vuex";
-import Header from "@/components/Header/Header.vue";
-import Snackbar from "@/components/Snackbar/Snackbar.vue";
 
-export default defineComponent({
-	components: {
-		Header,
-		Snackbar,
-	},
-	setup() {
-		const store = useStore();
+import GiftlistHeader from "@/components/GiftlistHeader.vue";
+import GiftlistSnackbar from "@/components/GiftlistSnackbar.vue";
 
-		const snack = store.state.snackbar;
+const store = useStore();
 
-		return {
-			snack,
-		};
-	},
-});
+const snack = store.state.snackbar;
 </script>
 
 <style lang="scss">

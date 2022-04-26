@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 
 import router from "@/router";
-import { APIStatusCodeEnum } from "@/types/APIStatusCodeEnum";
+import { APIStatusCodeEnum } from "@/types/enums/APIStatusCodeEnum";
 import { CreateListDTO } from "@/types/dto/CreateListDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { ListIdDTO } from "@/types/dto/ListIdDTO";

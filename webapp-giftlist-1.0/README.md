@@ -14,7 +14,11 @@
 # Tâches
 
 ## Global
-- [ ] Se conformer aux rules Vue ESLint https://eslint.vuejs.org/rules/
+- [ ] Se conformer aux rules Vue ESLint https://eslint.vuejs.org/rules/ :
+    - [x] SFC
+    - [x] Use script setup
+    - [x] eslint vue-recommended
+    - [x] ESLint general rules
 
 ## State / Store
 - [x] Réfléchir aux stores

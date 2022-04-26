@@ -1,16 +1,20 @@
 {
 	"root": true,
 	"env": {
-		"node": true
+		"node": true,
+		"vue/setup-compiler-macros": true
 	},
-	"plugins": ["@typescript-eslint"],
+	"plugins": [
+		"@typescript-eslint"
+	],
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:vue/vue3-essential",
+		"plugin:vue/vue3-recommended",
 		"@vue/typescript/recommended",
-		"@vue/prettier"
+		"@vue/prettier",
+		"prettier"
 	],
 	"parserOptions": {
 		"ecmaVersion": 2021
@@ -27,12 +31,14 @@
 		"valid-typeof": "warn",
 		"no-extra-semi": "error",
 		"no-console": "warn",
-		"no-debugger": "warn",
-		"vue/multi-word-component-names": "off"
+		"no-debugger": "warn"
 	},
 	"overrides": [
 		{
-			"files": ["**/__tests__/*.{j,t}s?(x)", "**/tests/unit/**/*.spec.{j,t}s?(x)"],
+			"files": [
+				"**/__tests__/*.{j,t}s?(x)",
+				"**/tests/unit/**/*.spec.{j,t}s?(x)"
+			],
 			"env": {
 				"jest": true
 			}

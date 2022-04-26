@@ -1,8 +1,14 @@
 import { Module } from "vuex";
 
-import { SnackbarEventEnum } from "@/types/SnackbarEventEnum";
+import { SnackbarEventEnum } from "@/types/enums/SnackbarEventEnum";
 
 import { RootState } from "./";
+
+export interface SnackbarState {
+	show?: boolean;
+	message: string;
+	type?: SnackbarEventEnum;
+}
 
 export const snackbar: Module<SnackbarState, RootState> = {
 	state: () => ({
@@ -36,9 +42,3 @@ export const snackbar: Module<SnackbarState, RootState> = {
 		},
 	},
 };
-
-export interface SnackbarState {
-	show?: boolean;
-	message: string;
-	type?: SnackbarEventEnum;
-}
