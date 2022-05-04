@@ -91,13 +91,15 @@ interface Props {
 	value: string;
 	disabled?: boolean;
 	isError?: boolean;
-	helperText: string;
-	errorMessage: string;
+	helperText?: string;
+	errorMessage?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
 	disabled: false,
 	isError: false,
+	helperText: "",
+	errorMessage: "",
 });
 
 const emit = defineEmits<{

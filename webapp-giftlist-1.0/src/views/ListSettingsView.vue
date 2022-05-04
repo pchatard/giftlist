@@ -3,227 +3,87 @@
 		<div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
 			<GiftlistLoader class="w-16 h-16" />
 		</div>
-		<div v-else>
-			<div class="w-10/12 mx-auto">
-				<Disclosure v-slot="{ open }">
-					<DisclosureButton
-						class="flex justify-between w-full px-4 py-4 text-sm font-medium text-left text-indigo-900 bg-indigo-100 rounded-lg hover:bg-indigo-200 focus:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75"
-						@click="handleOpen('general')"
-					>
-						<span>{{ labels.listOptions.generalTitle }}</span>
-						<ChevronUpIcon
-							:class="open ? 'transform rotate-180' : ''"
-							class="w-5 h-5 text-indigo-500"
-						/>
-					</DisclosureButton>
-					<transition
-						enter-active-class="transition duration-300 ease-out"
-						enter-from-class="transform opacity-0"
-						enter-to-class="transform opacity-100"
-					>
-						<DisclosurePanel
-							v-show="openGeneral"
-							static
-							class="px-4 pt-4 pb-2 text-sm text-black"
-						>
-							<div v-if="loading">Loading...</div>
-							<ListFormOne
-								v-else
-								:values="generalInformation"
-								@change="handleGeneralInformationChange"
-							/>
-						</DisclosurePanel>
-					</transition>
-				</Disclosure>
-				<Disclosure v-slot="{ open }" as="div" class="mt-2">
-					<DisclosureButton
-						class="flex justify-between w-full px-4 py-4 text-sm font-medium text-left text-indigo-900 bg-indigo-100 rounded-lg hover:bg-indigo-200 focus:outline-none focus-visible:ring focus-visible:ring-indigo-500 focus-visible:ring-opacity-75"
-						@click="handleOpen('share')"
-					>
-						<span>{{ labels.listOptions.sharingTitle }}</span>
-						<ChevronUpIcon
-							:class="open ? 'transform rotate-180' : ''"
-							class="w-5 h-5 text-indigo-500"
-						/>
-					</DisclosureButton>
-					<transition
-						enter-active-class="transition duration-300 ease-out"
-						enter-from-class="transform opacity-0"
-						enter-to-class="transform opacity-100"
-					>
-						<DisclosurePanel
-							v-show="openShare"
-							static
-							class="px-4 pt-4 pb-2 text-sm text-black"
-						>
-							<div v-if="loading">Loading...</div>
-							<ListFormTwo
-								v-else
-								:values="sharingOptions"
-								@change="handleSharingOptionsChange"
-							/>
-						</DisclosurePanel>
-					</transition>
-				</Disclosure>
+		<div v-else class="flex flex-col">
+			<div class="relative my-4 flex flex-col border rounded-lg">
+				<GiftlistSubtitle
+					class="absolute top-0 left-4 transform -translate-y-1/2 bg-white px-4"
+				>
+					{{ stepTitle }}
+				</GiftlistSubtitle>
 
-				<div class="flex justify-end gap-4 mt-4">
-					<GiftlistButton btn-style="danger" @click="cancel">Retour</GiftlistButton>
-					<GiftlistButton btn-style="primary" :loading="buttonIsLoading" @click="saveChanges"
-						>Enregistrer les changements</GiftlistButton
-					>
-				</div>
+				<ListFormOne v-if="currentStep === 1" class="p-4 my-4 rounded-md" />
+				<ListFormTwo v-else class="p-4 my-4 rounded-md" :friends="friends" />
 			</div>
+
+			<ListFormControls
+				:current-step="currentStep"
+				:max-step="maxStep"
+				:submit-button-text="labels.listOptions.button.submit"
+				:submit-button-is-loading="submitButtonIsLoading"
+				@submit="handleSubmit"
+			/>
 		</div>
 	</DefaultLayout>
 </template>
 
 <script setup lang="ts">
 import { computed, ComputedRef, inject, onMounted, onUnmounted, ref } from "vue";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-
+import { useRouter } from "vue-router";
 import { Auth0Client } from "@auth0/auth0-spa-js";
 
 import labels from "@/labels/fr/labels.json";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
-import GiftlistButton from "@/components/GiftlistButton.vue";
 import GiftlistLoader from "@/components/GiftlistLoader.vue";
+import GiftlistSubtitle from "@/components/GiftlistSubtitle.vue";
 import ListFormOne from "@/components/ListFormOne.vue";
 import ListFormTwo from "@/components/ListFormTwo.vue";
-
-import { ChevronUpIcon } from "@heroicons/vue/solid";
-import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-
+import ListFormControls from "@/components/ListFormControls.vue";
 import { ListDTO } from "@/types/dto/ListDTO";
-import { PartialListDTO } from "@/types/dto/PartialListDTO";
-import { EditListPayload } from "@/types/payload/EditListPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { EditListPayload } from "@/types/payload/EditListPayload";
+import { PartialListDTO } from "@/types/dto/PartialListDTO";
 
 /******** Basic imports ********/
-const router = useRouter();
-const { dispatch, state, commit } = useStore();
-const auth = inject("Auth") as Auth0Client;
+const { state, getters, dispatch, commit } = useStore();
 
 /******** Static data ********/
+const maxStep = 2;
+const auth = inject("Auth") as Auth0Client;
+const router = useRouter();
+
+const friends = [
+	{ id: 1, name: "Arnold A." },
+	{ id: 12, name: "Ben 10" },
+	{ id: 13, name: "Carl Os" },
+	{ id: 14, name: "Denis D." },
+	{ id: 15, name: "Elliot E." },
+	{ id: 25, name: "Fabrice L." },
+	{ id: 54, name: "Guéric G." },
+	{ id: 47, name: "Hans H." },
+];
 
 /******** Reactive data ********/
 const loading = ref(true);
-const openGeneral = ref(true);
-const openShare = ref(false);
-const buttonIsLoading = ref(false);
-const generalInformation = ref({
-	title: {
-		label: labels.listOptions.inputs.title.label,
-		value: "",
-		errorMessage: "",
-		helperText: labels.listOptions.inputs.title.helperText,
-		placeholder: labels.listOptions.inputs.title.placeholder,
-		required: true,
-	},
-	description: {
-		label: labels.listOptions.inputs.description.label,
-		value: "",
-		placeholder: labels.listOptions.inputs.description.placeholder,
-		helperText: labels.listOptions.inputs.description.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	activateTermDate: {
-		value: false,
-		label: labels.listOptions.inputs.activateTermDate.label,
-		helperText: labels.listOptions.inputs.activateTermDate.helperText,
-	},
-	termDate: {
-		label: labels.listOptions.inputs.termDate.label,
-		value: "",
-		helperText: labels.listOptions.inputs.termDate.helperText,
-		errorMessage: "",
-	},
-});
-const sharingOptions = ref({
-	shared: {
-		value: false,
-		label: labels.listOptions.inputs.shared.label,
-		helperText: labels.listOptions.inputs.shared.helperText,
-	},
-	friends: [
-		{ id: 1, name: "Arnold A." },
-		{ id: 12, name: "Ben 10" },
-		{ id: 13, name: "Carl Os" },
-		{ id: 14, name: "Denis D." },
-		{ id: 15, name: "Elliot E." },
-		{ id: 25, name: "Fabrice L." },
-		{ id: 54, name: "Guéric G." },
-		{ id: 47, name: "Hans H." },
-	],
-	owners: {
-		label: labels.listOptions.inputs.owners.label,
-		helperText: labels.listOptions.inputs.owners.helperText,
-		value: [],
-	},
-	authorizedUsers: {
-		label: labels.listOptions.inputs.authorizedUsers.label,
-		helperText: labels.listOptions.inputs.authorizedUsers.helperText,
-		value: [],
-	},
-});
+const submitButtonIsLoading = ref(false);
 
 /******** Computed data ********/
+const currentStep: ComputedRef<number> = computed(() => getters.getCurrentStep);
 const initialList: ComputedRef<ListDTO> = computed(() => state.lists.selected);
-const editedList: ComputedRef<PartialListDTO> = computed(() => {
-	const list: PartialListDTO = {
-		description:
-			generalInformation.value.description.value !== initialList.value.description
-				? generalInformation.value.description.value
-				: undefined,
-		closureDate:
-			generalInformation.value.activateTermDate &&
-			generalInformation.value.termDate.value !== initialList.value.closureDate
-				? generalInformation.value.termDate.value
-				: undefined,
-	};
+const partialListData: ComputedRef<PartialListDTO> = computed(() =>
+	getters.getPartialListData(initialList.value)
+);
 
-	if (generalInformation.value.title.value !== initialList.value.title) {
-		list.title = generalInformation.value.title.value;
+const stepTitle = computed(() => {
+	if (currentStep.value === 1) {
+		return labels.newList.step1.title;
 	}
-
-	if (generalInformation.value.description.value !== initialList.value.description) {
-		list.description = generalInformation.value.description.value;
+	if (currentStep.value === 2) {
+		return labels.newList.step2.title;
 	}
-
-	if (
-		generalInformation.value.activateTermDate.value &&
-		generalInformation.value.termDate.value !== initialList.value.closureDate
-	) {
-		list.closureDate = generalInformation.value.termDate.value;
-	}
-
-	if (!generalInformation.value.activateTermDate.value) {
-		list.closureDate = null;
-	}
-
-	return list;
+	return "";
 });
-
-const initializeDate = () => {
-	let date = new Date();
-	date.setDate(date.getDate() + 1);
-	const offset = date.getTimezoneOffset();
-	date = new Date(date.getTime() - offset * 60 * 1000);
-	return date;
-};
-
-const initializeFormValues = () => {
-	generalInformation.value.title.value = initialList.value.title;
-	generalInformation.value.description.value = initialList.value.description
-		? initialList.value.description
-		: "";
-	generalInformation.value.activateTermDate.value = initialList.value.closureDate ? true : false;
-	generalInformation.value.termDate.value = initialList.value.closureDate
-		? new Date(initialList.value.closureDate).toISOString().split("T")[0]
-		: initializeDate().toISOString().split("T")[0];
-};
 
 onMounted(async () => {
 	const actionPayload: ListIdPayload = {
@@ -232,55 +92,39 @@ onMounted(async () => {
 	};
 	const success = await dispatch("getList", actionPayload);
 	if (success) {
-		initializeFormValues();
+		dispatch("initListData", initialList.value);
 		loading.value = false;
 	}
 });
 
 onUnmounted(() => {
 	commit("EMPTY_LIST");
+	dispatch("initListFormState");
 });
 
-const handleOpen = (tab: string) => {
-	if (tab === "general") {
-		openGeneral.value = !openGeneral.value;
-	} else if (tab === "share") {
-		openShare.value = !openShare.value;
-	}
-};
+const handleSubmit = async () => {
+	submitButtonIsLoading.value = true;
 
-const handleGeneralInformationChange = (values: Record<string, unknown>) => {
-	generalInformation.value = values;
-};
+	const check1 = await dispatch("checkListStepOneData");
+	const check2 = await dispatch("checkListStepTwoData");
 
-const handleSharingOptionsChange = (values: Record<string, unknown>) => {
-	sharingOptions.value = values;
-};
-
-const cancel = () => {
-	router.go(-1);
-};
-
-const validateListData = (): boolean => {
-	// TODO
-	const validate = true;
-	return validate;
-};
-
-const saveChanges = async () => {
-	buttonIsLoading.value = true;
-	if (validateListData()) {
+	if (check1 && check2) {
 		const editPayload: EditListPayload = {
 			auth,
 			listId: initialList.value.id || (router.currentRoute.value.params.id as string),
-			partialList: editedList.value,
+			partialList: partialListData.value,
 		};
 
 		const success = await dispatch("editList", editPayload);
 		if (success) {
 			router.go(-1);
+		} else if (!check1) {
+			dispatch("changeListCurrentStep", 1);
+		} else {
+			dispatch("changeListCurrentStep", 2);
 		}
 	}
-	buttonIsLoading.value = false;
+
+	submitButtonIsLoading.value = false;
 };
 </script>

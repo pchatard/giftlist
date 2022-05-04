@@ -79,18 +79,18 @@ const cta = computed(() => {
 	switch (currentRoute.value.path) {
 		case "/app/lists":
 			return {
-				...currentRoute.value.meta.navbarCta,
+				name: (currentRoute.value.meta.navbarCta as Record<string, string>).name,
 				action: listsNavbarCta,
 			};
 		case "/app/shared":
 			return {
-				...currentRoute.value.meta.navbarCta,
+				name: (currentRoute.value.meta.navbarCta as Record<string, string>).name,
 				action: sharedListsNavbarCta,
 			};
 		default:
-			if (currentRoute.value.path.includes("/app/lists")) {
+			if (currentRoute.value.path.includes("/app/lists") && currentRoute.value.meta.navbarCta) {
 				return {
-					...currentRoute.value.meta.navbarCta,
+					name: (currentRoute.value.meta.navbarCta as Record<string, string>).name,
 					action: listNavbarCta,
 				};
 			} else {

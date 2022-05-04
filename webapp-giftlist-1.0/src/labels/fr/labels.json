@@ -283,6 +283,9 @@
     "listOptions": {
         "generalTitle": "Informations générales",
         "sharingTitle": "Options de partage",
+        "button": {
+            "submit": "Sauvegarder"
+        },
         "inputs": {
             "title": {
                 "label": "Titre",
