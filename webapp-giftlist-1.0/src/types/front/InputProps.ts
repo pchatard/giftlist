@@ -22,7 +22,7 @@ export interface InputTextData extends GeneralInputData {
 }
 
 export interface InputSelectData extends GeneralInputData {
-	value: Record<string, unknown>[];
+	value: Record<string, unknown> | Record<string, unknown>[];
 	options?: Record<string, unknown>[];
 	writable?: boolean;
 }
@@ -32,6 +32,7 @@ export interface InputNumberData extends GeneralInputData {
 	min?: number;
 	max?: number;
 	copy?: boolean;
+	mandatory?: boolean;
 }
 
 export interface InputDateData extends GeneralInputData {
@@ -44,19 +45,5 @@ export interface InputLinkData extends GeneralInputData {
 	copy?: boolean;
 	open?: boolean;
 	reset?: boolean;
-}
-
-export interface ListFormStepOneData {
-	title: InputTextData;
-	description: InputTextData;
-	activateTermDate: InputToggleData;
-	termDate: InputDateData;
-}
-
-export interface ListFormStepTwoData {
-	shared: InputToggleData;
-	owners: InputSelectData;
-	authorizedUsers: InputSelectData;
-	// TODO: Change with FriendDTO later
-	friends: Record<string, unknown>[];
+	mandatory?: boolean;
 }

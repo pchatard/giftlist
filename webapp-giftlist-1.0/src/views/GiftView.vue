@@ -11,9 +11,8 @@
 		<div v-else>
 			<GiftForm
 				action="update"
-				:values="giftInformation"
 				:loading="confirmButtonIsLoading"
-				@change="handleGiftInformationChange"
+				:categories="giftCategories"
 				@cancel="cancel"
 				@confirm="saveGiftChanges"
 			/>
@@ -22,7 +21,7 @@
 				:show="modal.showModal"
 				:title="modal.title"
 				:confirm-text="modal.confirmText"
-				type="danger"
+				:type="ModalTypeEnum.DANGER"
 				:btn-loading="deleteButtonIsLoading"
 				@close="modal.showModal = false"
 				@confirm="handleDeleteConfirm()"
@@ -30,7 +29,7 @@
 			</GiftlistModal>
 		</div>
 		<template #commands>
-			<GiftlistButton btn-style="danger" has-icon @click="handleDeleteModal">
+			<GiftlistButton :btn-style="ButtonStyleEnum.danger" has-icon @click="handleDeleteModal">
 				<template #icon>
 					<TrashIcon />
 				</template>
@@ -64,10 +63,12 @@ import { PartialGiftDTO } from "@/types/dto/PartialGiftDTO";
 import { EditGiftPayload } from "@/types/payload/EditGiftPayload";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
+import { ButtonStyleEnum } from "@/types/enums/ButtonStyleEnum";
+import { ModalTypeEnum } from "@/types/enums/ModalTypeEnum";
 
 /******** Basic imports ********/
 const router = useRouter();
-const { dispatch, state, commit } = useStore();
+const { dispatch, state, commit, getters } = useStore();
 const auth = inject("Auth") as Auth0Client;
 
 /******** Static imports ********/
@@ -93,147 +94,14 @@ const modal = ref({
 	confirmText: labels.modals.deleteGift.confirm,
 });
 
-const giftInformation = ref({
-	title: {
-		label: labels.gift.inputs.title.label,
-		value: "",
-		placeholder: labels.gift.inputs.title.placeholder,
-		helperText: labels.gift.inputs.title.helperText,
-		errorMessage: "",
-		required: true,
-	},
-	isFavorite: {
-		label: labels.gift.inputs.isFavorite.label,
-		value: false,
-		helperText: labels.gift.inputs.isFavorite.helperText,
-	},
-	price: {
-		label: labels.gift.inputs.price.label,
-		value: 0,
-		placeholder: labels.gift.inputs.price.placeholder,
-		helperText: labels.gift.inputs.price.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	category: {
-		label: labels.gift.inputs.category.label,
-		value: giftCategories[0],
-		options: giftCategories,
-		helperText: labels.gift.inputs.category.helperText,
-		errorMessage: "",
-	},
-	link: {
-		label: labels.gift.inputs.link.label,
-		value: "",
-		placeholder: labels.gift.inputs.link.placeholder,
-		helperText: labels.gift.inputs.link.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	showDetails: {
-		label: labels.gift.inputs.showDetails.label,
-		value: false,
-		helperText: labels.gift.inputs.showDetails.helperText,
-	},
-	brand: {
-		label: labels.gift.inputs.brand.label,
-		value: "",
-		placeholder: labels.gift.inputs.brand.placeholder,
-		helperText: labels.gift.inputs.brand.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	size: {
-		label: labels.gift.inputs.size.label,
-		value: "",
-		placeholder: labels.gift.inputs.size.placeholder,
-		helperText: labels.gift.inputs.size.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	color: {
-		label: labels.gift.inputs.color.label,
-		value: "",
-		placeholder: labels.gift.inputs.color.placeholder,
-		helperText: labels.gift.inputs.color.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	comments: {
-		label: labels.gift.inputs.comments.label,
-		value: "",
-		placeholder: labels.gift.inputs.comments.placeholder,
-		helperText: labels.gift.inputs.comments.helperText,
-		errorMessage: "",
-		required: false,
-	},
-});
-
 /******** Computed data ********/
 const list: ComputedRef<ListDTO> = computed(() => state.lists.selected);
 const gift: ComputedRef<GiftDTO> = computed(() => state.gifts.selected);
-const editedGift: ComputedRef<PartialGiftDTO> = computed(() => {
-	const editedGift: PartialGiftDTO = {};
-
-	if (giftInformation.value.title.value !== gift.value.title) {
-		editedGift.title = giftInformation.value.title.value;
-	}
-
-	if (giftInformation.value.isFavorite.value !== gift.value.isFavorite) {
-		editedGift.isFavorite = giftInformation.value.isFavorite.value;
-	}
-
-	if (giftInformation.value.category.value.name !== gift.value.category) {
-		editedGift.category = giftInformation.value.category.value.name;
-	}
-
-	if (giftInformation.value.price.value !== gift.value.price) {
-		editedGift.price = giftInformation.value.price.value;
-	}
-
-	if (giftInformation.value.link.value !== gift.value.linkURL) {
-		editedGift.linkURL = giftInformation.value.link.value;
-	}
-
-	if (giftInformation.value.brand.value !== gift.value.brand) {
-		editedGift.brand = giftInformation.value.brand.value;
-	}
-
-	if (giftInformation.value.color.value !== gift.value.color) {
-		editedGift.color = giftInformation.value.color.value;
-	}
-
-	if (giftInformation.value.size.value !== gift.value.size) {
-		editedGift.size = giftInformation.value.size.value;
-	}
-
-	if (giftInformation.value.comments.value !== gift.value.comments) {
-		editedGift.comments = giftInformation.value.comments.value;
-	}
-
-	return editedGift;
-});
+const partialGiftData: ComputedRef<PartialGiftDTO> = computed(() =>
+	getters.getPartialGiftData(gift.value)
+);
 
 /******** Methods ********/
-const initializeFormData = () => {
-	giftInformation.value.title.value = gift.value.title;
-	giftInformation.value.isFavorite.value = gift.value.isFavorite;
-	giftInformation.value.price.value = gift.value.price || 0;
-	giftInformation.value.category.value =
-		giftCategories.find((cat) => cat.name === gift.value.category) || giftCategories[0];
-	giftInformation.value.link.value = gift.value.linkURL || "";
-	giftInformation.value.showDetails.value = ((gift.value.brand ||
-		gift.value.size ||
-		gift.value.color ||
-		gift.value.comments) as unknown as boolean)
-		? true
-		: false;
-	giftInformation.value.brand.value = gift.value.brand || "";
-	giftInformation.value.size.value = gift.value.size || "";
-	giftInformation.value.color.value = gift.value.color || "";
-	giftInformation.value.comments.value = gift.value.comments || "";
-};
-
 onMounted(async () => {
 	const listIdPayload: ListIdPayload = {
 		auth,
@@ -247,7 +115,7 @@ onMounted(async () => {
 	};
 	const successGift = await dispatch("getGift", giftIdPayload);
 	if (successList && successGift) {
-		initializeFormData();
+		dispatch("initGiftData", gift.value);
 		loading.value = false;
 	}
 });
@@ -255,32 +123,18 @@ onMounted(async () => {
 onUnmounted(() => {
 	commit("EMPTY_LIST");
 	commit("EMPTY_GIFT");
+	dispatch("initGiftFormState");
 });
 
-const handleGiftInformationChange = (values: Record<string, unknown>) => {
-	giftInformation.value = values;
-};
-
 const cancel = () => {
-	router.go(-1);
-};
-
-const validateGiftFields = (): boolean => {
-	let validate = true;
-
-	if (!giftInformation.value.title.value) {
-		giftInformation.value.title.errorMessage = labels.gift.inputs.title.errors.mandatory;
-		validate = false;
-	}
-
-	return validate;
+	router.push("/app/lists/" + listId);
 };
 
 const saveGiftChanges = async () => {
 	confirmButtonIsLoading.value = true;
 
 	// Validate fields
-	if (!validateGiftFields()) {
+	if (!(await dispatch("checkGiftData"))) {
 		confirmButtonIsLoading.value = false;
 		return;
 	}
@@ -289,7 +143,7 @@ const saveGiftChanges = async () => {
 		auth,
 		listId,
 		giftId,
-		partialGift: editedGift.value,
+		partialGift: partialGiftData.value,
 	};
 
 	// Call store action
@@ -301,7 +155,7 @@ const saveGiftChanges = async () => {
 };
 
 const handleDeleteModal = () => {
-	modal.value.title = labels.modals.deleteGift.title + giftInformation.value.title.value;
+	modal.value.title = labels.modals.deleteGift.title + gift.value.title;
 	modal.value.showModal = true;
 };
 

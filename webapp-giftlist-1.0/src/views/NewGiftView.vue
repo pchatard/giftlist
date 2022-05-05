@@ -3,8 +3,7 @@
 		<GiftForm
 			action="create"
 			:loading="buttonIsLoading"
-			:values="giftInformation"
-			@change="handleGiftInformationChange"
+			:categories="giftCategories"
 			@cancel="cancel"
 			@confirm="createGift"
 		/>
@@ -12,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref } from "vue";
+import { computed, ComputedRef, inject, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -26,7 +25,7 @@ import { Auth0Client } from "@auth0/auth0-spa-js";
 
 /******** Basic imports ********/
 const router = useRouter();
-const { dispatch } = useStore();
+const { dispatch, getters } = useStore();
 const auth = inject("Auth") as Auth0Client;
 
 /******** Static imports ********/
@@ -41,134 +40,26 @@ const giftCategories: GiftCategory[] = [
 
 /******** Reactive data ********/
 const buttonIsLoading = ref(false);
-const giftInformation = ref({
-	title: {
-		label: labels.gift.inputs.title.label,
-		value: "",
-		placeholder: labels.gift.inputs.title.placeholder,
-		helperText: labels.gift.inputs.title.helperText,
-		errorMessage: "",
-		required: true,
-	},
-	isFavorite: {
-		label: labels.gift.inputs.isFavorite.label,
-		value: false,
-		helperText: labels.gift.inputs.isFavorite.helperText,
-	},
-	price: {
-		label: labels.gift.inputs.price.label,
-		value: 0,
-		placeholder: labels.gift.inputs.price.placeholder,
-		helperText: labels.gift.inputs.price.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	category: {
-		label: labels.gift.inputs.category.label,
-		value: giftCategories[0],
-		options: giftCategories,
-		helperText: labels.gift.inputs.category.helperText,
-		errorMessage: "",
-	},
-	link: {
-		label: labels.gift.inputs.link.label,
-		value: "",
-		placeholder: labels.gift.inputs.link.placeholder,
-		helperText: labels.gift.inputs.link.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	showDetails: {
-		label: labels.gift.inputs.showDetails.label,
-		value: false,
-		helperText: labels.gift.inputs.showDetails.helperText,
-	},
-	brand: {
-		label: labels.gift.inputs.brand.label,
-		value: "",
-		placeholder: labels.gift.inputs.brand.placeholder,
-		helperText: labels.gift.inputs.brand.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	size: {
-		label: labels.gift.inputs.size.label,
-		value: "",
-		placeholder: labels.gift.inputs.size.placeholder,
-		helperText: labels.gift.inputs.size.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	color: {
-		label: labels.gift.inputs.color.label,
-		value: "",
-		placeholder: labels.gift.inputs.color.placeholder,
-		helperText: labels.gift.inputs.color.helperText,
-		errorMessage: "",
-		required: false,
-	},
-	comments: {
-		label: labels.gift.inputs.comments.label,
-		value: "",
-		placeholder: labels.gift.inputs.comments.placeholder,
-		helperText: labels.gift.inputs.comments.helperText,
-		errorMessage: "",
-		required: false,
-	},
-});
 
 /******** Computed data ********/
-const newGift = computed(() => {
-	const gift: CreateGiftDTO = {
-		title: giftInformation.value.title.value,
-		isFavorite: giftInformation.value.isFavorite.value,
-		isHidden: false,
-		category: giftInformation.value.category.value.name,
-		price: giftInformation.value.price.value ? giftInformation.value.price.value : undefined,
-		linkURL: giftInformation.value.link.value ? giftInformation.value.link.value : undefined,
-		brand:
-			giftInformation.value.showDetails && giftInformation.value.brand.value
-				? giftInformation.value.brand.value
-				: undefined,
-		color:
-			giftInformation.value.showDetails && giftInformation.value.color.value
-				? giftInformation.value.color.value
-				: undefined,
-		size:
-			giftInformation.value.showDetails && giftInformation.value.size.value
-				? giftInformation.value.size.value
-				: undefined,
-		comments:
-			giftInformation.value.showDetails && giftInformation.value.comments.value
-				? giftInformation.value.comments.value
-				: undefined,
-	};
-	return gift;
-});
+const createGiftData: ComputedRef<CreateGiftDTO> = computed(() => getters.getCreateGiftData);
 
-/******** Fetch page data ********/
+onMounted(() => {
+	dispatch("initGiftFormState");
+});
+onUnmounted(() => {
+	dispatch("initGiftFormState");
+});
 
 /******** Methods ********/
 const cancel = () => {
-	router.go(-1);
-};
-
-const validateGiftFields = (): boolean => {
-	let validate = true;
-
-	if (!giftInformation.value.title.value) {
-		giftInformation.value.title.errorMessage = "Ce champ est requis";
-		validate = false;
-	}
-
-	return validate;
+	router.push("/app/lists/" + listId);
 };
 
 const createGift = async () => {
 	buttonIsLoading.value = true;
 
-	// Validate fields
-	if (!validateGiftFields()) {
+	if (!(await dispatch("checkGiftData"))) {
 		buttonIsLoading.value = false;
 		return;
 	}
@@ -176,17 +67,14 @@ const createGift = async () => {
 	const giftPayload: CreateGiftPayload = {
 		auth,
 		listId,
-		gift: newGift.value,
+		gift: createGiftData.value,
 	};
 	const success = await dispatch("createGift", giftPayload);
 	if (success) {
-		router.go(-1);
+		router.push("/app/lists/" + listId);
+		return;
 	} else {
 		buttonIsLoading.value = false;
 	}
-};
-
-const handleGiftInformationChange = (values: Record<string, unknown>) => {
-	giftInformation.value = values;
 };
 </script>

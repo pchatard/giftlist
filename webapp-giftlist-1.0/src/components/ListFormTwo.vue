@@ -95,7 +95,7 @@ import InputToggle from "@/components/InputToggle.vue";
 import PersonTag from "@/components/PersonTag.vue";
 import { ShareIcon, UserIcon, UsersIcon } from "@heroicons/vue/outline";
 import { useStore } from "vuex";
-import { ListFormState } from "@/store/listForm";
+import { ListFormState } from "@/store/list-form";
 
 interface Props {
 	friends: Record<string, unknown>[];

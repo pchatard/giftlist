@@ -71,7 +71,7 @@ import InputDate from "@/components/InputDate.vue";
 import InputText from "@/components/InputText.vue";
 import InputToggle from "@/components/InputToggle.vue";
 import { AnnotationIcon, CalendarIcon, CollectionIcon } from "@heroicons/vue/outline";
-import { ListFormState } from "@/store/listForm";
+import { ListFormState } from "@/store/list-form";
 import { computed, ComputedRef } from "vue";
 import { useStore } from "vuex";
 

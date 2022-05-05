@@ -91,9 +91,11 @@ export const listForm: Module<ListFormState, RootState> = {
 		listHasClosureDate: (state: ListFormState): boolean => state.hasClosureDate.value,
 		getListClosureDate: (state: ListFormState): string => state.closureDate.value,
 		listIsShared: (state: ListFormState): boolean => state.isShared.value,
-		getListOwners: (state: ListFormState): Record<string, unknown>[] => state.owners.value,
-		getListGrantedUsers: (state: ListFormState): Record<string, unknown>[] =>
-			state.grantedUsers.value,
+		getListOwners: (state: ListFormState): Record<string, unknown>[] | Record<string, unknown> =>
+			state.owners.value,
+		getListGrantedUsers: (
+			state: ListFormState
+		): Record<string, unknown>[] | Record<string, unknown> => state.grantedUsers.value,
 		getListData: (_state: ListFormState, getters): CreateListDTO => {
 			const newList: CreateListDTO = {
 				title: getters.getListTitle,
