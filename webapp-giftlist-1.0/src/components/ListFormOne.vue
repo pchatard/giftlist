@@ -3,15 +3,15 @@
 		<div class="col-span-full grid grid-cols-3">
 			<InputText
 				class="col-span-1"
-				:label="values.title.label"
-				:value="values.title.value"
-				:helper-text="values.title.helperText"
-				:placeholder="values.title.placeholder"
-				:is-error="values.title.errorMessage !== ''"
-				:error-message="values.title.errorMessage"
-				:mandatory="values.title.required"
+				:label="listFormData.title.label"
+				:value="listFormData.title.value"
+				:helper-text="listFormData.title.helperText"
+				:placeholder="listFormData.title.placeholder"
+				:is-error="listFormData.title.errorMessage !== ''"
+				:error-message="listFormData.title.errorMessage"
+				:mandatory="listFormData.title.mandatory"
 				reset
-				@change="handleTitleChange"
+				@change="(title: string) => dispatch('changeListTitle', title)"
 			>
 				<div class="mr-4">
 					<CollectionIcon class="w-5 h-5 text-indigo-600" />
@@ -19,15 +19,15 @@
 			</InputText>
 			<InputText
 				class="col-span-3 pt-4"
-				:label="values.description.label"
-				:value="values.description.value"
-				:helper-text="values.description.helperText"
-				:placeholder="values.description.placeholder"
-				:is-error="values.description.errorMessage !== ''"
-				:error-message="values.description.errorMessage"
-				:mandatory="values.description.required"
+				:label="listFormData.description.label"
+				:value="listFormData.description.value"
+				:helper-text="listFormData.description.helperText"
+				:placeholder="listFormData.description.placeholder"
+				:is-error="listFormData.description.errorMessage !== ''"
+				:error-message="listFormData.description.errorMessage"
+				:mandatory="listFormData.description.mandatory"
 				reset
-				@change="handleDescriptionChange"
+				@change="(description: string) => dispatch('changeListDescription', description)"
 			>
 				<div class="mr-4">
 					<AnnotationIcon class="w-5 h-5 text-indigo-600" />
@@ -38,29 +38,29 @@
 		<div class="col-span-full flex items-center pt-4">
 			<InputToggle
 				class="col-span-full"
-				:label="values.activateTermDate.label"
-				:value="values.activateTermDate.value"
+				:label="listFormData.hasClosureDate.label"
+				:value="listFormData.hasClosureDate.value"
 				inline
-				:helper-text="values.activateTermDate.helperText"
-				@change="handleActivateTermDateChange"
+				:helper-text="listFormData.hasClosureDate.helperText"
+				@change="(hasClosureDate: boolean) => dispatch('changeListHasClosureDate', hasClosureDate)"
 			>
 				<div class="mr-4">
 					<CalendarIcon
 						class="w-5 h-5"
-						:class="values.activateTermDate.value ? 'text-indigo-600' : 'text-gray-600'"
+						:class="listFormData.hasClosureDate.value ? 'text-indigo-600' : 'text-gray-600'"
 					/>
 				</div>
 			</InputToggle>
 			<InputDate
-				:disabled="!values.activateTermDate.value"
+				:disabled="!listFormData.hasClosureDate.value"
 				class="col-span-full self-stretch mx-auto py-4 w-auto"
-				:label="values.termDate.label"
-				:value="values.termDate.value"
-				:helper-text="values.termDate.helperText"
-				:is-error="values.termDate.errorMessage !== ''"
-				:error-message="values.termDate.errorMessage"
+				:label="listFormData.closureDate.label"
+				:value="listFormData.closureDate.value"
+				:helper-text="listFormData.closureDate.helperText"
+				:is-error="listFormData.closureDate.errorMessage !== ''"
+				:error-message="listFormData.closureDate.errorMessage"
 				mandatory
-				@change="handleTermDateChange"
+				@change="(closureDate: string) => dispatch('changeListClosureDate', closureDate)"
 			/>
 		</div>
 	</div>
@@ -71,60 +71,10 @@ import InputDate from "@/components/InputDate.vue";
 import InputText from "@/components/InputText.vue";
 import InputToggle from "@/components/InputToggle.vue";
 import { AnnotationIcon, CalendarIcon, CollectionIcon } from "@heroicons/vue/outline";
+import { ListFormState } from "@/store/list-form";
+import { computed, ComputedRef } from "vue";
+import { useStore } from "vuex";
 
-interface Props {
-	values: Record<string, unknown>;
-}
-
-const props = defineProps<Props>();
-const emit = defineEmits<{
-	(e: "change", values: Record<string, unknown>): void;
-}>();
-
-const handleTitleChange = (title: string) => {
-	const values = {
-		...props.values,
-		title: {
-			...props.values?.title,
-			errorMessage: "",
-			value: title,
-		},
-	};
-	emit("change", values);
-};
-
-const handleDescriptionChange = (description: string) => {
-	const values = {
-		...props.values,
-		description: {
-			...props.values?.description,
-			errorMessage: "",
-			value: description,
-		},
-	};
-	emit("change", values);
-};
-
-const handleActivateTermDateChange = (activateTermDate: boolean) => {
-	const values = {
-		...props.values,
-		activateTermDate: {
-			...props.values?.activateTermDate,
-			value: activateTermDate,
-		},
-	};
-	emit("change", values);
-};
-
-const handleTermDateChange = (termDate: string) => {
-	const values = {
-		...props.values,
-		termDate: {
-			...props.values?.termDate,
-			errorMessage: "",
-			value: termDate,
-		},
-	};
-	emit("change", values);
-};
+const { state, dispatch } = useStore();
+const listFormData: ComputedRef<ListFormState> = computed(() => state.listForm);
 </script>

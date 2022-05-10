@@ -31,7 +31,8 @@
 		"valid-typeof": "warn",
 		"no-extra-semi": "error",
 		"no-console": "warn",
-		"no-debugger": "warn"
+		"no-debugger": "warn",
+		"no-useless-escape": "off"
 	},
 	"overrides": [
 		{
