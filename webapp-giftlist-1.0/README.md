@@ -14,7 +14,7 @@
 # Tâches
 
 ## Global
-- [ ] Se conformer aux rules Vue ESLint https://eslint.vuejs.org/rules/ :
+- [x] Se conformer aux rules Vue ESLint https://eslint.vuejs.org/rules/ :
     - [x] SFC
     - [x] Use script setup
     - [x] eslint vue-recommended
@@ -27,13 +27,12 @@
 - [x] Connecter les différentes actions des stores aux boutons correspondants
 
 ## Formulaires / Inputs
-- [ ] Réfléchir aux différentes règles de validation
-- [ ] Ajouter les validations sur tous les formulaires
+- [x] Réfléchir aux différentes règles de validation
+- [x] Ajouter les validations sur tous les formulaires
 - [x] Compléter les composants Inputs 
     - [x] DatePicker
     - [x] Ajouter une action Open sur l'input Link
-    - [x] Ajouter une Icon optionnelle
-- [ ] Compléter les formulaires avec des slots pour ajouter du texte        
+    - [x] Ajouter une Icon optionnelle     
 
 ## Pages existantes
 - [x] Nouveau cadeau : Bouton "Valider et créer un nouveau"
