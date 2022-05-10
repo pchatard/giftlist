@@ -27,7 +27,7 @@ export const validateGiftPrice = (price: number): string => {
 
 export const validateGiftLinkURL = (linkURL: string): string => {
 	const urlRegex =
-		/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+		/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
 	if (!urlRegex.test(linkURL)) {
 		return "Veuillez rentrer un lien valide.";
 	}
