@@ -38,7 +38,7 @@
 				<InputSelect
 					class="col-start-1 col-span-2"
 					:label="giftFormData.category.label"
-					:value="giftFormData.category.value"
+					:value="(giftFormData.category.value as Record<string, unknown>)"
 					:options="categories"
 					:helper-text="giftFormData.category.helperText"
 					:error-message="giftFormData.category.errorMessage"
@@ -54,6 +54,7 @@
 					:label="giftFormData.price.label"
 					:value="giftFormData.price.value"
 					:placeholder="giftFormData.price.placeholder"
+					:is-error="giftFormData.price.errorMessage !== ''"
 					:helper-text="giftFormData.price.helperText"
 					:error-message="giftFormData.price.errorMessage"
 					:mandatory="giftFormData.price.mandatory"
@@ -70,6 +71,7 @@
 					:value="giftFormData.linkURL.value"
 					:placeholder="giftFormData.linkURL.placeholder"
 					:helper-text="giftFormData.linkURL.helperText"
+					:is-error="giftFormData.linkURL.errorMessage !== ''"
 					:error-message="giftFormData.linkURL.errorMessage"
 					:mandatory="giftFormData.linkURL.mandatory"
 					open
@@ -106,6 +108,7 @@
 						:value="giftFormData.brand.value"
 						:placeholder="giftFormData.brand.placeholder"
 						:helper-text="giftFormData.brand.helperText"
+						:is-error="giftFormData.brand.errorMessage !== ''"
 						:error-message="giftFormData.brand.errorMessage"
 						:mandatory="giftFormData.brand.mandatory"
 						reset
@@ -121,6 +124,7 @@
 						:value="giftFormData.color.value"
 						:placeholder="giftFormData.color.placeholder"
 						:helper-text="giftFormData.color.helperText"
+						:is-error="giftFormData.color.errorMessage !== ''"
 						:error-message="giftFormData.color.errorMessage"
 						:mandatory="giftFormData.color.mandatory"
 						reset
@@ -136,6 +140,7 @@
 						:value="giftFormData.size.value"
 						:placeholder="giftFormData.size.placeholder"
 						:helper-text="giftFormData.size.helperText"
+						:is-error="giftFormData.size.errorMessage !== ''"
 						:error-message="giftFormData.size.errorMessage"
 						:mandatory="giftFormData.size.mandatory"
 						reset
@@ -154,6 +159,7 @@
 					:value="giftFormData.comments.value"
 					:placeholder="giftFormData.comments.placeholder"
 					:helper-text="giftFormData.comments.helperText"
+					:is-error="giftFormData.comments.errorMessage !== ''"
 					:error-message="giftFormData.comments.errorMessage"
 					:mandatory="giftFormData.comments.mandatory"
 					reset

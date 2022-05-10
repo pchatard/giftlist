@@ -58,9 +58,8 @@
 								<ListboxOption
 									v-for="opt in filteredOptions"
 									v-slot="{ active, selected }"
-									:key="opt.id"
+									:key="(opt.id as string)"
 									:value="opt"
-									:disabled="opt.id === 'x'"
 									as="template"
 								>
 									<li

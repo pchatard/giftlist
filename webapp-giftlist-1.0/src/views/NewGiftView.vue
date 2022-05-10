@@ -18,7 +18,6 @@ import { useStore } from "vuex";
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftForm from "@/components/GiftForm.vue";
 import labels from "@/labels/fr/labels.json";
-import { GiftCategory } from "@/types/api/GiftCategory";
 import { CreateGiftDTO } from "@/types/dto/CreateGiftDTO";
 import { CreateGiftPayload } from "@/types/payload/CreateGiftPayload";
 import { Auth0Client } from "@auth0/auth0-spa-js";
@@ -30,7 +29,7 @@ const auth = inject("Auth") as Auth0Client;
 
 /******** Static imports ********/
 const listId = router.currentRoute.value.params.id as string;
-const giftCategories: GiftCategory[] = [
+const giftCategories = [
 	{ id: "x", name: "Général" },
 	{ id: "0", name: "Vêtements" },
 	{ id: "1", name: "Chaussures" },

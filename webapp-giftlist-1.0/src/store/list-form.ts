@@ -11,6 +11,12 @@ import labels from "@/labels/fr/labels.json";
 import { CreateListDTO } from "@/types/dto/CreateListDTO";
 import { ListDTO } from "@/types/dto/ListDTO";
 import { PartialListDTO } from "@/types/dto/PartialListDTO";
+import {
+	formatInitDate,
+	validateListClosureDate,
+	validateListDescription,
+	validateListTitle,
+} from "@/helpers/list-helpers";
 
 export interface ListFormState {
 	currentStep: number;
@@ -22,17 +28,6 @@ export interface ListFormState {
 	owners: InputSelectData;
 	grantedUsers: InputSelectData;
 }
-
-const getInitDate = (): Date => {
-	const date = new Date();
-	date.setDate(date.getDate() + 1);
-	const offset = date.getTimezoneOffset();
-	return new Date(date.getTime() - offset * 60 * 1000);
-};
-
-const formatInitDate = (): string => {
-	return getInitDate().toISOString().split("T")[0];
-};
 
 const initListFormState = (): ListFormState => {
 	return {
@@ -86,8 +81,8 @@ export const listForm: Module<ListFormState, RootState> = {
 	state: initListFormState,
 	getters: {
 		getCurrentStep: (state: ListFormState): number => state.currentStep,
-		getListTitle: (state: ListFormState): string => state.title.value,
-		getListDescription: (state: ListFormState): string => state.description.value,
+		getListTitle: (state: ListFormState): string => state.title.value.trim(),
+		getListDescription: (state: ListFormState): string => state.description.value.trim(),
 		listHasClosureDate: (state: ListFormState): boolean => state.hasClosureDate.value,
 		getListClosureDate: (state: ListFormState): string => state.closureDate.value,
 		listIsShared: (state: ListFormState): boolean => state.isShared.value,
@@ -184,6 +179,9 @@ export const listForm: Module<ListFormState, RootState> = {
 		SET_LIST_TITLE_ERROR_MESSAGE: (state: ListFormState, errorMessage: string) => {
 			state.title.errorMessage = errorMessage;
 		},
+		SET_LIST_DESCRIPTION_ERROR_MESSAGE: (state: ListFormState, errorMessage: string) => {
+			state.description.errorMessage = errorMessage;
+		},
 		SET_LIST_CLOSURE_DATE_ERROR_MESSAGE: (state: ListFormState, errorMessage: string) => {
 			state.closureDate.errorMessage = errorMessage;
 		},
@@ -272,28 +270,28 @@ export const listForm: Module<ListFormState, RootState> = {
 		checkListStepOneData: ({ state, commit }): boolean => {
 			let validateStep = true;
 
-			// Check that title is filled
-			if (!state.title.value) {
-				const titleErrorMessage = labels.newList.step1.inputs.title.errors.mandatory;
+			const titleErrorMessage = validateListTitle(state.title.value);
+			if (titleErrorMessage) {
 				commit("SET_LIST_TITLE_ERROR_MESSAGE", titleErrorMessage);
 				validateStep = false;
 			}
 
-			// Check that title matches regex : Only alphanumeric values
-			// Check title length
-			// Check title only white space ?
-
 			// Same thing for description
+			const descriptionErrorMessage = validateListDescription(state.description.value);
+			if (descriptionErrorMessage) {
+				commit("SET_LIST_DESCRIPTION_ERROR_MESSAGE", descriptionErrorMessage);
+				validateStep = false;
+			}
 
 			// Check that date is not in the past
 			if (state.hasClosureDate.value) {
-				const dateIsInPast = new Date(state.closureDate.value) <= new Date();
-				if (dateIsInPast) {
-					const closureDateErrorMessage = labels.newList.step1.inputs.termDate.errors.pastDate;
+				const closureDateErrorMessage = validateListClosureDate(state.closureDate.value);
+				if (closureDateErrorMessage) {
 					commit("SET_LIST_CLOSURE_DATE_ERROR_MESSAGE", closureDateErrorMessage);
 					validateStep = false;
 				}
 			}
+
 			return validateStep;
 		},
 		checkListStepTwoData: (): boolean => {
