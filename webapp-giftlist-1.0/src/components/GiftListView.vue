@@ -30,8 +30,8 @@
 		<span
 			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
 			:class="{
-				'bg-red-100 text-red-800': gift.isBooked,
-				'bg-green-100 text-green-800': !gift.isBooked,
+				'bg-danger-light text-red-800': gift.isBooked,
+				'bg-success-light text-green-800': !gift.isBooked,
 			}"
 		>
 			{{ gift.isBooked ? labels.gifts.status.booked : labels.gifts.status.available }}
@@ -45,13 +45,15 @@
 		<button
 			class="ml-4 font-medium"
 			:class="
-				gift.linkURL ? 'text-indigo-600 hover:text-indigo-900' : 'text-gray-400 line-through'
+				gift.linkURL
+					? 'text-primary-default hover:text-primary-text'
+					: 'text-gray-400 line-through'
 			"
 			@click.stop="openLinkInNewTab"
 		>
 			<span
 				class="flex items-center px-2 py-1 rounded-md"
-				:class="gift.linkURL ? 'hover:bg-indigo-100' : ''"
+				:class="gift.linkURL ? 'hover:bg-primary-light' : ''"
 			>
 				<ExternalLinkIcon class="h-4 w-4 mr-2" />
 				{{ labels.gifts.buttons.open }}
@@ -60,12 +62,16 @@
 		<button
 			v-if="shared"
 			class="ml-4 font-medium"
-			:class="!gift.isBooked ? 'text-red-600 hover:text-red-900' : 'text-gray-400 line-through'"
+			:class="
+				!gift.isBooked
+					? 'text-danger-default hover:text-danger-text'
+					: 'text-gray-400 line-through'
+			"
 			@click.stop="openBookGiftModal"
 		>
 			<span
 				class="flex items-center px-2 py-1 rounded-md"
-				:class="!gift.isBooked ? 'hover:bg-red-100' : 'hover:bg-gray-100'"
+				:class="!gift.isBooked ? 'hover:bg-danger-light' : 'hover:bg-secondary-default'"
 			>
 				<TicketIcon class="h-4 w-4 mr-2" />
 				{{ labels.gifts.buttons.book }}
@@ -73,10 +79,10 @@
 		</button>
 		<button
 			v-else
-			class="ml-4 items-center text-red-600 font-medium hover:text-red-900"
+			class="ml-4 items-center text-danger-default font-medium hover:text-danger-text"
 			@click.stop="openDeleteGiftModal"
 		>
-			<span class="flex items-center px-2 py-1 hover:bg-red-100 rounded-md">
+			<span class="flex items-center px-2 py-1 hover:bg-danger-light rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />
 				{{ labels.gifts.buttons.delete }}
 			</span>

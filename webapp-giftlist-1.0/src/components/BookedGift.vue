@@ -1,13 +1,13 @@
 <template>
-	<div class="border border-gray-200 shadow-sm rounded-md p-4 flex flex-col cursor-pointer">
+	<div class="border border-secondary-hover shadow-sm rounded-md p-4 flex flex-col cursor-pointer">
 		<div class="flex items-center">
-			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-gray-100 text-yellow-400" />
+			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-secondary-default text-yellow-400" />
 			<div class="flex flex-col">
 				<span class="font-semibold">
 					{{ gift.title }}
 				</span>
 				<div class="flex items-center">
-					<CurrencyEuroIcon class="w-4 mr-1 text-indigo-600" />
+					<CurrencyEuroIcon class="w-4 mr-1 text-primary-default" />
 					<span class="text-sm">{{ price }}</span>
 				</div>
 			</div>
@@ -15,7 +15,7 @@
 		<div class="mt-4 flex justify-between items-center">
 			<div>
 				<div class="flex items-center">
-					<UserCircleIcon class="w-5 mr-2 text-indigo-600" />
+					<UserCircleIcon class="w-5 mr-2 text-primary-default" />
 					<span>
 						<!-- {{ gift.owner }} -->
 					</span>
@@ -28,7 +28,7 @@
 			</div>
 			<ExternalLinkIcon
 				v-if="gift.linkURL"
-				class="w-5 text-gray-400 cursor-pointer hover:text-indigo-600"
+				class="w-5 text-gray-400 cursor-pointer hover:text-primary-default"
 				@click.stop="openInNewTab"
 			/>
 		</div>

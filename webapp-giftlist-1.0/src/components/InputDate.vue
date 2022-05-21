@@ -20,13 +20,15 @@
 		/>
 		<button
 			:disabled="disabled"
-			class="relative w-8 border-l border-gray-100"
-			:class="disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-100'"
+			class="relative w-8 border-l border-secondary-default"
+			:class="
+				disabled ? 'bg-secondary-default cursor-not-allowed' : 'hover:bg-secondary-default'
+			"
 			@click="openModal"
 		>
 			<CalendarIcon
 				class="absolute w-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-				:class="disabled ? 'text-gray-600' : 'text-indigo-600'"
+				:class="disabled ? 'text-secondary-text' : 'text-primary-default'"
 			/>
 		</button>
 		<GiftlistModal

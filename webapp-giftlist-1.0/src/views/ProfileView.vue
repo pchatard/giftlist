@@ -3,7 +3,7 @@
 		<div class="flex flex-col my-4">
 			<div class="flex items-center justify-between border rounded-lg px-4 my-4">
 				<div
-					class="bg-indigo-600 text-white text-4xl font-semibold w-1/12 my-4 grid place-items-center rounded-full"
+					class="bg-primary-default text-white text-4xl font-semibold w-1/12 my-4 grid place-items-center rounded-full"
 					style="aspect-ratio: 1"
 				>
 					{{ user.displayName.toUpperCase()[0] }}
@@ -14,7 +14,7 @@
 					<div>{{ labels.profile.email }} {{ user.email }}</div>
 					<button
 						v-if="!auth.user.email_verified"
-						class="text-indigo-600"
+						class="text-primary-default"
 						@click="verifyEmail"
 					>
 						{{ labels.profile.verifyEmail }}
@@ -35,7 +35,7 @@
 						>
 					</div>
 					<div class="pl-1">12 {{ labels.profile.friendsNumber }}</div>
-					<router-link to="/app/profile/friends" class="ml-1 mt-4 text-indigo-600">
+					<router-link to="/app/profile/friends" class="ml-1 mt-4 text-primary-default">
 						{{ labels.profile.manageFriends }}
 					</router-link>
 				</div>

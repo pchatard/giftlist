@@ -48,7 +48,7 @@
 							>
 								<ListboxOption v-if="!filteredOptions.length" as="template">
 									<li
-										class="cursor-pointer text-gray-900 hover:bg-gray-100 select-none relative py-2 pl-10 pr-4"
+										class="cursor-pointer text-gray-900 hover:bg-secondary-default select-none relative py-2 pl-10 pr-4"
 									>
 										<span class="font-normal block truncate"
 											>Aucune option disponible</span
@@ -63,9 +63,9 @@
 									as="template"
 								>
 									<li
-										class="cursor-pointer text-gray-900 hover:text-indigo-600 hover:bg-indigo-100"
+										class="cursor-pointer text-gray-900 hover:text-primary-default hover:bg-primary-light"
 										:class="[
-											active ? 'text-indigo-600 bg-indigo-100' : 'text-gray-900',
+											active ? 'text-primary-default bg-primary-light' : 'text-gray-900',
 											'select-none relative py-2 pl-10 pr-4',
 										]"
 									>
@@ -78,7 +78,7 @@
 										>
 										<span
 											v-if="selected"
-											class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600"
+											class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-default"
 										>
 											<CheckIcon class="w-5 h-5" aria-hidden="true" />
 										</span>

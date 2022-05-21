@@ -29,7 +29,7 @@
 					class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 grid-flow-row gap-x-4 gap-y-8"
 				>
 					<div
-						class="border border-gray-200 shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer"
+						class="border border-secondary-hover shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer"
 						@click="router.push(`/app/lists/${list.id}/new-gift`)"
 					>
 						<PlusIcon class="w-8 text-gray-400" />
@@ -64,7 +64,7 @@
 					{{ labels.modals.sharingOptions.statusText }}
 					<span
 						class="font-semibold"
-						:class="list.isShared ? 'text-green-600' : 'text-red-600'"
+						:class="list.isShared ? 'text-success-default' : 'text-danger-default'"
 					>
 						{{
 							list.isShared
@@ -114,7 +114,7 @@
 		<template #commands>
 			<span
 				v-if="list.isShared"
-				class="flex items-center mr-4 text-green-600 font-medium hover:text-green-900 hover:bg-green-100 px-2 py-1 rounded-md cursor-pointer"
+				class="flex items-center mr-4 text-success-default font-medium hover:text-success-text hover:bg-success-light px-2 py-1 rounded-md cursor-pointer"
 				@click="showSharingOptionsModal"
 			>
 				<LockOpenIcon class="h-4 w-4 mr-2" />
@@ -122,14 +122,14 @@
 			</span>
 			<span
 				v-else
-				class="flex items-center mr-4 text-red-600 font-medium hover:text-red-900 hover:bg-red-100 px-2 py-1 rounded-md cursor-pointer"
+				class="flex items-center mr-4 text-danger-default font-medium hover:text-danger-text hover:bg-danger-light px-2 py-1 rounded-md cursor-pointer"
 				@click="showSharingOptionsModal"
 			>
 				<LockClosedIcon class="h-4 w-4 mr-2" />
 				{{ labels.lists.status.private }}
 			</span>
 			<span
-				class="flex items-center mr-4 text-indigo-600 font-medium hover:text-indigo-900 cursor-pointer"
+				class="flex items-center mr-4 text-primary-default font-medium hover:text-primary-text cursor-pointer"
 				@click="router.push(`/app/lists/${list.id}/settings`)"
 			>
 				<CogIcon class="h-4 w-4 mr-2" />

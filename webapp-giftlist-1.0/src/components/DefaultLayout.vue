@@ -4,10 +4,10 @@
 			<div class="flex flex-col gap-2">
 				<div
 					v-if="back"
-					class="flex gap-2 text-gray-600 cursor-pointer hover:text-black"
+					class="flex gap-2 text-black cursor-pointer group"
 					@click="handleBackButtonClick"
 				>
-					<ArrowLeftIcon class="w-4" />
+					<ArrowLeftIcon class="w-4 group-hover:text-secondary-text" />
 					<span>{{ backText }}</span>
 				</div>
 				<GiftlistTitle class="mb-4">{{ title }}</GiftlistTitle>

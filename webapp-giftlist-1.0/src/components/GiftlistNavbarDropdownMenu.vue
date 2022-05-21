@@ -3,7 +3,7 @@
 		<Menu as="div" class="relative inline-block text-left">
 			<div>
 				<MenuButton
-					class="inline-flex justify-center items-center w-full px-4 py-2 text-sm text-black bg-white rounded-md shadow-sm border border-gray-100 hover:border-gray-200 focus:outline-none"
+					class="inline-flex justify-center items-center w-full px-4 py-2 text-sm text-black bg-white rounded-md shadow-sm border border-secondary-default hover:border-secondary-hover focus:outline-none"
 				>
 					<UserCircleIcon class="h-5 w-5 mr-2 text-gray-400" />
 					{{ auth.user.name }}
@@ -20,13 +20,13 @@
 				leave-to-class="transform scale-95 opacity-0"
 			>
 				<MenuItems
-					class="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+					class="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-secondary-default rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
 				>
 					<div>
 						<MenuItem v-slot="{ active }">
 							<button
 								:class="[
-									active ? 'bg-gray-50 text-indigo-600' : 'text-black',
+									active ? 'bg-gray-50 text-primary-default' : 'text-black',
 									'group flex rounded-md items-center w-full px-4 py-3 text-sm',
 								]"
 								@click="redirectToProfile"
@@ -38,7 +38,7 @@
 						<MenuItem v-slot="{ active }">
 							<button
 								:class="[
-									active ? 'bg-gray-50 text-indigo-600' : 'text-black',
+									active ? 'bg-gray-50 text-primary-default' : 'text-black',
 									'group flex rounded-md items-center w-full px-4 py-3 text-sm',
 								]"
 								@click="redirectToFriends"
@@ -50,7 +50,7 @@
 						<MenuItem v-slot="{ active }">
 							<button
 								:class="[
-									active ? 'bg-gray-50 text-indigo-600' : 'text-black',
+									active ? 'bg-gray-50 text-primary-default' : 'text-black',
 									'group flex rounded-md items-center w-full px-4 py-3 text-sm',
 								]"
 								@click="redirectToSettings"
@@ -63,7 +63,7 @@
 					<MenuItem v-slot="{ active }">
 						<button
 							:class="[
-								active ? 'bg-gray-50 text-red-600' : 'text-black',
+								active ? 'bg-gray-50 text-danger-default' : 'text-black',
 								'group flex rounded-md items-center w-full px-4 py-3 text-sm',
 							]"
 							@click="$emit('logout')"

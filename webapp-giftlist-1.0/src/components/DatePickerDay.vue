@@ -10,8 +10,8 @@
 			:class="[
 				grayed,
 				day <= new Date()
-					? 'text-gray-400 cursor-not-allowed hover:bg-gray-200'
-					: 'text-gray-600 hover:bg-gray-300',
+					? 'text-gray-400 cursor-not-allowed hover:bg-secondary-hover'
+					: 'text-secondary-text hover:bg-gray-300',
 			]"
 			@click="changeDate(day)"
 		>
@@ -27,9 +27,9 @@
 					? `border-gray-300 hover:bg-white text-${
 							compareDate(day) ? 'white' : 'gray-400'
 					  } cursor-not-allowed`
-					: `border-indigo-200 text-${
-							compareDate(day) ? 'white' : 'indigo-600'
-					  } hover:bg-indigo-100 hover:border-indigo-100`,
+					: `border-primary-lightHover text-${
+							compareDate(day) ? 'white' : 'primary-default'
+					  } hover:bg-primary-light hover:border-primary-light`,
 			]"
 			@click="changeDate(day)"
 		>
@@ -59,13 +59,13 @@ const emit = defineEmits<{
 	(e: "day", day: Date): void;
 }>();
 
-const header = "w-3/4 grid place-items-center text-gray-600 my-1 row-span-1";
+const header = "w-3/4 grid place-items-center text-secondary-text my-1 row-span-1";
 const selected =
-	"py-2 cursor-pointer bg-indigo-600 hover:bg-indigo-700 border border-indigo-600 hover:border-indigo-600 text-white font-semibold rounded text-sm grid place-items-center row-span-1";
+	"py-2 cursor-pointer bg-primary-default hover:bg-primary-hover border border-primary-default hover:border-primary-default text-white font-semibold rounded text-sm grid place-items-center row-span-1";
 const base =
 	"py-2 cursor-pointer bg-white border font-semibold rounded text-sm grid place-items-center row-span-1";
 const grayed =
-	"py-2 cursor-pointer bg-gray-200 font-semibold rounded text-sm grid place-items-center row-span-1";
+	"py-2 cursor-pointer bg-secondary-hover font-semibold rounded text-sm grid place-items-center row-span-1";
 
 const weekDays = ["Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di"];
 

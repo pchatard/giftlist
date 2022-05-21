@@ -4,7 +4,7 @@
 		<div class="flex flex-col items-start transition-all flex-1">
 			<label class="text-sm font-semibold transition-all" :class="computedLabelClass">
 				{{ label }}
-				<span v-if="mandatory" class="text-red-600">*</span>
+				<span v-if="mandatory" class="text-danger-default">*</span>
 			</label>
 			<div
 				class="input-container relative flex items-stretch overflow-hidden border rounded-md my-1 w-full"
@@ -12,7 +12,10 @@
 			>
 				<slot />
 			</div>
-			<span class="input-helper text-xs text-gray-500" :class="{ 'text-red-600': isError }">
+			<span
+				class="input-helper text-xs text-gray-500"
+				:class="{ 'text-danger-default': isError }"
+			>
 				{{ computedHelperText }}
 			</span>
 		</div>
@@ -43,22 +46,22 @@ const props = withDefaults(defineProps<Props>(), {
 
 const computedLabelClass = computed(() => {
 	if (props.isError) {
-		return "text-red-600";
+		return "text-danger-default";
 	}
 	if (props.selected) {
-		return "text-indigo-600";
+		return "text-primary-default";
 	}
-	return "text-gray-600";
+	return "text-secondary-text";
 });
 
 const computedInputBorderClass = computed(() => {
 	if (props.isError) {
-		return "border-red-600";
+		return "border-danger-default";
 	}
 	if (props.selected) {
-		return "border-indigo-600";
+		return "border-primary-default";
 	}
-	return "border-gray-300 hover:border-indigo-600";
+	return "border-gray-300 hover:border-primary-default";
 });
 
 const computedHelperText = computed(() => {

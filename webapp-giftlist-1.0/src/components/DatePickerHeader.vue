@@ -43,11 +43,11 @@ const emit = defineEmits<{
 }>();
 
 const base =
-	"py-2 bg-gray-100 text-center  text-gray-600 font-semibold cursor-pointer hover:bg-indigo-100 hover:text-indigo-600 rounded";
+	"py-2 bg-secondary-default text-center  text-secondary-text font-semibold cursor-pointer hover:bg-primary-light hover:text-primary-default rounded";
 const selected =
-	"py-2 bg-indigo-600 text-center  hover:bg-indigo-700 text-white font-semibold cursor-pointer rounded";
+	"py-2 bg-primary-default text-center  hover:bg-primary-hover text-white font-semibold cursor-pointer rounded";
 
-const arrowBaseStyle = "h-8 w-8 hover:text-indigo-600 cursor-pointer";
+const arrowBaseStyle = "h-8 w-8 hover:text-primary-default cursor-pointer";
 const arrowDisabledStyle = "h-8 w-8 cursor-not-allowed text-gray-400";
 
 const computedLeftArrowStyle = computed(() => {

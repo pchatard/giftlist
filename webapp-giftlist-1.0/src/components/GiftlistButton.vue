@@ -2,14 +2,17 @@
 	<button
 		class="rounded-md font-bold py-2 px-4 flex items-center justify-center text-sm"
 		:class="{
-			'bg-indigo-600 text-white hover:bg-indigo-700': btnStyle === 'primary',
-			'bg-indigo-100 text-indigo-600 hover:bg-indigo-200': btnStyle === 'primary-soft',
-			'border border-indigo-600 text-indigo-600 hover:border-indigo-700 hover:text-indigo-700':
+			'bg-primary-default text-white hover:bg-primary-hover': btnStyle === 'primary',
+			'bg-primary-light text-primary-default hover:bg-primary-lightHover':
+				btnStyle === 'primary-soft',
+			'border border-primary-default text-primary-default hover:border-primary-hover hover:text-primary-hover':
 				btnStyle === 'secondary',
-			'bg-red-600 text-white hover:bg-red-700': btnStyle === 'danger',
-			'bg-red-100 text-red-900 hover:bg-red-200': btnStyle === 'danger-soft',
-			'bg-green-100 text-green-600 hover:bg-green-200': btnStyle === 'green-soft',
-			'bg-gray-100 text-gray-900 hover:bg-gray-200': btnStyle === 'secondary-soft',
+			'bg-danger-default text-white hover:bg-danger-hover': btnStyle === 'danger',
+			'bg-danger-light text-danger-text hover:bg-danger-lightHover': btnStyle === 'danger-soft',
+			'bg-success-light text-success-default hover:bg-success-lightHover':
+				btnStyle === 'green-soft',
+			'bg-secondary-default text-gray-900 hover:bg-secondary-hover':
+				btnStyle === 'secondary-soft',
 		}"
 	>
 		<div v-if="loading" class="flex items-center mt-1">

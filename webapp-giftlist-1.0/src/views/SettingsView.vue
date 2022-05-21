@@ -17,8 +17,8 @@
 							<div
 								:class="[
 									checked
-										? 'bg-indigo-600 text-white '
-										: 'bg-white border border-gray-200',
+										? 'bg-primary-default text-white '
+										: 'bg-white border border-secondary-hover',
 								]"
 								class="relative flex flex-1 px-5 py-4 rounded-lg shadow-md cursor-pointer focus:outline-none"
 							>
@@ -69,8 +69,8 @@
 							<div
 								:class="[
 									checked
-										? 'bg-indigo-600 text-white '
-										: 'bg-white border border-gray-200',
+										? 'bg-primary-default text-white '
+										: 'bg-white border border-secondary-hover',
 								]"
 								class="relative flex flex-1 px-5 py-4 rounded-lg shadow-md cursor-pointer focus:outline-none"
 							>

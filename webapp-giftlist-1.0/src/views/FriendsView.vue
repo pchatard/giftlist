@@ -7,21 +7,23 @@
 					<li
 						v-for="i in 2"
 						:key="i"
-						class="py-4 px-8 flex justify-between items-center hover:bg-gray-100"
+						class="py-4 px-8 flex justify-between items-center hover:bg-secondary-default"
 					>
 						<span class="flex items-center cursor-pointer">
-							<span class="w-12 h-12 rounded-full bg-gray-200 grid place-items-center">
+							<span
+								class="w-12 h-12 rounded-full bg-secondary-hover grid place-items-center"
+							>
 								ML
 							</span>
 							<span class="ml-4">Marc Lavoine</span>
 						</span>
 						<span class="flex justify-between items-center">
 							<CheckCircleIcon
-								class="w-6 mx-1 cursor-pointer text-green-600"
+								class="w-6 mx-1 cursor-pointer text-success-default"
 								@click="acceptFriendRequest"
 							/>
 							<XCircleIcon
-								class="w-6 mx-1 cursor-pointer text-red-600"
+								class="w-6 mx-1 cursor-pointer text-danger-default"
 								@click="declineFriendRequest"
 							/>
 						</span>
@@ -29,26 +31,30 @@
 					<li
 						v-for="i in 7"
 						:key="i"
-						class="py-4 px-8 flex justify-between items-center hover:bg-gray-100"
+						class="py-4 px-8 flex justify-between items-center hover:bg-secondary-default"
 					>
 						<span class="flex items-center cursor-pointer">
-							<span class="w-12 h-12 rounded-full bg-gray-200 grid place-items-center">
+							<span
+								class="w-12 h-12 rounded-full bg-secondary-hover grid place-items-center"
+							>
 								ML
 							</span>
 							<span class="ml-4">Marc Lavoine</span>
 						</span>
 						<XCircleIcon
-							class="w-6 text-gray-600 cursor-pointer hover:text-red-600"
+							class="w-6 text-secondary-text cursor-pointer hover:text-danger-default"
 							@click="deleteFriend"
 						/>
 					</li>
 					<li
 						v-for="i in 2"
 						:key="i"
-						class="py-4 px-8 flex justify-between items-center hover:bg-gray-100"
+						class="py-4 px-8 flex justify-between items-center hover:bg-secondary-default"
 					>
 						<span class="flex items-center cursor-pointer">
-							<span class="w-12 h-12 rounded-full bg-gray-200 grid place-items-center">
+							<span
+								class="w-12 h-12 rounded-full bg-secondary-hover grid place-items-center"
+							>
 								ML
 							</span>
 							<span class="ml-4">Marc Lavoine</span>

@@ -38,7 +38,7 @@ const hideSnackbar = () => {
 	@apply bg-green-500 text-white;
 
 	button:hover {
-		@apply bg-green-600;
+		@apply bg-success-default;
 	}
 }
 
@@ -46,7 +46,7 @@ const hideSnackbar = () => {
 	@apply bg-red-500 text-white;
 
 	button:hover {
-		@apply bg-red-600;
+		@apply bg-danger-default;
 	}
 }
 

@@ -8,7 +8,6 @@ import {
 import Auth0 from "@/auth";
 import labels from "@/labels/fr/labels.json";
 
-import BookedGiftsView from "@/views/BookedGiftsView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 import FriendsView from "@/views/FriendsView.vue";
 import GiftView from "@/views/GiftView.vue";
@@ -23,6 +22,7 @@ import RedirectView from "@/views/RedirectView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import SharedListView from "@/views/SharedListView.vue";
 import SharedListsView from "@/views/SharedListsView.vue";
+import StylesView from "@/views/StylesView.vue";
 
 const redirectNavigationGuard: NavigationGuardWithThis<undefined> = () => {
 	const redirect_route = localStorage.getItem("giftlist-redirect");
@@ -38,6 +38,11 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/",
 		name: "Accueil",
 		component: HomeView,
+	},
+	{
+		path: "/styles",
+		name: "Styles",
+		component: StylesView,
 	},
 	{
 		path: "/app/redirect",
@@ -136,12 +141,6 @@ const routes: Array<RouteRecordRaw> = [
 		path: "/app/shared/:code",
 		name: "Liste partagée",
 		component: SharedListView,
-		beforeEnter: Auth0.routeGuard,
-	},
-	{
-		path: "/app/booked",
-		name: "Mes cadeaux réservés",
-		component: BookedGiftsView,
 		beforeEnter: Auth0.routeGuard,
 	},
 ];
