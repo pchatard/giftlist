@@ -1,7 +1,15 @@
 <template>
 	<GiftlistTableData>
-		<HeartIcon v-if="gift.isFavorite" class="w-7 h-7 mx-auto text-red-400 cursor-pointer" @click.stop="unfavGift" />
-		<HeartIconOutline v-else class="w-7 h-7 mx-auto text-gray-400 cursor-pointer" @click.stop="favGift" />
+		<HeartIcon
+			v-if="gift.isFavorite"
+			class="w-7 h-7 mx-auto text-red-400 cursor-pointer"
+			@click.stop="unfavGift"
+		/>
+		<HeartIconOutline
+			v-else
+			class="w-7 h-7 mx-auto text-gray-400 cursor-pointer"
+			@click.stop="favGift"
+		/>
 	</GiftlistTableData>
 	<GiftlistTableData>
 		<div>
@@ -19,10 +27,13 @@
 		</div>
 	</GiftlistTableData>
 	<GiftlistTableData v-show="shared">
-		<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="{
-			'bg-danger-light text-red-800': gift.isBooked,
-			'bg-success-light text-green-800': !gift.isBooked,
-		}">
+		<span
+			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+			:class="{
+				'bg-danger-light text-red-800': gift.isBooked,
+				'bg-success-light text-green-800': !gift.isBooked,
+			}"
+		>
 			{{ gift.isBooked ? labels.gifts.status.booked : labels.gifts.status.available }}
 		</span>
 	</GiftlistTableData>
@@ -31,29 +42,46 @@
 		<div class="text-sm text-gray-500">{{ gift.price ? gift.price + "€" : "-" }}</div>
 	</GiftlistTableData>
 	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-		<button class="ml-4 font-medium" :class="
-			gift.linkURL
-				? 'text-primary-default hover:text-primary-text'
-				: 'text-gray-400 line-through'
-		" @click.stop="openLinkInNewTab">
-			<span class="flex items-center px-2 py-1 rounded-md" :class="gift.linkURL ? 'hover:bg-primary-light' : ''">
+		<button
+			class="ml-4 font-medium"
+			:class="
+				gift.linkURL
+					? 'text-primary-default hover:text-primary-text'
+					: 'text-gray-400 line-through'
+			"
+			@click.stop="openLinkInNewTab"
+		>
+			<span
+				class="flex items-center px-2 py-1 rounded-md"
+				:class="gift.linkURL ? 'hover:bg-primary-light' : ''"
+			>
 				<ExternalLinkIcon class="h-4 w-4 mr-2" />
 				{{ labels.gifts.buttons.open }}
 			</span>
 		</button>
-		<button v-if="shared" class="ml-4 font-medium" :class="
-			!gift.isBooked
-				? 'text-danger-default hover:text-danger-text'
-				: 'text-gray-400 line-through'
-		" @click.stop="openBookGiftModal">
-			<span class="flex items-center px-2 py-1 rounded-md"
-				:class="!gift.isBooked ? 'hover:bg-danger-light' : 'hover:bg-secondary-default'">
+		<button
+			v-if="shared"
+			class="ml-4 font-medium"
+			:class="
+				!gift.isBooked
+					? 'text-danger-default hover:text-danger-text'
+					: 'text-gray-400 line-through'
+			"
+			@click.stop="openBookGiftModal"
+		>
+			<span
+				class="flex items-center px-2 py-1 rounded-md"
+				:class="!gift.isBooked ? 'hover:bg-danger-light' : 'hover:bg-secondary-default'"
+			>
 				<TicketIcon class="h-4 w-4 mr-2" />
 				{{ labels.gifts.buttons.book }}
 			</span>
 		</button>
-		<button v-else class="ml-4 items-center text-danger-default font-medium hover:text-danger-text"
-			@click.stop="openDeleteGiftModal">
+		<button
+			v-else
+			class="ml-4 items-center text-danger-default font-medium hover:text-danger-text"
+			@click.stop="openDeleteGiftModal"
+		>
 			<span class="flex items-center px-2 py-1 hover:bg-danger-light rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />
 				{{ labels.gifts.buttons.delete }}

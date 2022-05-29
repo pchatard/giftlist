@@ -26,8 +26,11 @@
 					</span>
 				</div>
 			</div>
-			<ExternalLinkIcon v-if="gift.linkURL" class="w-5 text-gray-400 cursor-pointer hover:text-primary-default"
-				@click.stop="openInNewTab" />
+			<ExternalLinkIcon
+				v-if="gift.linkURL"
+				class="w-5 text-gray-400 cursor-pointer hover:text-primary-default"
+				@click.stop="openInNewTab"
+			/>
 		</div>
 	</div>
 </template>

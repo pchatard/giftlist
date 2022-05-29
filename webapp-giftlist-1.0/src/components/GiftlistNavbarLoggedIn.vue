@@ -1,13 +1,25 @@
 <template>
 	<div class="flex flex-row items-center">
 		<router-link to="/app/lists">
-			<span class="bg-logo text-white rounded-md py-2 px-6 mr-4 font-bold italic text-lg">GIFTLIST</span>
+			<span class="bg-logo text-white rounded-md py-2 px-6 mr-4 font-bold italic text-lg"
+				>GIFTLIST</span
+			>
 		</router-link>
 		<ul class="flex flex-row items-center">
-			<GiftlistNavbarItem path="/app/lists" :text="labels.navbar.links.lists" :outline="true" class="group">
+			<GiftlistNavbarItem
+				path="/app/lists"
+				:text="labels.navbar.links.lists"
+				:outline="true"
+				class="group"
+			>
 				<CollectionIcon class="transition-all duration-200 group-hover:text-logo h-4 w-4" />
 			</GiftlistNavbarItem>
-			<GiftlistNavbarItem path="/app/shared" :text="labels.navbar.links.shared" :outline="true" class="group">
+			<GiftlistNavbarItem
+				path="/app/shared"
+				:text="labels.navbar.links.shared"
+				:outline="true"
+				class="group"
+			>
 				<UserGroupIcon class="transition-all duration-200 group-hover:text-logo h-4 w-4" />
 			</GiftlistNavbarItem>
 		</ul>

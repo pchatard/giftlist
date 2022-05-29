@@ -12,8 +12,13 @@
 				</div>
 			</div>
 			<div class="my-2 flex">
-				<a v-if="gift.linkURL" :href="gift.linkURL ? gift.linkURL : '#'" target="_blank"
-					rel="noopener noreferrer" class="flex items-center text-primary-default hover:text-primary-text">
+				<a
+					v-if="gift.linkURL"
+					:href="gift.linkURL ? gift.linkURL : '#'"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="flex items-center text-primary-default hover:text-primary-text"
+				>
 					<ExternalLinkIcon class="h-4 w-4 mr-2" />
 					{{ labels.modals.giftDetails.openNewTab }}
 				</a>

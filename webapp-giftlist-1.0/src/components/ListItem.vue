@@ -11,10 +11,13 @@
 		<div class="text-sm text-gray-500">{{ shared ? "Mon copain" : "Moi" }}</div>
 	</GiftlistTableData>
 	<GiftlistTableData v-show="!shared">
-		<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="{
-			'bg-danger-light text-red-800': !list.isShared,
-			'bg-success-light text-green-800': list.isShared,
-		}">
+		<span
+			class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+			:class="{
+				'bg-danger-light text-red-800': !list.isShared,
+				'bg-success-light text-green-800': list.isShared,
+			}"
+		>
 			{{ list.isShared ? labels.lists.status.public : labels.lists.status.private }}
 		</span>
 	</GiftlistTableData>
@@ -23,22 +26,31 @@
 	</GiftlistTableData>
 
 	<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-		<button v-show="shared" class="mx-2 text-primary-default font-medium hover:text-primary-text"
-			@click.stop="$emit('details', list)">
+		<button
+			v-show="shared"
+			class="mx-2 text-primary-default font-medium hover:text-primary-text"
+			@click.stop="$emit('details', list)"
+		>
 			<span class="flex items-center px-2 py-1 hover:bg-primary-light rounded-md">
 				<InformationCircleIcon class="h-4 w-4 mr-2" />
 				{{ labels.lists.buttons.info }}
 			</span>
 		</button>
-		<button v-show="!shared" class="mx-2 text-primary-default font-medium hover:text-primary-text"
-			@click.stop="router.push(`/app/lists/${list.id}/settings`)">
+		<button
+			v-show="!shared"
+			class="mx-2 text-primary-default font-medium hover:text-primary-text"
+			@click.stop="router.push(`/app/lists/${list.id}/settings`)"
+		>
 			<span class="flex items-center px-2 py-1 hover:bg-primary-light rounded-md">
 				<CogIcon class="h-4 w-4 mr-2" />
 				{{ labels.lists.buttons.settings }}
 			</span>
 		</button>
-		<button v-show="!shared" class="ml-2 text-danger-default font-medium hover:text-danger-text"
-			@click.stop="$emit('delete', list)">
+		<button
+			v-show="!shared"
+			class="ml-2 text-danger-default font-medium hover:text-danger-text"
+			@click.stop="$emit('delete', list)"
+		>
 			<span class="flex items-center px-2 py-1 hover:bg-danger-light rounded-md">
 				<TrashIcon class="h-4 w-4 mr-2" />
 				{{ labels.lists.buttons.delete }}

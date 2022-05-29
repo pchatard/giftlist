@@ -22,7 +22,7 @@ defineProps<Props>();
 
 <style lang="scss" scoped>
 li:hover .giftlist-outline,
-.router-link-exact-active+.giftlist-outline {
+.router-link-exact-active + .giftlist-outline {
 	@apply w-full bg-logo;
 }
 </style>
