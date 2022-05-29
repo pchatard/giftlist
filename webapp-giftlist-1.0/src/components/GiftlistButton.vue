@@ -1,31 +1,13 @@
 <template>
-	<button
-		class="rounded-md font-bold py-2 px-4 flex items-center justify-center text-sm"
-		:class="{
-			'bg-primary-default text-white hover:bg-primary-hover': btnStyle === 'primary',
-			'bg-primary-light text-primary-default hover:bg-primary-lightHover':
-				btnStyle === 'primary-soft',
-			'border border-primary-default text-primary-default hover:border-primary-hover hover:text-primary-hover':
-				btnStyle === 'secondary',
-			'bg-danger-default text-white hover:bg-danger-hover': btnStyle === 'danger',
-			'bg-danger-light text-danger-text hover:bg-danger-lightHover': btnStyle === 'danger-soft',
-			'bg-success-light text-success-default hover:bg-success-lightHover':
-				btnStyle === 'green-soft',
-			'bg-secondary-default text-gray-900 hover:bg-secondary-hover':
-				btnStyle === 'secondary-soft',
-		}"
-	>
-		<div v-if="loading" class="flex items-center mt-1">
-			<PulseLoader :loading="loading" size="10px" :color="spinnerColor" />
-		</div>
-		<div v-else class="flex flex-row items-center justify-center">
-			<span :class="{ 'h-5 w-5': hasIcon }">
-				<slot name="icon" />
-			</span>
-			<span :class="{ 'ml-2': hasIcon }">
-				<slot />
-			</span>
-		</div>
+	<button class="rounded-md font-bold py-2 px-4 flex itens-center text-sm w-40 max-w-sm" :class="buttonStyle">
+
+		<RefreshIcon v-if="loading" class="w-5 animate-[spin_1s_reverse_infinite]" />
+		<span v-if="hasIcon && !loading" class="w-5">
+			<slot name="icon" />
+		</span>
+		<span class="flex-1 flex items-center justify-center">
+			<slot />
+		</span>
 	</button>
 </template>
 
@@ -34,7 +16,7 @@ import { computed } from "vue";
 
 import { ButtonStyleEnum } from "@/types/enums/ButtonStyleEnum";
 
-import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import { RefreshIcon } from "@heroicons/vue/outline";
 
 interface Props {
 	btnStyle?: ButtonStyleEnum;
@@ -46,6 +28,29 @@ const props = withDefaults(defineProps<Props>(), {
 	btnStyle: ButtonStyleEnum.primary,
 	hasIcon: false,
 	loading: false,
+});
+
+const buttonStyle = computed(() => {
+	switch (props.btnStyle) {
+		case ButtonStyleEnum.primary:
+			return 'bg-primary-default text-white hover:bg-primary-hover';
+		case ButtonStyleEnum.primarySoft:
+			return 'bg-primary-light text-primary-text hover:bg-primary-lightHover';
+		case ButtonStyleEnum.secondary:
+			return 'bg-secondary-default text-secondary-text hover:bg-secondary-hover';
+		case ButtonStyleEnum.secondarySoft:
+			return 'bg-secondary-light text-secondary-text shadow-md hover:bg-secondary-lightHover';
+		case ButtonStyleEnum.danger:
+			return 'bg-danger-default text-white hover:bg-danger-hover';
+		case ButtonStyleEnum.dangerSoft:
+			return 'bg-danger-light text-danger-text hover:bg-danger-lightHover';
+		case ButtonStyleEnum.success:
+			return 'bg-success-default text-white hover:bg-success-hover';
+		case ButtonStyleEnum.successSoft:
+			return 'bg-success-light text-success-text hover:bg-success-lightHover';
+		default:
+			return '';
+	}
 });
 
 const spinnerColor = computed(() => {

@@ -6,7 +6,7 @@
 				{{ text }}
 			</span>
 		</router-link>
-		<div v-if="outline" class="giftlist-outline"></div>
+		<div v-if="outline" class="giftlist-outline w-0 h-px mt-1 transition-all duration-500"></div>
 	</li>
 </template>
 
@@ -21,12 +21,8 @@ defineProps<Props>();
 </script>
 
 <style lang="scss" scoped>
-.giftlist-outline {
-	@apply w-0 h-px mt-1 transition-all duration-500;
-}
-
 li:hover .giftlist-outline,
-.router-link-exact-active + .giftlist-outline {
-	@apply w-full bg-yellow-400;
+.router-link-exact-active+.giftlist-outline {
+	@apply w-full bg-logo;
 }
 </style>

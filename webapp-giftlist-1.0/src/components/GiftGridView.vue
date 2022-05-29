@@ -1,7 +1,7 @@
 <template>
 	<div class="border border-secondary-hover shadow-sm rounded-md p-4 flex flex-col cursor-pointer">
 		<div class="flex items-center">
-			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-secondary-default text-yellow-400" />
+			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-secondary-default text-logo" />
 			<div class="flex flex-col">
 				<span class="font-semibold">
 					{{ gift.title }}
@@ -12,24 +12,12 @@
 				</div>
 			</div>
 			<div class="ml-auto self-start flex gap-2 flex-col items-end justify-between">
-				<HeartIcon
-					v-if="gift.isFavorite"
-					class="w-6 h-6 text-red-400 cursor-pointer"
-					@click.stop="unfavGift"
-				/>
-				<HeartIconOutline
-					v-else
-					class="w-6 h-6 text-gray-400 cursor-pointer"
-					@click.stop="favGift"
-				/>
-				<span
-					v-if="shared"
-					class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-					:class="{
-						'bg-danger-light text-red-800': gift.isBooked,
-						'bg-success-light text-green-800': !gift.isBooked,
-					}"
-				>
+				<HeartIcon v-if="gift.isFavorite" class="w-6 h-6 text-red-400 cursor-pointer" @click.stop="unfavGift" />
+				<HeartIconOutline v-else class="w-6 h-6 text-gray-400 cursor-pointer" @click.stop="favGift" />
+				<span v-if="shared" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="{
+					'bg-danger-light text-red-800': gift.isBooked,
+					'bg-success-light text-green-800': !gift.isBooked,
+				}">
 					{{ gift.isBooked ? labels.gifts.status.booked : labels.gifts.status.available }}
 				</span>
 			</div>
@@ -47,21 +35,12 @@
 				</div>
 			</div>
 			<div class="flex self-end gap-4">
-				<ExternalLinkIcon
-					v-if="gift.linkURL"
-					class="w-6 text-gray-400 cursor-pointer hover:text-primary-default"
-					@click.stop="openInNewTab"
-				/>
-				<TicketIcon
-					v-if="shared"
-					class="w-6 text-gray-400 cursor-pointer hover:text-danger-default"
-					@click.stop="openBookGiftModal"
-				/>
-				<TrashIcon
-					v-else
-					class="w-6 text-gray-400 cursor-pointer hover:text-danger-default"
-					@click.stop="openDeleteGiftModal"
-				/>
+				<ExternalLinkIcon v-if="gift.linkURL"
+					class="w-6 text-gray-400 cursor-pointer hover:text-primary-default" @click.stop="openInNewTab" />
+				<TicketIcon v-if="shared" class="w-6 text-gray-400 cursor-pointer hover:text-danger-default"
+					@click.stop="openBookGiftModal" />
+				<TrashIcon v-else class="w-6 text-gray-400 cursor-pointer hover:text-danger-default"
+					@click.stop="openDeleteGiftModal" />
 			</div>
 		</div>
 	</div>

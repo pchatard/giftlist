@@ -1,17 +1,11 @@
 <template>
 	<div class="w-full flex flex-row items-center justify-between">
 		<router-link to="/">
-			<span class="bg-yellow-400 rounded-md py-2 px-6 mr-4 font-bold italic text-lg"
-				>GIFTLIST</span
-			>
+			<span class="bg-logoLight text-logo rounded-lg font-test w-auto px-6 mr-4 text-3xl">giftlist</span>
 		</router-link>
 		<ul class="flex flex-row items-center justify-between">
-			<GiftlistButton
-				v-if="!auth.loading && !auth.isAuthenticated"
-				class="mx-1"
-				btn-style="secondary"
-				@click="login"
-			>
+			<GiftlistButton v-if="!auth.loading && !auth.isAuthenticated" :btn-style="ButtonStyleEnum.primary"
+				@click="login">
 				{{ labels.navbar.links.login }}
 			</GiftlistButton>
 		</ul>
@@ -25,6 +19,7 @@ import { Auth0Client } from "@auth0/auth0-spa-js";
 
 import labels from "@/labels/fr/labels.json";
 
+import { ButtonStyleEnum } from "@/types/enums/ButtonStyleEnum";
 import GiftlistButton from "@/components/GiftlistButton.vue";
 
 const auth = ref(inject("Auth") as Auth0Client);

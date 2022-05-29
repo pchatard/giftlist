@@ -3,7 +3,7 @@
 		<div class="py-4">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center my-2">
-					<ShoppingCartIcon class="w-12 p-3 rounded-md bg-secondary-default text-yellow-400" />
+					<ShoppingCartIcon class="w-12 p-3 rounded-md bg-secondary-default text-logo" />
 					<span class="ml-2">{{ gift.category }}</span>
 				</div>
 				<div class="my-2 flex items-center">
@@ -12,13 +12,8 @@
 				</div>
 			</div>
 			<div class="my-2 flex">
-				<a
-					v-if="gift.linkURL"
-					:href="gift.linkURL ? gift.linkURL : '#'"
-					target="_blank"
-					rel="noopener noreferrer"
-					class="flex items-center text-primary-default hover:text-primary-text"
-				>
+				<a v-if="gift.linkURL" :href="gift.linkURL ? gift.linkURL : '#'" target="_blank"
+					rel="noopener noreferrer" class="flex items-center text-primary-default hover:text-primary-text">
 					<ExternalLinkIcon class="h-4 w-4 mr-2" />
 					{{ labels.modals.giftDetails.openNewTab }}
 				</a>

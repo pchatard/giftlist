@@ -1,7 +1,7 @@
 <template>
 	<div class="border border-secondary-hover shadow-sm rounded-md p-4 flex flex-col cursor-pointer">
 		<div class="flex items-center">
-			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-secondary-default text-yellow-400" />
+			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-secondary-default text-logo" />
 			<div class="flex flex-col">
 				<span class="font-semibold">
 					{{ gift.title }}
@@ -26,11 +26,8 @@
 					</span>
 				</div>
 			</div>
-			<ExternalLinkIcon
-				v-if="gift.linkURL"
-				class="w-5 text-gray-400 cursor-pointer hover:text-primary-default"
-				@click.stop="openInNewTab"
-			/>
+			<ExternalLinkIcon v-if="gift.linkURL" class="w-5 text-gray-400 cursor-pointer hover:text-primary-default"
+				@click.stop="openInNewTab" />
 		</div>
 	</div>
 </template>

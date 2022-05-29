@@ -6,6 +6,9 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      test: ['Satisfy', 'cursive']
+    },
     extend: {
       minHeight: {
         layout: "calc(100vh - 15rem)",
@@ -21,7 +24,9 @@ module.exports = {
         secondary: {
           default: colors.gray[100],
           hover: colors.gray[200],
-          text: colors.indigo[600]
+          text: colors.indigo[600],
+          light: colors.white,
+          lightHover: colors.gray[100]
         },
         success: {
           default: colors.green[600],
@@ -36,7 +41,9 @@ module.exports = {
           light: colors.red[100],
           lightHover: colors.red[200],
           text: colors.red[900]
-        }
+        },
+        logo: colors.yellow[400],
+        logoLight: '#FEFAE7'//'#facc15'
       }
     },
   },
