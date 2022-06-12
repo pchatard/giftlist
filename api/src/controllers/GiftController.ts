@@ -23,6 +23,7 @@ import Gift from "../models/Gift";
 import List from "../models/List";
 import GiftService from "../services/GiftService";
 import ListService from "../services/ListService";
+import UserService from "../services/UserService";
 import { UUID } from "../types/UUID";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
@@ -271,6 +272,8 @@ export class GiftController extends Controller {
 			throw new UnauthorizedError();
 		}
 		await GiftService.edit(giftId, { isBooked: true });
+		const gift = await GiftService.get(giftId);
+		await UserService.addUserGifts(request.userId, gift);
 	}
 
 	/**
@@ -298,6 +301,8 @@ export class GiftController extends Controller {
 			throw new UnauthorizedError();
 		}
 		await GiftService.edit(giftId, { isBooked: false });
+		const gift = await GiftService.get(giftId);
+		await UserService.removeUserGifts(request.userId, gift);
 	}
 }
 

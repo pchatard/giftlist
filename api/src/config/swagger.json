@@ -468,6 +468,12 @@
 					"displayName": {
 						"type": "string"
 					},
+					"bookingsDTO": {
+						"items": {
+							"$ref": "#/components/schemas/GiftDTO"
+						},
+						"type": "array"
+					},
 					"email": {
 						"$ref": "#/components/schemas/email"
 					}
@@ -483,6 +489,12 @@
 				"properties": {
 					"displayName": {
 						"type": "string"
+					},
+					"bookingsDTO": {
+						"items": {
+							"$ref": "#/components/schemas/GiftDTO"
+						},
+						"type": "array"
 					},
 					"email": {
 						"$ref": "#/components/schemas/email"

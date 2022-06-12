@@ -182,6 +182,7 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "displayName": {"dataType":"string","required":true},
+            "bookingsDTO": {"dataType":"array","array":{"dataType":"refAlias","ref":"GiftDTO"}},
             "email": {"ref":"email","required":true},
         },
         "additionalProperties": false,
@@ -189,7 +190,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "Partial_UserDTO_": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"displayName":{"dataType":"string"},"email":{"ref":"email"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"displayName":{"dataType":"string"},"bookingsDTO":{"dataType":"array","array":{"dataType":"refAlias","ref":"GiftDTO"}},"email":{"ref":"email"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };

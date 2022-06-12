@@ -1,5 +1,6 @@
 import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
 
+import Gift from "../models/Gift";
 import List from "../models/List";
 import User from "../models/User";
 import { email } from "../types/email";
@@ -117,6 +118,52 @@ class UserService {
 				break;
 		}
 		return res.sort((a, b) => a.createdDate.valueOf() - b.createdDate.valueOf());
+	}
+
+	/**
+	 * Returns all user gifts.
+	 * @param {string} userAuth0Id id of user which books the gift
+	 * @returns {Promise<Gift[]>} the userId booked gifts
+	 */
+	static async getUserGifts(userAuth0Id: string): Promise<Gift[]> {
+		const userRepository: Repository<User> = getRepository(User);
+		const user: User = await userRepository.findOneOrFail({
+			where: { auth0Id: userAuth0Id },
+			relations: ["bookings"],
+		});
+		return user.bookings;
+	}
+
+	/**
+	 * Add a gift to a user booked gifts list.
+	 * @param {string} userAuth0Id id of user which books the gift
+	 * @param {Gift} gift the gift to add into booked list
+	 * @returns {Promise<User[]>} the User matching userAuth0Id
+	 */
+	static async addUserGifts(userAuth0Id: string, gift: Gift): Promise<User> {
+		const userRepository: Repository<User> = getRepository(User);
+		const user: User = await userRepository.findOneOrFail({
+			where: { auth0Id: userAuth0Id },
+			relations: ["bookings"],
+		});
+		user.bookings = (user.bookings || []).concat(gift);
+		return await userRepository.save(user);
+	}
+
+	/**
+	 * Add a gift to a user booked gifts list.
+	 * @param {string} userAuth0Id id of user which books the gift
+	 * @param {Gift} gift the gift to add into booked list
+	 * @returns {Promise<User[]>} the User matching userAuth0Id
+	 */
+	static async removeUserGifts(userAuth0Id: string, gift: Gift): Promise<User> {
+		const userRepository: Repository<User> = getRepository(User);
+		const user: User = await userRepository.findOneOrFail({
+			where: { auth0Id: userAuth0Id },
+			relations: ["bookings"],
+		});
+		user.bookings = user.bookings.filter((booked_gift) => booked_gift.id === gift.id);
+		return await userRepository.save(user);
 	}
 }
 

@@ -11,6 +11,7 @@ export const NewUserTest: CreateUserDTO = {
 	auth0Id: "newUserId",
 	email: "newUserMail@test.fr",
 	displayName: "Test NewUser",
+	// bookingsIds: [],
 };
 
 export const ListTest: CreateListDTO = {
