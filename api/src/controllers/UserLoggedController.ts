@@ -13,8 +13,10 @@ import {
 	Tags,
 } from "tsoa";
 
+import { GiftDTO } from "../dto/gifts";
 import { UserDTO } from "../dto/users";
 import { ValidateErrorJSON } from "../errors/ValidationError";
+import { castGiftAsGiftDTO } from "../helpers/gifts";
 import User from "../models/User";
 import UserService from "../services/UserService";
 import { UserManagementController } from "./UserManagementController";
@@ -31,7 +33,8 @@ export class UserLoggedController extends Controller {
 	@Get()
 	async get(@Request() request: ERequest): Promise<UserDTO> {
 		const user: User = await UserService.getByAuth0Id(request.userId);
-		const { id, createdDate, ...rest } = user;
+		const { id, bookings, createdDate, ...rest } = user;
+		rest.bookingsDTO = bookings.map((gift) => castGiftAsGiftDTO(gift, false) as GiftDTO);
 		return rest;
 	}
 

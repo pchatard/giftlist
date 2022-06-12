@@ -57,7 +57,10 @@ class UserService {
 	 */
 	static async getByAuth0Id(userAuth0Id: string): Promise<User> {
 		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.findOneOrFail({ where: { auth0Id: userAuth0Id } });
+		return await userRepository.findOneOrFail({
+			where: { auth0Id: userAuth0Id },
+			relations: ["bookings"],
+		});
 	}
 
 	/**
@@ -162,7 +165,7 @@ class UserService {
 			where: { auth0Id: userAuth0Id },
 			relations: ["bookings"],
 		});
-		user.bookings = user.bookings.filter((booked_gift) => booked_gift.id === gift.id);
+		user.bookings = user.bookings.filter((booked_gift) => booked_gift.id !== gift.id);
 		return await userRepository.save(user);
 	}
 }

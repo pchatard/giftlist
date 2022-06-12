@@ -8,7 +8,7 @@ import { User1 } from "../seeder/users.seed";
 
 export default function suite() {
 	it("Returns 200 with user informations", async () => {
-		const { id, createdDate, ...user1 } = User1;
+		const { id, bookings, bookingsDTO, createdDate, ...user1 } = User1;
 		const response = await get(Url_UserGetOne(User1.email));
 		expect200(response);
 		expect(response).to.have.property("body").to.eql(user1);

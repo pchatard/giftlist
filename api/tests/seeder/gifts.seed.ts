@@ -14,6 +14,7 @@ export const Gift1: Gift = {
 	list: ListOwned,
 	isBooked: false,
 	bookedBy: [],
+	bookedByDTO: [],
 	createdDate: getDateFromNow(-5),
 	updatedDate: getDateFromNow(-5),
 };
@@ -28,6 +29,7 @@ export const Gift2: Gift = {
 	list: ListOwned,
 	isBooked: false,
 	bookedBy: [],
+	bookedByDTO: [],
 	createdDate: getDateFromNow(-4),
 	updatedDate: getDateFromNow(-4),
 };
@@ -42,6 +44,7 @@ export const Gift3: Gift = {
 	list: ListGranted,
 	isBooked: false,
 	bookedBy: [],
+	bookedByDTO: [],
 	createdDate: getDateFromNow(-3),
 	updatedDate: getDateFromNow(-3),
 };
@@ -56,6 +59,7 @@ export const Gift4: Gift = {
 	list: ListGranted,
 	isBooked: false,
 	bookedBy: [],
+	bookedByDTO: [],
 	createdDate: getDateFromNow(-2),
 	updatedDate: getDateFromNow(-2),
 };
@@ -70,6 +74,7 @@ export const Gift5: Gift = {
 	list: ListUnauthorized,
 	isBooked: false,
 	bookedBy: [],
+	bookedByDTO: [],
 	createdDate: getDateFromNow(-1),
 	updatedDate: getDateFromNow(-1),
 };

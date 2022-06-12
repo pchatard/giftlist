@@ -41,9 +41,6 @@ export class User {
 	@JoinTable({ name: "User_Bookings" })
 	public bookings!: Gift[];
 
-	// @RelationId((gift: Gift) => gift.bookedBy)
-	// public bookingsIds!: UUID[];
-
 	public bookingsDTO?: GiftDTO[];
 
 	@CreateDateColumn()

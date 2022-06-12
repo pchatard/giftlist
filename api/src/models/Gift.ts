@@ -9,6 +9,7 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 
+import { UserNameDTO } from "../dto/users";
 import { UUID } from "../types/UUID";
 // import GiftCategory from "./GiftCategory";
 import { List } from "./List";
@@ -45,6 +46,8 @@ export class Gift {
 
 	@ManyToMany(() => User, (user) => user.bookings)
 	public bookedBy!: User[];
+
+	public bookedByDTO!: UserNameDTO[];
 
 	@Column({ nullable: true })
 	public price?: number;

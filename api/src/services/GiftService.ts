@@ -43,7 +43,7 @@ class GiftService {
 	 */
 	static async get(giftId: UUID): Promise<Gift> {
 		const giftRepository: Repository<Gift> = getRepository(Gift);
-		return await giftRepository.findOneOrFail(giftId);
+		return await giftRepository.findOneOrFail(giftId, { relations: ["bookedBy"] });
 	}
 
 	/**

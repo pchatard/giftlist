@@ -1,11 +1,13 @@
 import { expect } from "chai";
 
+import { castUserAsUserNameDTO } from "../../src/helpers/users";
 import { Url_GiftBook, Url_GiftGetOne } from "../global";
 import { get, put } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect204 } from "../helpers/success";
 import { Gift1, Gift3 } from "../seeder/gifts.seed";
 import { ListGranted, ListOwned, ListUnauthorized } from "../seeder/lists.seed";
+import { UserTest } from "../seeder/users.seed";
 import { castAsGiftDTO } from "./cast";
 
 export default function suite() {
@@ -19,7 +21,12 @@ export default function suite() {
 		const changedGift = await get(Url_GiftGetOne(ListGranted.id, Gift3.id));
 		expect(changedGift)
 			.to.have.property("body")
-			.to.eql(castAsGiftDTO({ ...Gift3, isBooked: true }, true));
+			.to.eql(
+				castAsGiftDTO(
+					{ ...Gift3, isBooked: true, bookedByDTO: [castUserAsUserNameDTO(UserTest)] },
+					true
+				)
+			);
 	});
 	it("Returns 401 Unauthorized, if owned but gift does not belong to list", async () => {
 		const response = await put(Url_GiftBook(ListOwned.id, Gift3.id), {});

@@ -12,7 +12,7 @@ export const UserTest: User = {
 	email: "testuser@test.fr",
 	displayName: "Test User",
 	bookings: [],
-	// bookingsIds: [],
+	bookingsDTO: [],
 	createdDate: getDateFromNow(),
 };
 
@@ -22,7 +22,7 @@ export const User1: User = {
 	email: "test1@test.fr",
 	displayName: "TestUser1",
 	bookings: [],
-	// bookingsIds: [],
+	bookingsDTO: [],
 	createdDate: getDateFromNow(1),
 };
 
@@ -32,6 +32,6 @@ export const User2: User = {
 	email: "test2@test.fr",
 	displayName: "TestUser2",
 	bookings: [],
-	// bookingsIds: [],
+	bookingsDTO: [],
 	createdDate: getDateFromNow(2),
 };
