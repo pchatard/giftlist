@@ -11,6 +11,8 @@ export const UserTest: User = {
 	auth0Id: process.env.AUTH0_CLIENT_ID + "@clients",
 	email: "testuser@test.fr",
 	displayName: "Test User",
+	bookings: [],
+	bookingsDTO: [],
 	createdDate: getDateFromNow(),
 };
 
@@ -19,6 +21,8 @@ export const User1: User = {
 	auth0Id: "auth0|000000000000000000000000",
 	email: "test1@test.fr",
 	displayName: "TestUser1",
+	bookings: [],
+	bookingsDTO: [],
 	createdDate: getDateFromNow(1),
 };
 
@@ -27,5 +31,7 @@ export const User2: User = {
 	auth0Id: "facebook|000000000000000000000000",
 	email: "test2@test.fr",
 	displayName: "TestUser2",
+	bookings: [],
+	bookingsDTO: [],
 	createdDate: getDateFromNow(2),
 };

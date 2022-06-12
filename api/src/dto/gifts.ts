@@ -3,7 +3,17 @@ import Expand from "./expand";
 
 export interface CreateGiftDTO
 	extends Expand<
-		Omit<Gift, "id" | "list" | "listId" | "isBooked" | "createdDate" | "updatedDate">
+		Omit<
+			Gift,
+			| "id"
+			| "list"
+			| "listId"
+			| "isBooked"
+			| "bookedBy"
+			| "bookedByDTO"
+			| "createdDate"
+			| "updatedDate"
+		>
 	> {}
 export interface GiftIdDTO extends Expand<Pick<Gift, "id">> {}
 
@@ -13,6 +23,7 @@ export type GiftDTO = Pick<
 	| "id"
 	| "title"
 	| "isBooked"
+	| "bookedByDTO"
 	| "isFavorite"
 	| "isHidden"
 	| "category"
@@ -25,6 +36,7 @@ export type GiftDTO = Pick<
 	| "comments"
 >;
 
-export interface GiftDTOForOwner extends Expand<Omit<GiftDTO, "isBooked" | "listId" | "list">> {}
+export interface GiftDTOForOwner
+	extends Expand<Omit<GiftDTO, "isBooked" | "bookedBy" | "bookedByDTO" | "listId" | "list">> {}
 
 export interface EditGiftDTO extends Expand<Omit<GiftDTO, "id" | "listId" | "list">> {}

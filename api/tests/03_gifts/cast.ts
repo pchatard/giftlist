@@ -3,19 +3,20 @@ import { cleanObject } from "../../src/helpers/cleanObjects";
 import Gift from "../../src/models/Gift";
 
 export function castAsCreateGiftDTO(gift: Gift): CreateGiftDTO {
-	const { id, isBooked, list, listId, updatedDate, createdDate, ...rest } = gift;
+	const { id, isBooked, bookedBy, bookedByDTO, list, listId, updatedDate, createdDate, ...rest } =
+		gift;
 	return cleanObject({
 		...rest,
 	}) as CreateGiftDTO;
 }
 
 export function castAsGiftDTO(gift: Gift, showBooked: boolean = false): GiftDTO {
-	const { list, updatedDate, createdDate, ...rest } = gift;
+	const { list, bookedBy, updatedDate, createdDate, ...rest } = gift;
 	return cleanObject(
 		{
 			...rest,
 		},
-		[!showBooked ? "isBooked" : ""]
+		!showBooked ? ["isBooked", "bookedByDTO"] : [""]
 	) as GiftDTO;
 }
 

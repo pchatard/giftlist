@@ -2,15 +2,18 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	ManyToMany,
 	ManyToOne,
 	PrimaryGeneratedColumn,
 	RelationId,
 	UpdateDateColumn,
 } from "typeorm";
 
+import { UserNameDTO } from "../dto/users";
 import { UUID } from "../types/UUID";
 // import GiftCategory from "./GiftCategory";
 import { List } from "./List";
+import User from "./User";
 
 @Entity("Gift", { orderBy: { createdDate: "ASC" } })
 export class Gift {
@@ -19,9 +22,6 @@ export class Gift {
 
 	@Column()
 	public title!: string;
-
-	@Column({ default: false })
-	public isBooked!: boolean;
 
 	@Column({ default: false })
 	public isFavorite!: boolean;
@@ -41,6 +41,14 @@ export class Gift {
 	@RelationId((gift: Gift) => gift.list)
 	public listId!: UUID;
 
+	@Column({ default: false })
+	public isBooked!: boolean;
+
+	@ManyToMany(() => User, (user) => user.bookings)
+	public bookedBy!: User[];
+
+	public bookedByDTO!: UserNameDTO[];
+
 	@Column({ nullable: true })
 	public price?: number;
 
@@ -58,10 +66,6 @@ export class Gift {
 
 	@Column({ nullable: true })
 	public comments?: string;
-
-	// Trouver un moyen de stocker les données des personnes qui réservent en tenant compte de leurs préférences...
-	// - bookedBy: List<User> (permettra de réserver des cadeaux à plusieurs)
-	// - bookings: List<GiftBooking>
 
 	@CreateDateColumn()
 	createdDate!: Date;

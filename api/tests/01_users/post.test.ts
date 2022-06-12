@@ -1,5 +1,6 @@
 import { expect } from "chai";
 
+import { castUserAsCreateUserDTO } from "../../src/helpers/users";
 import { GlobalVar, NewUserTest, Url_UserPost } from "../global";
 import { post } from "../helpers/crud";
 import { expectValidationFailed } from "../helpers/error";
@@ -8,8 +9,7 @@ import { User1, UserTest } from "../seeder/users.seed";
 
 export default function suite() {
 	it("Returns 200 with ID if user already exist", async () => {
-		const { id, createdDate, friends, friendLists, lists, ...userTest } = UserTest;
-		const response = await post(Url_UserPost(), userTest);
+		const response = await post(Url_UserPost(), castUserAsCreateUserDTO(UserTest));
 		expect200(response);
 		expect(response).to.have.property("body").to.have.property("id").to.be.a.string;
 	});

@@ -18,11 +18,12 @@ import {
 import { CreateGiftDTO, EditGiftDTO, GiftDTO, GiftDTOForOwner, GiftIdDTO } from "../dto/gifts";
 import UnauthorizedError, { UnauthorizedErrorJSON } from "../errors/UnauthorizedError";
 import { ValidateErrorJSON } from "../errors/ValidationError";
-import { cleanObject } from "../helpers/cleanObjects";
+import { castGiftAsGiftDTO } from "../helpers/gifts";
 import Gift from "../models/Gift";
 import List from "../models/List";
 import GiftService from "../services/GiftService";
 import ListService from "../services/ListService";
+import UserService from "../services/UserService";
 import { UUID } from "../types/UUID";
 
 @Security("auth0") // Follow https://github.com/lukeautry/tsoa/issues/1082 for root-level security
@@ -132,10 +133,7 @@ export class GiftController extends Controller {
 		} else {
 			throw new UnauthorizedError();
 		}
-		return gifts.map((gift) => {
-			const { list, createdDate, updatedDate, ...rest } = gift;
-			return cleanObject(rest, [isOwner ? "isBooked" : ""]) as GiftDTO | GiftDTOForOwner;
-		});
+		return gifts.map((gift) => castGiftAsGiftDTO(gift, isOwner));
 	}
 
 	/**
@@ -162,8 +160,7 @@ export class GiftController extends Controller {
 		) {
 			throw new UnauthorizedError();
 		}
-		const { list, createdDate, updatedDate, ...rest }: Gift = await GiftService.get(giftId);
-		return cleanObject(rest, [isOwner ? "isBooked" : ""]) as GiftDTO | GiftDTOForOwner;
+		return castGiftAsGiftDTO(await GiftService.get(giftId), isOwner);
 	}
 
 	/**
@@ -271,6 +268,8 @@ export class GiftController extends Controller {
 			throw new UnauthorizedError();
 		}
 		await GiftService.edit(giftId, { isBooked: true });
+		const gift = await GiftService.get(giftId);
+		await UserService.addUserGifts(request.userId, gift);
 	}
 
 	/**
@@ -298,6 +297,8 @@ export class GiftController extends Controller {
 			throw new UnauthorizedError();
 		}
 		await GiftService.edit(giftId, { isBooked: false });
+		const gift = await GiftService.get(giftId);
+		await UserService.removeUserGifts(request.userId, gift);
 	}
 }
 

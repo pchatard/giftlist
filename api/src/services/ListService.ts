@@ -129,7 +129,7 @@ class ListService {
 	static async getListGifts(listId: UUID, showHidden: boolean): Promise<Gift[]> {
 		const listRepository: Repository<List> = getRepository(List);
 		const list: List = await listRepository.findOneOrFail(listId, {
-			relations: ["gifts"],
+			relations: ["gifts", "gifts.bookedBy"],
 		});
 		return (list.gifts || [])
 			.filter((g) => (showHidden ? true : g.isHidden == false))

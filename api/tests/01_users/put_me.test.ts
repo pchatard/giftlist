@@ -8,7 +8,7 @@ import { UserTest } from "../seeder/users.seed";
 export default function suite() {
 	it("Returns 204, user informations are changed", async () => {
 		const origMail: string = UserTest.email;
-		const { id, createdDate, ...user } = UserTest;
+		const { id, bookings, createdDate, ...user } = UserTest;
 		const response = await put(Url_UserPutMe(), { email: "new@new.fr" });
 		expect204(response);
 		const changedUser = await get(Url_UserGetMe());
