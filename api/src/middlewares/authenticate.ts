@@ -24,8 +24,8 @@ export function expressAuthentication(
 			});
 
 			function getKey(header: any, callback: any) {
-				client.getSigningKey(header.kid, (_err: Error | null, key: SigningKey) =>
-					callback(null, key.getPublicKey())
+				client.getSigningKey(header.kid, (_err: Error | null, key: SigningKey | undefined) =>
+					callback(null, key?.getPublicKey())
 				);
 			}
 
