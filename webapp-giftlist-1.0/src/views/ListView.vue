@@ -1,145 +1,89 @@
 <template>
-	<DefaultLayout
-		:title="list.title"
-		back
-		:back-button-title="labels.titles.lists"
-		back-button-link="/app/lists"
-	>
+	<DefaultLayout :title="list.title" back :back-button-title="labels.titles.lists" back-button-link="/app/lists">
 		<div v-if="loading" class="absolute top-0 bottom-0 right-0 left-0 grid place-items-center">
 			<GiftlistLoader class="w-16 h-16" />
 		</div>
 
 		<div v-else>
-			<div
-				v-if="gifts.length === 0"
-				class="absolute w-full h-full flex flex-col justify-center items-center text-gray-400 gap-8"
-			>
+			<div v-if="gifts.length === 0"
+				class="absolute w-full h-full flex flex-col justify-center items-center text-gray-400 gap-8">
 				<div class="text-lg">{{ labels.list.empty.description }}</div>
 				<GiftIcon class="w-1/6" />
-				<GiftlistButton
-					btn-style="primary-soft"
-					@click="router.push(`/app/lists/${list.id}/new-gift`)"
-				>
+				<GiftlistButton :btn-style="ButtonStyleEnum.primarySoft"
+					@click="router.push(`/app/lists/${list.id}/new-gift`)">
 					{{ labels.list.empty.button }}
 				</GiftlistButton>
 			</div>
 			<div v-else>
-				<div
-					v-if="!isListView"
-					class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 grid-flow-row gap-x-4 gap-y-8"
-				>
-					<div
-						class="border border-secondary-hover shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer"
-						@click="router.push(`/app/lists/${list.id}/new-gift`)"
-					>
+				<div v-if="!isListView"
+					class="my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 grid-flow-row gap-x-4 gap-y-8">
+					<div class="border border-secondary-hover shadow-sm rounded-md p-4 flex flex-col gap-2 items-center justify-center cursor-pointer"
+						@click="router.push(`/app/lists/${list.id}/new-gift`)">
 						<PlusIcon class="w-8 text-gray-400" />
 						<span class="">{{ labels.list.empty.button }}</span>
 					</div>
-					<GiftGridView
-						v-for="gift in gifts"
-						:key="gift.id"
-						:gift="gift"
-						@click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)"
-						@delete="handleDeleteModal"
-					/>
+					<GiftGridView v-for="gift in gifts" :key="gift.id" :gift="gift"
+						@click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)" @delete="handleDeleteModal" />
 				</div>
 				<GiftlistTable v-else :headers="tableHeaders" @sort="handleSort">
-					<tr
-						v-for="gift in gifts"
-						:key="gift.id"
-						class="cursor-pointer hover:bg-gray-50"
-						@click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)"
-					>
+					<tr v-for="gift in gifts" :key="gift.id" class="cursor-pointer hover:bg-gray-50"
+						@click="router.push(`/app/lists/${list.id}/gift/${gift.id}`)">
 						<GiftListView :gift="gift" @delete="handleDeleteModal" />
 					</tr>
 				</GiftlistTable>
 			</div>
-			<GiftlistModal
-				:show="sharingOptionsModal.showModal"
-				:title="sharingOptionsModal.title"
-				:cancel-text="sharingOptionsModal.cancelText"
-				@close="sharingOptionsModal.showModal = false"
-			>
+			<GiftlistModal :show="sharingOptionsModal.showModal" :title="sharingOptionsModal.title"
+				:cancel-text="sharingOptionsModal.cancelText" @close="sharingOptionsModal.showModal = false">
 				<p class="mb-2">
 					{{ labels.modals.sharingOptions.statusText }}
-					<span
-						class="font-semibold"
-						:class="list.isShared ? 'text-success-default' : 'text-danger-default'"
-					>
+					<span class="font-semibold" :class="list.isShared ? 'text-success-default' : 'text-danger-default'">
 						{{
-							list.isShared
-								? labels.lists.status.public.toLowerCase()
-								: labels.lists.status.private.toLowerCase()
+								list.isShared
+									? labels.lists.status.public.toLowerCase()
+									: labels.lists.status.private.toLowerCase()
 						}}.
 					</span>
 				</p>
 				<div class="py-2">
-					<InputLink
-						:label="labels.modals.sharingOptions.link.label"
-						:value="listSharingLink"
-						:helper-text="labels.modals.sharingOptions.link.helperText"
-						copy
-						:disabled="!list.isShared"
-					/>
+					<InputLink :label="labels.modals.sharingOptions.link.label" :value="listSharingLink"
+						:helper-text="labels.modals.sharingOptions.link.helperText" copy :disabled="!list.isShared" />
 				</div>
 				<div class="py-2">
-					<InputText
-						:label="labels.modals.sharingOptions.code.label"
-						:value="list.sharingCode"
-						:helper-text="labels.modals.sharingOptions.code.helperText"
-						copy
-						:disabled="!list.isShared"
-					/>
+					<InputText :label="labels.modals.sharingOptions.code.label" :value="list.sharingCode"
+						:helper-text="labels.modals.sharingOptions.code.helperText" copy :disabled="!list.isShared" />
 				</div>
-				<GiftlistButton
-					class="mb-4 w-full"
-					:btn-style="list.isShared ? 'danger-soft' : 'green-soft'"
-					:loading="shareButtonIsLoading"
-					@click="handleSharingOptionsConfirm()"
-					>{{ sharingOptionsModal.confirmText }}</GiftlistButton
-				>
+				<GiftlistButton class="mb-4 w-full"
+					:btn-style="list.isShared ? ButtonStyleEnum.dangerSoft : ButtonStyleEnum.successSoft"
+					:loading="shareButtonIsLoading" @click="handleSharingOptionsConfirm()">{{
+							sharingOptionsModal.confirmText
+					}}</GiftlistButton>
 			</GiftlistModal>
 
-			<GiftlistModal
-				:show="deleteModal.showModal"
-				:title="deleteModal.title"
-				:confirm-text="deleteModal.confirmText"
-				:btn-loading="deleteButtonIsLoading"
-				type="danger"
-				@close="deleteModal.showModal = false"
-				@confirm="handleDeleteConfirm()"
-			>
+			<GiftlistModal :show="deleteModal.showModal" :title="deleteModal.title"
+				:confirm-text="deleteModal.confirmText" :btn-loading="deleteButtonIsLoading" type="danger"
+				@close="deleteModal.showModal = false" @confirm="handleDeleteConfirm()">
 			</GiftlistModal>
 		</div>
 		<template #commands>
-			<span
-				v-if="list.isShared"
-				class="flex items-center mr-4 text-success-default font-medium hover:text-success-text hover:bg-success-light px-2 py-1 rounded-md cursor-pointer"
-				@click="showSharingOptionsModal"
-			>
-				<LockOpenIcon class="h-4 w-4 mr-2" />
+			<GiftlistButton v-if="list.isShared" :btn-style="ButtonStyleEnum.successSoft" has-icon
+				@click="showSharingOptionsModal">
+				<template #icon>
+					<LockOpenIcon />
+				</template>
 				{{ labels.lists.status.public }}
-			</span>
-			<span
-				v-else
-				class="flex items-center mr-4 text-danger-default font-medium hover:text-danger-text hover:bg-danger-light px-2 py-1 rounded-md cursor-pointer"
-				@click="showSharingOptionsModal"
-			>
-				<LockClosedIcon class="h-4 w-4 mr-2" />
+			</GiftlistButton>
+			<GiftlistButton v-else :btn-style="ButtonStyleEnum.dangerSoft" has-icon @click="showSharingOptionsModal">
+				<template #icon>
+					<LockClosedIcon />
+				</template>
 				{{ labels.lists.status.private }}
-			</span>
-			<span
-				class="flex items-center mr-4 text-primary-default font-medium hover:text-primary-text cursor-pointer"
-				@click="router.push(`/app/lists/${list.id}/settings`)"
-			>
+			</GiftlistButton>
+			<span class="flex items-center mr-4 text-primary-default font-medium hover:text-primary-text cursor-pointer"
+				@click="router.push(`/app/lists/${list.id}/settings`)">
 				<CogIcon class="h-4 w-4 mr-2" />
 				{{ labels.lists.buttons.settings }}
 			</span>
-			<ToggleViewMode
-				:is-grid-view="!isListView"
-				class="ml-4 w-28"
-				@change="toggleDisplayMode"
-			/>
+			<ToggleViewMode :is-grid-view="!isListView" class="ml-4 w-28" @change="toggleDisplayMode" />
 		</template>
 	</DefaultLayout>
 </template>
@@ -158,6 +102,7 @@ import { ListDTO } from "@/types/dto/ListDTO";
 import { GiftIdPayload } from "@/types/payload/GiftIdPayload";
 import { ListIdPayload } from "@/types/payload/ListIdPayload";
 import { TableHeader } from "@/types/front/TableHeader.ts";
+import { ButtonStyleEnum } from "@/types/enums/ButtonStyleEnum";
 
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import GiftGridView from "@/components/GiftGridView.vue";

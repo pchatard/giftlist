@@ -1,8 +1,5 @@
 <template>
-	<button
-		class="rounded-md font-bold py-2 px-4 flex itens-center text-sm w-40 max-w-sm"
-		:class="buttonStyle"
-	>
+	<button class="rounded-md font-bold py-2 px-4 flex itens-center text-sm max-w-md" :class="buttonStyle">
 		<RefreshIcon v-if="loading" class="w-5 animate-[spin_1s_reverse_infinite]" />
 		<span v-if="hasIcon && !loading" class="w-5">
 			<slot name="icon" />
@@ -61,7 +58,7 @@ const spinnerColor = computed(() => {
 			return "#FFFFFF";
 		case ButtonStyleEnum.dangerSoft:
 			return "#DC2626";
-		case ButtonStyleEnum.greenSoft:
+		case ButtonStyleEnum.successSoft:
 			return "#16a34a";
 		case ButtonStyleEnum.primary:
 			return "#FFFFFF";

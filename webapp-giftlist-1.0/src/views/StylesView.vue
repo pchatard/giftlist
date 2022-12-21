@@ -1,10 +1,6 @@
 <template>
 	<DefaultLayout title="Styles">
-
-
 		<h1 class="font-test">Hello world</h1>
-
-
 
 		<GiftlistSubtitle>Buttons</GiftlistSubtitle>
 		<div class="grid grid-flow-col-dense">
@@ -19,14 +15,28 @@
 				<GiftlistButton :btn-style="ButtonStyleEnum.successSoft">Sauvegarder</GiftlistButton>
 			</div>
 			<div class="flex flex-col gap-2 items-start">
-				<GiftlistButton :btn-style="ButtonStyleEnum.primary" loading>Sauvegarder</GiftlistButton>
-				<GiftlistButton :btn-style="ButtonStyleEnum.primarySoft" loading>Sauvegarder</GiftlistButton>
-				<GiftlistButton :btn-style="ButtonStyleEnum.secondary" loading>Sauvegarder</GiftlistButton>
-				<GiftlistButton :btn-style="ButtonStyleEnum.secondarySoft" loading>Sauvegarder</GiftlistButton>
+				<GiftlistButton :btn-style="ButtonStyleEnum.primary" loading
+					>Sauvegarder</GiftlistButton
+				>
+				<GiftlistButton :btn-style="ButtonStyleEnum.primarySoft" loading
+					>Sauvegarder</GiftlistButton
+				>
+				<GiftlistButton :btn-style="ButtonStyleEnum.secondary" loading
+					>Sauvegarder</GiftlistButton
+				>
+				<GiftlistButton :btn-style="ButtonStyleEnum.secondarySoft" loading
+					>Sauvegarder</GiftlistButton
+				>
 				<GiftlistButton :btn-style="ButtonStyleEnum.danger" loading>Sauvegarder</GiftlistButton>
-				<GiftlistButton :btn-style="ButtonStyleEnum.dangerSoft" loading>Sauvegarder</GiftlistButton>
-				<GiftlistButton :btn-style="ButtonStyleEnum.success" loading>Sauvegarder</GiftlistButton>
-				<GiftlistButton :btn-style="ButtonStyleEnum.successSoft" loading>Sauvegarder</GiftlistButton>
+				<GiftlistButton :btn-style="ButtonStyleEnum.dangerSoft" loading
+					>Sauvegarder</GiftlistButton
+				>
+				<GiftlistButton :btn-style="ButtonStyleEnum.success" loading
+					>Sauvegarder</GiftlistButton
+				>
+				<GiftlistButton :btn-style="ButtonStyleEnum.successSoft" loading
+					>Sauvegarder</GiftlistButton
+				>
 			</div>
 			<div class="flex flex-col gap-2 items-start">
 				<GiftlistButton :btn-style="ButtonStyleEnum.primary" has-icon>
@@ -37,42 +47,41 @@
 				</GiftlistButton>
 				<GiftlistButton :btn-style="ButtonStyleEnum.primarySoft" has-icon>
 					<template #icon>
-						<PlusCircleIcon />
-					</template>Sauvegarder
+						<PlusCircleIcon /> </template
+					>Sauvegarder
 				</GiftlistButton>
 				<GiftlistButton :btn-style="ButtonStyleEnum.secondary" has-icon>
 					<template #icon>
-						<PlusCircleIcon />
-					</template>Sauvegarder
+						<PlusCircleIcon /> </template
+					>Sauvegarder
 				</GiftlistButton>
 				<GiftlistButton :btn-style="ButtonStyleEnum.secondarySoft" has-icon>
 					<template #icon>
-						<PlusCircleIcon />
-					</template>Sauvegarder
+						<PlusCircleIcon /> </template
+					>Sauvegarder
 				</GiftlistButton>
 				<GiftlistButton :btn-style="ButtonStyleEnum.danger" has-icon>
 					<template #icon>
-						<PlusCircleIcon />
-					</template>Sauvegarder
+						<PlusCircleIcon /> </template
+					>Sauvegarder
 				</GiftlistButton>
 				<GiftlistButton :btn-style="ButtonStyleEnum.dangerSoft" has-icon>
 					<template #icon>
-						<PlusCircleIcon />
-					</template>Sauvegarder
+						<PlusCircleIcon /> </template
+					>Sauvegarder
 				</GiftlistButton>
 				<GiftlistButton :btn-style="ButtonStyleEnum.success" has-icon>
 					<template #icon>
-						<PlusCircleIcon />
-					</template>Sauvegarder
+						<PlusCircleIcon /> </template
+					>Sauvegarder
 				</GiftlistButton>
 				<GiftlistButton :btn-style="ButtonStyleEnum.successSoft" has-icon>
 					<template #icon>
-						<PlusCircleIcon />
-					</template>Sauvegarder
+						<PlusCircleIcon /> </template
+					>Sauvegarder
 				</GiftlistButton>
 			</div>
 		</div>
-
 	</DefaultLayout>
 </template>
 

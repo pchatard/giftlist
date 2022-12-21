@@ -1,0 +1,8 @@
+postcss.config.js
+tailwind.config.js
+tsconfig.app.json
+tsconfig.config.json
+tsconfig.json
+tsconfig.vitest.json
+vite.config.ts
+.gitignore
