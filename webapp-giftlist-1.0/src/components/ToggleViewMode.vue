@@ -1,12 +1,12 @@
 <template>
 	<div class="flex items-center">
-		<ViewListIcon class="w-4" :class="isGrid ? 'text-gray-400' : 'text-indigo-600'" />
+		<ViewListIcon class="w-4" :class="isGrid ? 'text-gray-400' : 'text-primary-default'" />
 
 		<Switch
 			v-model="isGrid"
 			:class="{
-				'bg-indigo-600 hover:bg-indigo-600': isGrid,
-				'bg-gray-200': !isGrid,
+				'bg-primary-default hover:bg-primary-default': isGrid,
+				'bg-secondary-hover': !isGrid,
 			}"
 			class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 mx-2 my-1 focus:outline-none hover:bg-gray-300"
 		>
@@ -15,7 +15,7 @@
 				class="inline-block w-4 h-4 transition-transform transform bg-white rounded-full"
 			/>
 		</Switch>
-		<ViewGridIcon class="w-4" :class="isGrid ? 'text-indigo-600' : 'text-gray-400'" />
+		<ViewGridIcon class="w-4" :class="isGrid ? 'text-primary-default' : 'text-gray-400'" />
 	</div>
 </template>
 

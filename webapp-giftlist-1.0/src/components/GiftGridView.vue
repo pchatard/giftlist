@@ -1,13 +1,13 @@
 <template>
-	<div class="border border-gray-200 shadow-sm rounded-md p-4 flex flex-col cursor-pointer">
+	<div class="border border-secondary-hover shadow-sm rounded-md p-4 flex flex-col cursor-pointer">
 		<div class="flex items-center">
-			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-gray-100 text-yellow-400" />
+			<ShoppingCartIcon class="w-12 p-3 mr-4 rounded-md bg-secondary-default text-logo" />
 			<div class="flex flex-col">
 				<span class="font-semibold">
 					{{ gift.title }}
 				</span>
 				<div class="flex items-center">
-					<CurrencyEuroIcon class="w-4 mr-1 text-indigo-600" />
+					<CurrencyEuroIcon class="w-4 mr-1 text-primary-default" />
 					<span class="text-sm">{{ price }}</span>
 				</div>
 			</div>
@@ -26,8 +26,8 @@
 					v-if="shared"
 					class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
 					:class="{
-						'bg-red-100 text-red-800': gift.isBooked,
-						'bg-green-100 text-green-800': !gift.isBooked,
+						'bg-danger-light text-red-800': gift.isBooked,
+						'bg-success-light text-green-800': !gift.isBooked,
 					}"
 				>
 					{{ gift.isBooked ? labels.gifts.status.booked : labels.gifts.status.available }}
@@ -42,24 +42,24 @@
 					</span>
 				</div>
 				<div class="flex items-center">
-					<UserCircleIcon class="w-5 mr-2 text-indigo-600" />
+					<UserCircleIcon class="w-5 mr-2 text-primary-default" />
 					<span> Creator name </span>
 				</div>
 			</div>
 			<div class="flex self-end gap-4">
 				<ExternalLinkIcon
 					v-if="gift.linkURL"
-					class="w-6 text-gray-400 cursor-pointer hover:text-indigo-600"
+					class="w-6 text-gray-400 cursor-pointer hover:text-primary-default"
 					@click.stop="openInNewTab"
 				/>
 				<TicketIcon
 					v-if="shared"
-					class="w-6 text-gray-400 cursor-pointer hover:text-red-600"
+					class="w-6 text-gray-400 cursor-pointer hover:text-danger-default"
 					@click.stop="openBookGiftModal"
 				/>
 				<TrashIcon
 					v-else
-					class="w-6 text-gray-400 cursor-pointer hover:text-red-600"
+					class="w-6 text-gray-400 cursor-pointer hover:text-danger-default"
 					@click.stop="openDeleteGiftModal"
 				/>
 			</div>

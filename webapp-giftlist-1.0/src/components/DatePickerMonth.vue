@@ -24,9 +24,9 @@ const emit = defineEmits<{
 }>();
 
 const selected =
-	"rounded py-2 cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white grid place-items-center font-semibold";
+	"rounded py-2 cursor-pointer bg-primary-default hover:bg-primary-hover text-white grid place-items-center font-semibold";
 const base =
-	"rounded py-2 bg-white hover:bg-indigo-100 hover:border-indigo-100 text-indigo-600 border border-indigo-200 cursor-pointer grid place-items-center";
+	"rounded py-2 bg-white hover:bg-primary-light hover:border-primary-light text-primary-default border border-primary-lightHover cursor-pointer grid place-items-center";
 
 const changeMonth = (month: number) => {
 	emit("month", month);

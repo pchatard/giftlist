@@ -15,7 +15,7 @@
 					@change="(title: string) => dispatch('changeGiftTitle', title)"
 				>
 					<div class="mr-4">
-						<GiftIcon class="w-5 h-5 text-indigo-600" />
+						<GiftIcon class="w-5 h-5 text-primary-default" />
 					</div>
 				</InputText>
 
@@ -29,9 +29,9 @@
 					<div class="mr-4">
 						<HeartIcon
 							v-if="!giftFormData.isFavorite.value"
-							class="w-5 h-5 text-indigo-600"
+							class="w-5 h-5 text-primary-default"
 						/>
-						<HeartIconFull v-else class="w-5 h-5 text-red-600" />
+						<HeartIconFull v-else class="w-5 h-5 text-danger-default" />
 					</div>
 				</InputToggle>
 
@@ -45,7 +45,7 @@
 					@change="(category: Record<string, unknown>) => dispatch('changeGiftCategory', category)"
 				>
 					<div class="mr-4">
-						<FilterIcon class="w-5 h-5 text-indigo-600" />
+						<FilterIcon class="w-5 h-5 text-primary-default" />
 					</div>
 				</InputSelect>
 
@@ -61,7 +61,7 @@
 					@change="(price: number) => dispatch('changeGiftPrice', price)"
 				>
 					<div class="mr-4">
-						<CurrencyEuroIcon class="w-5 h-5 text-indigo-600" />
+						<CurrencyEuroIcon class="w-5 h-5 text-primary-default" />
 					</div>
 				</InputNumber>
 
@@ -79,7 +79,7 @@
 					@change="(linkURL: string) => dispatch('changeGiftLinkURL', linkURL)"
 				>
 					<div class="mr-4">
-						<LinkIcon class="w-5 h-5 text-indigo-600" />
+						<LinkIcon class="w-5 h-5 text-primary-default" />
 					</div>
 				</InputLink>
 			</div>
@@ -96,7 +96,11 @@
 					<div class="mr-4">
 						<InformationCircleIcon
 							class="w-5 h-5"
-							:class="giftFormData.showDetails.value ? 'text-indigo-600' : 'text-gray-600'"
+							:class="
+								giftFormData.showDetails.value
+									? 'text-primary-default'
+									: 'text-secondary-text'
+							"
 						/>
 					</div>
 				</InputToggle>
@@ -115,7 +119,7 @@
 						@change="(brand: string) => dispatch('changeGiftBrand', brand)"
 					>
 						<div class="mr-4">
-							<TagIcon class="w-5 h-5 text-indigo-600" />
+							<TagIcon class="w-5 h-5 text-primary-default" />
 						</div>
 					</InputText>
 					<InputText
@@ -131,7 +135,7 @@
 						@change="(color: string) => dispatch('changeGiftColor', color)"
 					>
 						<div class="mr-4">
-							<ColorSwatchIcon class="w-5 h-5 text-indigo-600" />
+							<ColorSwatchIcon class="w-5 h-5 text-primary-default" />
 						</div>
 					</InputText>
 					<InputText
@@ -147,7 +151,7 @@
 						@change="(size: string) => dispatch('changeGiftSize', size)"
 					>
 						<div class="mr-4">
-							<ChartBarIcon class="w-5 h-5 text-indigo-600" />
+							<ChartBarIcon class="w-5 h-5 text-primary-default" />
 						</div>
 					</InputText>
 				</div>
@@ -166,7 +170,7 @@
 					@change="(comments: string) => dispatch('changeGiftComments', comments)"
 				>
 					<div class="mr-4">
-						<AnnotationIcon class="w-5 h-5 text-indigo-600" />
+						<AnnotationIcon class="w-5 h-5 text-primary-default" />
 					</div>
 				</InputText>
 			</div>

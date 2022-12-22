@@ -14,7 +14,7 @@
 				@change="(title: string) => dispatch('changeListTitle', title)"
 			>
 				<div class="mr-4">
-					<CollectionIcon class="w-5 h-5 text-indigo-600" />
+					<CollectionIcon class="w-5 h-5 text-primary-default" />
 				</div>
 			</InputText>
 			<InputText
@@ -30,7 +30,7 @@
 				@change="(description: string) => dispatch('changeListDescription', description)"
 			>
 				<div class="mr-4">
-					<AnnotationIcon class="w-5 h-5 text-indigo-600" />
+					<AnnotationIcon class="w-5 h-5 text-primary-default" />
 				</div>
 			</InputText>
 		</div>
@@ -47,7 +47,11 @@
 				<div class="mr-4">
 					<CalendarIcon
 						class="w-5 h-5"
-						:class="listFormData.hasClosureDate.value ? 'text-indigo-600' : 'text-gray-600'"
+						:class="
+							listFormData.hasClosureDate.value
+								? 'text-primary-default'
+								: 'text-secondary-text'
+						"
 					/>
 				</div>
 			</InputToggle>

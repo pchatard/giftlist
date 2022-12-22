@@ -5,5 +5,6 @@ export enum ButtonStyleEnum {
 	secondarySoft = "secondary-soft",
 	danger = "danger",
 	dangerSoft = "danger-soft",
-	greenSoft = "green-soft",
+	success = "success",
+	successSoft = "success-soft",
 }

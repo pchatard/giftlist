@@ -15,9 +15,9 @@
 			<div class="col-span-full flex items-center">
 				<UserIcon
 					v-if="listFormData.owners.value.length <= 1"
-					class="w-4 h-4 mr-2 text-indigo-600"
+					class="w-4 h-4 mr-2 text-primary-default"
 				/>
-				<UsersIcon v-else class="w-4 h-4 mr-2 text-indigo-600" />
+				<UsersIcon v-else class="w-4 h-4 mr-2 text-primary-default" />
 				<span>{{ labels.newList.step2.inputs.owners.title }}</span>
 				<div class="flex flex-wrap gap-y-2 py-2 ml-4">
 					<PersonTag text="Moi" class="px-4" hide-delete />
@@ -44,7 +44,9 @@
 				<div class="mr-4">
 					<ShareIcon
 						class="w-5 h-5"
-						:class="listFormData.isShared.value ? 'text-indigo-600' : 'text-gray-600'"
+						:class="
+							listFormData.isShared.value ? 'text-primary-default' : 'text-secondary-text'
+						"
 					/>
 				</div>
 			</InputToggle>
@@ -64,9 +66,9 @@
 			<div v-show="listFormData.isShared.value" class="col-span-full flex items-center">
 				<UserIcon
 					v-if="listFormData.owners.value.length <= 1"
-					class="w-4 h-4 mr-2 text-indigo-600"
+					class="w-4 h-4 mr-2 text-primary-default"
 				/>
-				<UsersIcon v-else class="w-4 h-4 mr-2 text-indigo-600" />
+				<UsersIcon v-else class="w-4 h-4 mr-2 text-primary-default" />
 				<span>{{ labels.newList.step2.inputs.authorizedUsers.title }}</span>
 				<div v-if="listFormData.grantedUsers.value.length" class="flex py-2 ml-4">
 					<PersonTag
@@ -77,7 +79,7 @@
 						@delete="() => dispatch('deleteListGrantedUser', person.id as string)"
 					/>
 				</div>
-				<div v-else class="text-gray-600 ml-2">
+				<div v-else class="text-secondary-text ml-2">
 					{{ labels.newList.step2.inputs.authorizedUsers.empty }}
 				</div>
 			</div>

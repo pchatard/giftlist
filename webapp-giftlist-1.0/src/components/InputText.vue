@@ -16,7 +16,7 @@
 			:type="type"
 			:disabled="disabled"
 			:placeholder="placeholder"
-			class="outline-none px-3 py-2 flex-1 caret-indigo-600"
+			class="outline-none px-3 py-2 flex-1 caret-primary-default"
 			:tabindex="tab"
 			@focus="onFocus"
 			@blur="onBlur"
@@ -28,8 +28,10 @@
 		/>
 		<button
 			v-if="copy"
-			class="relative w-8 border-l border-gray-100 hover:bg-gray-100"
-			:class="disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-100'"
+			class="relative w-8 border-l border-secondary-default hover:bg-secondary-default"
+			:class="
+				disabled ? 'bg-secondary-default cursor-not-allowed' : 'hover:bg-secondary-default'
+			"
 			@click="copyToClipboard"
 		>
 			<TransitionRoot
@@ -43,7 +45,7 @@
 			>
 				<ClipboardCopyIcon
 					class="absolute w-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-					:class="disabled ? 'text-gray-600' : 'text-indigo-600'"
+					:class="disabled ? 'text-secondary-text' : 'text-primary-default'"
 				/>
 			</TransitionRoot>
 			<TransitionRoot

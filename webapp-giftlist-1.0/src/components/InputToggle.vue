@@ -9,8 +9,8 @@
 						<Switch
 							v-model="refValue"
 							:class="{
-								'bg-indigo-600 hover:bg-indigo-600': refValue,
-								'bg-gray-200': !refValue,
+								'bg-primary-default hover:bg-primary-default': refValue,
+								'bg-secondary-hover': !refValue,
 								'ml-4': inline,
 							}"
 							class="relative inline-flex items-center h-6 transition-colors rounded-full w-11 my-1 focus:outline-none hover:bg-gray-300"

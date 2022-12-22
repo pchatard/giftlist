@@ -30,20 +30,24 @@
 			:href="refValue"
 			target="_blank"
 			rel="noopener noreferrer"
-			class="relative w-8 border-l border-gray-100 hover:bg-gray-100"
+			class="relative w-8 border-l border-secondary-default hover:bg-secondary-default"
 			:class="
-				refValue ? 'hover:bg-gray-100' : 'bg-gray-100 cursor-not-allowed pointer-events-none'
+				refValue
+					? 'hover:bg-secondary-default'
+					: 'bg-secondary-default cursor-not-allowed pointer-events-none'
 			"
 		>
 			<ExternalLinkIcon
 				class="absolute w-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-				:class="refValue ? 'text-indigo-600' : 'text-gray-600'"
+				:class="refValue ? 'text-primary-default' : 'text-secondary-text'"
 			/>
 		</a>
 		<button
 			v-if="copy"
-			class="relative w-8 border-l border-gray-100 hover:bg-gray-100"
-			:class="disabled ? 'bg-gray-100 cursor-not-allowed' : 'hover:bg-gray-100'"
+			class="relative w-8 border-l border-secondary-default hover:bg-secondary-default"
+			:class="
+				disabled ? 'bg-secondary-default cursor-not-allowed' : 'hover:bg-secondary-default'
+			"
 			@click="copyToClipboard"
 		>
 			<TransitionRoot
@@ -57,7 +61,7 @@
 			>
 				<ClipboardCopyIcon
 					class="absolute w-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-					:class="disabled ? 'text-gray-600' : 'text-indigo-600'"
+					:class="disabled ? 'text-secondary-text' : 'text-primary-default'"
 				/>
 			</TransitionRoot>
 			<TransitionRoot

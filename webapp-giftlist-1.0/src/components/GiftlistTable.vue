@@ -18,7 +18,7 @@
 				</th>
 			</tr>
 		</thead>
-		<tbody class="bg-white divide-y divide-gray-100">
+		<tbody class="bg-white divide-y divide-secondary-default">
 			<slot />
 		</tbody>
 	</table>
