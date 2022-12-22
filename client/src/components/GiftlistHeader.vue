@@ -73,13 +73,13 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
         class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
       >
         <RouterLink to="#" class="flex items-center">
-          <lottie-player
+          <!-- <lottie-player
             src="https://assets8.lottiefiles.com/packages/lf20_0oco6l9x.json"
             background="transparent"
             speed="1"
             class="mr-0 h-14 overflow-hidden"
             hover
-          ></lottie-player>
+          ></lottie-player> -->
           <span
             class="self-center text-xl font-satisfy font-semibold whitespace-nowrap dark:text-white"
             >giftlist</span
@@ -142,7 +142,7 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
                 :to="link.path ?? '#'"
                 class="block py-2 pr-4 pl-3 border-b border-gray-100 lg:border-0 lg:p-0 dark:border-gray-700"
                 :class="[
-                  link.path?.startsWith(currentRoute.path)
+                  link.path == currentRoute.path
                     ? 'text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 dark:text-white'
                     : 'text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:hover:text-primary-700 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent',
                 ]"
