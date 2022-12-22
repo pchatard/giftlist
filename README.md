@@ -2,14 +2,6 @@
 
 Work in progress
 
-NuxtJS SSR application using:
-
--   @nuxtjs/auth for client Authentication
--   @nuxtjs/axios for API requests
--   Express for the API as a server middleware
--   Firebase Authentication for backend user handling
--   Firebase Database
-
 ### 🎁 Wishlist application
 
 GiftList is a web application allowing you to create your wishlists for special events such as birthdays, weddings, births or simply a bucket list.
