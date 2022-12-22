@@ -154,7 +154,7 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
               class="block lg:hidden py-2 pr-4 pl-3 border-b border-gray-100 last:border-b-0 lg:border-0 lg:p-0 cursor-pointer dark:border-gray-700 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:hover:text-primary-700 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
               @click="setIsLoggedIn"
             >
-              Déconnexion
+              Se déconnecter
             </li>
           </ul>
         </div>
