@@ -72,18 +72,11 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
       <div
         class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
       >
-        <RouterLink to="#" class="flex items-center">
-          <!-- <lottie-player
-            src="https://assets8.lottiefiles.com/packages/lf20_0oco6l9x.json"
-            background="transparent"
-            speed="1"
-            class="mr-0 h-14 overflow-hidden"
-            hover
-          ></lottie-player> -->
-          <span
-            class="self-center text-xl font-satisfy font-semibold whitespace-nowrap dark:text-white"
-            >giftlist</span
-          >
+        <RouterLink
+          :to="isLoggedIn ? '/app' : '/'"
+          class="self-center text-xl font-satisfy font-semibold whitespace-nowrap dark:text-white"
+        >
+          giftlist
         </RouterLink>
         <div class="flex items-center lg:order-2">
           <ThemeButton />
