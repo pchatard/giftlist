@@ -1,7 +1,7 @@
 # GiftList
 
 Giftlist v1.
-Vue 3 + Vite + TailwindCSS Frontend
+Vue 3 + Vite + TailwindCSS Frontend deployed on Netlify.
 Express + TS + TypeORM API.
 
 ### 🎁 Wishlist application
