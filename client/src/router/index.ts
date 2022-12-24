@@ -28,14 +28,6 @@ const router = createRouter({
       },
     },
     {
-      path: "/app/lists/:listId",
-      name: "Ma liste",
-      component: MyListsView,
-      meta: {
-        isHeaderLink: false,
-      },
-    },
-    {
       path: "/app/lists",
       name: "Mes listes",
       component: MyListsView,
@@ -43,7 +35,6 @@ const router = createRouter({
         isHeaderLink: true,
       },
     },
-
     {
       path: "/app/shared",
       name: "Listes partagées avec moi",

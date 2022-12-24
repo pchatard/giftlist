@@ -18,15 +18,17 @@ provide(darkModeInjectionKey, { isDarkMode, setIsDarkMode });
 </script>
 
 <template>
-  <GiftlistHeader />
-  <main class="bg-white px-4 lg:px-6 py-2.5 dark:bg-gray-800">
-    <div
-      class="flex flex-col flex-wrap justify-between mx-auto max-w-screen-xl"
-    >
-      <BreadcrumbNavigation v-if="isLoggedIn" />
-      <RouterView class="text-gray-900 dark:text-gray-400" />
-    </div>
-  </main>
+  <div class="min-h-screen flex flex-col">
+    <GiftlistHeader />
+    <main class="flex-1 bg-white px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+      <div
+        class="flex flex-col flex-wrap justify-between mx-auto max-w-screen-xl"
+      >
+        <BreadcrumbNavigation v-if="isLoggedIn" />
+        <RouterView class="text-gray-900 dark:text-gray-400" />
+      </div>
+    </main>
+  </div>
 </template>
 
 <style scoped></style>
