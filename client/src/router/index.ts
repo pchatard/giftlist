@@ -7,6 +7,7 @@ import MyListsView from "@/views/MyListsView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import SharedListsView from "@/views/SharedListsView.vue";
+import ListView from "@/views/ListView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,14 @@ const router = createRouter({
       component: MyListsView,
       meta: {
         isHeaderLink: true,
+      },
+    },
+    {
+      path: "/app/lists/:listId",
+      name: "Ma liste",
+      component: ListView,
+      meta: {
+        isHeaderLink: false,
       },
     },
     {
