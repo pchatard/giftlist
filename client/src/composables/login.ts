@@ -2,7 +2,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 export function useLogin() {
-  const isLoggedIn = ref(false);
+  const isLoggedIn = ref(true);
   const router = useRouter();
 
   const setIsLoggedIn = () => {
