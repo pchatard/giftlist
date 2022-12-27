@@ -6,5 +6,10 @@
       class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
       >Mes listes
     </RouterLink>
+    <RouterLink
+      to="/app/shared"
+      class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+      >Mes listes partagées
+    </RouterLink>
   </div>
 </template>
