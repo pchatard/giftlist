@@ -69,7 +69,6 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
 <template>
   <header>
     <nav
-      id="navbar"
       class="bg-white px-4 py-2.5 dark:bg-gray-900 w-full fixed top-0 z-20 left-0 border-b border-gray-200 dark:border-gray-600"
     >
       <div
