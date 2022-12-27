@@ -70,7 +70,7 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
   <header>
     <nav
       id="navbar"
-      class="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-800 w-full fixed top-0 z-20 left-0 border-b border-gray-200 dark:border-gray-600"
+      class="bg-white px-4 py-2.5 dark:bg-gray-900 w-full fixed top-0 z-20 left-0 border-b border-gray-200 dark:border-gray-600"
     >
       <div
         class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
@@ -90,6 +90,13 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
             @click="setIsLoggedIn"
             >Se connecter</a
           >
+          <a
+            v-if="!isLoggedIn"
+            href="#"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            @click="setIsLoggedIn"
+            >S'inscrire</a
+          >
           <DropdownButton
             v-if="isLoggedIn"
             class="hidden lg:block"
@@ -100,14 +107,14 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
           <HamburgerButton v-if="isLoggedIn" @click="toggleMobileMenu" />
         </div>
         <div
-          class="justify-between items-center gap-12 w-full lg:flex lg:w-auto lg:order-1"
+          class="justify-between items-center w-full mt-2 lg:m-0 lg:flex lg:w-auto lg:order-1 rounded-lg"
           :class="isMobileMenuOpened ? '' : 'hidden'"
           id="mobile-menu-2"
           @click="toggleMobileMenu"
         >
           <ul
             v-if="isLoggedIn"
-            class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0"
+            class="flex flex-col font-medium lg:flex-row lg:space-x-8"
           >
             <li v-for="(link, index) in links" :key="link.path">
               <RouterLink
@@ -126,7 +133,7 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
           </ul>
           <ul
             v-if="isLoggedIn"
-            class="flex flex-col mt-16 font-medium lg:hidden"
+            class="flex flex-col mt-8 font-medium lg:hidden"
           >
             <li
               v-for="link in headerDropdownProps.options.filter(
