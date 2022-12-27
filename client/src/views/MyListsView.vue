@@ -1,17 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { List } from "@/types/giftlist";
+import { lists as listsData } from "@/data/lists";
 
-const lists = ref<List[]>([]);
-for (let i = 0; i < 6; i++) {
-  lists.value.push({
-    id: "id" + i,
-    title: "List n°" + i + 1,
-    sharingCode: "id" + i,
-    isShared: i % 2 == 0,
-    description: i % 3 == 0 ? "List n°" + i + " description" : undefined,
-  });
-}
+const lists = ref<List[]>(listsData);
 </script>
 
 <template>
