@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.13",
-    "@lottiefiles/lottie-player": "^1.6.2",
     "flowbite": "^1.5.5",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",

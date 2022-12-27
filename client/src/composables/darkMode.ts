@@ -7,12 +7,12 @@ export function useDarkMode() {
   };
 
   watch(isDarkMode, (isDarkMode) => {
-    const app = document.getElementById("app");
+    const html = document.querySelectorAll("html")[0];
 
     if (isDarkMode) {
-      app?.classList.add("dark");
+      html?.classList.add("dark");
     } else {
-      app?.classList.remove("dark");
+      html?.classList.remove("dark");
     }
   });
 

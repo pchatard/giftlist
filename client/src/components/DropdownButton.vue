@@ -17,11 +17,16 @@ export interface DropdownButtonEmits {
 }
 
 defineProps<DropdownButtonProps>();
-defineEmits<DropdownButtonEmits>();
+const emit = defineEmits<DropdownButtonEmits>();
 
 const isDropdownMenuOpened = ref(false);
 const toggleDropdownMenu = () => {
   isDropdownMenuOpened.value = !isDropdownMenuOpened.value;
+};
+
+const handleOptionClick = (option: DropdownButtonOption) => {
+  emit("select", option);
+  toggleDropdownMenu();
 };
 </script>
 
@@ -65,7 +70,7 @@ const toggleDropdownMenu = () => {
           v-for="option in options"
           :key="option.name"
           class="block py-2 px-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-          @click="$emit('select', option)"
+          @click="handleOptionClick(option)"
         >
           {{ option.name }}
         </li>

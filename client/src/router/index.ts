@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import HomeView from "@/views/HomeView.vue";
 import AppView from "@/views/AppView.vue";
-import MyListsView from "@/views/MyListsView.vue";
-import SharedListsView from "@/views/SharedListsView.vue";
+import HomeView from "@/views/HomeView.vue";
 import MyGiftsViewVue from "@/views/MyGiftsView.vue";
+import MyListsView from "@/views/MyListsView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import SettingsView from "@/views/SettingsView.vue";
+import SharedListsView from "@/views/SharedListsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
