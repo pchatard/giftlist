@@ -8,6 +8,8 @@ import {
   UsersIcon,
   NoSymbolIcon,
   PlusSmallIcon,
+  TrashIcon,
+  PencilIcon,
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
 import { useRouter } from "vue-router";
@@ -25,7 +27,7 @@ const listTableHeaders = [
   { name: "Statut", isMobile: true },
   { name: "Propriétaire(s)", isMobile: false },
   { name: "Date d'échéance", isMobile: false },
-  { name: "Actions", isMobile: false },
+  { name: "Actions", isMobile: true },
 ];
 
 const handleTableHeaderClick = (
@@ -126,7 +128,22 @@ const handleListClick = (listId: string) => {
             <td class="py-4 px-6 hidden md:table-cell">
               {{ list.closureDate }}
             </td>
-            <td class="py-4 px-6 hidden md:table-cell">Actions</td>
+            <td class="py-4 px-6">
+              <button
+                type="button"
+                class="text-blue-600 hover:bg-blue-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-blue-300 dark:hover:bg-blue-900 dark:focus:ring-blue-800"
+              >
+                <PencilIcon class="w-5" />
+                <span class="hidden lg:inline lg:ml-2">Modifier</span>
+              </button>
+              <button
+                type="button"
+                class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+              >
+                <TrashIcon class="w-5" />
+                <span class="hidden lg:inline lg:ml-2">Supprimer</span>
+              </button>
+            </td>
           </tr>
           <tr
             class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"

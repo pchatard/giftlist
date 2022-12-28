@@ -71,7 +71,6 @@ onMounted(() => {
     const mobileMenu = document.querySelectorAll("header nav")[0];
 
     if (e.target instanceof Node && !mobileMenu?.contains(e.target)) {
-      console.log("test");
       isMobileMenuOpened.value = false;
     }
   };
