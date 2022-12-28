@@ -2,12 +2,17 @@
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { ChevronRightIcon } from "@heroicons/vue/20/solid";
 import { HomeIcon } from "@heroicons/vue/24/outline";
-import { ref, watch } from "vue";
+import { inject, ref, watch } from "vue";
+import { currentRouteNameInjectionKey } from "@/injectionSymbols";
+import type { CurrentRouteNameData } from "@/types";
 
 const breadcrumbItems = ref<string[]>([]);
 
 const route = useRoute();
 const router = useRouter();
+const { currentRouteName } = inject(
+  currentRouteNameInjectionKey
+) as CurrentRouteNameData;
 
 watch(route, (routeNew) => {
   let routeParts = routeNew.fullPath.split("/");
@@ -18,6 +23,12 @@ watch(route, (routeNew) => {
     (_part, i, arr) => "/app" + arr.slice(0, i == 0 ? 1 : i + 1).join("")
   );
 });
+
+const getCurrentRoute = (routePart: string) => {
+  return router.getRoutes().find((route) => {
+    return route.path == routePart;
+  })?.name;
+};
 </script>
 
 <template>
@@ -39,14 +50,14 @@ watch(route, (routeNew) => {
             v-if="index == breadcrumbItems.length - 1"
             class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
           >
-            {{ route.name }}
+            {{ route.name ?? currentRouteName }}
           </span>
           <RouterLink
             v-else
             :to="item"
             class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white"
           >
-            {{ router.getRoutes().find((route) => route.path == item)?.name }}
+            {{ getCurrentRoute(item) }}
           </RouterLink>
         </div>
       </li>

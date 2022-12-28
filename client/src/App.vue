@@ -2,17 +2,27 @@
 import { provide } from "vue";
 import { RouterView } from "vue-router";
 import { useDarkMode } from "./composables/darkMode";
-import { userInjectionKey, darkModeInjectionKey } from "./injectionSymbols";
+import {
+  userInjectionKey,
+  darkModeInjectionKey,
+  currentRouteNameInjectionKey,
+} from "./injectionSymbols";
 
 import GiftlistHeader from "./components/GiftlistHeader.vue";
 import BreadcrumbNavigation from "./components/BreadcrumbNavigation.vue";
 import { useLogin } from "./composables/login";
+import { useCurrentRouteName } from "./composables/currentRouteName";
 
 const { isLoggedIn, setIsLoggedIn } = useLogin();
 const { isDarkMode, setIsDarkMode } = useDarkMode();
+const { currentRouteName, setCurrentRouteName } = useCurrentRouteName();
 
 provide(userInjectionKey, { isLoggedIn, setIsLoggedIn });
 provide(darkModeInjectionKey, { isDarkMode, setIsDarkMode });
+provide(currentRouteNameInjectionKey, {
+  currentRouteName,
+  setCurrentRouteName,
+});
 </script>
 
 <template>
