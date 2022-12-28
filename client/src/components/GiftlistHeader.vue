@@ -107,9 +107,9 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
           <HamburgerButton v-if="isLoggedIn" @click="toggleMobileMenu" />
         </div>
         <div
+          id="mobile-menu-2"
           class="justify-between items-center w-full mt-2 lg:m-0 lg:flex lg:w-auto lg:order-1 rounded-lg"
           :class="isMobileMenuOpened ? '' : 'hidden'"
-          id="mobile-menu-2"
           @click="toggleMobileMenu"
         >
           <ul
