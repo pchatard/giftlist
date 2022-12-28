@@ -8,6 +8,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import SharedListsView from "@/views/SharedListsView.vue";
 import ListView from "@/views/ListView.vue";
+import SharedListView from "@/views/SharedListView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,16 +46,15 @@ const router = createRouter({
     },
     {
       path: "/app/shared",
-      name: "Listes partagées avec moi",
+      name: "Listes partagées",
       component: SharedListsView,
       meta: {
         isHeaderLink: true,
       },
     },
     {
-      path: "/app/shared/:id",
-      name: "Liste partagée",
-      component: ListView,
+      path: "/app/shared/:listId",
+      component: SharedListView,
       meta: {
         isHeaderLink: false,
       },

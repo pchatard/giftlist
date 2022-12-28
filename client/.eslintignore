@@ -6,3 +6,5 @@ tsconfig.json
 tsconfig.vitest.json
 vite.config.ts
 .gitignore
+node_modules/
+dist/

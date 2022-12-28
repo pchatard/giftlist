@@ -2,7 +2,7 @@
 import type { HeaderLinks } from "@/types";
 import { userInjectionKey } from "@/injectionSymbols";
 import type { UserInjectionData } from "@/types/users";
-import { ref, inject, computed } from "vue";
+import { ref, inject, computed, onMounted, onUnmounted } from "vue";
 
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import HamburgerButton from "./HamburgerButton.vue";
@@ -64,6 +64,23 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
     router.push(selectedOption.path);
   }
 };
+let eventListenerCloseFunction: (e: MouseEvent) => void;
+
+onMounted(() => {
+  eventListenerCloseFunction = (e) => {
+    const mobileMenu = document.querySelectorAll("header nav")[0];
+
+    if (e.target instanceof Node && !mobileMenu?.contains(e.target)) {
+      console.log("test");
+      isMobileMenuOpened.value = false;
+    }
+  };
+
+  document.addEventListener("click", eventListenerCloseFunction);
+});
+onUnmounted(() => {
+  document.removeEventListener("click", eventListenerCloseFunction);
+});
 </script>
 
 <template>
@@ -107,9 +124,9 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
           <HamburgerButton v-if="isLoggedIn" @click="toggleMobileMenu" />
         </div>
         <div
+          id="mobile-menu-2"
           class="justify-between items-center w-full mt-2 lg:m-0 lg:flex lg:w-auto lg:order-1 rounded-lg"
           :class="isMobileMenuOpened ? '' : 'hidden'"
-          id="mobile-menu-2"
           @click="toggleMobileMenu"
         >
           <ul
