@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import PageHeading from "@/components/PageHeading.vue";
+</script>
+
 <template>
-  <h1>Mon compte</h1>
+  <PageHeading>Mon compte</PageHeading>
 </template>

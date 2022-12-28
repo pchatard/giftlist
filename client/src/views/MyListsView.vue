@@ -9,6 +9,7 @@ import {
   NoSymbolIcon,
   PlusSmallIcon,
 } from "@heroicons/vue/24/outline";
+import PageHeading from "@/components/PageHeading.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -20,7 +21,7 @@ const sorting = reactive({
 });
 
 const listTableHeaders = [
-  { name: "Nom de la liste", isMobile: true },
+  { name: "Liste", isMobile: true },
   { name: "Statut", isMobile: true },
   { name: "Propriétaire(s)", isMobile: false },
   { name: "Date d'échéance", isMobile: false },
@@ -48,7 +49,7 @@ const handleListClick = (listId: string) => {
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold dark:text-white mb-4">Mes listes</h1>
+    <PageHeading>Mes listes</PageHeading>
 
     <div class="overflow-x-auto relative rounded-lg">
       <table

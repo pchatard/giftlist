@@ -70,6 +70,7 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
   <header>
     <nav
       class="bg-white px-4 py-2.5 dark:bg-gray-800 w-full fixed top-0 z-20 left-0 border-b border-gray-200 dark:border-gray-600"
+      :class="[isMobileMenuOpened ? 'shadow-lg' : 'shadow-none']"
     >
       <div
         class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"

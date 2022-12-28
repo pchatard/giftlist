@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import PageHeading from "@/components/PageHeading.vue";
+</script>
+
 <template>
-  <h1>Paramètres</h1>
+  <PageHeading>Paramètres</PageHeading>
 </template>

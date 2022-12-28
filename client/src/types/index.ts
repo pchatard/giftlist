@@ -5,6 +5,11 @@ export interface DarkModeData {
   setIsDarkMode: () => void;
 }
 
+export interface CurrentRouteNameData {
+  currentRouteName: Ref<string>;
+  setCurrentRouteName: (a: string) => void;
+}
+
 export interface HeaderLinks {
   path: string;
   name: string;

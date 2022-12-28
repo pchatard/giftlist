@@ -38,7 +38,6 @@ const router = createRouter({
     },
     {
       path: "/app/lists/:listId",
-      name: "Ma liste",
       component: ListView,
       meta: {
         isHeaderLink: false,

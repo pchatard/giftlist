@@ -13,3 +13,19 @@ export interface List {
   ownersDTO?: UserName[];
   grantedUsersDTO?: UserName[];
 }
+
+export interface Gift {
+  id: string;
+  title: string;
+  isBooked?: boolean;
+  isFavorite: boolean;
+  isHidden: boolean;
+  category: string;
+  listId: string;
+  price?: number;
+  linkURL?: string;
+  brand?: string;
+  size?: string;
+  color?: string;
+  comments?: string;
+}

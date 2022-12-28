@@ -7,6 +7,7 @@ import {
   ArrowSmallUpIcon,
   PlusSmallIcon,
 } from "@heroicons/vue/24/outline";
+import PageHeading from "@/components/PageHeading.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -18,7 +19,7 @@ const sorting = reactive({
 });
 
 const listTableHeaders = [
-  { name: "Nom de la liste", isMobile: true },
+  { name: "Liste", isMobile: true },
   { name: "Propriétaire(s)", isMobile: true },
   { name: "Date d'échéance", isMobile: false },
   { name: "Actions", isMobile: false },
@@ -45,9 +46,7 @@ const handleListClick = (listId: string) => {
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold dark:text-white mb-4">
-      Listes partagées avec moi
-    </h1>
+    <PageHeading>Listes partagées avec moi</PageHeading>
 
     <div class="overflow-x-auto relative rounded-lg">
       <table

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import PageHeading from "@/components/PageHeading.vue";
+</script>
+
 <template>
-  <h1>Mes cadeaux</h1>
+  <PageHeading>Mes cadeaux</PageHeading>
 </template>
