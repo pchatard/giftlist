@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 export interface DropdownButtonOption {
   name: string;
@@ -29,14 +29,22 @@ const handleOptionClick = (option: DropdownButtonOption) => {
   toggleDropdownMenu();
 };
 
+let eventListenerCloseFunction: (e: MouseEvent) => void;
+
 onMounted(() => {
-  document.addEventListener("click", (e) => {
+  eventListenerCloseFunction = (e) => {
     const button = document.getElementById("dropdown-button-giftlist");
 
     if (e.target !== button) {
       isDropdownMenuOpened.value = false;
     }
-  });
+  };
+
+  document.addEventListener("click", eventListenerCloseFunction);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", eventListenerCloseFunction);
 });
 </script>
 
