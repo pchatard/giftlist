@@ -130,7 +130,7 @@ onUnmounted(() => {
               >
                 <HeartIconSolid
                   v-if="gift.isFavorite"
-                  class="w-4 md:w-5 absolute top-0 left-0 -translate-x-2/3 -translate-y-2/3 -rotate-12 text-red-600"
+                  class="w-4 md:w-5 absolute top-0 left-0 -translate-x-2/3 -translate-y-2/3 -rotate-12 text-red-600 dark:text-red-900"
                 />
                 {{ gift.title }}
               </div>
@@ -152,7 +152,7 @@ onUnmounted(() => {
               </div>
               <div
                 v-else
-                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900"
+                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
               >
                 <CheckIcon class="w-4 mr-2" />
                 <span>Disponible</span>
@@ -167,7 +167,7 @@ onUnmounted(() => {
             <td class="py-4 px-3 md:px-6">
               <button
                 type="button"
-                class="text-blue-600 hover:bg-blue-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-blue-300 dark:hover:bg-blue-900 dark:focus:ring-blue-800"
+                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
               >
                 <TicketIcon class="w-5" />
                 <span class="hidden md:inline md:ml-2">Réserver</span>

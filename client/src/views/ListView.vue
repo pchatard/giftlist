@@ -128,8 +128,11 @@ onUnmounted(() => {
             @click="handleGiftClick(gift.id)"
           >
             <td class="py-4 px-3 md:px-6">
-              <HeartIconSolid v-if="gift.isFavorite" class="w-5 text-red-600" />
-              <HeartIcon v-else class="w-5 text-red-600" />
+              <HeartIconSolid
+                v-if="gift.isFavorite"
+                class="w-5 text-red-600 dark:text-red-300"
+              />
+              <HeartIcon v-else class="w-5 text-red-600 dark:text-red-300" />
             </td>
             <td class="py-4 px-3 md:px-6 hidden md:table-cell">
               <EyeSlashIcon v-if="gift.isHidden" class="w-5" />
@@ -154,7 +157,7 @@ onUnmounted(() => {
             <td class="py-4 px-3 md:px-6">
               <button
                 type="button"
-                class="text-blue-600 hover:bg-blue-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-blue-300 dark:hover:bg-blue-900 dark:focus:ring-blue-800"
+                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
               >
                 <PencilIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Modifier</span>
