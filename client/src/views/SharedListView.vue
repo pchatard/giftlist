@@ -11,6 +11,9 @@ import type { List, Gift } from "@/types/giftlist";
 import {
   ArrowSmallDownIcon,
   ArrowSmallUpIcon,
+  TicketIcon,
+  NoSymbolIcon,
+  CheckIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
@@ -29,9 +32,9 @@ const sorting = reactive({
 });
 
 const tableHeaders = [
-  { name: "", isMobile: true },
   { name: "Cadeau", isMobile: true },
-  { name: "Prix", isMobile: true },
+  { name: "Prix", isMobile: false },
+  { name: "Statut", isMobile: true },
   { name: "Marque", isMobile: false },
   { name: "Taille", isMobile: false },
   { name: "Actions", isMobile: true },
@@ -121,18 +124,39 @@ onUnmounted(() => {
             :class="[gift.isHidden ? 'hidden' : '']"
             @click="handleGiftClick(gift.id)"
           >
-            <td class="py-4 px-3 md:px-6">
-              <HeartIconSolid v-if="gift.isFavorite" class="w-5 text-red-600" />
-            </td>
-            <th scope="row" class="py-4 px-3 md:px-6 flex flex-col">
-              <span
-                class="font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >{{ gift.title }}</span
+            <th scope="row" class="py-4 px-3 md:px-6">
+              <div
+                class="relative font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
-              <span class="font-normal text-xs">{{ gift.category }}</span>
+                <HeartIconSolid
+                  v-if="gift.isFavorite"
+                  class="w-4 md:w-5 absolute top-0 left-0 -translate-x-2/3 -translate-y-2/3 -rotate-12 text-red-600 dark:text-red-900"
+                />
+                {{ gift.title }}
+              </div>
+              <div class="font-normal text-xs">{{ gift.category }}</div>
             </th>
-            <td class="py-4 px-3 md:px-6">
+            <td class="py-4 px-3 md:px-6 hidden md:table-cell">
               {{ gift.price?.toFixed(2) ?? "-" }} €
+            </td>
+            <td class="py-4 px-3 md:px-6">
+              <div class="mb-1 md:hidden">
+                {{ gift.price?.toFixed(2) ?? "-" }} €
+              </div>
+              <div
+                v-if="gift.isBooked"
+                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+              >
+                <NoSymbolIcon class="w-4 mr-2" />
+                <span>Réservé</span>
+              </div>
+              <div
+                v-else
+                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
+              >
+                <CheckIcon class="w-4 mr-2" />
+                <span>Disponible</span>
+              </div>
             </td>
             <td class="py-4 px-3 md:px-6 hidden md:table-cell">
               {{ gift.brand ?? "-" }}
@@ -140,7 +164,15 @@ onUnmounted(() => {
             <td class="py-4 px-3 md:px-6 hidden md:table-cell">
               {{ gift.size ?? "-" }}
             </td>
-            <td class="py-4 px-3 md:px-6">Actions</td>
+            <td class="py-4 px-3 md:px-6">
+              <button
+                type="button"
+                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+              >
+                <TicketIcon class="w-5" />
+                <span class="hidden md:inline md:ml-2">Réserver</span>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

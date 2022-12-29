@@ -6,6 +6,7 @@ import {
   ArrowSmallDownIcon,
   ArrowSmallUpIcon,
   PlusSmallIcon,
+  TrashIcon,
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
 import { useRouter } from "vue-router";
@@ -20,9 +21,9 @@ const sorting = reactive({
 
 const listTableHeaders = [
   { name: "Liste", isMobile: true },
-  { name: "Propriétaire(s)", isMobile: true },
+  { name: "Propriétaire(s)", isMobile: false },
   { name: "Date d'échéance", isMobile: false },
-  { name: "Actions", isMobile: false },
+  { name: "Actions", isMobile: true },
 ];
 
 const handleTableHeaderClick = (
@@ -95,19 +96,31 @@ const handleListClick = (listId: string) => {
             class="bg-white cursor-pointer dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             @click="handleListClick(list.id)"
           >
-            <th
-              scope="row"
-              class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {{ list.title }}
+            <th scope="row" class="py-4 px-6">
+              <div
+                class="font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ list.title }}
+              </div>
+              <div class="font-normal md:hidden">
+                {{ list.ownersDTO ?? "Copain" }}
+              </div>
             </th>
-            <td class="py-4 px-6">
+            <td class="py-4 px-6 hidden md:table-cell">
               {{ list.ownersDTO ?? "Copain" }}
             </td>
             <td class="py-4 px-6 hidden md:table-cell">
               {{ list.closureDate }}
             </td>
-            <td class="py-4 px-6 hidden md:table-cell">Actions</td>
+            <td class="py-4 px-6">
+              <button
+                type="button"
+                class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+              >
+                <TrashIcon class="w-4" />
+                <span class="hidden lg:inline lg:ml-2">Supprimer</span>
+              </button>
+            </td>
           </tr>
           <tr
             class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"

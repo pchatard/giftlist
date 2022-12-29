@@ -5,7 +5,7 @@ import PageHeading from "@/components/PageHeading.vue";
 <template>
   <div>
     <PageHeading>Home</PageHeading>
-    <div>
+    <div class="flex flex-col">
       <RouterLink
         to="/app/lists"
         class="font-medium text-blue-600 dark:text-blue-500 hover:underline"

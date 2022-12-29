@@ -15,6 +15,8 @@ import {
   HeartIcon,
   EyeIcon,
   EyeSlashIcon,
+  TrashIcon,
+  PencilIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
@@ -126,8 +128,11 @@ onUnmounted(() => {
             @click="handleGiftClick(gift.id)"
           >
             <td class="py-4 px-3 md:px-6">
-              <HeartIconSolid v-if="gift.isFavorite" class="w-5 text-red-600" />
-              <HeartIcon v-else class="w-5 text-red-600" />
+              <HeartIconSolid
+                v-if="gift.isFavorite"
+                class="w-5 text-red-600 dark:text-red-300"
+              />
+              <HeartIcon v-else class="w-5 text-red-600 dark:text-red-300" />
             </td>
             <td class="py-4 px-3 md:px-6 hidden md:table-cell">
               <EyeSlashIcon v-if="gift.isHidden" class="w-5" />
@@ -149,7 +154,22 @@ onUnmounted(() => {
             <td class="py-4 px-3 md:px-6 hidden md:table-cell">
               {{ gift.size ?? "-" }}
             </td>
-            <td class="py-4 px-3 md:px-6">Actions</td>
+            <td class="py-4 px-3 md:px-6">
+              <button
+                type="button"
+                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+              >
+                <PencilIcon class="w-5" />
+                <span class="hidden lg:inline lg:ml-2">Modifier</span>
+              </button>
+              <button
+                type="button"
+                class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+              >
+                <TrashIcon class="w-5" />
+                <span class="hidden lg:inline lg:ml-2">Supprimer</span>
+              </button>
+            </td>
           </tr>
           <tr
             class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
