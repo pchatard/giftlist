@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import type { List } from "@/types/giftlist";
 import { lists as listsData } from "@/data/lists";
 import {
@@ -12,9 +12,11 @@ import {
   PencilIcon,
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
-import { useRouter } from "vue-router";
+import NewListModal from "@/components/NewListModal.vue";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 
 const lists = ref<List[]>(listsData);
 const sorting = reactive({
@@ -24,7 +26,7 @@ const sorting = reactive({
 
 const listTableHeaders = [
   { name: "Liste", isMobile: true },
-  { name: "Statut", isMobile: true },
+  { name: "Statut", isMobile: false },
   { name: "Propriétaire(s)", isMobile: false },
   { name: "Date d'échéance", isMobile: false },
   { name: "Actions", isMobile: true },
@@ -47,11 +49,29 @@ const handleTableHeaderClick = (
 const handleListClick = (listId: string) => {
   router.push("/app/lists/" + listId);
 };
+
+const isNewListModalOpen = ref(route.fullPath.endsWith("/new"));
+
+watch(route, (currentRoute) => {
+  isNewListModalOpen.value = currentRoute.fullPath.endsWith("/new");
+});
+
+const handleNewListSubmit = () => {
+  router.push("/app/lists");
+};
 </script>
 
 <template>
   <div>
     <PageHeading>Mes listes</PageHeading>
+
+    <Teleport to="body">
+      <NewListModal
+        v-show="isNewListModalOpen"
+        @close="router.push('/app/lists')"
+        @submit="handleNewListSubmit"
+      />
+    </Teleport>
 
     <div class="overflow-x-auto relative rounded-lg">
       <table
@@ -100,13 +120,30 @@ const handleListClick = (listId: string) => {
             class="bg-white cursor-pointer dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             @click="handleListClick(list.id)"
           >
-            <th
-              scope="row"
-              class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              {{ list.title }}
+            <th scope="row" class="py-4 px-6">
+              <div
+                class="font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ list.title }}
+              </div>
+              <div class="mt-1 -ml-1 font-normal md:hidden">
+                <div
+                  v-if="list.isShared"
+                  class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
+                >
+                  <UsersIcon class="w-4 mr-2" />
+                  <span>Partagée</span>
+                </div>
+                <div
+                  v-else
+                  class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+                >
+                  <NoSymbolIcon class="w-4 mr-2" />
+                  <span>Privée</span>
+                </div>
+              </div>
             </th>
-            <td class="py-4 px-6">
+            <td class="py-4 px-6 hidden md:table-cell">
               <div
                 v-if="list.isShared"
                 class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
@@ -148,7 +185,11 @@ const handleListClick = (listId: string) => {
           <tr
             class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
           >
-            <td colspan="100%" class="py-4 px-6">
+            <td
+              colspan="100%"
+              class="py-4 px-6 cursor-pointer"
+              @click="router.push('/app/lists/new')"
+            >
               <div class="flex items-center justify-center">
                 <PlusSmallIcon class="w-4 mr-2" />
                 <span>Nouvelle liste</span>
