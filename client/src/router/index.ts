@@ -61,6 +61,14 @@ const router = createRouter({
       },
     },
     {
+      path: "/app/shared/new",
+      name: "Code de partage",
+      component: SharedListsView,
+      meta: {
+        isHeaderLink: false,
+      },
+    },
+    {
       path: "/app/shared/:listId",
       component: SharedListView,
       meta: {

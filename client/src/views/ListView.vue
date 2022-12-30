@@ -138,12 +138,13 @@ onUnmounted(() => {
               <EyeSlashIcon v-if="gift.isHidden" class="w-5" />
               <EyeIcon v-else class="w-5" />
             </td>
-            <th scope="row" class="py-4 px-3 md:px-6 flex flex-col">
-              <span
+            <th scope="row" class="py-4 px-3 md:px-6 w-full md:w-auto">
+              <div
                 class="font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >{{ gift.title }}</span
               >
-              <span class="font-normal text-xs">{{ gift.category }}</span>
+                {{ gift.title }}
+              </div>
+              <div class="font-normal text-xs">{{ gift.category }}</div>
             </th>
             <td class="py-4 px-3 md:px-6">
               {{ gift.price?.toFixed(2) ?? "-" }} €

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import type { List } from "@/types/giftlist";
 import { sharedLists as sharedListsData } from "@/data/lists";
 import {
@@ -9,9 +9,11 @@ import {
   TrashIcon,
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
-import { useRouter } from "vue-router";
+import NewSharedListModal from "@/components/NewSharedListModal.vue";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 
 const sharedLists = ref<List[]>(sharedListsData);
 const sorting = reactive({
@@ -43,11 +45,40 @@ const handleTableHeaderClick = (
 const handleListClick = (listId: string) => {
   router.push("/app/shared/" + listId);
 };
+
+const isNewSharedListModalOpen = ref(route.fullPath.endsWith("/shared/new"));
+
+watch(route, (currentRoute) => {
+  isNewSharedListModalOpen.value =
+    currentRoute.fullPath.endsWith("/shared/new");
+});
+
+const handleNewSharedListSubmit = () => {
+  router.push("/app/shared");
+};
 </script>
 
 <template>
   <div>
-    <PageHeading>Listes partagées avec moi</PageHeading>
+    <div class="flex justify-between items-center mb-4">
+      <PageHeading class="mb-0">Listes partagées</PageHeading>
+      <button
+        type="button"
+        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        @click="router.push('/app/shared/new')"
+      >
+        Code
+        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
+      </button>
+    </div>
+
+    <Teleport to="body">
+      <NewSharedListModal
+        v-show="isNewSharedListModalOpen"
+        @close="router.push('/app/shared')"
+        @submit="handleNewSharedListSubmit"
+      />
+    </Teleport>
 
     <div class="overflow-x-auto relative rounded-lg">
       <table
@@ -96,7 +127,7 @@ const handleListClick = (listId: string) => {
             class="bg-white cursor-pointer dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             @click="handleListClick(list.id)"
           >
-            <th scope="row" class="py-4 px-6">
+            <th scope="row" class="py-4 px-6 w-full md:w-auto">
               <div
                 class="font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
@@ -125,7 +156,11 @@ const handleListClick = (listId: string) => {
           <tr
             class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
           >
-            <td colspan="100%" class="py-4 px-6">
+            <td
+              colspan="100%"
+              class="py-4 px-6 cursor-pointer"
+              @click="router.push('/app/shared/new')"
+            >
               <div class="flex items-center justify-center">
                 <PlusSmallIcon class="w-4 mr-2" />
                 <span>Entrer un code de partage</span>
