@@ -124,7 +124,7 @@ onUnmounted(() => {
             :class="[gift.isHidden ? 'hidden' : '']"
             @click="handleGiftClick(gift.id)"
           >
-            <th scope="row" class="py-4 px-3 md:px-6">
+            <th scope="row" class="py-4 px-3 md:px-6 w-full md:w-auto">
               <div
                 class="relative font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
