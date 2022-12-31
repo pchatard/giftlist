@@ -53,6 +53,14 @@ const router = createRouter({
       },
     },
     {
+      path: "/app/lists/:listId/gift/new",
+      name: "Nouveau cadeau",
+      component: ListView,
+      meta: {
+        isHeaderLink: false,
+      },
+    },
+    {
       path: "/app/shared",
       name: "Listes partagées",
       component: SharedListsView,

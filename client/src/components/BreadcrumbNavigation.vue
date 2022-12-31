@@ -19,15 +19,17 @@ watch(route, (routeNew) => {
   routeParts = routeParts
     .filter((route) => route !== "" && route !== "app")
     .map((pathPart) => `/${pathPart}`);
-  breadcrumbItems.value = routeParts.map(
-    (_part, i, arr) => "/app" + arr.slice(0, i == 0 ? 1 : i + 1).join("")
-  );
+  breadcrumbItems.value = routeParts
+    .map((_part, i, arr) => "/app" + arr.slice(0, i == 0 ? 1 : i + 1).join(""))
+    .filter((routePart) => !routePart.endsWith("/gift"));
 });
 
 const getCurrentRoute = (routePart: string) => {
-  return router.getRoutes().find((route) => {
+  const routeNameFromRouter = router.getRoutes().find((route) => {
     return route.path == routePart;
   })?.name;
+
+  return routeNameFromRouter ?? currentRouteName.value;
 };
 </script>
 
@@ -39,7 +41,7 @@ const getCurrentRoute = (routePart: string) => {
           to="/app"
           class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
-          <HomeIcon class="w-4 mr-2" />
+          <HomeIcon class="w-4 mr1 md:mr-2" />
           Accueil
         </RouterLink>
       </li>

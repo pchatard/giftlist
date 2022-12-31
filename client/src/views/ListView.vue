@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, inject, onUnmounted, reactive } from "vue";
+import { onMounted, ref, inject, onUnmounted, reactive, watch } from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
+import NewGiftModal from "@/components/NewGiftModal.vue";
 import { lists } from "@/data/lists";
 import { gifts as giftsData } from "@/data/gifts";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { currentRouteNameInjectionKey } from "@/injectionSymbols";
 import type { CurrentRouteNameData } from "@/types";
 import type { List, Gift } from "@/types/giftlist";
@@ -21,6 +22,8 @@ import {
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
 const isOwner = ref(true);
+
+const router = useRouter();
 const route = useRoute();
 const { setCurrentRouteName } = inject(
   currentRouteNameInjectionKey
@@ -60,6 +63,17 @@ const handleTableHeaderClick = (
 
 const handleGiftClick = (giftId: string) => {
   //router.push("/app/lists/" + listId);
+  console.log(giftId);
+};
+
+const isNewGiftModalOpen = ref(route.fullPath.endsWith("/gift/new"));
+
+watch(route, (currentRoute) => {
+  isNewGiftModalOpen.value = currentRoute.fullPath.endsWith("/gift/new");
+});
+
+const handleNewGiftSubmit = () => {
+  router.push("/app/lists/" + list.value?.id);
 };
 
 onMounted(() => {
@@ -75,7 +89,26 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <PageHeading>{{ list?.title }}</PageHeading>
+    <div class="flex justify-between items-center mb-4">
+      <PageHeading class="mb-0">{{ list?.title }}</PageHeading>
+      <button
+        type="button"
+        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        @click="router.push('/app/lists/' + list?.id + '/gift/new')"
+      >
+        Nouveau cadeau
+
+        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
+      </button>
+    </div>
+
+    <Teleport to="body">
+      <NewGiftModal
+        v-show="isNewGiftModalOpen"
+        @close="router.push('/app/lists/' + list?.id)"
+        @submit="handleNewGiftSubmit"
+      />
+    </Teleport>
 
     <div class="overflow-x-auto relative rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -173,7 +206,8 @@ onUnmounted(() => {
             </td>
           </tr>
           <tr
-            class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
+            class="bg-white border-b cursor-pointer dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
+            @click="router.push('/app/lists/' + list?.id + '/gift/new')"
           >
             <td colspan="100%" class="py-4 px-3 md:px-6">
               <div class="flex items-center justify-center">
