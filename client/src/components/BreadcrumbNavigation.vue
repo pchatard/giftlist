@@ -1,36 +1,14 @@
 <script setup lang="ts">
-import { RouterLink, useRoute, useRouter } from "vue-router";
+import { RouterLink } from "vue-router";
 import { ChevronRightIcon } from "@heroicons/vue/20/solid";
 import { HomeIcon } from "@heroicons/vue/24/outline";
-import { inject, ref, watch } from "vue";
-import { currentRouteNameInjectionKey } from "@/injectionSymbols";
-import type { CurrentRouteNameData } from "@/types";
+import { inject } from "vue";
+import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import type { BreadcrumbContentData } from "@/types";
 
-const breadcrumbItems = ref<string[]>([]);
-
-const route = useRoute();
-const router = useRouter();
-const { currentRouteName } = inject(
-  currentRouteNameInjectionKey
-) as CurrentRouteNameData;
-
-watch(route, (routeNew) => {
-  let routeParts = routeNew.fullPath.split("/");
-  routeParts = routeParts
-    .filter((route) => route !== "" && route !== "app")
-    .map((pathPart) => `/${pathPart}`);
-  breadcrumbItems.value = routeParts
-    .map((_part, i, arr) => "/app" + arr.slice(0, i == 0 ? 1 : i + 1).join(""))
-    .filter((routePart) => !routePart.endsWith("/gift"));
-});
-
-const getCurrentRoute = (routePart: string) => {
-  const routeNameFromRouter = router.getRoutes().find((route) => {
-    return route.path == routePart;
-  })?.name;
-
-  return routeNameFromRouter ?? currentRouteName.value;
-};
+const { breadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
 </script>
 
 <template>
@@ -41,25 +19,26 @@ const getCurrentRoute = (routePart: string) => {
           to="/app"
           class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
-          <HomeIcon class="w-4 mr1 md:mr-2" />
-          Accueil
+          <HomeIcon class="w-4 mr-1 md:mr-2" />
+          <span v-show="breadcrumbContent.length < 4">Accueil</span>
         </RouterLink>
       </li>
-      <li v-for="(item, index) in breadcrumbItems" :key="item">
+
+      <li v-for="({ name, path }, index) in breadcrumbContent" :key="name">
         <div class="flex items-center">
           <ChevronRightIcon class="w-4 text-gray-500 dark:text-gray-400" />
           <span
-            v-if="index == breadcrumbItems.length - 1"
+            v-if="index == breadcrumbContent.length - 1"
             class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
           >
-            {{ route.name ?? currentRouteName }}
+            {{ name }}
           </span>
           <RouterLink
             v-else
-            :to="item"
+            :to="path ?? ''"
             class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white"
           >
-            {{ getCurrentRoute(item) }}
+            {{ name }}
           </RouterLink>
         </div>
       </li>

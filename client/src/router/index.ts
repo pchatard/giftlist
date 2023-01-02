@@ -9,6 +9,7 @@ import SettingsView from "@/views/SettingsView.vue";
 import SharedListsView from "@/views/SharedListsView.vue";
 import ListView from "@/views/ListView.vue";
 import SharedListView from "@/views/SharedListView.vue";
+import GiftView from "@/views/GiftView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,21 @@ const router = createRouter({
     {
       path: "/app/lists/:listId/gift/new",
       name: "Nouveau cadeau",
+      component: ListView,
+      meta: {
+        isHeaderLink: false,
+      },
+    },
+    {
+      path: "/app/lists/:listId/gift/:giftId",
+      component: GiftView,
+      meta: {
+        isHeaderLink: false,
+      },
+    },
+    {
+      path: "/app/lists/:listId/gift/:giftId/edit",
+      name: "Modifier un cadeau",
       component: ListView,
       meta: {
         isHeaderLink: false,

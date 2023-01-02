@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { XMarkIcon, ArrowRightIcon } from "@heroicons/vue/24/outline";
-import { ref } from "vue";
+import { useRoute } from "vue-router";
 
 // export interface NewGiftModalProps {
 //   list:
@@ -10,6 +10,8 @@ defineEmits<{
   (e: "close"): void;
   (e: "submit"): void;
 }>();
+
+const route = useRoute();
 </script>
 
 <template>
@@ -31,7 +33,8 @@ defineEmits<{
         </button>
         <div class="px-6 py-6 lg:px-8">
           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-            Créer un cadeau
+            {{ route.fullPath.endsWith("/new") ? "Créer" : "Modifier" }} un
+            cadeau
           </h3>
           <form class="space-y-6" action="#">
             <div>

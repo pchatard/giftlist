@@ -1,5 +1,18 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
+
+import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import type { BreadcrumbContentData } from "@/types";
+import { inject, onMounted } from "vue";
+import { RouterLink } from "vue-router";
+
+const { setBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
+
+onMounted(() => {
+  setBreadcrumbContent([]);
+});
 </script>
 
 <template>

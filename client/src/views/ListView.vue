@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref, inject, onUnmounted, reactive, watch } from "vue";
+import { onMounted, ref, inject, reactive, watch } from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
-import NewGiftModal from "@/components/NewGiftModal.vue";
+import GiftModal from "@/components/GiftModal.vue";
 import { lists } from "@/data/lists";
 import { gifts as giftsData } from "@/data/gifts";
 import { useRoute, useRouter } from "vue-router";
-import { currentRouteNameInjectionKey } from "@/injectionSymbols";
-import type { CurrentRouteNameData } from "@/types";
+import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import type { BreadcrumbContentData } from "@/types";
 import type { List, Gift } from "@/types/giftlist";
 import {
   ArrowSmallDownIcon,
@@ -21,13 +21,8 @@ import {
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
-const isOwner = ref(true);
-
 const router = useRouter();
 const route = useRoute();
-const { setCurrentRouteName } = inject(
-  currentRouteNameInjectionKey
-) as CurrentRouteNameData;
 
 const list = ref<List>();
 const gifts = ref<Gift[]>();
@@ -62,28 +57,43 @@ const handleTableHeaderClick = (
 };
 
 const handleGiftClick = (giftId: string) => {
-  //router.push("/app/lists/" + listId);
-  console.log(giftId);
+  router.push(`/app/lists/${list.value?.id}/gift/${giftId}/edit`);
 };
 
 const isNewGiftModalOpen = ref(route.fullPath.endsWith("/gift/new"));
-
-watch(route, (currentRoute) => {
-  isNewGiftModalOpen.value = currentRoute.fullPath.endsWith("/gift/new");
-});
 
 const handleNewGiftSubmit = () => {
   router.push("/app/lists/" + list.value?.id);
 };
 
+const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
+
 onMounted(() => {
   list.value = lists.find((l) => l.id == route.params.listId);
   gifts.value = giftsData.filter((g) => g.listId == route.params.listId);
-  setCurrentRouteName(list.value?.title ?? "Ma liste");
+  setBreadcrumbContent([
+    { name: "Mes listes", path: "/app/lists" },
+    { name: list.value?.title ?? "Ma liste", path: route.fullPath },
+  ]);
 });
 
-onUnmounted(() => {
-  setCurrentRouteName("");
+watch(route, (currentRoute) => {
+  const isNewGiftPage = currentRoute.fullPath.endsWith("/gift/new");
+  const isEditGiftPage = currentRoute.fullPath.endsWith("/edit");
+  isNewGiftModalOpen.value = isNewGiftPage || isEditGiftPage;
+
+  if (isNewGiftPage) {
+    pushBreadcrumbContent({ name: route.name ?? "", path: route.fullPath });
+  } else if (isEditGiftPage) {
+    pushBreadcrumbContent({ name: route.name ?? "", path: route.fullPath });
+  } else {
+    setBreadcrumbContent([
+      { name: "Mes listes", path: "/app/lists" },
+      { name: list.value?.title ?? "Ma liste", path: route.fullPath },
+    ]);
+  }
 });
 </script>
 
@@ -103,7 +113,7 @@ onUnmounted(() => {
     </div>
 
     <Teleport to="body">
-      <NewGiftModal
+      <GiftModal
         v-show="isNewGiftModalOpen"
         @close="router.push('/app/lists/' + list?.id)"
         @submit="handleNewGiftSubmit"
@@ -161,11 +171,8 @@ onUnmounted(() => {
             @click="handleGiftClick(gift.id)"
           >
             <td class="py-4 px-3 md:px-6">
-              <HeartIconSolid
-                v-if="gift.isFavorite"
-                class="w-5 text-red-600 dark:text-red-300"
-              />
-              <HeartIcon v-else class="w-5 text-red-600 dark:text-red-300" />
+              <HeartIconSolid v-if="gift.isFavorite" class="w-5 text-red-600" />
+              <HeartIcon v-else class="w-5 text-red-600" />
             </td>
             <td class="py-4 px-3 md:px-6 hidden md:table-cell">
               <EyeSlashIcon v-if="gift.isHidden" class="w-5" />
@@ -192,6 +199,7 @@ onUnmounted(() => {
               <button
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                @click.stop="handleGiftClick(gift.id)"
               >
                 <PencilIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Modifier</span>
@@ -199,6 +207,7 @@ onUnmounted(() => {
               <button
                 type="button"
                 class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+                @click.stop=""
               >
                 <TrashIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>
