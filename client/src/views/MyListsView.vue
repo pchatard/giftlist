@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, onMounted, inject } from "vue";
 import type { List } from "@/types/giftlist";
 import { lists as listsData } from "@/data/lists";
 import {
@@ -14,6 +14,8 @@ import {
 import PageHeading from "@/components/PageHeading.vue";
 import NewListModal from "@/components/NewListModal.vue";
 import { useRoute, useRouter } from "vue-router";
+import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import type { BreadcrumbContentData } from "@/types";
 
 const router = useRouter();
 const route = useRoute();
@@ -31,6 +33,14 @@ const listTableHeaders = [
   { name: "Date d'échéance", isMobile: false },
   { name: "Actions", isMobile: true },
 ];
+
+const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
+
+onMounted(() => {
+  setBreadcrumbContent([{ name: route.name ?? "", path: route.fullPath }]);
+});
 
 const handleTableHeaderClick = (
   e: Event,
@@ -53,7 +63,14 @@ const handleListClick = (listId: string) => {
 const isNewListModalOpen = ref(route.fullPath.endsWith("/new"));
 
 watch(route, (currentRoute) => {
-  isNewListModalOpen.value = currentRoute.fullPath.endsWith("/new");
+  const isNewListPage = currentRoute.fullPath.endsWith("/new");
+  isNewListModalOpen.value = isNewListPage;
+
+  if (isNewListPage) {
+    pushBreadcrumbContent({ name: route.name ?? "", path: route.fullPath });
+  } else {
+    setBreadcrumbContent([{ name: route.name ?? "", path: route.fullPath }]);
+  }
 });
 
 const handleNewListSubmit = () => {
@@ -180,6 +197,7 @@ const handleNewListSubmit = () => {
               <button
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                @click.stop=""
               >
                 <PencilIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Modifier</span>
@@ -187,6 +205,7 @@ const handleNewListSubmit = () => {
               <button
                 type="button"
                 class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+                @click.stop=""
               >
                 <TrashIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>

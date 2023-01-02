@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, inject, onMounted } from "vue";
 import type { List } from "@/types/giftlist";
 import { sharedLists as sharedListsData } from "@/data/lists";
 import {
@@ -11,6 +11,8 @@ import {
 import PageHeading from "@/components/PageHeading.vue";
 import NewSharedListModal from "@/components/NewSharedListModal.vue";
 import { useRoute, useRouter } from "vue-router";
+import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import type { BreadcrumbContentData } from "@/types";
 
 const router = useRouter();
 const route = useRoute();
@@ -27,6 +29,10 @@ const listTableHeaders = [
   { name: "Date d'échéance", isMobile: false },
   { name: "Actions", isMobile: true },
 ];
+
+const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
 
 const handleTableHeaderClick = (
   e: Event,
@@ -48,14 +54,24 @@ const handleListClick = (listId: string) => {
 
 const isNewSharedListModalOpen = ref(route.fullPath.endsWith("/shared/new"));
 
-watch(route, (currentRoute) => {
-  isNewSharedListModalOpen.value =
-    currentRoute.fullPath.endsWith("/shared/new");
-});
-
 const handleNewSharedListSubmit = () => {
   router.push("/app/shared");
 };
+
+watch(route, (currentRoute) => {
+  const isNewSharedList = currentRoute.fullPath.endsWith("/shared/new");
+  isNewSharedListModalOpen.value = isNewSharedList;
+
+  if (isNewSharedList) {
+    pushBreadcrumbContent({ name: route.name ?? "", path: route.fullPath });
+  } else {
+    setBreadcrumbContent([{ name: route.name ?? "", path: route.fullPath }]);
+  }
+});
+
+onMounted(() => {
+  setBreadcrumbContent([{ name: route.name ?? "", path: route.fullPath }]);
+});
 </script>
 
 <template>
@@ -147,6 +163,7 @@ const handleNewSharedListSubmit = () => {
               <button
                 type="button"
                 class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+                @click.stop=""
               >
                 <TrashIcon class="w-4" />
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>
