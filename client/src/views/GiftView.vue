@@ -32,8 +32,8 @@ onMounted(() => {
     .filter((g) => g.listId == route.params.listId)
     .find((g) => g.id == route.params.giftId);
   setBreadcrumbContent([
-    { name: "Listes partagées", path: "/app/shared" },
-    { name: list.value?.title, path: `/app/shared/${list.value?.id}` },
+    { name: "Listes partagées", path: "/app/lists/shared" },
+    { name: list.value?.title, path: `/app/lists/${list.value?.id}` },
     { name: gift.value?.title ?? "Mon cadeau", path: route.fullPath },
   ]);
 });

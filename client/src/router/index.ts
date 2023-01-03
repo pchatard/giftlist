@@ -6,7 +6,6 @@ import MyGiftsViewVue from "@/views/MyGiftsView.vue";
 import MyListsView from "@/views/MyListsView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import SettingsView from "@/views/SettingsView.vue";
-import SharedListsView from "@/views/SharedListsView.vue";
 import ListView from "@/views/ListView.vue";
 import SharedListView from "@/views/SharedListView.vue";
 import GiftView from "@/views/GiftView.vue";
@@ -36,11 +35,29 @@ const router = createRouter({
       component: MyListsView,
       meta: {
         isHeaderLink: true,
+        headerOrder: 0,
       },
     },
     {
       path: "/app/lists/new",
       name: "Nouvelle liste",
+      component: MyListsView,
+      meta: {
+        isHeaderLink: false,
+      },
+    },
+    {
+      path: "/app/lists/shared",
+      name: "Listes partagées",
+      component: MyListsView,
+      meta: {
+        isHeaderLink: true,
+        headerOrder: 1,
+      },
+    },
+    {
+      path: "/app/lists/shared/new",
+      name: "Code de partage",
       component: MyListsView,
       meta: {
         isHeaderLink: false,
@@ -76,24 +93,9 @@ const router = createRouter({
         isHeaderLink: false,
       },
     },
+
     {
-      path: "/app/shared",
-      name: "Listes partagées",
-      component: SharedListsView,
-      meta: {
-        isHeaderLink: true,
-      },
-    },
-    {
-      path: "/app/shared/new",
-      name: "Code de partage",
-      component: SharedListsView,
-      meta: {
-        isHeaderLink: false,
-      },
-    },
-    {
-      path: "/app/shared/:listId",
+      path: "/app/lists/:listId",
       component: SharedListView,
       meta: {
         isHeaderLink: false,
@@ -105,6 +107,7 @@ const router = createRouter({
       component: MyGiftsViewVue,
       meta: {
         isHeaderLink: true,
+        headerOrder: 2,
       },
     },
     {
@@ -123,6 +126,7 @@ const router = createRouter({
         isDropdownLink: true,
       },
     },
+
     // {
     //   path: "/about",
     //   name: "about",

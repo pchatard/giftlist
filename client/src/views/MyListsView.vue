@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted, inject } from "vue";
-import type { List } from "@/types/giftlist";
-import { lists as listsData } from "@/data/lists";
+import { reactive, watch, onMounted, inject, computed } from "vue";
+import {
+  lists as listsData,
+  sharedLists as sharedListsData,
+} from "@/data/lists";
 import {
   ArrowSmallDownIcon,
   ArrowSmallUpIcon,
@@ -13,18 +15,53 @@ import {
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
 import NewListModal from "@/components/NewListModal.vue";
+import NewSharedListModal from "@/components/NewSharedListModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 
 const router = useRouter();
-const route = useRoute();
+const currentRoute = useRoute();
 
-const lists = ref<List[]>(listsData);
-const sorting = reactive({
-  columnIndex: 0,
-  isDown: true,
+const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
+
+const isSharedView = computed(() => currentRoute.fullPath.includes("/shared"));
+
+const pageTitle = computed(() => {
+  return isSharedView.value ? "Listes partagées" : "Mes listes";
 });
+
+const headingButton = computed(() => {
+  return {
+    text: isSharedView.value ? "Code" : "Nouvelle liste",
+    action: () =>
+      router.push(
+        isSharedView.value ? "/app/lists/shared/new" : "/app/lists/new"
+      ),
+  };
+});
+
+const newListModal = {
+  show: computed(() => currentRoute.fullPath.endsWith("/lists/new")),
+  submitAction: () => {
+    router.push("/app/lists");
+  },
+  closeAction: () => {
+    router.push("/app/lists");
+  },
+};
+
+const newSharedListModal = {
+  show: computed(() => currentRoute.fullPath.endsWith("/shared/new")),
+  submitAction: () => {
+    router.push("/app/lists/shared");
+  },
+  closeAction: () => {
+    router.push("/app/lists/shared");
+  },
+};
 
 const listTableHeaders = [
   { name: "Liste", isMobile: true },
@@ -33,13 +70,23 @@ const listTableHeaders = [
   { name: "Date d'échéance", isMobile: false },
   { name: "Actions", isMobile: true },
 ];
+const sharedListTableHeaders = [
+  { name: "Liste", isMobile: true },
+  { name: "Propriétaire(s)", isMobile: false },
+  { name: "Date d'échéance", isMobile: false },
+  { name: "Actions", isMobile: true },
+];
 
-const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
-  breadcrumbContentInjectionKey
-) as BreadcrumbContentData;
+const tableHeaders = computed(() =>
+  isSharedView.value ? sharedListTableHeaders : listTableHeaders
+);
+const lists = computed(() =>
+  isSharedView.value ? sharedListsData : listsData
+);
 
-onMounted(() => {
-  setBreadcrumbContent([{ name: route.name ?? "", path: route.fullPath }]);
+const sorting = reactive({
+  columnIndex: 0,
+  isDown: true,
 });
 
 const handleTableHeaderClick = (
@@ -60,44 +107,61 @@ const handleListClick = (listId: string) => {
   router.push("/app/lists/" + listId);
 };
 
-const isNewListModalOpen = ref(route.fullPath.endsWith("/new"));
-
-watch(route, (currentRoute) => {
-  const isNewListPage = currentRoute.fullPath.endsWith("/new");
-  isNewListModalOpen.value = isNewListPage;
-
-  if (isNewListPage) {
-    pushBreadcrumbContent({ name: route.name ?? "", path: route.fullPath });
-  } else {
-    setBreadcrumbContent([{ name: route.name ?? "", path: route.fullPath }]);
-  }
+onMounted(() => {
+  setBreadcrumbContent([
+    { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+  ]);
 });
 
-const handleNewListSubmit = () => {
-  router.push("/app/lists");
-};
+watch(currentRoute, (currentRoute) => {
+  if (newListModal.show.value || newSharedListModal.show.value) {
+    pushBreadcrumbContent({
+      name: currentRoute.name ?? "",
+      path: currentRoute.fullPath,
+    });
+  } else {
+    setBreadcrumbContent([
+      { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+    ]);
+  }
+
+  sorting.columnIndex = 0;
+  sorting.isDown = true;
+});
 </script>
 
 <template>
   <div>
     <div class="flex justify-between items-center mb-4">
-      <PageHeading class="mb-0">Mes listes</PageHeading>
+      <PageHeading class="mb-0">{{ pageTitle }}</PageHeading>
       <button
         type="button"
         class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        @click="router.push('/app/lists/new')"
+        @click="headingButton.action"
       >
-        Nouvelle liste
-
+        {{ headingButton.text }}
         <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
       </button>
     </div>
 
     <Teleport to="body">
       <NewListModal
-        v-show="isNewListModalOpen"
-        @close="router.push('/app/lists')"
-        @submit="handleNewListSubmit"
+        v-show="
+          newListModal.show.value &&
+          !isSharedView &&
+          !newSharedListModal.show.value
+        "
+        @close="newListModal.closeAction"
+        @submit="newListModal.submitAction"
+      />
+      <NewSharedListModal
+        v-show="
+          newSharedListModal.show.value &&
+          isSharedView &&
+          !newListModal.show.value
+        "
+        @close="newSharedListModal.closeAction"
+        @submit="newSharedListModal.submitAction"
       />
     </Teleport>
 
@@ -110,7 +174,7 @@ const handleNewListSubmit = () => {
         >
           <tr>
             <th
-              v-for="(header, index) in listTableHeaders"
+              v-for="(header, index) in tableHeaders"
               :key="header.name"
               scope="col"
               class="py-3 px-6"
@@ -148,13 +212,17 @@ const handleNewListSubmit = () => {
             class="bg-white cursor-pointer dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             @click="handleListClick(list.id)"
           >
+            <!-- Column 1 -->
             <th scope="row" class="py-4 px-6 w-full md:w-auto">
               <div
                 class="font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
                 {{ list.title }}
               </div>
-              <div class="mt-1 -ml-1 font-normal md:hidden">
+              <div
+                v-if="!isSharedView"
+                class="mt-1 -ml-1 font-normal md:hidden"
+              >
                 <div
                   v-if="list.isShared"
                   class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
@@ -170,8 +238,13 @@ const handleNewListSubmit = () => {
                   <span>Privée</span>
                 </div>
               </div>
+              <div v-else class="font-normal md:hidden">
+                {{ list.ownersDTO ?? "Copain" }}
+              </div>
             </th>
-            <td class="py-4 px-6 hidden md:table-cell">
+
+            <!-- Column 2 -->
+            <td v-if="!isSharedView" class="py-4 px-6 hidden md:table-cell">
               <div
                 v-if="list.isShared"
                 class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
@@ -187,13 +260,35 @@ const handleNewListSubmit = () => {
                 <span>Privée</span>
               </div>
             </td>
-            <td class="py-4 px-6 hidden md:table-cell">
+            <td v-else class="py-4 px-6 hidden md:table-cell">
+              {{ list.ownersDTO ?? "Copain" }}
+            </td>
+
+            <!-- Column 3 -->
+            <td v-if="!isSharedView" class="py-4 px-6 hidden md:table-cell">
               {{ list.ownersDTO ?? "Moi" }}
             </td>
-            <td class="py-4 px-6 hidden md:table-cell">
+            <td v-else class="py-4 px-6 hidden md:table-cell">
               {{ list.closureDate }}
             </td>
-            <td class="py-4 px-6">
+
+            <!-- Column 4 -->
+            <td v-if="!isSharedView" class="py-4 px-6 hidden md:table-cell">
+              {{ list.closureDate }}
+            </td>
+            <td v-else class="py-4 px-6">
+              <button
+                type="button"
+                class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+                @click.stop=""
+              >
+                <TrashIcon class="w-4" />
+                <span class="hidden lg:inline lg:ml-2">Supprimer</span>
+              </button>
+            </td>
+
+            <!-- Column 5 -->
+            <td v-if="!isSharedView" class="py-4 px-6">
               <button
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
@@ -212,17 +307,21 @@ const handleNewListSubmit = () => {
               </button>
             </td>
           </tr>
+
+          <!-- Action raw -->
           <tr
             class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
           >
             <td
               colspan="100%"
               class="py-4 px-6 cursor-pointer"
-              @click="router.push('/app/lists/new')"
+              @click="headingButton.action"
             >
               <div class="flex items-center justify-center">
                 <PlusSmallIcon class="w-4 mr-2" />
-                <span>Nouvelle liste</span>
+                <span>{{
+                  isSharedView ? "Entrer un code de partage" : "Nouvelle liste"
+                }}</span>
               </div>
             </td>
           </tr>

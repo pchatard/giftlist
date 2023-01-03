@@ -63,7 +63,7 @@ onMounted(() => {
   list.value = sharedLists.find((l) => l.id == route.params.listId);
   gifts.value = giftsData.filter((g) => g.listId == route.params.listId);
   setBreadcrumbContent([
-    { name: "Listes partagées", path: "/app/shared" },
+    { name: "Listes partagées", path: "/app/lists/shared" },
     { name: list.value?.title ?? "Ma liste", path: route.fullPath },
   ]);
 });
