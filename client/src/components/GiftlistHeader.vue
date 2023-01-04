@@ -67,6 +67,13 @@ const handleDropdownSelect = (selectedOption: DropdownButtonOption) => {
     router.push(selectedOption.path);
   }
 };
+
+const handleMobileMenuClick = () => {
+  if (isMobileMenuOpened.value) {
+    toggleMobileMenu();
+  }
+};
+
 let eventListenerCloseFunction: (e: MouseEvent) => void;
 
 onMounted(() => {
@@ -129,7 +136,7 @@ onUnmounted(() => {
           id="mobile-menu-2"
           class="justify-between items-center w-full mt-2 lg:m-0 lg:flex lg:w-auto lg:order-1 rounded-lg"
           :class="isMobileMenuOpened ? '' : 'hidden'"
-          @click.stop="toggleMobileMenu"
+          @click.stop="handleMobileMenuClick"
         >
           <ul
             v-if="isLoggedIn"
