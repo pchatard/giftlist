@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { reactive, watch, onMounted, inject, computed } from "vue";
-import {
-  lists as listsData,
-  sharedLists as sharedListsData,
-} from "@/data/lists";
+import { lists as listsData } from "@/data/lists";
 import {
   ArrowSmallDownIcon,
   ArrowSmallUpIcon,
@@ -81,7 +78,7 @@ const tableHeaders = computed(() =>
   isSharedView.value ? sharedListTableHeaders : listTableHeaders
 );
 const lists = computed(() =>
-  isSharedView.value ? sharedListsData : listsData
+  listsData.filter((list) => (isSharedView.value ? list.isShared : true))
 );
 
 const sorting = reactive({
@@ -308,7 +305,7 @@ watch(currentRoute, (currentRoute) => {
             </td>
           </tr>
 
-          <!-- Action raw -->
+          <!-- Action row -->
           <tr
             class="bg-white border-b dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
           >
