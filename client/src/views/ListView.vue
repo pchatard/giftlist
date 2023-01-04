@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref, inject, reactive, watch } from "vue";
+import { onMounted, ref, inject, reactive, watch, computed } from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
 import GiftModal from "@/components/GiftModal.vue";
-import { lists } from "@/data/lists";
+import { lists as listsData } from "@/data/lists";
 import { gifts as giftsData } from "@/data/gifts";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
-import type { List, Gift } from "@/types/giftlist";
 import {
   ArrowSmallDownIcon,
   ArrowSmallUpIcon,
@@ -18,29 +17,66 @@ import {
   EyeSlashIcon,
   TrashIcon,
   PencilIcon,
+  TicketIcon,
+  NoSymbolIcon,
+  CheckIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
 const router = useRouter();
-const route = useRoute();
+const currentRoute = useRoute();
 
-const list = ref<List>();
-const gifts = ref<Gift[]>();
+// Define this depending on wether the logged in user is in the list owners.
+const isListOwner = ref(true);
+
+const giftModal = {
+  show: computed(
+    () =>
+      currentRoute.fullPath.endsWith("/gift/new") ||
+      currentRoute.fullPath.endsWith("/edit")
+  ),
+  submitAction: () => {
+    router.push("/app/lists/" + list.value?.id);
+  },
+  closeAction: () => {
+    router.push("/app/lists/" + list.value?.id);
+  },
+};
+
+const list = computed(() =>
+  listsData.find((l) => l.id == currentRoute.params.listId)
+);
+const gifts = computed(() =>
+  giftsData.filter((g) => g.listId == currentRoute.params.listId)
+);
+
+const ownerTableHeaders = [
+  { name: "", key: "favorite", isMobile: true },
+  { name: "", key: "hidden", isMobile: false },
+  { name: "Cadeau", key: "gift", isMobile: true },
+  { name: "Prix", key: "price", isMobile: true },
+  { name: "Marque", key: "brand", isMobile: false },
+  { name: "Taille", key: "size", isMobile: false },
+  { name: "Actions", key: "actions", isMobile: true },
+];
+
+const visitorTableHeaders = [
+  { name: "Cadeau", key: "gift", isMobile: true },
+  { name: "Prix", key: "price", isMobile: false },
+  { name: "Disponibilité", key: "available", isMobile: true },
+  { name: "Marque", key: "brand", isMobile: false },
+  { name: "Taille", key: "size", isMobile: false },
+  { name: "Actions", key: "actions", isMobile: true },
+];
+
+const tableHeaders = computed(() =>
+  isListOwner.value ? ownerTableHeaders : visitorTableHeaders
+);
 
 const sorting = reactive({
   columnIndex: 0,
   isDown: true,
 });
-
-const tableHeaders = [
-  { name: "", isMobile: true },
-  { name: "", isMobile: false },
-  { name: "Cadeau", isMobile: true },
-  { name: "Prix", isMobile: true },
-  { name: "Marque", isMobile: false },
-  { name: "Taille", isMobile: false },
-  { name: "Actions", isMobile: true },
-];
 
 const handleTableHeaderClick = (
   e: Event,
@@ -57,43 +93,44 @@ const handleTableHeaderClick = (
 };
 
 const handleGiftClick = (giftId: string) => {
-  router.push(`/app/lists/${list.value?.id}/gift/${giftId}/edit`);
-};
-
-const isNewGiftModalOpen = ref(route.fullPath.endsWith("/gift/new"));
-
-const handleNewGiftSubmit = () => {
-  router.push("/app/lists/" + list.value?.id);
+  const destination = isListOwner.value
+    ? `/app/lists/${list.value?.id}/gift/${giftId}/edit`
+    : `/app/lists/${list.value?.id}/gift/${giftId}`;
+  router.push(destination);
 };
 
 const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
   breadcrumbContentInjectionKey
 ) as BreadcrumbContentData;
 
+const initialBreadcrumbContent = computed(() => [
+  {
+    name: isListOwner.value ? "Mes listes" : "Listes partagées",
+    path: isListOwner.value ? "/app/lists" : "/app/lists/shared",
+  },
+  { name: list.value?.title ?? "Ma liste", path: currentRoute.fullPath },
+]);
+
 onMounted(() => {
-  list.value = lists.find((l) => l.id == route.params.listId);
-  gifts.value = giftsData.filter((g) => g.listId == route.params.listId);
-  setBreadcrumbContent([
-    { name: "Mes listes", path: "/app/lists" },
-    { name: list.value?.title ?? "Ma liste", path: route.fullPath },
-  ]);
+  setBreadcrumbContent(initialBreadcrumbContent.value);
 });
 
-watch(route, (currentRoute) => {
-  const isNewGiftPage = currentRoute.fullPath.endsWith("/gift/new");
-  const isEditGiftPage = currentRoute.fullPath.endsWith("/edit");
-  isNewGiftModalOpen.value = isNewGiftPage || isEditGiftPage;
-
-  if (isNewGiftPage) {
-    pushBreadcrumbContent({ name: route.name ?? "", path: route.fullPath });
-  } else if (isEditGiftPage) {
-    pushBreadcrumbContent({ name: route.name ?? "", path: route.fullPath });
+watch(currentRoute, (newCurrentRoute) => {
+  if (giftModal.show.value) {
+    pushBreadcrumbContent({
+      name: newCurrentRoute.name ?? "",
+      path: newCurrentRoute.fullPath,
+    });
   } else {
-    setBreadcrumbContent([
-      { name: "Mes listes", path: "/app/lists" },
-      { name: list.value?.title ?? "Ma liste", path: route.fullPath },
-    ]);
+    setBreadcrumbContent(initialBreadcrumbContent.value);
   }
+
+  sorting.columnIndex = 0;
+  sorting.isDown = true;
+});
+
+watch(isListOwner, () => {
+  setBreadcrumbContent(initialBreadcrumbContent.value);
 });
 </script>
 
@@ -102,6 +139,7 @@ watch(route, (currentRoute) => {
     <div class="flex justify-between items-center mb-4">
       <PageHeading class="mb-0">{{ list?.title }}</PageHeading>
       <button
+        v-if="isListOwner"
         type="button"
         class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         @click="router.push('/app/lists/' + list?.id + '/gift/new')"
@@ -112,11 +150,14 @@ watch(route, (currentRoute) => {
       </button>
     </div>
 
+    <label for="isOwner" class="mr-2">isListOwner</label>
+    <input id="isOwner" v-model="isListOwner" type="checkbox" name="isOwner" />
+
     <Teleport to="body">
       <GiftModal
-        v-show="isNewGiftModalOpen"
-        @close="router.push('/app/lists/' + list?.id)"
-        @submit="handleNewGiftSubmit"
+        v-show="giftModal.show.value && isListOwner"
+        @close="giftModal.closeAction"
+        @submit="giftModal.submitAction"
       />
     </Teleport>
 
@@ -128,7 +169,7 @@ watch(route, (currentRoute) => {
           <tr>
             <th
               v-for="(header, index) in tableHeaders"
-              :key="header.name"
+              :key="header.key"
               scope="col"
               class=""
               :class="[
@@ -170,33 +211,87 @@ watch(route, (currentRoute) => {
             class="bg-white cursor-pointer dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             @click="handleGiftClick(gift.id)"
           >
-            <td class="py-4 px-3 md:px-6">
+            <!-- Column 1 -->
+            <td v-if="isListOwner" class="py-4 px-3 md:px-6">
               <HeartIconSolid v-if="gift.isFavorite" class="w-5 text-red-600" />
               <HeartIcon v-else class="w-5 text-red-600" />
             </td>
-            <td class="py-4 px-3 md:px-6 hidden md:table-cell">
+
+            <!-- Column 2 -->
+            <td
+              v-if="isListOwner"
+              class="py-4 px-3 md:px-6 hidden md:table-cell"
+            >
               <EyeSlashIcon v-if="gift.isHidden" class="w-5" />
               <EyeIcon v-else class="w-5" />
             </td>
+
+            <!-- Column 3 -->
             <th scope="row" class="py-4 px-3 md:px-6 w-full md:w-auto">
               <div
-                class="font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                class="relative font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
+                <HeartIconSolid
+                  v-if="!isListOwner && gift.isFavorite"
+                  class="w-4 md:w-5 absolute top-0 left-0 -translate-x-2/3 -translate-y-2/3 -rotate-12 text-red-600"
+                />
                 {{ gift.title }}
               </div>
               <div class="font-normal text-xs">{{ gift.category }}</div>
             </th>
-            <td class="py-4 px-3 md:px-6">
+
+            <!-- Column 4 -->
+            <td
+              class="py-4 px-3 md:px-6"
+              :class="[isListOwner ? '' : 'hidden md:table-cell']"
+            >
               {{ gift.price?.toFixed(2) ?? "-" }} €
             </td>
-            <td class="py-4 px-3 md:px-6 hidden md:table-cell">
+
+            <!-- Column 5 -->
+            <td
+              v-if="isListOwner"
+              class="py-4 px-3 md:px-6 hidden md:table-cell"
+            >
               {{ gift.brand ?? "-" }}
             </td>
+            <td v-else class="py-4 px-3 md:px-6">
+              <div class="mb-1 md:hidden">
+                {{ gift.price?.toFixed(2) ?? "-" }} €
+              </div>
+              <div
+                v-if="gift.isBooked"
+                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+              >
+                <NoSymbolIcon class="w-4 mr-2" />
+                <span>Réservé</span>
+              </div>
+              <div
+                v-else
+                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
+              >
+                <CheckIcon class="w-4 mr-2" />
+                <span>Disponible</span>
+              </div>
+            </td>
+
+            <!-- Column 6 -->
             <td class="py-4 px-3 md:px-6 hidden md:table-cell">
+              {{ isListOwner ? gift.size ?? "-" : gift.brand ?? "-" }}
+            </td>
+
+            <!-- Column 7 -->
+            <td
+              v-if="!isListOwner"
+              class="py-4 px-3 md:px-6 hidden md:table-cell"
+            >
               {{ gift.size ?? "-" }}
             </td>
+
+            <!-- Column 8 -->
             <td class="py-4 px-3 md:px-6">
               <button
+                v-if="isListOwner"
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
                 @click.stop="handleGiftClick(gift.id)"
@@ -205,6 +300,7 @@ watch(route, (currentRoute) => {
                 <span class="hidden lg:inline lg:ml-2">Modifier</span>
               </button>
               <button
+                v-if="isListOwner"
                 type="button"
                 class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
                 @click.stop=""
@@ -212,9 +308,21 @@ watch(route, (currentRoute) => {
                 <TrashIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>
               </button>
+              <button
+                v-if="!isListOwner"
+                type="button"
+                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                @click.stop=""
+              >
+                <TicketIcon class="w-5" />
+                <span class="hidden md:inline md:ml-2">Réserver</span>
+              </button>
             </td>
           </tr>
+
+          <!-- Action row -->
           <tr
+            v-if="isListOwner"
             class="bg-white border-b cursor-pointer dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
             @click="router.push('/app/lists/' + list?.id + '/gift/new')"
           >

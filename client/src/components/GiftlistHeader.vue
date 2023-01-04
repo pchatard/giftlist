@@ -28,6 +28,9 @@ const links = computed<Array<HeaderLinks>>(() =>
   router
     .getRoutes()
     .filter((route) => route.meta.isHeaderLink)
+    .sort(
+      (a, b) => (a.meta.headerOrder as number) - (b.meta.headerOrder as number)
+    )
     .map((route) => ({
       path: route.path.toString(),
       name: route.name?.toString() || "",
@@ -120,13 +123,13 @@ onUnmounted(() => {
             :options="headerDropdownProps.options"
             @select="handleDropdownSelect"
           />
-          <HamburgerButton v-if="isLoggedIn" @click="toggleMobileMenu" />
+          <HamburgerButton v-if="isLoggedIn" @click.stop="toggleMobileMenu" />
         </div>
         <div
           id="mobile-menu-2"
           class="justify-between items-center w-full mt-2 lg:m-0 lg:flex lg:w-auto lg:order-1 rounded-lg"
           :class="isMobileMenuOpened ? '' : 'hidden'"
-          @click="toggleMobileMenu"
+          @click.stop="toggleMobileMenu"
         >
           <ul
             v-if="isLoggedIn"

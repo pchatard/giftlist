@@ -11,15 +11,3 @@ for (let i = 0; i < 6; i++) {
     closureDate: "2022-12-25",
   });
 }
-
-export const sharedLists: List[] = [];
-for (let i = 0; i < 6; i++) {
-  sharedLists.push({
-    id: "id" + i,
-    title: "Shared list n°" + (i + 1),
-    sharingCode: "id" + i,
-    isShared: true,
-    description: i % 3 == 0 ? "List n°" + i + " description" : undefined,
-    closureDate: "2022-12-25",
-  });
-}
