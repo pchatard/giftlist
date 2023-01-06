@@ -25,6 +25,7 @@ import List from "../models/List";
 import User from "../models/User";
 import ListService from "../services/ListService";
 import UserService from "../services/UserService";
+import { email } from "../types/email";
 import { SelectKindList } from "../types/SelectKindList";
 import { UUID } from "../types/UUID";
 import GiftController from "./GiftController";
@@ -179,6 +180,31 @@ export class ListController extends Controller {
 			if (!list.owners.find((u) => u.id == user.id)) {
 				await ListService.addGrantedUser(list.id, user);
 			}
+		} catch (err: unknown) {
+			throw new ResourceNotFoundError();
+		}
+	}
+
+	/**
+	 * Remove a user from granted users of a list.
+	 * @param {UUID} listId the GUID of the list
+	 * @param {email} userMail the email of the user
+	 */
+	@SuccessResponse(204, "Success response")
+	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner")
+	@Put("{listId}/eject")
+	async removeGrantedUser(
+		@Request() request: ERequest,
+		@Path() listId: UUID,
+		@Query() userMail: email
+	): Promise<void> {
+		try {
+			if (!(await ListService.ownersAuth0Ids(listId)).includes(request.userId)) {
+				throw new UnauthorizedError();
+			}
+			const user: User = await UserService.getByMail(userMail);
+			await ListService.removeGrantedUser(listId, user);
 		} catch (err: unknown) {
 			throw new ResourceNotFoundError();
 		}
