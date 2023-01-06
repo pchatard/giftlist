@@ -1,17 +1,73 @@
 <script setup lang="ts">
-import { XMarkIcon, ArrowRightIcon } from "@heroicons/vue/24/outline";
-import { ref } from "vue";
+import type { FormList, FormListValidation } from "@/types/giftlist";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
+import { reactive, ref } from "vue";
 
-// export interface NewListModalProps {
-//   list:
-// }
-
-defineEmits<{
+const emit = defineEmits<{
   (e: "close"): void;
-  (e: "submit"): void;
+  (e: "submit", listForm: FormList): void;
 }>();
 
-const hasClosureDate = ref(true);
+const listForm: FormList = reactive({
+  title: "",
+  description: "",
+  closureDate: "",
+  isShared: false,
+  ownersIds: [],
+  grantedUsersIds: [],
+});
+
+const listFormValidation: FormListValidation = reactive({
+  title: {
+    isError: false,
+    errorMessage: "",
+  },
+  description: {
+    isError: false,
+    errorMessage: "",
+  },
+  closureDate: {
+    isError: false,
+    errorMessage: "",
+  },
+});
+
+const hasClosureDate = ref(false);
+
+const handleSubmit = () => {
+  if (validateList()) {
+    emit("submit", listForm);
+    resetListForm();
+    resetListFormValidation();
+  }
+};
+
+const validateList = (): boolean => {
+  if (listForm.title.trim() === "") {
+    listFormValidation.title.isError = true;
+    listFormValidation.title.errorMessage =
+      "Le nom de la liste ne peut pas être vide";
+    return false;
+  }
+  return true;
+};
+
+const resetListForm = () => {
+  listForm.title = "";
+  listForm.description = "";
+  listForm.closureDate = "";
+  listForm.ownersIds = [];
+  listForm.grantedUsersIds = [];
+};
+
+const resetListFormValidation = () => {
+  listFormValidation.title.errorMessage = "";
+  listFormValidation.title.isError = false;
+  listFormValidation.description.errorMessage = "";
+  listFormValidation.description.isError = false;
+  listFormValidation.closureDate.errorMessage = "";
+  listFormValidation.closureDate.isError = false;
+};
 </script>
 
 <template>
@@ -20,7 +76,7 @@ const hasClosureDate = ref(true);
     class="fixed top-0 left-0 right-0 z-50 w-full bg-gray-400 bg-opacity-50 dark:bg-opacity-50 dark:bg-gray-400 flex justify-center items-center p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-full"
     @click.self="$emit('close')"
   >
-    <div class="relative w-full max-w-md h-auto">
+    <div class="relative w-full max-w-md h-5/6">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <button
@@ -41,16 +97,23 @@ const hasClosureDate = ref(true);
                 for="list-name"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Nom de la liste
+                Nom de la liste*
               </label>
               <input
                 id="list-name"
+                v-model="listForm.title"
                 type="text"
                 name="list-name"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="Ma liste de Noël"
                 required
               />
+              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                <span class="font-medium">{{
+                  listFormValidation.title.isError ? "Erreur :" : ""
+                }}</span>
+                {{ listFormValidation.title.errorMessage }}
+              </p>
             </div>
             <div>
               <label
@@ -61,11 +124,18 @@ const hasClosureDate = ref(true);
               </label>
               <input
                 id="list-description"
+                v-model="listForm.description"
                 type="text"
                 name="list-description"
                 placeholder="Une brève description de ma liste"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               />
+              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                <span class="font-medium">{{
+                  listFormValidation.description.isError ? "Erreur :" : ""
+                }}</span>
+                {{ listFormValidation.description.errorMessage }}
+              </p>
             </div>
             <div class="flex justify-between">
               <label class="inline-flex relative items-center cursor-pointer">
@@ -83,7 +153,7 @@ const hasClosureDate = ref(true);
                 >
               </label>
             </div>
-            <div>
+            <div v-if="hasClosureDate">
               <label
                 for="list-closure-date"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -92,25 +162,43 @@ const hasClosureDate = ref(true);
               </label>
               <input
                 id="list-closure-date"
-                type="text"
+                v-model="listForm.closureDate"
+                type="date"
                 name="list-closure-date"
                 placeholder="25/12/2025"
                 :disabled="!hasClosureDate"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               />
+              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                <span class="font-medium">{{
+                  listFormValidation.closureDate.isError ? "Erreur :" : ""
+                }}</span>
+                {{ listFormValidation.closureDate.errorMessage }}
+              </p>
             </div>
 
-            <div
-              class="cursor-pointer inline-flex items-center font-medium text-primary-600 dark:text-primary-500"
-            >
-              Options de partage
-              <ArrowRightIcon class="w-5 ml-1" />
+            <div>
+              <label
+                for="list-closure-date"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Propriétaire(s) de la liste
+              </label>
+              <select
+                id="countries"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                <option>United States</option>
+                <option>Canada</option>
+                <option>France</option>
+                <option>Germany</option>
+              </select>
             </div>
 
             <button
               type="button"
               class="w-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              @click="$emit('submit')"
+              @click="handleSubmit"
             >
               Valider
             </button>

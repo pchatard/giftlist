@@ -22,6 +22,7 @@ import {
   CheckIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
+import type { FormGift } from "@/types/giftlist";
 
 const router = useRouter();
 const currentRoute = useRoute();
@@ -35,7 +36,8 @@ const giftModal = {
       currentRoute.fullPath.endsWith("/gift/new") ||
       currentRoute.fullPath.endsWith("/edit")
   ),
-  submitAction: () => {
+  submitAction: (giftForm: FormGift) => {
+    console.log("Creating new gift: ", giftForm);
     router.push("/app/lists/" + list.value?.id);
   },
   closeAction: () => {

@@ -16,6 +16,7 @@ import NewSharedListModal from "@/components/NewSharedListModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
+import type { FormList, List } from "@/types/giftlist";
 
 const router = useRouter();
 const currentRoute = useRoute();
@@ -42,8 +43,9 @@ const headingButton = computed(() => {
 
 const newListModal = {
   show: computed(() => currentRoute.fullPath.endsWith("/lists/new")),
-  submitAction: () => {
-    router.push("/app/lists");
+  submitAction: (newList: FormList) => {
+    console.log("Creating new list: ", newList);
+    // router.push("/app/lists");
   },
   closeAction: () => {
     router.push("/app/lists");
