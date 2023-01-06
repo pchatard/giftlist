@@ -2,17 +2,17 @@ name: API - Deploy
 
 on:
   push:
-    branches: 
+    branches:
       - v1
 
-jobs:   
+jobs:
   deploy:
     name: Deploy Staging on Heroku
     runs-on: ubuntu-latest
     defaults:
       run:
-       working-directory: ./api
-    env: 
+        working-directory: ./api
+    env:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
       - name: Checkout 🛎️
@@ -21,7 +21,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: "npm"
+          cache-dependency-path: "./api/package-lock.json"
       - name: Install 🔧
         run: npm ci
       - name: Build 🏗️
@@ -29,6 +30,6 @@ jobs:
       - name: Build and Push Image 🚨
         run: |
           heroku container:login 
-          heroku container:push -a ${{ secrets.HEROKU_API_NAME }} web 
+          heroku container:push -a ${{ secrets.HEROKU_API_NAME }} web
       - name: Release 🚀
-        run: heroku container:release -a ${{ secrets.HEROKU_API_NAME }} web 
+        run: heroku container:release -a ${{ secrets.HEROKU_API_NAME }} web
