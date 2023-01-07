@@ -69,8 +69,9 @@ onMounted(() => {
           :href="gift?.linkURL ?? ''"
           target="_blank"
           rel="noopener noreferrer"
-          >{{ gift?.linkURL }}</a
         >
+          {{ gift?.linkURL }}
+        </a>
       </div>
     </div>
   </div>

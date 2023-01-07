@@ -84,9 +84,9 @@ const validateSharingCode = (): boolean => {
                 required
               />
               <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                <span class="font-medium">{{
-                  sharingCodeValidation.isError ? "Erreur :" : ""
-                }}</span>
+                <span class="font-medium">
+                  {{ sharingCodeValidation.isError ? "Erreur :" : "" }}
+                </span>
                 {{ sharingCodeValidation.errorMessage }}
               </p>
               <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">

@@ -121,15 +121,17 @@ onUnmounted(() => {
             href="#"
             class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
             @click="handleLogin"
-            >Se connecter</a
           >
+            Se connecter
+          </a>
           <a
             v-if="!isAuthenticated"
             href="#"
             class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             @click="handleSignup"
-            >S'inscrire</a
           >
+            S'inscrire
+          </a>
           <DropdownButton
             v-if="isAuthenticated"
             class="hidden lg:block"
@@ -163,7 +165,8 @@ onUnmounted(() => {
                   index == links.length - 1 ? 'border-b-0' : '',
                 ]"
                 aria-current="page"
-                >{{ link.name }}
+              >
+                {{ link.name }}
               </RouterLink>
             </li>
           </ul>
@@ -186,7 +189,8 @@ onUnmounted(() => {
                     : 'text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:hover:text-primary-700 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent',
                 ]"
                 aria-current="page"
-                >{{ link.name }}
+              >
+                {{ link.name }}
               </RouterLink>
             </li>
             <li
