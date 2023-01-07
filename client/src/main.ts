@@ -18,6 +18,7 @@ app.use(
     domain: import.meta.env.VITE_AUTH0_DOMAIN,
     client_id: import.meta.env.VITE_AUTH0_CLIENT_ID,
     redirect_uri: import.meta.env.VITE_AUTH0_CALLBACK_URL,
+    audience: import.meta.env.VITE_AUTH0_API_AUDIENCE,
   })
 );
 
