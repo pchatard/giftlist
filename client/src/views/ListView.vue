@@ -10,7 +10,6 @@ import type { BreadcrumbContentData } from "@/types";
 import {
   ArrowSmallDownIcon,
   ArrowSmallUpIcon,
-  PlusSmallIcon,
   HeartIcon,
   EyeIcon,
   EyeSlashIcon,
@@ -19,6 +18,10 @@ import {
   TicketIcon,
   NoSymbolIcon,
   CheckIcon,
+  ShareIcon,
+  GiftIcon,
+  PlusSmallIcon,
+  UsersIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
@@ -112,22 +115,95 @@ watch(isListOwner, () => {
 
 <template>
   <div>
-    <div class="flex justify-between items-center mb-4">
-      <PageHeading class="mb-0">{{ list?.title }}</PageHeading>
-      <button
-        v-if="isListOwner"
-        type="button"
-        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        @click="router.push('/app/lists/' + list?.id + '/gift/new')"
-      >
-        Nouveau cadeau
-
-        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
-      </button>
+    <div class="flex justify-between items-end mb-4">
+      <div>
+        <PageHeading class="mb-0 flex items-baseline gap-4">
+          <span>{{ list?.title }}</span>
+          <button
+            v-if="isListOwner"
+            class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm px-2 py-2 mr-2 lg:cursor-pointer dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+            @click="router.push(`${currentRoute.fullPath}/edit`)"
+          >
+            <PencilIcon class="w-5 text-primary-600" />
+          </button>
+        </PageHeading>
+        <div
+          v-if="isListOwner && list?.isShared"
+          class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
+        >
+          <UsersIcon class="w-4 mr-2" />
+          <span>Partagée</span>
+        </div>
+        <div
+          v-else-if="isListOwner && !list?.isShared"
+          class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+        >
+          <NoSymbolIcon class="w-4 mr-2" />
+          <span>Privée</span>
+        </div>
+        <div v-if="isListOwner">
+          <p class="text-sm">
+            par
+            {{
+              list?.ownersDTO
+                ? list.ownersDTO
+                    .map((user) => user.displayName)
+                    .reduce(
+                      (ownersList, newOwner, index) =>
+                        ownersList + (index == 0 ? "" : ", ") + newOwner,
+                      "Vous, "
+                    )
+                : ""
+            }}
+          </p>
+        </div>
+        <div v-else>
+          <p class="text-sm">
+            par
+            {{
+              list?.ownersDTO
+                ? list.ownersDTO
+                    .map((user) => user.displayName)
+                    .reduce(
+                      (ownersList, newOwner, index) =>
+                        ownersList + (index == 0 ? "" : ", ") + newOwner,
+                      ""
+                    )
+                : ""
+            }}
+          </p>
+        </div>
+        <p v-if="list?.closureDate" class="text-sm">
+          Date d'échéance : {{ list?.closureDate }}
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <button
+          v-if="isListOwner"
+          type="button"
+          class="hidden text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 md:px-5 py-2 text-center md:inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          @click="router.push(`${currentRoute.fullPath}/share`)"
+        >
+          Partager
+          <ShareIcon class="ml-2 -mr-1 w-5 h-5" />
+        </button>
+        <button
+          v-if="isListOwner"
+          type="button"
+          class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          @click="router.push(`${currentRoute.fullPath}/gift/new`)"
+        >
+          <span class="hidden sr-only md:not-sr-only md:inline"
+            >Nouveau cadeau</span
+          >
+          <GiftIcon class="w-5 md:ml-2" />
+          <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5 md:hidden" />
+        </button>
+      </div>
     </div>
 
-    <label for="isOwner" class="mr-2">isListOwner</label>
-    <input id="isOwner" v-model="isListOwner" type="checkbox" name="isOwner" />
+    <!-- <label for="isOwner" class="mr-2">isListOwner</label>
+    <input id="isOwner" v-model="isListOwner" type="checkbox" name="isOwner" /> -->
 
     <div class="overflow-x-auto relative rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -277,7 +353,7 @@ watch(isListOwner, () => {
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>
               </button>
               <button
-                v-if="!isListOwner"
+                v-if="!isListOwner && !gift.isBooked"
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
                 @click.stop=""
@@ -296,13 +372,23 @@ watch(isListOwner, () => {
           >
             <td colspan="100%" class="py-4 px-3 md:px-6">
               <div class="flex items-center justify-center">
-                <PlusSmallIcon class="w-4 mr-2" />
                 <span>Nouveau cadeau</span>
+                <GiftIcon class="w-4 ml-2" />
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <button
+      v-if="isListOwner"
+      type="button"
+      class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm py-3 text-center w-full flex justify-center items-center md:hidden dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+      @click="router.push(`${currentRoute.fullPath}/share`)"
+    >
+      Partager
+      <ShareIcon class="ml-2 -mr-1 w-5 h-5" />
+    </button>
   </div>
 </template>
