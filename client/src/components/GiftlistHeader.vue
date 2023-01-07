@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { HeaderLinks } from "@/types";
-import { userInjectionKey } from "@/injectionSymbols";
-import type { UserInjectionData } from "@/types/users";
-import { ref, inject, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import HamburgerButton from "./HamburgerButton.vue";
@@ -11,10 +9,19 @@ import DropdownButton, {
   type DropdownButtonOption,
   type DropdownButtonProps,
 } from "./DropdownButton.vue";
+import { useAuth0 } from "@auth0/auth0-vue";
 
-const { isLoggedIn, setIsLoggedIn } = inject(
-  userInjectionKey
-) as UserInjectionData;
+const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
+const handleSignup = () => {
+  loginWithRedirect({ screen_hint: "signup" });
+};
+const handleLogin = () => {
+  loginWithRedirect();
+};
+
+const handleLogout = () => {
+  logout({ returnTo: window.location.origin });
+};
 
 const isMobileMenuOpened = ref(false);
 const toggleMobileMenu = () => {
@@ -40,7 +47,7 @@ const links = computed<Array<HeaderLinks>>(() =>
 );
 
 const headerDropdownProps: DropdownButtonProps = {
-  text: "Dev Loper",
+  text: user.value.nickname || "undefined",
   options: [
     ...router
       .getRoutes()
@@ -54,7 +61,7 @@ const headerDropdownProps: DropdownButtonProps = {
     {
       name: "Déconnexion",
       callback: () => {
-        setIsLoggedIn();
+        handleLogout();
       },
     },
   ],
@@ -102,7 +109,7 @@ onUnmounted(() => {
         class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl"
       >
         <RouterLink
-          :to="isLoggedIn ? '/app' : '/'"
+          :to="isAuthenticated ? '/app' : '/'"
           class="self-center text-xl font-satisfy font-semibold whitespace-nowrap dark:text-white"
         >
           giftlist
@@ -110,27 +117,30 @@ onUnmounted(() => {
         <div class="flex items-center lg:order-2">
           <ThemeButton />
           <a
-            v-if="!isLoggedIn"
+            v-if="!isAuthenticated"
             href="#"
             class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-            @click="setIsLoggedIn"
+            @click="handleLogin"
             >Se connecter</a
           >
           <a
-            v-if="!isLoggedIn"
+            v-if="!isAuthenticated"
             href="#"
             class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-            @click="setIsLoggedIn"
+            @click="handleSignup"
             >S'inscrire</a
           >
           <DropdownButton
-            v-if="isLoggedIn"
+            v-if="isAuthenticated"
             class="hidden lg:block"
             :text="headerDropdownProps.text"
             :options="headerDropdownProps.options"
             @select="handleDropdownSelect"
           />
-          <HamburgerButton v-if="isLoggedIn" @click.stop="toggleMobileMenu" />
+          <HamburgerButton
+            v-if="isAuthenticated"
+            @click.stop="toggleMobileMenu"
+          />
         </div>
         <div
           id="mobile-menu-2"
@@ -139,7 +149,7 @@ onUnmounted(() => {
           @click.stop="handleMobileMenuClick"
         >
           <ul
-            v-if="isLoggedIn"
+            v-if="isAuthenticated"
             class="flex flex-col font-medium lg:flex-row lg:space-x-8"
           >
             <li v-for="(link, index) in links" :key="link.path">
@@ -158,7 +168,7 @@ onUnmounted(() => {
             </li>
           </ul>
           <ul
-            v-if="isLoggedIn"
+            v-if="isAuthenticated"
             class="flex flex-col mt-8 font-medium lg:hidden"
           >
             <li
@@ -181,7 +191,7 @@ onUnmounted(() => {
             </li>
             <li
               class="block lg:hidden py-2 pr-4 pl-3 border-b border-gray-100 last:border-b-0 lg:border-0 lg:p-0 cursor-pointer dark:border-gray-700 text-gray-700 hover:bg-gray-50 lg:hover:bg-transparent lg:hover:text-primary-700 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent"
-              @click="setIsLoggedIn"
+              @click="handleLogout"
             >
               Déconnexion
             </li>

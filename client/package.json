@@ -14,6 +14,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^1.0.2",
     "@heroicons/vue": "^2.0.13",
     "flowbite": "^1.5.5",
     "pinia": "^2.0.28",
