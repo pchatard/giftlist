@@ -11,7 +11,6 @@ import {
   PencilIcon,
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
-import NewListModal from "@/components/NewListModal.vue";
 import NewSharedListModal from "@/components/NewSharedListModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
@@ -40,19 +39,10 @@ const headingButton = computed(() => {
   };
 });
 
-const newListModal = {
-  show: computed(() => currentRoute.fullPath.endsWith("/lists/new")),
-  submitAction: () => {
-    router.push("/app/lists");
-  },
-  closeAction: () => {
-    router.push("/app/lists");
-  },
-};
-
 const newSharedListModal = {
   show: computed(() => currentRoute.fullPath.endsWith("/shared/new")),
-  submitAction: () => {
+  submitAction: (sharingCode: string) => {
+    console.log("Entered new sharing code or link: ", sharingCode);
     router.push("/app/lists/shared");
   },
   closeAction: () => {
@@ -111,7 +101,7 @@ onMounted(() => {
 });
 
 watch(currentRoute, (currentRoute) => {
-  if (newListModal.show.value || newSharedListModal.show.value) {
+  if (newSharedListModal.show.value) {
     pushBreadcrumbContent({
       name: currentRoute.name ?? "",
       path: currentRoute.fullPath,
@@ -142,21 +132,8 @@ watch(currentRoute, (currentRoute) => {
     </div>
 
     <Teleport to="body">
-      <NewListModal
-        v-show="
-          newListModal.show.value &&
-          !isSharedView &&
-          !newSharedListModal.show.value
-        "
-        @close="newListModal.closeAction"
-        @submit="newListModal.submitAction"
-      />
       <NewSharedListModal
-        v-show="
-          newSharedListModal.show.value &&
-          isSharedView &&
-          !newListModal.show.value
-        "
+        v-show="newSharedListModal.show.value && isSharedView"
         @close="newSharedListModal.closeAction"
         @submit="newSharedListModal.submitAction"
       />
@@ -289,7 +266,7 @@ watch(currentRoute, (currentRoute) => {
               <button
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
-                @click.stop=""
+                @click.stop="router.push(`/app/lists/${list.id}/edit`)"
               >
                 <PencilIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Modifier</span>

@@ -2,7 +2,6 @@
 import { onMounted, ref, inject, reactive, watch, computed } from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
-import GiftModal from "@/components/GiftModal.vue";
 import { lists as listsData } from "@/data/lists";
 import { gifts as giftsData } from "@/data/gifts";
 import { useRoute, useRouter } from "vue-router";
@@ -28,20 +27,6 @@ const currentRoute = useRoute();
 
 // Define this depending on wether the logged in user is in the list owners.
 const isListOwner = ref(true);
-
-const giftModal = {
-  show: computed(
-    () =>
-      currentRoute.fullPath.endsWith("/gift/new") ||
-      currentRoute.fullPath.endsWith("/edit")
-  ),
-  submitAction: () => {
-    router.push("/app/lists/" + list.value?.id);
-  },
-  closeAction: () => {
-    router.push("/app/lists/" + list.value?.id);
-  },
-};
 
 const list = computed(() =>
   listsData.find((l) => l.id == currentRoute.params.listId)
@@ -99,7 +84,7 @@ const handleGiftClick = (giftId: string) => {
   router.push(destination);
 };
 
-const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
+const { setBreadcrumbContent } = inject(
   breadcrumbContentInjectionKey
 ) as BreadcrumbContentData;
 
@@ -115,16 +100,7 @@ onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
 });
 
-watch(currentRoute, (newCurrentRoute) => {
-  if (giftModal.show.value) {
-    pushBreadcrumbContent({
-      name: newCurrentRoute.name ?? "",
-      path: newCurrentRoute.fullPath,
-    });
-  } else {
-    setBreadcrumbContent(initialBreadcrumbContent.value);
-  }
-
+watch(currentRoute, () => {
   sorting.columnIndex = 0;
   sorting.isDown = true;
 });
@@ -152,14 +128,6 @@ watch(isListOwner, () => {
 
     <label for="isOwner" class="mr-2">isListOwner</label>
     <input id="isOwner" v-model="isListOwner" type="checkbox" name="isOwner" />
-
-    <Teleport to="body">
-      <GiftModal
-        v-show="giftModal.show.value && isListOwner"
-        @close="giftModal.closeAction"
-        @submit="giftModal.submitAction"
-      />
-    </Teleport>
 
     <div class="overflow-x-auto relative rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">

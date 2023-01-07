@@ -9,9 +9,29 @@ export interface List {
   sharingCode: string;
   isShared: boolean;
   description?: string;
-  closureDate?: string | null;
+  closureDate?: string;
   ownersDTO?: UserName[];
   grantedUsersDTO?: UserName[];
+}
+
+export interface FormValidation {
+  isError: boolean;
+  errorMessage: string;
+}
+
+export interface FormList {
+  title: string;
+  isShared: boolean;
+  description?: string;
+  closureDate?: string;
+  ownersIds: string[];
+  grantedUsersIds: string[];
+}
+
+export interface FormListValidation {
+  title: FormValidation;
+  description: FormValidation;
+  closureDate: FormValidation;
 }
 
 export interface Gift {
@@ -28,4 +48,29 @@ export interface Gift {
   size?: string;
   color?: string;
   comments?: string;
+}
+
+export interface FormGift {
+  title: string;
+  isFavorite: boolean;
+  isHidden: boolean;
+  category: string;
+  listId: string;
+  price?: number;
+  linkURL?: string;
+  brand?: string;
+  size?: string;
+  color?: string;
+  comments?: string;
+}
+
+export interface FormGiftValidation {
+  title: FormValidation;
+  category: FormValidation;
+  price: FormValidation;
+  linkURL: FormValidation;
+  brand: FormValidation;
+  size: FormValidation;
+  color: FormValidation;
+  comments: FormValidation;
 }
