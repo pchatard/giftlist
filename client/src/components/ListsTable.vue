@@ -148,12 +148,32 @@ const computedLastRowText = computed(() => {
             </div>
           </td>
           <td v-else class="py-4 px-6 hidden md:table-cell">
-            {{ list.ownersDTO ?? "Copain" }}
+            {{
+              list?.ownersDTO
+                ? list.ownersDTO
+                    .map((user) => user.displayName)
+                    .reduce(
+                      (ownersList, newOwner, index) =>
+                        ownersList + (index == 0 ? "" : ", ") + newOwner,
+                      ""
+                    )
+                : null ?? "Copain"
+            }}
           </td>
 
           <!-- Column 3 -->
           <td v-if="!isSharedView" class="py-4 px-6 hidden md:table-cell">
-            {{ list.ownersDTO ?? "Moi" }}
+            {{
+              list?.ownersDTO
+                ? list.ownersDTO
+                    .map((user) => user.displayName)
+                    .reduce(
+                      (ownersList, newOwner, index) =>
+                        ownersList + (index == 0 ? "" : ", ") + newOwner,
+                      ""
+                    )
+                : null ?? "Moi"
+            }}
           </td>
           <td v-else class="py-4 px-6 hidden md:table-cell">
             {{ list.closureDate }}

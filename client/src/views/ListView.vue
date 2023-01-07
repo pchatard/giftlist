@@ -19,6 +19,7 @@ import {
   TicketIcon,
   NoSymbolIcon,
   CheckIcon,
+  ShareIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
@@ -26,7 +27,7 @@ const router = useRouter();
 const currentRoute = useRoute();
 
 // Define this depending on wether the logged in user is in the list owners.
-const isListOwner = ref(true);
+const isListOwner = ref(false);
 
 const list = computed(() =>
   listsData.find((l) => l.id == currentRoute.params.listId)
@@ -113,21 +114,52 @@ watch(isListOwner, () => {
 <template>
   <div>
     <div class="flex justify-between items-center mb-4">
-      <PageHeading class="mb-0">{{ list?.title }}</PageHeading>
-      <button
-        v-if="isListOwner"
-        type="button"
-        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        @click="router.push('/app/lists/' + list?.id + '/gift/new')"
-      >
-        Nouveau cadeau
+      <div>
+        <PageHeading class="mb-0">{{ list?.title }}</PageHeading>
+        <div v-if="!isListOwner">
+          <p class="text-sm">
+            par
+            {{
+              list?.ownersDTO
+                ? list.ownersDTO
+                    .map((user) => user.displayName)
+                    .reduce(
+                      (ownersList, newOwner, index) =>
+                        ownersList + (index == 0 ? "" : ", ") + newOwner,
+                      ""
+                    )
+                : ""
+            }}
+          </p>
+          <p v-if="list?.closureDate" class="text-sm">
+            Date d'échéance : {{ list?.closureDate }}
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button
+          v-if="isListOwner"
+          type="button"
+          class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        >
+          Partager
+          <ShareIcon class="ml-2 -mr-1 w-5 h-5" />
+        </button>
+        <button
+          v-if="isListOwner"
+          type="button"
+          class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          @click="router.push('/app/lists/' + list?.id + '/gift/new')"
+        >
+          Nouveau cadeau
 
-        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
-      </button>
+          <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
+        </button>
+      </div>
     </div>
 
-    <label for="isOwner" class="mr-2">isListOwner</label>
-    <input id="isOwner" v-model="isListOwner" type="checkbox" name="isOwner" />
+    <!-- <label for="isOwner" class="mr-2">isListOwner</label>
+    <input id="isOwner" v-model="isListOwner" type="checkbox" name="isOwner" /> -->
 
     <div class="overflow-x-auto relative rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -277,7 +309,7 @@ watch(isListOwner, () => {
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>
               </button>
               <button
-                v-if="!isListOwner"
+                v-if="!isListOwner && !gift.isBooked"
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
                 @click.stop=""
