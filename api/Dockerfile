@@ -9,9 +9,10 @@ COPY package-lock.json ./
 
 # Building your code for production
 RUN curl --create-dirs -o /certs/root.crt -O https://cockroachlabs.cloud/clusters/f82eaea0-cfe2-4492-aa07-e986cd93e46d/cert &&\
-  npm ci --only=production  
+  npm ci --only=production  &&\
+  npm run build
 
 # Bundle app source
-COPY ./build .
+# COPY ./build .
 
 CMD [ "node", "index.js" ]
