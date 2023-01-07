@@ -18,7 +18,7 @@ const list = computed(() => {
 });
 const sharingLink = computed(() => {
   const link = new URL(
-    window.location.origin + "/app/lists/invite/" + list.value?.sharingCode
+    window.location.origin + "/#/app/lists/invite/" + list.value?.sharingCode
   );
   return link.href;
 });
