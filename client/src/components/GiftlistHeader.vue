@@ -12,10 +12,11 @@ import DropdownButton, {
 import { useAuth0 } from "@auth0/auth0-vue";
 
 const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
+
 const handleSignup = () => {
   loginWithRedirect({ screen_hint: "signup" });
 };
-const handleLogin = () => {
+const handleLogin = async () => {
   loginWithRedirect();
 };
 
@@ -47,7 +48,7 @@ const links = computed<Array<HeaderLinks>>(() =>
 );
 
 const headerDropdownProps: DropdownButtonProps = {
-  text: user.value.nickname || "undefined",
+  text: user.value.email || "unknown",
   options: [
     ...router
       .getRoutes()
@@ -132,10 +133,11 @@ onUnmounted(() => {
           >
             S'inscrire
           </a>
+          <!-- TODO: Check why using headerDropdownProps.text does not work-->
           <DropdownButton
             v-if="isAuthenticated"
             class="hidden lg:block"
-            :text="headerDropdownProps.text"
+            :text="user.email || ''"  
             :options="headerDropdownProps.options"
             @select="handleDropdownSelect"
           />
