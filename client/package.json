@@ -11,9 +11,12 @@
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' :4173 'cypress open --e2e'",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "prettier:check": "prettier --config .prettierrc.json --check 'src/**/*.{vue,ts,css}'",
+    "prettier:write": "prettier --config .prettierrc.json --write 'src/**/*.{vue,ts,css}'"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^1.0.2",
     "@heroicons/vue": "^2.0.13",
     "flowbite": "^1.5.5",
     "pinia": "^2.0.28",

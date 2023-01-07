@@ -125,9 +125,9 @@ onMounted(() => {
             required
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            <span class="font-medium">{{
-              listFormValidation.title.isError ? "Erreur :" : ""
-            }}</span>
+            <span class="font-medium">
+              {{ listFormValidation.title.isError ? "Erreur :" : "" }}
+            </span>
             {{ listFormValidation.title.errorMessage }}
           </p>
         </div>
@@ -147,9 +147,9 @@ onMounted(() => {
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            <span class="font-medium">{{
-              listFormValidation.description.isError ? "Erreur :" : ""
-            }}</span>
+            <span class="font-medium">
+              {{ listFormValidation.description.isError ? "Erreur :" : "" }}
+            </span>
             {{ listFormValidation.description.errorMessage }}
           </p>
         </div>
@@ -165,8 +165,9 @@ onMounted(() => {
             ></div>
             <span
               class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >Ajouter une date d'échéance</span
             >
+              Ajouter une date d'échéance
+            </span>
           </label>
           <div v-if="hasClosureDate">
             <label
@@ -185,9 +186,9 @@ onMounted(() => {
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
             />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-              <span class="font-medium">{{
-                listFormValidation.closureDate.isError ? "Erreur :" : ""
-              }}</span>
+              <span class="font-medium">
+                {{ listFormValidation.closureDate.isError ? "Erreur :" : "" }}
+              </span>
               {{ listFormValidation.closureDate.errorMessage }}
             </p>
           </div>

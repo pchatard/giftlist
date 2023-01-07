@@ -163,9 +163,9 @@ onMounted(() => {
             required
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            <span class="font-medium">{{
-              giftFormValidation.title.isError ? "Erreur :" : ""
-            }}</span>
+            <span class="font-medium">
+              {{ giftFormValidation.title.isError ? "Erreur :" : "" }}
+            </span>
             {{ giftFormValidation.title.errorMessage }}
           </p>
         </div>
@@ -181,8 +181,9 @@ onMounted(() => {
           ></div>
           <span
             class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Ajouter à mes favoris</span
           >
+            Ajouter à mes favoris
+          </span>
         </label>
 
         <label class="flex relative items-center cursor-pointer">
@@ -196,8 +197,9 @@ onMounted(() => {
           ></div>
           <span
             class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Cacher ce cadeau pour le moment</span
           >
+            Cacher ce cadeau pour le moment
+          </span>
         </label>
         <div>
           <label
@@ -272,9 +274,9 @@ onMounted(() => {
             required
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            <span class="font-medium">{{
-              giftFormValidation.brand.isError ? "Erreur :" : ""
-            }}</span>
+            <span class="font-medium">
+              {{ giftFormValidation.brand.isError ? "Erreur :" : "" }}
+            </span>
             {{ giftFormValidation.brand.errorMessage }}
           </p>
         </div>
@@ -296,9 +298,9 @@ onMounted(() => {
             required
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            <span class="font-medium">{{
-              giftFormValidation.color.isError ? "Erreur :" : ""
-            }}</span>
+            <span class="font-medium">
+              {{ giftFormValidation.color.isError ? "Erreur :" : "" }}
+            </span>
             {{ giftFormValidation.color.errorMessage }}
           </p>
         </div>
@@ -320,9 +322,9 @@ onMounted(() => {
             required
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            <span class="font-medium">{{
-              giftFormValidation.size.isError ? "Erreur :" : ""
-            }}</span>
+            <span class="font-medium">
+              {{ giftFormValidation.size.isError ? "Erreur :" : "" }}
+            </span>
             {{ giftFormValidation.size.errorMessage }}
           </p>
         </div>
@@ -344,9 +346,9 @@ onMounted(() => {
             required
           />
           <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-            <span class="font-medium">{{
-              giftFormValidation.comments.isError ? "Erreur :" : ""
-            }}</span>
+            <span class="font-medium">
+              {{ giftFormValidation.comments.isError ? "Erreur :" : "" }}
+            </span>
             {{ giftFormValidation.comments.errorMessage }}
           </p>
         </div>
