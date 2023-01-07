@@ -199,10 +199,10 @@ export class ListController extends Controller {
 		@Path() listId: UUID,
 		@Query() userMail: email
 	): Promise<void> {
+		if (!(await ListService.ownersAuth0Ids(listId)).includes(request.userId)) {
+			throw new UnauthorizedError();
+		}
 		try {
-			if (!(await ListService.ownersAuth0Ids(listId)).includes(request.userId)) {
-				throw new UnauthorizedError();
-			}
 			const user: User = await UserService.getByMail(userMail);
 			await ListService.removeGrantedUser(listId, user);
 		} catch (err: unknown) {

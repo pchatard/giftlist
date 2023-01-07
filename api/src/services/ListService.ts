@@ -106,13 +106,12 @@ class ListService {
 		const list: List = await listRepository.findOneOrFail(listId, {
 			relations: ["grantedUsers"],
 		});
-		list.isShared = true;
-		const gUsers: User[] = (list.grantedUsers || [])
+		const gUsers: User[] = list.grantedUsers || [];
 		const index: number = gUsers.indexOf(user);
 		if (index > -1) {
 			gUsers.splice(index, 1);
 		}
-		list.grantedUsers = gUsers
+		list.grantedUsers = gUsers;
 
 		return await listRepository.save(list);
 	}
