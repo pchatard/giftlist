@@ -9,6 +9,7 @@ import {
 	AfterList,
 	BeforeList,
 	DeleteList,
+	EjectList,
 	GetList,
 	GetLists,
 	InviteList,
@@ -58,6 +59,7 @@ describe("Lists", function () {
 	describe("GET " + URLS.Url_ListGetAll(), GetLists);
 	describe("PUT " + URLS.Url_ListPut(), PutList);
 	describe("PUT " + URLS.Url_ListInvite(), InviteList);
+	describe("PUT " + URLS.Url_ListEject(), EjectList);
 	describe("PUT " + URLS.Url_ListShare(), ShareList);
 	describe("PUT " + URLS.Url_ListUnshare(), UnshareList);
 	after(async () => await AfterList());

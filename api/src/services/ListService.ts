@@ -31,7 +31,6 @@ class ListService {
 	/**
 	 * Delete a list from Database.
 	 * @param {UUID} listId id of list to delete, uuid v4 formatted
-	 * @param {UUID} userId id of user which ask, uuid v4 formatted
 	 * @returns {Promise<DeleteResult>}
 	 */
 	static async delete(listId: UUID): Promise<DeleteResult> {
@@ -42,7 +41,7 @@ class ListService {
 	/**
 	 * Forget a list for a user from Database.
 	 * @param {UUID} listId id of list to delete, uuid v4 formatted
-	 * @param {UUID} userId id of user which ask, uuid v4 formatted
+	 * @param {UUID} userAuth0Id id of user which ask, uuid v4 formatted
 	 * @returns {Promise<List>} the forgotten list
 	 */
 	static async forget(listId: UUID, userAuth0Id: UUID): Promise<List> {
@@ -57,7 +56,7 @@ class ListService {
 
 	/**
 	 * Return a list from Database.
-	 * @param {string} listId id of list to get, uuid v4 formatted
+	 * @param {UUID} listId id of list to get, uuid v4 formatted
 	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
 	static async get(listId: UUID): Promise<List> {
@@ -81,9 +80,9 @@ class ListService {
 	}
 
 	/**
-	 * Get a list from its sharing code.
-	 * @param {UUID} sharingCode sharing code of list to get, uuid v4 formatted
-	 * @param {User} user user to add to granted
+	 * Add a user to granted users of a list.
+	 * @param {UUID} listId id of list to get, uuid v4 formatted
+	 * @param {User} user user to add to granted ones
 	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
 	static async addGrantedUser(listId: UUID, user: User): Promise<List> {
@@ -93,6 +92,27 @@ class ListService {
 		});
 		list.isShared = true;
 		list.grantedUsers = (list.grantedUsers || []).concat(user);
+		return await listRepository.save(list);
+	}
+
+	/**
+	 * Remove a user from granted users of a list.
+	 * @param {UUID} listId id of list to get, uuid v4 formatted
+	 * @param {User} user user to remove from granted ones
+	 * @returns {Promise<List>} The list matching the listId parameter
+	 */
+	static async removeGrantedUser(listId: UUID, user: User): Promise<List> {
+		const listRepository: Repository<List> = getRepository(List);
+		const list: List = await listRepository.findOneOrFail(listId, {
+			relations: ["grantedUsers"],
+		});
+		const gUsers: User[] = list.grantedUsers || [];
+		const index: number = gUsers.indexOf(user);
+		if (index > -1) {
+			gUsers.splice(index, 1);
+		}
+		list.grantedUsers = gUsers;
+
 		return await listRepository.save(list);
 	}
 

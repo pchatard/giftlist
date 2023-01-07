@@ -51,8 +51,8 @@ class UserService {
 	}
 
 	/**
-	 * Return a user from Database.
-	 * @param {string} userAuth0Id id of user to get
+	 * Return a user from Database from Auth0 ID.
+	 * @param {string} userAuth0Id auth0 id of user to get
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
 	static async getByAuth0Id(userAuth0Id: string): Promise<User> {
