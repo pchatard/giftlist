@@ -126,7 +126,17 @@ const computedLastRowText = computed(() => {
               </div>
             </div>
             <div v-else class="font-normal md:hidden">
-              {{ list.ownersDTO ?? "Copain" }}
+              {{
+                list?.ownersDTO
+                  ? list.ownersDTO
+                      .map((user) => user.displayName)
+                      .reduce(
+                        (ownersList, newOwner, index) =>
+                          ownersList + (index == 0 ? "" : ", ") + newOwner,
+                        ""
+                      )
+                  : null ?? "Copain"
+              }}
             </div>
           </th>
 
