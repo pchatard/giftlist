@@ -1,15 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import AppView from "@/views/AppView.vue";
+import GiftFormView from "@/views/GiftFormView.vue";
+import GiftView from "@/views/GiftView.vue";
 import HomeView from "@/views/HomeView.vue";
+import ListFormView from "@/views/ListFormView.vue";
+import ListView from "@/views/ListView.vue";
 import MyListsView from "@/views/MyListsView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import SettingsView from "@/views/SettingsView.vue";
-import ListView from "@/views/ListView.vue";
-import GiftView from "@/views/GiftView.vue";
-import ListFormView from "@/views/ListFormView.vue";
-import GiftFormView from "@/views/GiftFormView.vue";
 import ListSharing from "@/views/ListSharing.vue";
+import { authGuard } from "@auth0/auth0-vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists",
@@ -38,6 +40,7 @@ const router = createRouter({
         isHeaderLink: true,
         headerOrder: 0,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/new",
@@ -46,6 +49,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/shared",
@@ -55,6 +59,7 @@ const router = createRouter({
         isHeaderLink: true,
         headerOrder: 1,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/shared/new",
@@ -63,6 +68,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/:listId",
@@ -70,6 +76,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/:listId/edit",
@@ -78,6 +85,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/:listId/share",
@@ -94,6 +102,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/:listId/gift/:giftId",
@@ -101,6 +110,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/:listId/gift/:giftId/edit",
@@ -109,6 +119,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/profile",
@@ -117,6 +128,7 @@ const router = createRouter({
       meta: {
         isDropdownLink: true,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/settings",
@@ -125,6 +137,7 @@ const router = createRouter({
       meta: {
         isDropdownLink: true,
       },
+      beforeEnter: authGuard,
     },
 
     // {

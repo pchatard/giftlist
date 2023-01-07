@@ -43,6 +43,9 @@ export const Url_ListUnshare = (listId: string = ":listId"): string =>
 export const Url_ListInvite = (sharingCode: string = ":sharingCode"): string =>
 	BaseUrl_Lists + "/invite/" + sharingCode;
 
+export const Url_ListEject = (listId: string = ":listId", userMail: string = ":userMail"): string =>
+	BaseUrl_Lists + "/" + listId + "/eject?userMail=" + userMail;
+
 // Lists Endpoints
 const BaseUrl_Gift = (listId: string = ":listId"): string =>
 	BaseUrl_Lists + "/" + listId + "/gifts";

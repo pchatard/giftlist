@@ -1,22 +1,22 @@
 {
-  "entryFile": "./src/index.ts",
-  "noImplicitAdditionalProperties": "throw-on-extras",
-  "spec": {
-    "license": "MIT",
-    "name": "Giftlist API",
-    "outputDirectory": "./src/config",
-    "specVersion": 3,
-    "securityDefinitions": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    }
-  },
-  "routes": {
-    "routesDir": "./src",
-    "authenticationModule": "./src/middlewares/authenticate.ts"
-  },
-  "controllerPathGlobs": ["./src/controllers/*.ts"]
+	"entryFile": "./src/index.ts",
+	"noImplicitAdditionalProperties": "throw-on-extras",
+	"spec": {
+		"license": "MIT",
+		"name": "Giftlist API",
+		"outputDirectory": "./src/config",
+		"specVersion": 3,
+		"securityDefinitions": {
+			"bearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"routes": {
+		"routesDir": "./src",
+		"authenticationModule": "./src/middlewares/authenticate.ts"
+	},
+	"controllerPathGlobs": ["./src/controllers/*.ts"]
 }
