@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
+import { lists } from "@/data/lists";
+import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import type { BreadcrumbContentData } from "@/types";
 import type { FormGift, FormGiftValidation } from "@/types/giftlist";
-import { computed, onMounted, reactive } from "vue";
+import { inject, onMounted, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const currentRoute = useRoute();
-
-const pageTitle = computed(() => {
-  return currentRoute.fullPath.endsWith("/new")
-    ? "Créer un cadeau"
-    : "Modifier un cadeau";
-});
 
 const giftForm: FormGift = reactive({
   title: "",
@@ -112,7 +109,12 @@ const resetGiftFormValidation = () => {
   giftFormValidation.comments.isError = false;
 };
 
+const { setBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
+
 onMounted(() => {
+  const listId = currentRoute.params.listId;
   const giftId = currentRoute.params.giftId;
   if (giftId) {
     // Get gift data and populate giftForm with it.
@@ -120,13 +122,26 @@ onMounted(() => {
   } else {
     console.log("Creating new gift");
   }
+
+  setBreadcrumbContent([
+    { name: "Mes listes", path: "/app/lists" },
+    ...(listId
+      ? [
+          {
+            name: lists.find((list) => list.id == listId)?.title ?? "Liste X",
+            path: "/app/lists/" + listId,
+          },
+        ]
+      : []),
+    { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+  ]);
 });
 </script>
 
 <template>
   <div>
     <div class="flex justify-between items-center mb-4">
-      <PageHeading class="mb-0">{{ pageTitle }}</PageHeading>
+      <PageHeading class="mb-0">{{ currentRoute.name }}</PageHeading>
     </div>
 
     <div>

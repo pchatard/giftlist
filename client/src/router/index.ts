@@ -81,7 +81,7 @@ const router = createRouter({
     },
     {
       path: "/app/lists/:listId/gift/new",
-      name: "Nouveau cadeau",
+      name: "Créer un cadeau",
       component: GiftFormView,
       meta: {
         isHeaderLink: false,

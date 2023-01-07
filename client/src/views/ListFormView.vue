@@ -1,17 +1,14 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
+import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import type { BreadcrumbContentData } from "@/types";
 import type { FormList, FormListValidation } from "@/types/giftlist";
-import { computed, onMounted, reactive, ref } from "vue";
+import { inject, onMounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { lists } from "@/data/lists";
 
 const router = useRouter();
 const currentRoute = useRoute();
-
-const pageTitle = computed(() => {
-  return currentRoute.fullPath.endsWith("/new")
-    ? "Créer un cadeau"
-    : "Modifier un cadeau";
-});
 
 const listForm: FormList = reactive({
   title: "",
@@ -75,6 +72,10 @@ const resetListFormValidation = () => {
   listFormValidation.closureDate.isError = false;
 };
 
+const { setBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
+
 onMounted(() => {
   const listId = currentRoute.params.listId;
   if (listId) {
@@ -83,6 +84,19 @@ onMounted(() => {
   } else {
     console.log("Creating new list");
   }
+
+  setBreadcrumbContent([
+    { name: "Mes listes", path: "/app/lists" },
+    ...(listId
+      ? [
+          {
+            name: lists.find((list) => list.id == listId)?.title ?? "Liste X",
+            path: "/app/lists/" + listId,
+          },
+        ]
+      : []),
+    { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+  ]);
 });
 </script>
 

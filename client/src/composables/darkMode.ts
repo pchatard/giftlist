@@ -1,7 +1,7 @@
 import { onMounted, ref, watch } from "vue";
 
 export function useDarkMode() {
-  const isDarkMode = ref(true);
+  const isDarkMode = ref(false);
   const setIsDarkMode = () => {
     isDarkMode.value = !isDarkMode.value;
   };
