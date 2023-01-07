@@ -23,3 +23,13 @@ export interface HeaderLinks {
   isActive: boolean;
   isExactActive: boolean;
 }
+
+export interface TableHeader {
+  name: string;
+  isMobile: boolean;
+}
+
+export interface TableSorting {
+  columnIndex: number;
+  isDown: boolean;
+}
