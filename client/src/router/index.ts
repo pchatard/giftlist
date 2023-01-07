@@ -9,6 +9,7 @@ import ListView from "@/views/ListView.vue";
 import GiftView from "@/views/GiftView.vue";
 import ListFormView from "@/views/ListFormView.vue";
 import GiftFormView from "@/views/GiftFormView.vue";
+import ListSharing from "@/views/ListSharing.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +75,14 @@ const router = createRouter({
       path: "/app/lists/:listId/edit",
       name: "Modifier une liste",
       component: ListFormView,
+      meta: {
+        isHeaderLink: false,
+      },
+    },
+    {
+      path: "/app/lists/:listId/share",
+      name: "Partager ma liste",
+      component: ListSharing,
       meta: {
         isHeaderLink: false,
       },
