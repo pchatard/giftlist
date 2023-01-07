@@ -266,7 +266,7 @@ watch(currentRoute, (currentRoute) => {
               <button
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
-                @click.stop=""
+                @click.stop="router.push(`/app/lists/${list.id}/edit`)"
               >
                 <PencilIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Modifier</span>

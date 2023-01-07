@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
 import type { FormList, FormListValidation } from "@/types/giftlist";
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onMounted, reactive, ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
+const currentRoute = useRoute();
+
+const pageTitle = computed(() => {
+  return currentRoute.fullPath.endsWith("/new")
+    ? "Créer un cadeau"
+    : "Modifier un cadeau";
+});
 
 const listForm: FormList = reactive({
   title: "",
@@ -67,12 +74,22 @@ const resetListFormValidation = () => {
   listFormValidation.closureDate.errorMessage = "";
   listFormValidation.closureDate.isError = false;
 };
+
+onMounted(() => {
+  const listId = currentRoute.params.listId;
+  if (listId) {
+    // Get list data and populate listForm with it.
+    console.log("Editing list " + listId);
+  } else {
+    console.log("Creating new list");
+  }
+});
 </script>
 
 <template>
   <div>
     <div class="flex justify-between items-center mb-4">
-      <PageHeading class="mb-0">Créer une liste</PageHeading>
+      <PageHeading class="mb-0">{{ currentRoute.name }}</PageHeading>
     </div>
 
     <div>

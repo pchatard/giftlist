@@ -115,7 +115,7 @@ const resetGiftFormValidation = () => {
 onMounted(() => {
   const giftId = currentRoute.params.giftId;
   if (giftId) {
-    // Get gift data and populate listForm with it.
+    // Get gift data and populate giftForm with it.
     console.log("Editing gift " + giftId);
   } else {
     console.log("Creating new gift");

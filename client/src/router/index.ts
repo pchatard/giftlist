@@ -8,7 +8,7 @@ import ProfileView from "@/views/ProfileView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import ListView from "@/views/ListView.vue";
 import GiftView from "@/views/GiftView.vue";
-import NewListView from "@/views/NewListView.vue";
+import ListFormView from "@/views/ListFormView.vue";
 import GiftFormView from "@/views/GiftFormView.vue";
 
 const router = createRouter({
@@ -41,8 +41,8 @@ const router = createRouter({
     },
     {
       path: "/app/lists/new",
-      name: "Nouvelle liste",
-      component: NewListView,
+      name: "Créer une liste",
+      component: ListFormView,
       meta: {
         isHeaderLink: false,
       },
@@ -67,6 +67,14 @@ const router = createRouter({
     {
       path: "/app/lists/:listId",
       component: ListView,
+      meta: {
+        isHeaderLink: false,
+      },
+    },
+    {
+      path: "/app/lists/:listId/edit",
+      name: "Modifier une liste",
+      component: ListFormView,
       meta: {
         isHeaderLink: false,
       },
