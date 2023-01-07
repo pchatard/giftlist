@@ -8,6 +8,8 @@ import ProfileView from "@/views/ProfileView.vue";
 import SettingsView from "@/views/SettingsView.vue";
 import ListView from "@/views/ListView.vue";
 import GiftView from "@/views/GiftView.vue";
+import NewListView from "@/views/NewListView.vue";
+import GiftFormView from "@/views/GiftFormView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,7 +42,7 @@ const router = createRouter({
     {
       path: "/app/lists/new",
       name: "Nouvelle liste",
-      component: MyListsView,
+      component: NewListView,
       meta: {
         isHeaderLink: false,
       },
@@ -72,7 +74,7 @@ const router = createRouter({
     {
       path: "/app/lists/:listId/gift/new",
       name: "Nouveau cadeau",
-      component: ListView,
+      component: GiftFormView,
       meta: {
         isHeaderLink: false,
       },
@@ -87,7 +89,7 @@ const router = createRouter({
     {
       path: "/app/lists/:listId/gift/:giftId/edit",
       name: "Modifier un cadeau",
-      component: ListView,
+      component: GiftFormView,
       meta: {
         isHeaderLink: false,
       },

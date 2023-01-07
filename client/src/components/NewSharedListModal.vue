@@ -1,14 +1,48 @@
 <script setup lang="ts">
+import type { FormValidation } from "@/types/giftlist";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+import { reactive, ref } from "vue";
 
 // export interface NewSharedListModalProps {
 //   list:
 // }
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "close"): void;
-  (e: "submit"): void;
+  (e: "submit", sharingCode: string): void;
 }>();
+
+const sharingCode = ref("");
+const sharingCodeValidation = reactive<FormValidation>({
+  isError: false,
+  errorMessage: "",
+});
+
+const handleSubmit = () => {
+  if (validateSharingCode()) {
+    const parsedSharingCode = sharingCode.value;
+    emit("submit", parsedSharingCode);
+    resetForm();
+  }
+};
+
+const resetForm = () => {
+  sharingCode.value = "";
+};
+
+const validateSharingCode = (): boolean => {
+  if (sharingCode.value.trim() == "") {
+    sharingCodeValidation.isError = true;
+    sharingCodeValidation.errorMessage =
+      "Le lien ou le code ne peut pas être vide";
+    return false;
+  } else if (sharingCode.value != "valid") {
+    sharingCodeValidation.isError = true;
+    sharingCodeValidation.errorMessage = "Le format est invalide";
+    return false;
+  }
+  return true;
+};
 </script>
 
 <template>
@@ -42,18 +76,29 @@ defineEmits<{
               </label>
               <input
                 id="shared-list-code"
+                v-model="sharingCode"
                 type="text"
                 name="shared-list-code"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder=""
                 required
               />
+              <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                <span class="font-medium">{{
+                  sharingCodeValidation.isError ? "Erreur :" : ""
+                }}</span>
+                {{ sharingCodeValidation.errorMessage }}
+              </p>
+              <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">
+                Le lien ou code de partage se présente sous la forme suivante
+                ...
+              </p>
             </div>
 
             <button
               type="button"
               class="w-full text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-              @click="$emit('submit')"
+              @click="handleSubmit"
             >
               Valider
             </button>

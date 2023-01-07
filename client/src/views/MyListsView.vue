@@ -11,12 +11,10 @@ import {
   PencilIcon,
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
-import NewListModal from "@/components/NewListModal.vue";
 import NewSharedListModal from "@/components/NewSharedListModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
-import type { FormList, List } from "@/types/giftlist";
 
 const router = useRouter();
 const currentRoute = useRoute();
@@ -41,20 +39,10 @@ const headingButton = computed(() => {
   };
 });
 
-const newListModal = {
-  show: computed(() => currentRoute.fullPath.endsWith("/lists/new")),
-  submitAction: (newList: FormList) => {
-    console.log("Creating new list: ", newList);
-    // router.push("/app/lists");
-  },
-  closeAction: () => {
-    router.push("/app/lists");
-  },
-};
-
 const newSharedListModal = {
   show: computed(() => currentRoute.fullPath.endsWith("/shared/new")),
-  submitAction: () => {
+  submitAction: (sharingCode: string) => {
+    console.log("Entered new sharing code or link: ", sharingCode);
     router.push("/app/lists/shared");
   },
   closeAction: () => {
@@ -113,7 +101,7 @@ onMounted(() => {
 });
 
 watch(currentRoute, (currentRoute) => {
-  if (newListModal.show.value || newSharedListModal.show.value) {
+  if (newSharedListModal.show.value) {
     pushBreadcrumbContent({
       name: currentRoute.name ?? "",
       path: currentRoute.fullPath,
@@ -144,21 +132,8 @@ watch(currentRoute, (currentRoute) => {
     </div>
 
     <Teleport to="body">
-      <NewListModal
-        v-show="
-          newListModal.show.value &&
-          !isSharedView &&
-          !newSharedListModal.show.value
-        "
-        @close="newListModal.closeAction"
-        @submit="newListModal.submitAction"
-      />
       <NewSharedListModal
-        v-show="
-          newSharedListModal.show.value &&
-          isSharedView &&
-          !newListModal.show.value
-        "
+        v-show="newSharedListModal.show.value && isSharedView"
         @close="newSharedListModal.closeAction"
         @submit="newSharedListModal.submitAction"
       />
