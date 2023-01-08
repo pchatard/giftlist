@@ -1,21 +1,30 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
 import UsersTable from "@/components/UsersTable.vue";
+import { fetcher } from "@/data/fetcher";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import { useAuth0 } from "@auth0/auth0-vue";
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
-import { inject, onMounted } from "vue";
+import { inject, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
+import type { UserDTO } from "../types/users";
 
 const { user } = useAuth0();
+
+let data = reactive<UserDTO>({
+  displayName: "",
+  email: "",
+  bookingsDTO: [],
+});
 
 const currentRoute = useRoute();
 const { setBreadcrumbContent } = inject(
   breadcrumbContentInjectionKey
 ) as BreadcrumbContentData;
 
-onMounted(() => {
+onMounted(async () => {
+  data = await fetcher("users/me");
   setBreadcrumbContent([
     { name: currentRoute.name ?? "", path: currentRoute.fullPath },
   ]);
@@ -37,8 +46,9 @@ onMounted(() => {
       </div>
 
       <div>
-        <div>7 listes</div>
-        <div>12 cadeaux offerts</div>
+        <div>7 listes</div> <!-- TODO: HARDCODED -->
+        <div>{{ data.bookingsDTO.length }} cadeaux réservés</div>
+        <div>12 cadeaux offerts</div> <!-- TODO: HARDCODED -->
       </div>
     </div>
 
