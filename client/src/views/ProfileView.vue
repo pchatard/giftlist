@@ -5,16 +5,15 @@ import { onMounted } from "@vue/runtime-core";
 
 async function fetcher(
   path: string,
-  body?: object,
-  method?: string,
-  devMode: boolean = true
+  body?: BodyInit,
+  method?: string
 ) {
   const { getAccessTokenSilently } = useAuth0();
 
   const token = await getAccessTokenSilently();
 
-  const proto = devMode ? "http" : "https";
   const host = import.meta.env.VITE_API_HOST;
+  const proto = host == "localhost" ? "http" : "https";
   const port = import.meta.env.VITE_API_PORT;
   const response = await fetch(`${proto}://${host}:${port}/${path}`, {
     headers: {
