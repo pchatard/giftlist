@@ -29,5 +29,4 @@ RUN curl --create-dirs -o /certs/root.crt -O https://cockroachlabs.cloud/cluster
 # Bundle app source
 COPY --from=builder /opt/app/build .
 
-EXPOSE 443
 CMD [ "node", "index.js" ]
