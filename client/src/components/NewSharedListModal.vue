@@ -43,6 +43,12 @@ const validateSharingCode = (): boolean => {
   }
   return true;
 };
+
+const handlePaste = (e: ClipboardEvent) => {
+  const splitCopiedLink = e.clipboardData?.getData("text").split("/") ?? [];
+  const formattedSharingCode = splitCopiedLink[splitCopiedLink.length - 1];
+  sharingCode.value = formattedSharingCode;
+};
 </script>
 
 <template>
@@ -64,7 +70,7 @@ const validateSharingCode = (): boolean => {
         </button>
         <div class="px-6 py-6 lg:px-8">
           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-            Code de partage
+            Lien de partage
           </h3>
           <form class="space-y-6" action="#">
             <div>
@@ -72,7 +78,7 @@ const validateSharingCode = (): boolean => {
                 for="shared-list-code"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Lien ou code de partage
+                Lien de partage
               </label>
               <input
                 id="shared-list-code"
@@ -82,6 +88,7 @@ const validateSharingCode = (): boolean => {
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder=""
                 required
+                @paste.prevent="handlePaste"
               />
               <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                 <span class="font-medium">
