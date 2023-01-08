@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "./src/index.ts",
 	"scripts": {
-		"build": "tsc",
+		"build:local": "tsc",
+		"build": "tsc && curl --create-dirs -o root.crt -O https://cockroachlabs.cloud/clusters/f82eaea0-cfe2-4492-aa07-e986cd93e46d/cert",
 		"clean": "rm -rf ./build/*",
 		"lint": "eslint -c .eslintrc.json './src/**/*.ts'",
 		"typeorm:dropschema": "NODE_ENV=test node -r ts-node/register ./node_modules/typeorm/cli.js -f ./src/config/ormconfig.ts schema:drop",
@@ -35,6 +36,7 @@
 		"pg": "^8.7.3",
 		"promise.any": "^2.0.3",
 		"swagger-ui-express": "^4.1.6",
+		"ts-node": "^10.4.0",
 		"tsoa": "^3.14.1",
 		"typeorm": "^0.2.41",
 		"typescript": "^4.4.4"
@@ -63,7 +65,6 @@
 		"nyc": "^15.1.0",
 		"prettier": "^2.4.1",
 		"request": "^2.88.2",
-		"ts-node": "^10.4.0",
 		"typeorm-seeding": "^1.6.1",
 		"uuid": "^8.3.2"
 	},
