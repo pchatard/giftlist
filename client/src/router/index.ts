@@ -8,7 +8,6 @@ import ListFormView from "@/views/ListFormView.vue";
 import ListView from "@/views/ListView.vue";
 import MyListsView from "@/views/MyListsView.vue";
 import ProfileView from "@/views/ProfileView.vue";
-import SettingsView from "@/views/SettingsView.vue";
 import ListSharing from "@/views/ListSharing.vue";
 import { authGuard } from "@auth0/auth0-vue";
 
@@ -94,6 +93,7 @@ const router = createRouter({
       meta: {
         isHeaderLink: false,
       },
+      beforeEnter: authGuard,
     },
     {
       path: "/app/lists/:listId/gift/new",
@@ -125,15 +125,6 @@ const router = createRouter({
       path: "/app/profile",
       name: "Mon compte",
       component: ProfileView,
-      meta: {
-        isDropdownLink: true,
-      },
-      beforeEnter: authGuard,
-    },
-    {
-      path: "/app/settings",
-      name: "Paramètres",
-      component: SettingsView,
       meta: {
         isDropdownLink: true,
       },
