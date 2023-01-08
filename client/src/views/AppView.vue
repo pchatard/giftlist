@@ -58,7 +58,6 @@ const { setBreadcrumbContent } = inject(
 
 onMounted(() => {
   setBreadcrumbContent([]);
-  console.log(lists);
 });
 </script>
 
