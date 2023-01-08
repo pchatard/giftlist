@@ -1,4 +1,19 @@
-FROM node:16.14
+FROM node:16.14 as builder
+
+# Create app directory
+WORKDIR /opt/app
+
+# Install all to build
+COPY src src
+COPY tsconfig.json .
+COPY package.json .
+COPY package-lock.json .
+
+# Building your code for production
+RUN ls && ls src
+RUN npm install && npm run build
+
+FROM node:16.14 as runner
 
 # Create app directory
 WORKDIR /opt/app
@@ -12,6 +27,6 @@ RUN curl --create-dirs -o /certs/root.crt -O https://cockroachlabs.cloud/cluster
   npm ci --only=production  
 
 # Bundle app source
-COPY ./build .
+COPY --from=builder /opt/app/build .
 
 CMD [ "node", "index.js" ]
