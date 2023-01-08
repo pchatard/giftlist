@@ -29,9 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cookies());
-<<<<<<< HEAD
-app.use(cors({ origin: "http://localhost:5173" }));
-=======
 const whitelist = [undefined, "http://localhost:5173", "https://giftlist-preview.netlify.app"];
 const corsOptions = {
 	origin: function (origin: any, callback: any) {
@@ -43,7 +40,6 @@ const corsOptions = {
 	},
 };
 app.use(cors(corsOptions));
->>>>>>> v1
 
 app.use(limiter);
 
