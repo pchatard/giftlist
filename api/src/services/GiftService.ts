@@ -1,5 +1,6 @@
-import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
+import { DeleteResult, Repository, UpdateResult } from "typeorm";
 
+import { dbInstance } from "../";
 import Gift from "../models/Gift";
 import { UUID } from "../types/UUID";
 
@@ -10,7 +11,7 @@ class GiftService {
 	 * @returns {Promise<Gift>} the created gift
 	 */
 	static async create(giftInfos: Partial<Gift>): Promise<Gift> {
-		const giftRepository: Repository<Gift> = getRepository(Gift);
+		const giftRepository: Repository<Gift> = dbInstance.getRepository(Gift);
 		const gift: Gift = giftRepository.create(giftInfos);
 		return await giftRepository.save(gift);
 	}
@@ -22,7 +23,7 @@ class GiftService {
 	 * @returns {Promise<UpdateResult>}
 	 */
 	static async edit(giftId: UUID, giftNewProps: Partial<Gift>): Promise<UpdateResult> {
-		const giftRepository: Repository<Gift> = getRepository(Gift);
+		const giftRepository: Repository<Gift> = dbInstance.getRepository(Gift);
 		return await giftRepository.update(giftId, { ...giftNewProps });
 	}
 
@@ -32,7 +33,7 @@ class GiftService {
 	 * @returns {Promise<DeleteResult>}
 	 */
 	static async delete(giftId: UUID): Promise<DeleteResult> {
-		const giftRepository: Repository<Gift> = getRepository(Gift);
+		const giftRepository: Repository<Gift> = dbInstance.getRepository(Gift);
 		return await giftRepository.delete(giftId);
 	}
 
@@ -42,8 +43,11 @@ class GiftService {
 	 * @returns {Promise<Gift>} The gift matching the giftId parameter
 	 */
 	static async get(giftId: UUID): Promise<Gift> {
-		const giftRepository: Repository<Gift> = getRepository(Gift);
-		return await giftRepository.findOneOrFail(giftId, { relations: ["bookedBy"] });
+		const giftRepository: Repository<Gift> = dbInstance.getRepository(Gift);
+		return await giftRepository.findOneOrFail({
+			where: { id: giftId },
+			relations: { bookedBy: true },
+		});
 	}
 
 	/**

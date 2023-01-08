@@ -3,12 +3,11 @@ import "mocha";
 import { config } from "dotenv";
 import * as fs from "fs";
 import request from "request";
-import { createConnection } from "typeorm";
-import { runSeeder } from "typeorm-seeding";
+import { DataSource } from "typeorm";
 
 import { dbConnection } from "../src";
 import { GlobalVar } from "./global";
-import Seeder from "./seeder/seeder.test";
+import { seed } from "./seeder/seeder.test";
 
 config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
@@ -23,26 +22,6 @@ const options = {
 	}),
 };
 
-before(async () => {
-	// Tricky hack to ask token only if expired
-	const data = fs.readFileSync("./tests/.env", { encoding: "utf-8" });
-	const lines = data.split(/\r?\n/);
-	const readDate = new Date(lines[0].split("DATE=")[1]);
-	if (getUnixTimestamp(readDate) + 172800 > getUnixTimestamp(new Date())) {
-		GlobalVar.Token = lines[1].toString().split("TOKEN=")[1];
-	} else {
-		let newValues = replaceDate(data);
-		request.post(options, function (error, _response, body) {
-			if (error) throw new Error(error);
-			const token = JSON.parse(body)["access_token"];
-			GlobalVar.Token = token;
-			fs.writeFileSync("./tests/.env", replaceToken(newValues, token));
-		});
-	}
-	await createConnection(dbConnection);
-	await runSeeder(Seeder);
-});
-
 const getUnixTimestamp = (date: Date) => Math.floor(date.getTime() / 1000);
 
 const replaceDate = (str: string) => {
@@ -56,3 +35,28 @@ const replaceToken = (str: string, token: string) => {
 		? str.replace(/^TOKEN=.*$/gm, newToken)
 		: str.concat(newToken);
 };
+
+const setupAuth0Token = () => {
+	// Tricky hack to ask token only if expired
+	const data = fs.readFileSync("./tests/.env", { encoding: "utf-8" });
+	const lines = data.split(/\r?\n/);
+	const readDate = new Date(lines[0].split("DATE=")[1]);
+	if (getUnixTimestamp(readDate) + 172800 > getUnixTimestamp(new Date())) {
+		GlobalVar.Token = lines[1].toString().split("TOKEN=")[1];
+	} else {
+		const newValues = replaceDate(data);
+		request.post(options, function (error, _response, body) {
+			if (error) throw new Error(error);
+			const token = JSON.parse(body)["access_token"];
+			GlobalVar.Token = token;
+			fs.writeFileSync("./tests/.env", replaceToken(newValues, token));
+		});
+	}
+};
+
+before(async () => {
+	setupAuth0Token();
+	const dbInstance = new DataSource(dbConnection);
+	await dbInstance.initialize();
+	await seed(dbInstance);
+});

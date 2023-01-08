@@ -1,5 +1,6 @@
-import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
+import { DeleteResult, In, Repository, UpdateResult } from "typeorm";
 
+import { dbInstance } from "../";
 import Gift from "../models/Gift";
 import List from "../models/List";
 import User from "../models/User";
@@ -15,7 +16,7 @@ class UserService {
 	 * @returns {Promise<User>} the created user
 	 */
 	static async create(userInfos: Partial<User>): Promise<User> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		const user: User = userRepository.create(userInfos);
 		return await userRepository.save(user);
 	}
@@ -27,7 +28,7 @@ class UserService {
 	 * @returns {Promise<UpdateResult>}
 	 */
 	static async edit(userAuth0Id: string, userNewProps: Partial<User>): Promise<UpdateResult> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		return await userRepository.update({ auth0Id: userAuth0Id }, { ...userNewProps });
 	}
 
@@ -37,7 +38,7 @@ class UserService {
 	 * @returns {Promise<DeleteResult>}
 	 */
 	static async delete(userAuth0Id: string): Promise<DeleteResult> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		return await userRepository.delete({ auth0Id: userAuth0Id });
 	}
 
@@ -46,7 +47,7 @@ class UserService {
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
 	static async getAll(): Promise<User[]> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		return await userRepository.find();
 	}
 
@@ -56,10 +57,10 @@ class UserService {
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
 	static async getByAuth0Id(userAuth0Id: string): Promise<User> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		return await userRepository.findOneOrFail({
 			where: { auth0Id: userAuth0Id },
-			relations: ["bookings"],
+			relations: { bookings: true },
 		});
 	}
 
@@ -69,7 +70,7 @@ class UserService {
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
 	static async getByMail(userMail: email): Promise<User> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		return await userRepository.findOneOrFail({ where: { email: userMail } });
 	}
 
@@ -79,8 +80,8 @@ class UserService {
 	 * @returns {Promise<User[]>} The user matching the userId parameter
 	 */
 	static async getMany(userIds: UUID[]): Promise<User[]> {
-		const userRepository: Repository<User> = getRepository(User);
-		return await userRepository.findByIds(userIds);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
+		return await userRepository.findBy({ id: In(userIds) });
 	}
 
 	/**
@@ -94,17 +95,19 @@ class UserService {
 		select: SelectKindList,
 		reallyAll: boolean = false
 	): Promise<List[]> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		const user: User = await userRepository.findOneOrFail({
 			where: { auth0Id: userAuth0Id },
-			relations: [
-				"lists",
-				"friendLists",
-				"lists.owners",
-				"lists.grantedUsers",
-				"friendLists.owners",
-				"friendLists.grantedUsers",
-			],
+			relations: {
+				lists: {
+					owners: true,
+					grantedUsers: true,
+				},
+				friendLists: {
+					owners: true,
+					grantedUsers: true,
+				},
+			},
 		});
 		let res: List[] = [];
 		const grantedLists = (user.friendLists || []).filter((l) => reallyAll || l.isShared);
@@ -129,10 +132,10 @@ class UserService {
 	 * @returns {Promise<Gift[]>} the userId booked gifts
 	 */
 	static async getUserGifts(userAuth0Id: string): Promise<Gift[]> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		const user: User = await userRepository.findOneOrFail({
 			where: { auth0Id: userAuth0Id },
-			relations: ["bookings"],
+			relations: { bookings: true },
 		});
 		return user.bookings;
 	}
@@ -144,10 +147,10 @@ class UserService {
 	 * @returns {Promise<User[]>} the User matching userAuth0Id
 	 */
 	static async addUserGifts(userAuth0Id: string, gift: Gift): Promise<User> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		const user: User = await userRepository.findOneOrFail({
 			where: { auth0Id: userAuth0Id },
-			relations: ["bookings"],
+			relations: { bookings: true },
 		});
 		user.bookings = (user.bookings || []).concat(gift);
 		return await userRepository.save(user);
@@ -160,10 +163,10 @@ class UserService {
 	 * @returns {Promise<User[]>} the User matching userAuth0Id
 	 */
 	static async removeUserGifts(userAuth0Id: string, gift: Gift): Promise<User> {
-		const userRepository: Repository<User> = getRepository(User);
+		const userRepository: Repository<User> = dbInstance.getRepository(User);
 		const user: User = await userRepository.findOneOrFail({
 			where: { auth0Id: userAuth0Id },
-			relations: ["bookings"],
+			relations: { bookings: true },
 		});
 		user.bookings = user.bookings.filter((booked_gift) => booked_gift.id !== gift.id);
 		return await userRepository.save(user);

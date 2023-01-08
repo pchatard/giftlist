@@ -12,7 +12,7 @@
 				"description": "Stringified UUIDv4.\nSee [RFC 4112](https://tools.ietf.org/html/rfc4122)",
 				"pattern": "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}"
 			},
-			"GiftIdDTO": {
+			"ListIdDTO": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
@@ -42,251 +42,6 @@
 				"required": [
 					"message",
 					"details"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"UnauthorizedErrorJSON": {
-				"properties": {
-					"message": {
-						"type": "string",
-						"enum": [
-							"Unauthorized"
-						],
-						"nullable": false
-					}
-				},
-				"required": [
-					"message"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"CreateGiftDTO": {
-				"properties": {
-					"title": {
-						"type": "string"
-					},
-					"isFavorite": {
-						"type": "boolean"
-					},
-					"isHidden": {
-						"type": "boolean"
-					},
-					"category": {
-						"type": "string"
-					},
-					"price": {
-						"type": "number",
-						"format": "double"
-					},
-					"linkURL": {
-						"type": "string"
-					},
-					"brand": {
-						"type": "string"
-					},
-					"size": {
-						"type": "string"
-					},
-					"color": {
-						"type": "string"
-					},
-					"comments": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"title",
-					"isFavorite",
-					"isHidden",
-					"category"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"UserNameDTO": {
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					},
-					"displayName": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"id",
-					"displayName"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"Partial_EditGiftDTO_": {
-				"properties": {
-					"isBooked": {
-						"type": "boolean"
-					},
-					"bookedByDTO": {
-						"items": {
-							"$ref": "#/components/schemas/UserNameDTO"
-						},
-						"type": "array"
-					},
-					"title": {
-						"type": "string"
-					},
-					"isFavorite": {
-						"type": "boolean"
-					},
-					"isHidden": {
-						"type": "boolean"
-					},
-					"category": {
-						"type": "string"
-					},
-					"price": {
-						"type": "number",
-						"format": "double"
-					},
-					"linkURL": {
-						"type": "string"
-					},
-					"brand": {
-						"type": "string"
-					},
-					"size": {
-						"type": "string"
-					},
-					"color": {
-						"type": "string"
-					},
-					"comments": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"description": "Make all properties in T optional"
-			},
-			"Pick_Gift.id-or-title-or-isBooked-or-bookedByDTO-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					},
-					"listId": {
-						"$ref": "#/components/schemas/UUID"
-					},
-					"isBooked": {
-						"type": "boolean"
-					},
-					"bookedByDTO": {
-						"items": {
-							"$ref": "#/components/schemas/UserNameDTO"
-						},
-						"type": "array"
-					},
-					"title": {
-						"type": "string"
-					},
-					"isFavorite": {
-						"type": "boolean"
-					},
-					"isHidden": {
-						"type": "boolean"
-					},
-					"category": {
-						"type": "string"
-					},
-					"price": {
-						"type": "number",
-						"format": "double"
-					},
-					"linkURL": {
-						"type": "string"
-					},
-					"brand": {
-						"type": "string"
-					},
-					"size": {
-						"type": "string"
-					},
-					"color": {
-						"type": "string"
-					},
-					"comments": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"id",
-					"listId",
-					"isBooked",
-					"bookedByDTO",
-					"title",
-					"isFavorite",
-					"isHidden",
-					"category"
-				],
-				"type": "object",
-				"description": "From T, pick a set of properties whose keys are in the union K"
-			},
-			"GiftDTO": {
-				"$ref": "#/components/schemas/Pick_Gift.id-or-title-or-isBooked-or-bookedByDTO-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_"
-			},
-			"GiftDTOForOwner": {
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					},
-					"title": {
-						"type": "string"
-					},
-					"isFavorite": {
-						"type": "boolean"
-					},
-					"isHidden": {
-						"type": "boolean"
-					},
-					"category": {
-						"type": "string"
-					},
-					"price": {
-						"type": "number",
-						"format": "double"
-					},
-					"linkURL": {
-						"type": "string"
-					},
-					"brand": {
-						"type": "string"
-					},
-					"size": {
-						"type": "string"
-					},
-					"color": {
-						"type": "string"
-					},
-					"comments": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"id",
-					"title",
-					"isFavorite",
-					"isHidden",
-					"category"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ListIdDTO": {
-				"properties": {
-					"id": {
-						"$ref": "#/components/schemas/UUID"
-					}
-				},
-				"required": [
-					"id"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -344,6 +99,22 @@
 			"CreateListDTO": {
 				"$ref": "#/components/schemas/Omit_List.id-or-sharingCode-or-gifts-or-owners-or-grantedUsers-or-ownersDTO-or-grantedUsersDTO-or-createdDate-or-updatedDate_"
 			},
+			"UnauthorizedErrorJSON": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"enum": [
+							"Unauthorized"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Partial_EditListDTO_": {
 				"properties": {
 					"title": {
@@ -379,13 +150,26 @@
 				"type": "object",
 				"description": "Make all properties in T optional"
 			},
-			"Pick_List.id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersDTO-or-grantedUsersDTO_": {
+			"UserNameDTO": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
 					},
-					"title": {
+					"displayName": {
 						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"displayName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_List.id-or-description-or-title-or-isShared-or-sharingCode-or-closureDate-or-ownersDTO-or-grantedUsersDTO_": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
 					},
 					"sharingCode": {
 						"$ref": "#/components/schemas/UUID"
@@ -401,6 +185,9 @@
 							"$ref": "#/components/schemas/UserNameDTO"
 						},
 						"type": "array"
+					},
+					"title": {
+						"type": "string"
 					},
 					"description": {
 						"type": "string"
@@ -419,8 +206,8 @@
 				},
 				"required": [
 					"id",
-					"title",
 					"sharingCode",
+					"title",
 					"isShared"
 				],
 				"type": "object",
@@ -476,6 +263,71 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"Pick_Gift.id-or-title-or-isBooked-or-bookedByDTO-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"title": {
+						"type": "string"
+					},
+					"isBooked": {
+						"type": "boolean"
+					},
+					"bookedByDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
+						},
+						"type": "array"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"listId": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"isBooked",
+					"bookedByDTO",
+					"isFavorite",
+					"isHidden",
+					"category",
+					"listId"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"GiftDTO": {
+				"$ref": "#/components/schemas/Pick_Gift.id-or-title-or-isBooked-or-bookedByDTO-or-isFavorite-or-isHidden-or-category-or-listId-or-price-or-linkURL-or-brand-or-size-or-color-or-comments_"
+			},
 			"UserDTO": {
 				"properties": {
 					"displayName": {
@@ -515,6 +367,154 @@
 				},
 				"type": "object",
 				"description": "Make all properties in T optional"
+			},
+			"GiftIdDTO": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateGiftDTO": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"isFavorite",
+					"isHidden",
+					"category"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_EditGiftDTO_": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"isBooked": {
+						"type": "boolean"
+					},
+					"bookedByDTO": {
+						"items": {
+							"$ref": "#/components/schemas/UserNameDTO"
+						},
+						"type": "array"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"GiftDTOForOwner": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"title": {
+						"type": "string"
+					},
+					"isFavorite": {
+						"type": "boolean"
+					},
+					"isHidden": {
+						"type": "boolean"
+					},
+					"category": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"linkURL": {
+						"type": "string"
+					},
+					"brand": {
+						"type": "string"
+					},
+					"size": {
+						"type": "string"
+					},
+					"color": {
+						"type": "string"
+					},
+					"comments": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"isFavorite",
+					"isHidden",
+					"category"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -535,6 +535,672 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
+		"/lists": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListIdDTO"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new list.\nPlease note that user which call the function is added to owners if not anticipated in body call",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "list property for entity creation",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateListDTO",
+								"description": "list property for entity creation"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ListDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets all user's lists data.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "flag to select owned or granted lists",
+						"in": "query",
+						"name": "select",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/SelectKindList"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}": {
+			"put": {
+				"operationId": "Edit",
+				"responses": {
+					"204": {
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Edit a list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "data to edit a list",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_EditListDTO_",
+								"description": "data to edit a list"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner or granted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete a list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListDTO"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "If user not owner or granted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Sends back a list in the response based on its id.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/share": {
+			"put": {
+				"operationId": "Share",
+				"responses": {
+					"204": {
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Make a list to public.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/unshare": {
+			"put": {
+				"operationId": "Private",
+				"responses": {
+					"204": {
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Make a list private.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/invite/{sharingCode}": {
+			"put": {
+				"operationId": "AccessFromCode",
+				"responses": {
+					"204": {
+						"description": "Success response"
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get a list from its sharing code.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the sharing code of the list",
+						"in": "path",
+						"name": "sharingCode",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/lists/{listId}/eject": {
+			"put": {
+				"operationId": "RemoveGrantedUser",
+				"responses": {
+					"204": {
+						"description": "Success response"
+					},
+					"401": {
+						"description": "If user not owner",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Remove a user from granted users of a list.",
+				"tags": [
+					"List"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the GUID of the list",
+						"in": "path",
+						"name": "listId",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					},
+					{
+						"description": "the email of the user",
+						"in": "query",
+						"name": "userMail",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/email"
+						}
+					}
+				]
+			}
+		},
+		"/users": {
+			"post": {
+				"operationId": "Create",
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserIdDTO"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new user during sign up. Even if users are authenticated and\ncreated by Auth0, we manage a user database to store preferences,\nfriends and much more.",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "data to create a user",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateUserDTO",
+								"description": "data to create a user"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetAll",
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserDTO"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets all user's data.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/users/profiles/{userMail}": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDTO"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets user's data.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "the email of user",
+						"in": "path",
+						"name": "userMail",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/email"
+						}
+					}
+				]
+			}
+		},
+		"/users/me": {
+			"get": {
+				"operationId": "Get",
+				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDTO"
+								}
+							}
+						}
+					}
+				},
+				"description": "Gets logged user's data.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "Edit",
+				"responses": {
+					"204": {
+						"description": "Success response"
+					},
+					"422": {
+						"description": "If body or request param type is violated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidateErrorJSON"
+								}
+							}
+						}
+					}
+				},
+				"description": "Edit a user.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "data to edit a user",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Partial_UserDTO_",
+								"description": "data to edit a user"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "Delete",
+				"responses": {
+					"204": {
+						"description": ""
+					}
+				},
+				"description": "Delete logged user.",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"auth0": []
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/lists/{listId}/gifts": {
 			"post": {
 				"operationId": "Create",
@@ -596,7 +1262,8 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateGiftDTO"
+								"$ref": "#/components/schemas/CreateGiftDTO",
+								"description": "list property for entity creation"
 							}
 						}
 					}
@@ -734,7 +1401,8 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/Partial_EditGiftDTO_"
+								"$ref": "#/components/schemas/Partial_EditGiftDTO_",
+								"description": "data to edit a gift"
 							}
 						}
 					}
@@ -1221,668 +1889,6 @@
 						}
 					}
 				]
-			}
-		},
-		"/lists": {
-			"post": {
-				"operationId": "Create",
-				"responses": {
-					"200": {
-						"description": "Success response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ListIdDTO"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Creates a new list.\nPlease note that user which call the function is added to owners if not anticipated in body call",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"description": "list property for entity creation",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/CreateListDTO"
-							}
-						}
-					}
-				}
-			},
-			"get": {
-				"operationId": "GetAll",
-				"responses": {
-					"200": {
-						"description": "Success response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ListDTO"
-									},
-									"type": "array"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Gets all user's lists data.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "flag to select owned or granted lists",
-						"in": "query",
-						"name": "select",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/SelectKindList"
-						}
-					}
-				]
-			}
-		},
-		"/lists/{listId}": {
-			"put": {
-				"operationId": "Edit",
-				"responses": {
-					"204": {
-						"description": "Success response"
-					},
-					"401": {
-						"description": "If user not owner",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Edit a list.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of the list",
-						"in": "path",
-						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				],
-				"requestBody": {
-					"description": "data to edit a list",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/Partial_EditListDTO_"
-							}
-						}
-					}
-				}
-			},
-			"delete": {
-				"operationId": "Delete",
-				"responses": {
-					"204": {
-						"description": "Success response"
-					},
-					"401": {
-						"description": "If user not owner or granted",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Delete a list.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of the list",
-						"in": "path",
-						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				]
-			},
-			"get": {
-				"operationId": "Get",
-				"responses": {
-					"200": {
-						"description": "Success response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ListDTO"
-								}
-							}
-						}
-					},
-					"401": {
-						"description": "If user not owner or granted",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Sends back a list in the response based on its id.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of the list",
-						"in": "path",
-						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				]
-			}
-		},
-		"/lists/{listId}/share": {
-			"put": {
-				"operationId": "Share",
-				"responses": {
-					"204": {
-						"description": "Success response"
-					},
-					"401": {
-						"description": "If user not owner",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Make a list to public.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of the list",
-						"in": "path",
-						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				]
-			}
-		},
-		"/lists/{listId}/unshare": {
-			"put": {
-				"operationId": "Private",
-				"responses": {
-					"204": {
-						"description": "Success response"
-					},
-					"401": {
-						"description": "If user not owner",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Make a list private.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of the list",
-						"in": "path",
-						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				]
-			}
-		},
-		"/lists/invite/{sharingCode}": {
-			"put": {
-				"operationId": "AccessFromCode",
-				"responses": {
-					"204": {
-						"description": "Success response"
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Get a list from its sharing code.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the sharing code of the list",
-						"in": "path",
-						"name": "sharingCode",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				]
-			}
-		},
-		"/lists/{listId}/eject": {
-			"put": {
-				"operationId": "RemoveGrantedUser",
-				"responses": {
-					"204": {
-						"description": "Success response"
-					},
-					"401": {
-						"description": "If user not owner",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UnauthorizedErrorJSON"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Remove a user from granted users of a list.",
-				"tags": [
-					"List"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the GUID of the list",
-						"in": "path",
-						"name": "listId",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					},
-					{
-						"description": "the email of the user",
-						"in": "query",
-						"name": "userMail",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/email"
-						}
-					}
-				]
-			}
-		},
-		"/users": {
-			"post": {
-				"operationId": "Create",
-				"responses": {
-					"200": {
-						"description": "Success response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UserIdDTO"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Create a new user during sign up. Even if users are authenticated and\ncreated by Auth0, we manage a user database to store preferences,\nfriends and much more.",
-				"tags": [
-					"User"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"description": "data to create a user",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/CreateUserDTO"
-							}
-						}
-					}
-				}
-			},
-			"get": {
-				"operationId": "GetAll",
-				"responses": {
-					"200": {
-						"description": "Success response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/UserDTO"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"description": "Gets all user's data.",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": []
-			}
-		},
-		"/users/profiles/{userMail}": {
-			"get": {
-				"operationId": "Get",
-				"responses": {
-					"200": {
-						"description": "Success response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UserDTO"
-								}
-							}
-						}
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Gets user's data.",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [
-					{
-						"description": "the email of user",
-						"in": "path",
-						"name": "userMail",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/email"
-						}
-					}
-				]
-			}
-		},
-		"/users/me": {
-			"get": {
-				"operationId": "Get",
-				"responses": {
-					"200": {
-						"description": "Success response",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/UserDTO"
-								}
-							}
-						}
-					}
-				},
-				"description": "Gets logged user's data.",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": []
-			},
-			"put": {
-				"operationId": "Edit",
-				"responses": {
-					"204": {
-						"description": "Success response"
-					},
-					"422": {
-						"description": "If body or request param type is violated",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidateErrorJSON"
-								}
-							}
-						}
-					}
-				},
-				"description": "Edit a user.",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"description": "data to edit a user",
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/Partial_UserDTO_"
-							}
-						}
-					}
-				}
-			},
-			"delete": {
-				"operationId": "Delete",
-				"responses": {
-					"204": {
-						"description": ""
-					}
-				},
-				"description": "Delete logged user.",
-				"tags": [
-					"User"
-				],
-				"security": [
-					{
-						"auth0": []
-					}
-				],
-				"parameters": []
 			}
 		}
 	},
