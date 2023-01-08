@@ -10,7 +10,6 @@ COPY package.json .
 COPY package-lock.json .
 
 # Building your code for production
-RUN ls && ls src
 RUN npm install && npm run build
 
 FROM node:16.14 as runner
