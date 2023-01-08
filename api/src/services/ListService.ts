@@ -1,5 +1,6 @@
-import { DeleteResult, getRepository, Repository, UpdateResult } from "typeorm";
+import { DeleteResult, Repository, UpdateResult } from "typeorm";
 
+import { dbInstance } from "../";
 import Gift from "../models/Gift";
 import List from "../models/List";
 import { User } from "../models/User";
@@ -12,7 +13,7 @@ class ListService {
 	 * @returns {Promise<List>} the created list
 	 */
 	static async create(listInfos: Partial<List>): Promise<List> {
-		const listRepository: Repository<List> = getRepository(List);
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
 		const list: List = listRepository.create(listInfos);
 		return await listRepository.save(list);
 	}
@@ -24,7 +25,7 @@ class ListService {
 	 * @returns {Promise<UpdateResult>}
 	 */
 	static async edit(listId: UUID, listNewProps: Partial<List>): Promise<UpdateResult> {
-		const listRepository: Repository<List> = getRepository(List);
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
 		return await listRepository.update(listId, { ...listNewProps });
 	}
 
@@ -34,7 +35,7 @@ class ListService {
 	 * @returns {Promise<DeleteResult>}
 	 */
 	static async delete(listId: UUID): Promise<DeleteResult> {
-		const listRepository: Repository<List> = getRepository(List);
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
 		return await listRepository.delete(listId);
 	}
 
@@ -45,9 +46,10 @@ class ListService {
 	 * @returns {Promise<List>} the forgotten list
 	 */
 	static async forget(listId: UUID, userAuth0Id: UUID): Promise<List> {
-		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId, {
-			relations: ["owners", "grantedUsers"],
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
+		const list: List = await listRepository.findOneOrFail({
+			where: { id: listId },
+			relations: { owners: true, grantedUsers: true },
 		});
 		list.owners = list.owners.filter((owner) => owner.auth0Id !== userAuth0Id);
 		list.grantedUsers = (list.grantedUsers || []).filter((user) => user.auth0Id !== userAuth0Id);
@@ -60,9 +62,10 @@ class ListService {
 	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
 	static async get(listId: UUID): Promise<List> {
-		const listRepository: Repository<List> = getRepository(List);
-		return await listRepository.findOneOrFail(listId, {
-			relations: ["owners", "grantedUsers"],
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
+		return await listRepository.findOneOrFail({
+			where: { id: listId },
+			relations: { owners: true, grantedUsers: true },
 		});
 	}
 
@@ -72,10 +75,10 @@ class ListService {
 	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
 	static async getFromSharingCode(sharingCode: UUID): Promise<List> {
-		const listRepository: Repository<List> = getRepository(List);
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
 		return await listRepository.findOneOrFail({
 			where: { sharingCode: sharingCode },
-			relations: ["owners", "grantedUsers"],
+			relations: { owners: true, grantedUsers: true },
 		});
 	}
 
@@ -86,9 +89,10 @@ class ListService {
 	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
 	static async addGrantedUser(listId: UUID, user: User): Promise<List> {
-		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId, {
-			relations: ["grantedUsers"],
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
+		const list: List = await listRepository.findOneOrFail({
+			where: { id: listId },
+			relations: { grantedUsers: true },
 		});
 		list.isShared = true;
 		list.grantedUsers = (list.grantedUsers || []).concat(user);
@@ -102,9 +106,10 @@ class ListService {
 	 * @returns {Promise<List>} The list matching the listId parameter
 	 */
 	static async removeGrantedUser(listId: UUID, user: User): Promise<List> {
-		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId, {
-			relations: ["grantedUsers"],
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
+		const list: List = await listRepository.findOneOrFail({
+			where: { id: listId },
+			relations: { grantedUsers: true },
 		});
 		const gUsers: User[] = list.grantedUsers || [];
 		const index: number = gUsers.indexOf(user);
@@ -122,8 +127,11 @@ class ListService {
 	 * @returns {Promise<UUID[]>} the listId owners
 	 */
 	static async ownersAuth0Ids(listId: UUID): Promise<UUID[]> {
-		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId, { relations: ["owners"] });
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
+		const list: List = await listRepository.findOneOrFail({
+			where: { id: listId },
+			relations: { owners: true },
+		});
 		return list.owners.map((u) => u.auth0Id);
 	}
 
@@ -133,9 +141,10 @@ class ListService {
 	 * @returns {Promise<UUID[]>} the listId granted users
 	 */
 	static async grantedUsersAuth0Ids(listId: UUID): Promise<UUID[]> {
-		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId, {
-			relations: ["grantedUsers"],
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
+		const list: List = await listRepository.findOneOrFail({
+			where: { id: listId },
+			relations: { grantedUsers: true },
 		});
 		return (list.grantedUsers || []).map((u) => u.auth0Id);
 	}
@@ -147,9 +156,10 @@ class ListService {
 	 * @returns {Promise<Gift[]>} the listId gifts
 	 */
 	static async getListGifts(listId: UUID, showHidden: boolean): Promise<Gift[]> {
-		const listRepository: Repository<List> = getRepository(List);
-		const list: List = await listRepository.findOneOrFail(listId, {
-			relations: ["gifts", "gifts.bookedBy"],
+		const listRepository: Repository<List> = dbInstance.getRepository(List);
+		const list: List = await listRepository.findOneOrFail({
+			where: { id: listId },
+			relations: { gifts: { bookedBy: true } },
 		});
 		return (list.gifts || [])
 			.filter((g) => (showHidden ? true : g.isHidden == false))
