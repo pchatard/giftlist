@@ -1,7 +1,7 @@
 /* eslint-disable security/detect-non-literal-fs-filename */
 import { config } from "dotenv";
 import * as fs from "fs";
-import { ConnectionOptions } from "typeorm";
+import { DataSourceOptions } from "typeorm";
 
 config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
@@ -17,4 +17,4 @@ export default {
 	},
 	synchronize: true,
 	logging: false,
-} as ConnectionOptions;
+} as DataSourceOptions;

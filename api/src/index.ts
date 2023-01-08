@@ -4,7 +4,7 @@ import { config } from "dotenv";
 import express from "express";
 import helmet from "helmet";
 import swaggerUi from "swagger-ui-express";
-import { ConnectionOptions, createConnection } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 
 import cockroachDBOptions from "./config/ormconfig";
 import swaggerDocument from "./config/swagger.json";
@@ -17,10 +17,12 @@ import { RegisterRoutes } from "./routes";
 
 config({ path: process.env.NODE_ENV == "dev" ? ".env.local" : ".env.test" });
 
-export const dbConnection: ConnectionOptions = {
+export const dbConnection: DataSourceOptions = {
 	...cockroachDBOptions,
 	entities: [User, List, Gift],
 };
+
+export const dbInstance = new DataSource(dbConnection);
 
 const PORT = process.env.PORT;
 const app: express.Application = express();
@@ -57,7 +59,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 const server = app.listen(PORT, async () => {
-	await createConnection(dbConnection);
+	await dbInstance.initialize();
 });
 
 process.on("SIGTERM", () => {
