@@ -14,10 +14,19 @@ import { useAuth0 } from "@auth0/auth0-vue";
 const { isAuthenticated, user, loginWithRedirect, logout } = useAuth0();
 
 const handleSignup = () => {
-  loginWithRedirect({ screen_hint: "signup" });
+  loginWithRedirect({
+    screen_hint: "signup",
+    appState: {
+      target: "/app",
+    },
+  });
 };
 const handleLogin = async () => {
-  loginWithRedirect();
+  loginWithRedirect({
+    appState: {
+      target: "/app",
+    },
+  });
 };
 
 const handleLogout = () => {
@@ -137,7 +146,7 @@ onUnmounted(() => {
           <DropdownButton
             v-if="isAuthenticated"
             class="hidden lg:block"
-            :text="user.email || ''"  
+            :text="user.email || ''"
             :options="headerDropdownProps.options"
             @select="handleDropdownSelect"
           />
