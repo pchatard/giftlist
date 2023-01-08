@@ -9,7 +9,9 @@ import type { BreadcrumbContentData } from "@/types";
 import { computed, inject, onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { ArrowRightIcon } from "@heroicons/vue/24/outline";
+import { useAuth0 } from "@auth0/auth0-vue";
 
+const { user } = useAuth0();
 const router = useRouter();
 
 const numberOfListsToShow = ref(1);
@@ -63,7 +65,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <PageHeading>Bienvenue Dev Loper</PageHeading>
+    <PageHeading>Bienvenue {{ user.nickname }}</PageHeading>
     <div class="flex flex-col">
       <div class="flex flex-col gap-4">
         <div

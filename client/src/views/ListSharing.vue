@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
+import UsersTable from "@/components/UsersTable.vue";
+import UsersIconStack from "@/components/UsersIconStack.vue";
 import { lists } from "@/data/lists";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
@@ -107,88 +109,13 @@ const copy = () => {
     </div>
 
     <div v-if="list?.isShared" class="my-8">
-      <div>
-        <h2 class="text-xl md:text-2xl font-bold dark:text-white">
-          Ajouter des invités
-        </h2>
-
-        <p>Invitez vos amis à votre liste :</p>
-
-        <form>
-          <label
-            for="search"
-            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >Ajouter des amis
-          </label>
-          <div class="relative md:w-1/2 my-2">
-            <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
-            >
-              <UsersIcon class="w-5" />
-            </div>
-            <input
-              id="search"
-              type="search"
-              class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search"
-              required
-            />
-            <button
-              type="submit"
-              class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Ajouter
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div class="mt-8">
+      <div class="mt-8 space-y-2">
         <h2 class="text-xl md:text-2xl font-bold dark:text-white mb-2">
           Gérer les invités
         </h2>
-        <p>Les personnes suivantes ont accès à votre liste</p>
-        <ul
-          class="w-full lg:w-1/2 divide-y divide-gray-200 dark:divide-gray-700"
-        >
-          <li
-            v-for="user in list.grantedUsersDTO"
-            :key="user.id"
-            class="py-3 sm:pb-4"
-          >
-            <div class="flex items-center space-x-4">
-              <div class="flex-shrink-0">
-                <!-- <img
-                  class="w-8 h-8 rounded-full"
-                  src="/docs/images/people/profile-picture-1.jpg"
-                  alt="Neil image"
-                /> -->
-                <div
-                  class="w-8 h-8 rounded-full border border-gray-300 bg-gray-300"
-                ></div>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p
-                  class="text-sm font-medium text-gray-900 truncate dark:text-white"
-                >
-                  {{ user.displayName }}
-                </p>
-                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                  test@giftlist.com
-                </p>
-              </div>
-              <div
-                class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white"
-              >
-                <button
-                  class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm px-2 py-2 mr-2 lg:cursor-pointer dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-                >
-                  <XMarkIcon class="w-5 text-red-600" />
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <UsersIconStack />
+        <p>Ajoutez ou supprimez vos amis des invités pour cette liste :</p>
+        <UsersTable />
       </div>
     </div>
   </div>
