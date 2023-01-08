@@ -6,6 +6,8 @@ import type { FormList, FormListValidation } from "@/types/giftlist";
 import { inject, onMounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { lists } from "@/data/lists";
+import UsersTable from "@/components/UsersTable.vue";
+import UsersIconStack from "@/components/UsersIconStack.vue";
 
 const router = useRouter();
 const currentRoute = useRoute();
@@ -106,12 +108,12 @@ onMounted(() => {
       <PageHeading class="mb-0">{{ currentRoute.name }}</PageHeading>
     </div>
 
-    <div>
+    <div class="relative">
       <form class="space-y-6" action="#">
         <div>
           <label
             for="list-name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="inline-block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Nom de la liste*
           </label>
@@ -134,7 +136,7 @@ onMounted(() => {
         <div>
           <label
             for="list-description"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="inline-block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Description
           </label>
@@ -172,7 +174,7 @@ onMounted(() => {
           <div v-if="hasClosureDate">
             <label
               for="list-closure-date"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="inline-block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Date d'échéance
             </label>
@@ -197,24 +199,19 @@ onMounted(() => {
         <div>
           <label
             for="list-closure-date"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            class="inline-block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            Propriétaire(s) de la liste (TODO)
+            Co-propriétaire(s) de la liste
           </label>
-          <select
-            id="countries"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-1/3 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option>United States</option>
-            <option>Canada</option>
-            <option>France</option>
-            <option>Germany</option>
-          </select>
+
+          <UsersIconStack />
+
+          <UsersTable />
         </div>
 
         <button
           type="button"
-          class="w-full md:w-auto text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          class="w-full md:w-auto sticky bottom-4 md:relative md:bottom-0 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           @click="handleSubmit"
         >
           Valider

@@ -29,7 +29,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cookies());
+<<<<<<< HEAD
 app.use(cors({ origin: "http://localhost:5173" }));
+=======
+const whitelist = [undefined, "http://localhost:5173", "https://giftlist-preview.netlify.app"];
+const corsOptions = {
+	origin: function (origin: any, callback: any) {
+		if (whitelist.indexOf(origin) !== -1) {
+			callback(null, true);
+		} else {
+			callback(new Error(`Not allowed by CORS ${origin} ${whitelist}`));
+		}
+	},
+};
+app.use(cors(corsOptions));
+>>>>>>> v1
 
 app.use(limiter);
 
