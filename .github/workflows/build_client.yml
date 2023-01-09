@@ -16,7 +16,7 @@ jobs:
         working-directory: ./client
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -37,7 +37,7 @@ jobs:
         working-directory: ./client
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
