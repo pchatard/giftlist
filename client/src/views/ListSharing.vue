@@ -8,8 +8,6 @@ import type { BreadcrumbContentData } from "@/types";
 import {
   ClipboardDocumentCheckIcon,
   ClipboardDocumentIcon,
-  UsersIcon,
-  XMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { inject, computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
