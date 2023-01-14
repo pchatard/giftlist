@@ -1,6 +1,0 @@
-export enum APIStatusCodeEnum {
-	OK = 200,
-	NO_CONTENT = 204,
-	UNAUTHORIZED = 401,
-	VALIDATION_ERROR = 422,
-}
