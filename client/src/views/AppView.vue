@@ -38,20 +38,27 @@ const handleListClick = (listId: string) => {
   router.push("/app/lists/" + listId);
 };
 
+const otherLists = computed(() => listsData.length - numberOfListsToShow.value);
 const listLastRowText = computed(() => {
-  const otherLists = listsData.length - numberOfListsToShow.value;
-  return `${otherLists} autre${otherLists == 1 ? "" : "s"} liste${
-    otherLists == 1 ? "" : "s"
-  }`;
+  return otherLists.value > 0
+    ? `${otherLists.value} autre${otherLists.value == 1 ? "" : "s"} liste${
+        otherLists.value == 1 ? "" : "s"
+      }`
+    : "Créer une liste";
 });
 
+const otherSharedLists = computed(
+  () =>
+    listsData.filter((list) => list.isShared).length - numberOfListsToShow.value
+);
 const sharedListLastRowText = computed(() => {
-  const otherLists =
-    listsData.filter((list) => list.isShared).length -
-    numberOfListsToShow.value;
-  return `${otherLists} autre${otherLists == 1 ? "" : "s"} liste${
-    otherLists == 1 ? "" : "s"
-  } partagée${otherLists == 1 ? "" : "s"}`;
+  return otherLists.value > 0
+    ? `${otherSharedLists.value} autre${
+        otherSharedLists.value == 1 ? "" : "s"
+      } liste${otherSharedLists.value == 1 ? "" : "s"} partagée${
+        otherSharedLists.value == 1 ? "" : "s"
+      }`
+    : "Entrer un lien de partage";
 });
 
 const { setBreadcrumbContent } = inject(
@@ -87,7 +94,9 @@ onMounted(() => {
           :table-headers="listTableHeaders"
           :handle-list-click="handleListClick"
           :lists="lists"
-          :last-row-action="() => router.push('/app/lists')"
+          :last-row-action="
+            () => router.push(otherLists > 0 ? '/app/lists' : '/app/lists/new')
+          "
           :last-row-text="listLastRowText"
         />
       </div>
@@ -112,7 +121,14 @@ onMounted(() => {
           :table-headers="sharedListTableHeaders"
           :handle-list-click="handleListClick"
           :lists="sharedLists"
-          :last-row-action="() => router.push('/app/lists/shared')"
+          :last-row-action="
+            () =>
+              router.push(
+                otherSharedLists > 0
+                  ? '/app/lists/shared'
+                  : '/app/lists/shared/new'
+              )
+          "
           :last-row-text="sharedListLastRowText"
         />
       </div>
