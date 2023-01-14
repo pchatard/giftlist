@@ -22,6 +22,7 @@ import {
   GiftIcon,
   PlusSmallIcon,
   UsersIcon,
+  ArchiveBoxXMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 
@@ -188,7 +189,7 @@ watch(isListOwner, () => {
           <ShareIcon class="ml-2 -mr-1 w-5 h-5" />
         </button>
         <button
-          v-if="isListOwner"
+          v-if="isListOwner && gifts.length"
           type="button"
           class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           @click="router.push(`${currentRoute.fullPath}/gift/new`)"
@@ -202,10 +203,7 @@ watch(isListOwner, () => {
       </div>
     </div>
 
-    <!-- <label for="isOwner" class="mr-2">isListOwner</label>
-    <input id="isOwner" v-model="isListOwner" type="checkbox" name="isOwner" /> -->
-
-    <div class="overflow-x-auto relative rounded-lg">
+    <div v-if="gifts.length" class="overflow-x-auto relative rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
@@ -379,6 +377,33 @@ watch(isListOwner, () => {
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div
+      v-else
+      class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px-0.625rem)] text-gray-400"
+    >
+      <div class="flex flex-col items-center justify-center px-4">
+        <ArchiveBoxXMarkIcon class="w-1/3" />
+        <div v-if="isListOwner" class="text-md text-center md:text-lg">
+          Vous n'avez pas encore de cadeaux, créez en un !
+        </div>
+        <div v-else class="text-md text-center md:text-lg">
+          Cette liste ne contient pas de cadeaux !
+        </div>
+      </div>
+      <button
+        v-if="isListOwner"
+        type="button"
+        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        @click="router.push(`${currentRoute.fullPath}/gift/new`)"
+      >
+        <span class="hidden sr-only md:not-sr-only md:inline"
+          >Nouveau cadeau</span
+        >
+        <GiftIcon class="w-5 md:ml-2" />
+        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5 md:hidden" />
+      </button>
     </div>
 
     <button

@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { reactive, watch, onMounted, inject, computed } from "vue";
 import { lists as listsData } from "@/data/lists";
-import { PlusSmallIcon } from "@heroicons/vue/24/outline";
+import {
+  PlusSmallIcon,
+  ArchiveBoxXMarkIcon,
+  LinkIcon,
+} from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
 import NewSharedListModal from "@/components/NewSharedListModal.vue";
 import { useRoute, useRouter } from "vue-router";
@@ -25,7 +29,7 @@ const pageTitle = computed(() => {
 
 const headingButton = computed(() => {
   return {
-    text: isSharedView.value ? "Code" : "Nouvelle liste",
+    text: isSharedView.value ? "Lien de partage" : "Nouvelle liste",
     action: () =>
       router.push(
         isSharedView.value ? "/app/lists/shared/new" : "/app/lists/new"
@@ -116,12 +120,14 @@ watch(currentRoute, (currentRoute) => {
     <div class="flex justify-between items-center mb-4">
       <PageHeading class="mb-0">{{ pageTitle }}</PageHeading>
       <button
+        v-if="lists.length"
         type="button"
         class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         @click="headingButton.action"
       >
         {{ headingButton.text }}
-        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
+        <LinkIcon v-if="isSharedView" class="ml-2 -mr-1 w-5 h-5" />
+        <PlusSmallIcon v-else class="ml-2 -mr-1 w-5 h-5" />
       </button>
     </div>
 
@@ -134,6 +140,7 @@ watch(currentRoute, (currentRoute) => {
     </Teleport>
 
     <ListsTable
+      v-if="lists.length"
       :table-headers="tableHeaders"
       :sorting="sorting"
       :lists="lists"
@@ -142,5 +149,29 @@ watch(currentRoute, (currentRoute) => {
       :is-shared-view="isSharedView"
       :last-row-action="headingButton.action"
     />
+    <div
+      v-else
+      class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-158px-0.625rem)] text-gray-400"
+    >
+      <div class="flex flex-col items-center justify-center px-4">
+        <ArchiveBoxXMarkIcon class="w-1/3" />
+        <div v-if="isSharedView" class="text-md text-center md:text-lg">
+          Vous n'avez pas encore de listes partagées, entrez un lien de partage
+          !
+        </div>
+        <div v-else class="text-md text-center md:text-lg">
+          Vous n'avez pas encore de listes, créez-en une !
+        </div>
+      </div>
+      <button
+        type="button"
+        class="text-white w-auto bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        @click="headingButton.action"
+      >
+        {{ headingButton.text }}
+        <LinkIcon v-if="isSharedView" class="ml-2 -mr-1 w-5 h-5" />
+        <PlusSmallIcon v-else class="ml-2 -mr-1 w-5 h-5" />
+      </button>
+    </div>
   </div>
 </template>
