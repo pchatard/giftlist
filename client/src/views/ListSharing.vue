@@ -2,7 +2,6 @@
 import PageHeading from "@/components/PageHeading.vue";
 import UsersTable from "@/components/UsersTable.vue";
 import UsersIconStack from "@/components/UsersIconStack.vue";
-import { lists } from "@/data/lists";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import {
@@ -11,19 +10,31 @@ import {
 } from "@heroicons/vue/24/outline";
 import { inject, computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+import { useListsStore } from "@/stores/lists";
+import { storeToRefs } from "pinia";
 
+// Router
 const currentRoute = useRoute();
-const list = computed(() => {
-  return lists.find((list) => list.id == currentRoute.params.listId);
-});
+const listId =
+  typeof currentRoute.params.listId == "string"
+    ? currentRoute.params.listId
+    : currentRoute.params.listId[0];
+
+// Store and list data
+const listsStore = useListsStore();
+const { selectedList } = storeToRefs(listsStore);
+
+const sharingLinkIsCopied = ref(false);
 const sharingLink = computed(() => {
   const link = new URL(
-    window.location.origin + "/#/app/lists/invite/" + list.value?.sharingCode
+    window.location.origin +
+      "/#/app/lists/invite/" +
+      selectedList.value?.sharingCode
   );
   return link.href;
 });
-const sharingLinkIsCopied = ref(false);
 
+// Breadcrumb
 const { setBreadcrumbContent } = inject(
   breadcrumbContentInjectionKey
 ) as BreadcrumbContentData;
@@ -34,44 +45,60 @@ const initialBreadcrumbContent = computed(() => [
     path: `/app/lists`,
   },
   {
-    name: list.value?.title ?? "Liste X",
-    path: `/app/lists/${currentRoute.params.listId}`,
+    name: selectedList.value?.title ?? "Liste X",
+    path: `/app/lists/${listId}`,
   },
   { name: currentRoute.name?.toString(), path: currentRoute.fullPath },
 ]);
 
-onMounted(() => {
-  setBreadcrumbContent(initialBreadcrumbContent.value);
-});
+// Handlers
+const handleShare = () => {
+  if (selectedList.value && selectedList.value.id) {
+    if (selectedList.value?.isShared) {
+      listsStore.unshareList(selectedList.value.id);
+    } else {
+      listsStore.shareList(selectedList.value.id);
+    }
+  }
+};
 
-const copy = () => {
+const handleCopy = () => {
   navigator.clipboard.writeText(sharingLink.value);
   sharingLinkIsCopied.value = true;
   setTimeout(() => {
     sharingLinkIsCopied.value = false;
   }, 10000);
 };
+
+// Initialization
+onMounted(() => {
+  setBreadcrumbContent(initialBreadcrumbContent.value);
+  listsStore.getList(listId);
+});
 </script>
 
 <template>
   <div>
-    <PageHeading>{{ currentRoute.name }}</PageHeading>
+    <PageHeading>{{ selectedList?.title }} - Options de partage</PageHeading>
 
     <div>
       <p class="mb-2">
         Cette liste est actuellement
         {{
-          list?.isShared
-            ? `partagée avec ${list?.grantedUsersDTO?.length ?? 0} personnes`
+          selectedList?.isShared
+            ? `partagée avec ${
+                selectedList?.grantedUsersDTO?.length ?? 0
+              } personnes`
             : "privée"
         }}.
       </p>
       <button
         class="w-full md:w-auto text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        @click="handleShare"
       >
-        {{ list?.isShared ? "Passer en privé" : "Partager la liste" }}
+        {{ selectedList?.isShared ? "Passer en privé" : "Partager la liste" }}
       </button>
-      <div v-if="list?.isShared" class="my-2">
+      <div v-if="selectedList?.isShared" class="my-2">
         <label
           for="list-sharing-code"
           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -88,7 +115,7 @@ const copy = () => {
           />
           <span
             class="inline-flex cursor-pointer items-center px-3 text-sm text-primary-600 bg-gray-100 border border-l-0 border-gray-300 rounded-r-md dark:bg-gray-800 dark:text-primary-400 dark:border-gray-600"
-            @click="copy"
+            @click="handleCopy"
           >
             <ClipboardDocumentCheckIcon
               v-if="sharingLinkIsCopied"
@@ -99,14 +126,14 @@ const copy = () => {
         </div>
         <button
           class="mt-2 font-small flex items-center text-blue-600 dark:text-blue-500 hover:underline"
-          @click="copy"
+          @click="handleCopy"
         >
           Copier le lien de partage
         </button>
       </div>
     </div>
 
-    <div v-if="list?.isShared" class="my-8">
+    <div v-if="selectedList?.isShared" class="my-8">
       <div class="mt-8 space-y-2">
         <h2 class="text-xl md:text-2xl font-bold dark:text-white mb-2">
           Gérer les invités

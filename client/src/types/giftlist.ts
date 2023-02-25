@@ -21,9 +21,9 @@ export interface FormValidation {
 
 export interface FormList {
   title: string;
-  isShared: boolean;
   description?: string;
   closureDate?: string;
+  isShared: boolean;
   ownersIds: string[];
   grantedUsersIds: string[];
 }
@@ -32,6 +32,11 @@ export interface FormListValidation {
   title: FormValidation;
   description: FormValidation;
   closureDate: FormValidation;
+}
+
+export interface ListInfo {
+  id: string;
+  title: string;
 }
 
 export interface Gift {
@@ -55,7 +60,6 @@ export interface FormGift {
   isFavorite: boolean;
   isHidden: boolean;
   category: string;
-  listId: string;
   price?: number;
   linkURL?: string;
   brand?: string;

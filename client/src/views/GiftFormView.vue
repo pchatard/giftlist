@@ -2,6 +2,7 @@
 import PageHeading from "@/components/PageHeading.vue";
 import { lists } from "@/data/lists";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import { useGiftsStore } from "@/stores/gifts";
 import type { BreadcrumbContentData } from "@/types";
 import type { FormGift, FormGiftValidation } from "@/types/giftlist";
 import { inject, onMounted, reactive } from "vue";
@@ -9,13 +10,18 @@ import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const currentRoute = useRoute();
+const listId =
+  typeof currentRoute.params.listId == "string"
+    ? currentRoute.params.listId
+    : currentRoute.params.listId[0];
+
+const giftsStore = useGiftsStore();
 
 const giftForm: FormGift = reactive({
   title: "",
   isFavorite: false,
   isHidden: false,
   category: "",
-  listId: "",
   price: 0,
   linkURL: "",
   brand: "",
@@ -62,9 +68,12 @@ const giftFormValidation: FormGiftValidation = reactive({
 const handleSubmit = () => {
   if (validateGift()) {
     // API Call (Create / Update) + Redirection to list
-    resetGiftForm();
-    resetGiftFormValidation();
-    router.push("/app/lists/" + currentRoute.params.listId);
+    giftsStore.createGift(listId, giftForm).then(() => {
+      resetGiftForm();
+      resetGiftFormValidation();
+      console.log("TWO");
+      router.push("/app/lists/" + listId);
+    });
   }
 };
 
@@ -114,7 +123,6 @@ const { setBreadcrumbContent } = inject(
 ) as BreadcrumbContentData;
 
 onMounted(() => {
-  const listId = currentRoute.params.listId;
   const giftId = currentRoute.params.giftId;
   if (giftId) {
     // Get gift data and populate giftForm with it.

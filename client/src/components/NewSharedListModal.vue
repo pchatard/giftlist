@@ -3,10 +3,6 @@ import type { FormValidation } from "@/types/giftlist";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 import { reactive, ref } from "vue";
 
-// export interface NewSharedListModalProps {
-//   list:
-// }
-
 const emit = defineEmits<{
   (e: "close"): void;
   (e: "submit", sharingCode: string): void;
@@ -36,10 +32,10 @@ const validateSharingCode = (): boolean => {
     sharingCodeValidation.errorMessage =
       "Le lien ou le code ne peut pas être vide";
     return false;
-  } else if (sharingCode.value != "valid") {
-    sharingCodeValidation.isError = true;
-    sharingCodeValidation.errorMessage = "Le format est invalide";
-    return false;
+    // } else if (sharingCode.value != "valid") {
+    //   sharingCodeValidation.isError = true;
+    //   sharingCodeValidation.errorMessage = "Le format est invalide";
+    //   return false;
   }
   return true;
 };

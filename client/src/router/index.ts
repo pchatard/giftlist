@@ -5,10 +5,11 @@ import GiftFormView from "@/views/GiftFormView.vue";
 import GiftView from "@/views/GiftView.vue";
 import HomeView from "@/views/HomeView.vue";
 import ListFormView from "@/views/ListFormView.vue";
+import ListInviteView from "@/views/ListInviteView.vue";
+import ListSharing from "@/views/ListSharing.vue";
 import ListView from "@/views/ListView.vue";
 import MyListsView from "@/views/MyListsView.vue";
 import ProfileView from "@/views/ProfileView.vue";
-import ListSharing from "@/views/ListSharing.vue";
 import { authGuard } from "@auth0/auth0-vue";
 
 const router = createRouter({
@@ -38,6 +39,15 @@ const router = createRouter({
       meta: {
         isHeaderLink: true,
         headerOrder: 0,
+      },
+      beforeEnter: authGuard,
+    },
+    {
+      path: "/app/lists/invite/:sharingCode",
+      name: "Invitation",
+      component: ListInviteView,
+      meta: {
+        isHeaderLink: false,
       },
       beforeEnter: authGuard,
     },

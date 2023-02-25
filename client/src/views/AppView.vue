@@ -2,23 +2,25 @@
 import PageHeading from "@/components/PageHeading.vue";
 import ListsTable from "@/components/ListsTable.vue";
 
-import { lists as listsData } from "@/data/lists";
-
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import { computed, inject, onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { ArrowRightIcon } from "@heroicons/vue/24/outline";
 import { useAuth0 } from "@auth0/auth0-vue";
+import { useListsStore } from "@/stores/lists";
 
 const { user } = useAuth0();
 const router = useRouter();
+const listsStore = useListsStore();
 
 const numberOfListsToShow = ref(1);
 
-const lists = computed(() => listsData.slice(0, numberOfListsToShow.value));
+const lists = computed(() =>
+  listsStore.myLists.slice(0, numberOfListsToShow.value)
+);
 const sharedLists = computed(() =>
-  listsData.filter((list) => list.isShared).slice(0, numberOfListsToShow.value)
+  listsStore.sharedLists.slice(0, numberOfListsToShow.value)
 );
 
 const listTableHeaders = [
@@ -38,7 +40,9 @@ const handleListClick = (listId: string) => {
   router.push("/app/lists/" + listId);
 };
 
-const otherLists = computed(() => listsData.length - numberOfListsToShow.value);
+const otherLists = computed(
+  () => listsStore.myLists.length - numberOfListsToShow.value
+);
 const listLastRowText = computed(() => {
   return otherLists.value > 0
     ? `${otherLists.value} autre${otherLists.value == 1 ? "" : "s"} liste${
@@ -48,8 +52,7 @@ const listLastRowText = computed(() => {
 });
 
 const otherSharedLists = computed(
-  () =>
-    listsData.filter((list) => list.isShared).length - numberOfListsToShow.value
+  () => listsStore.sharedLists.length - numberOfListsToShow.value
 );
 const sharedListLastRowText = computed(() => {
   return otherLists.value > 0
@@ -67,6 +70,7 @@ const { setBreadcrumbContent } = inject(
 
 onMounted(() => {
   setBreadcrumbContent([]);
+  listsStore.getAllLists();
 });
 </script>
 

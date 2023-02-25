@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref, inject, reactive, watch, computed } from "vue";
+import {
+  onMounted,
+  ref,
+  inject,
+  reactive,
+  watch,
+  computed,
+  onUnmounted,
+} from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
-import { lists as listsData } from "@/data/lists";
-import { gifts as giftsData } from "@/data/gifts";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
@@ -25,20 +31,43 @@ import {
   ArchiveBoxXMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
+import { useListsStore } from "@/stores/lists";
+import { useGiftsStore } from "@/stores/gifts";
+import { storeToRefs } from "pinia";
 
+// Router
 const router = useRouter();
 const currentRoute = useRoute();
+const listId =
+  typeof currentRoute.params.listId == "string"
+    ? currentRoute.params.listId
+    : currentRoute.params.listId[0];
 
+// Stores and data
+const listsStore = useListsStore();
+const giftsStore = useGiftsStore();
+const { selectedList } = storeToRefs(listsStore);
+const { selectedListGifts: gifts } = storeToRefs(giftsStore);
+
+const list = computed(() => selectedList.value);
+// TODO: Edit after ownersIds modifications
 // Define this depending on wether the logged in user is in the list owners.
 const isListOwner = ref(true);
 
-const list = computed(() =>
-  listsData.find((l) => l.id == currentRoute.params.listId)
-);
-const gifts = computed(() =>
-  giftsData.filter((g) => g.listId == currentRoute.params.listId)
-);
+// Breadcrumb
+const { setBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
 
+const initialBreadcrumbContent = computed(() => [
+  {
+    name: isListOwner.value ? "Mes listes" : "Listes partagées",
+    path: isListOwner.value ? "/app/lists" : "/app/lists/shared",
+  },
+  { name: list.value?.title ?? "Ma liste", path: currentRoute.fullPath },
+]);
+
+// Page content
 const ownerTableHeaders = [
   { name: "", key: "favorite", isMobile: true },
   { name: "", key: "hidden", isMobile: false },
@@ -67,6 +96,7 @@ const sorting = reactive({
   isDown: true,
 });
 
+// Handlers
 const handleTableHeaderClick = (
   e: Event,
   index: number,
@@ -83,25 +113,25 @@ const handleTableHeaderClick = (
 
 const handleGiftClick = (giftId: string) => {
   const destination = isListOwner.value
-    ? `/app/lists/${list.value?.id}/gift/${giftId}/edit`
-    : `/app/lists/${list.value?.id}/gift/${giftId}`;
+    ? `/app/lists/${listId}/gift/${giftId}/edit`
+    : `/app/lists/${listId}/gift/${giftId}`;
   router.push(destination);
 };
 
-const { setBreadcrumbContent } = inject(
-  breadcrumbContentInjectionKey
-) as BreadcrumbContentData;
+const handleGiftDelete = (giftId: string) => {
+  if (isListOwner.value) {
+    giftsStore.deleteGift(listId, giftId);
+  }
+};
 
-const initialBreadcrumbContent = computed(() => [
-  {
-    name: isListOwner.value ? "Mes listes" : "Listes partagées",
-    path: isListOwner.value ? "/app/lists" : "/app/lists/shared",
-  },
-  { name: list.value?.title ?? "Ma liste", path: currentRoute.fullPath },
-]);
-
+// Initialization
 onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
+  listsStore.getList(listId).then(() => giftsStore.getGifts(listId));
+});
+
+onUnmounted(() => {
+  giftsStore.reset();
 });
 
 watch(currentRoute, () => {
@@ -345,7 +375,7 @@ watch(isListOwner, () => {
                 v-if="isListOwner"
                 type="button"
                 class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-                @click.stop=""
+                @click.stop="handleGiftDelete(gift.id)"
               >
                 <TrashIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>
