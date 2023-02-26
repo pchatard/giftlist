@@ -1,28 +1,62 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
-import { lists } from "@/data/lists";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import { useGiftsStore } from "@/stores/gifts";
+import { useListsStore } from "@/stores/lists";
 import type { BreadcrumbContentData } from "@/types";
 import type { FormGift, FormGiftValidation } from "@/types/giftlist";
-import { inject, onMounted, reactive } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, inject, onMounted, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+// Router
 const router = useRouter();
 const currentRoute = useRoute();
+const listId =
+  typeof currentRoute.params.listId == "string"
+    ? currentRoute.params.listId
+    : currentRoute.params.listId[0];
 
-const giftForm: FormGift = reactive({
-  title: "",
-  isFavorite: false,
-  isHidden: false,
-  category: "",
-  listId: "",
-  price: 0,
-  linkURL: "",
-  brand: "",
-  size: "",
-  color: "",
-  comments: "",
+// Gift store
+const giftsStore = useGiftsStore();
+const listsStore = useListsStore();
+const currentGift = computed(() => {
+  return currentRoute.fullPath.endsWith("/edit") &&
+    currentRoute.fullPath.includes("gift")
+    ? selectedGift.value
+    : null;
 });
+const { selectedGift } = storeToRefs(giftsStore);
+const { myLists, selectedList } = storeToRefs(listsStore);
+
+// Gift form data and validation
+const giftForm: FormGift = reactive(
+  currentGift.value
+    ? {
+        title: currentGift.value.title,
+        isFavorite: currentGift.value.isFavorite,
+        isHidden: currentGift.value.isHidden,
+        category: currentGift.value.category,
+        price: currentGift.value.price,
+        linkURL: currentGift.value.linkURL,
+        brand: currentGift.value.brand,
+        size: currentGift.value.size,
+        color: currentGift.value.color,
+        comments: currentGift.value.color,
+      }
+    : {
+        title: "",
+        isFavorite: false,
+        isHidden: false,
+        category: "",
+        price: 0,
+        linkURL: "",
+        brand: "",
+        size: "",
+        color: "",
+        comments: "",
+      }
+);
 
 const giftFormValidation: FormGiftValidation = reactive({
   title: {
@@ -59,12 +93,26 @@ const giftFormValidation: FormGiftValidation = reactive({
   },
 });
 
+// Breadcrumb
+const { setBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
+
+// Handlers
 const handleSubmit = () => {
   if (validateGift()) {
-    // API Call (Create / Update) + Redirection to list
-    resetGiftForm();
-    resetGiftFormValidation();
-    router.push("/app/lists/" + currentRoute.params.listId);
+    currentGift.value
+      ? giftsStore.editGift(listId, currentGift.value.id, giftForm).then(() => {
+          resetGiftForm();
+          resetGiftFormValidation();
+          router.push("/app/lists/" + listId);
+        })
+      : // API Call (Create / Update) + Redirection to list
+        giftsStore.createGift(listId, giftForm).then(() => {
+          resetGiftForm();
+          resetGiftFormValidation();
+          router.push("/app/lists/" + listId);
+        });
   }
 };
 
@@ -109,39 +157,71 @@ const resetGiftFormValidation = () => {
   giftFormValidation.comments.isError = false;
 };
 
-const { setBreadcrumbContent } = inject(
-  breadcrumbContentInjectionKey
-) as BreadcrumbContentData;
-
 onMounted(() => {
-  const listId = currentRoute.params.listId;
-  const giftId = currentRoute.params.giftId;
-  if (giftId) {
-    // Get gift data and populate giftForm with it.
-    console.log("Editing gift " + giftId);
-  } else {
-    console.log("Creating new gift");
+  let giftId = "";
+  if (currentRoute.fullPath.includes("edit")) {
+    giftId =
+      typeof currentRoute.params.giftId == "string"
+        ? currentRoute.params.giftId
+        : currentRoute.params.giftId[0];
+    giftsStore.getGift(listId, giftId).then(() => {
+      if (currentGift.value) {
+        giftForm.title = currentGift.value?.title;
+        giftForm.isFavorite = currentGift.value?.isFavorite;
+        giftForm.isHidden = currentGift.value?.isHidden;
+        giftForm.category = currentGift.value?.category;
+        giftForm.price = currentGift.value?.price;
+        giftForm.linkURL = currentGift.value?.linkURL;
+        giftForm.brand = currentGift.value?.brand;
+        giftForm.size = currentGift.value?.size;
+        giftForm.color = currentGift.value?.color;
+        giftForm.comments = currentGift.value?.color;
+      }
+    });
   }
 
-  setBreadcrumbContent([
-    { name: "Mes listes", path: "/app/lists" },
-    ...(listId
-      ? [
-          {
-            name: lists.find((list) => list.id == listId)?.title ?? "Liste X",
-            path: "/app/lists/" + listId,
-          },
-        ]
-      : []),
-    { name: currentRoute.name ?? "", path: currentRoute.fullPath },
-  ]);
+  const list = myLists.value.find((list) => list.id === listId);
+  if (list) {
+    listsStore.selectList(listId, false);
+    setBreadcrumbContent([
+      { name: "Mes listes", path: "/app/lists" },
+      ...(listId
+        ? [
+            {
+              name: list.title ?? "Liste",
+              path: "/app/lists/" + listId,
+            },
+          ]
+        : []),
+      { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+    ]);
+  } else {
+    listsStore.getList(listId).then(() => {
+      setBreadcrumbContent([
+        { name: "Mes listes", path: "/app/lists" },
+        ...(listId
+          ? [
+              {
+                name: selectedList.value?.title ?? "Liste",
+                path: "/app/lists/" + listId,
+              },
+            ]
+          : []),
+        { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+      ]);
+    });
+  }
 });
 </script>
 
 <template>
   <div>
     <div class="flex justify-between items-center mb-4">
-      <PageHeading class="mb-0">{{ currentRoute.name }}</PageHeading>
+      <PageHeading class="mb-0">{{
+        currentRoute.fullPath.includes("edit")
+          ? "Modifier " + (currentGift?.title ?? "un cadeau")
+          : currentRoute.name
+      }}</PageHeading>
     </div>
 
     <div>

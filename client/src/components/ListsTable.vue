@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { TableHeader, TableSorting } from "@/types";
-import type { List } from "@/types/giftlist";
-import { useRouter } from "vue-router";
+import type { List, ListInfo } from "@/types/giftlist";
 
 import {
   ArrowSmallDownIcon,
@@ -15,32 +14,47 @@ import {
 import { computed } from "vue";
 
 export interface ListsTableProps {
-  tableHeaders: TableHeader[];
-  handleTableHeaderClick?: (
-    e: Event,
-    index: number,
-    isDown?: string | boolean
-  ) => void;
-  sorting?: TableSorting;
   lists: List[];
   isSharedView: boolean;
-  handleListClick: (listId: string) => void;
+  tableHeaders: TableHeader[];
+  sorting?: TableSorting;
   lastRowAction?: () => void;
   lastRowText?: string;
 }
 
-const props = defineProps<ListsTableProps>();
+export interface ListsTableEmits {
+  (
+    e: "sort",
+    sortParams: { e: Event; index: number; isDown?: string | boolean }
+  ): void;
+  (e: "select", listId: string): void;
+  (e: "edit", listId: string): void;
+  (e: "delete", listInfo: { id: string; title: string }): void;
+}
 
-const router = useRouter();
+const props = defineProps<ListsTableProps>();
+const emit = defineEmits<ListsTableEmits>();
 
 const handleTableHeaderClick = (
   e: MouseEvent,
   index: number,
   isDown: string | boolean = ""
 ) => {
-  if (props.sorting && props.handleTableHeaderClick) {
-    props.handleTableHeaderClick(e, index, isDown);
+  if (props.sorting) {
+    emit("sort", { e, index, isDown });
   }
+};
+
+const handleListSelect = (listId: string) => {
+  emit("select", listId);
+};
+
+const handleListEdit = (listId: string) => {
+  emit("edit", listId);
+};
+
+const handleListDelete = (listInfo: ListInfo) => {
+  emit("delete", listInfo);
 };
 
 const computedLastRowText = computed(() => {
@@ -100,7 +114,7 @@ const computedLastRowText = computed(() => {
           v-for="list in lists"
           :key="list.id"
           class="bg-white cursor-pointer dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-          @click="handleListClick(list.id)"
+          @click="handleListSelect(list.id)"
         >
           <!-- Column 1 -->
           <th scope="row" class="py-4 px-6 w-full md:w-auto">
@@ -197,7 +211,7 @@ const computedLastRowText = computed(() => {
             <button
               type="button"
               class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-              @click.stop=""
+              @click.stop="handleListDelete({ id: list.id, title: list.title })"
             >
               <TrashIcon class="w-4" />
               <span class="hidden lg:inline lg:ml-2">Supprimer</span>
@@ -209,7 +223,7 @@ const computedLastRowText = computed(() => {
             <button
               type="button"
               class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
-              @click.stop="router.push(`/app/lists/${list.id}/edit`)"
+              @click.stop="handleListEdit(list.id)"
             >
               <PencilIcon class="w-5" />
               <span class="hidden lg:inline lg:ml-2">Modifier</span>
@@ -217,7 +231,7 @@ const computedLastRowText = computed(() => {
             <button
               type="button"
               class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm pl-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-              @click.stop=""
+              @click.stop="handleListDelete({ id: list.id, title: list.title })"
             >
               <TrashIcon class="w-5" />
               <span class="hidden lg:inline lg:ml-2">Supprimer</span>

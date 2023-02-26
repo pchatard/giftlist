@@ -3,19 +3,16 @@ import { provide } from "vue";
 import { RouterView } from "vue-router";
 import { useDarkMode } from "./composables/darkMode";
 import {
-  userInjectionKey,
   darkModeInjectionKey,
   breadcrumbContentInjectionKey,
 } from "./injectionSymbols";
 
 import GiftlistHeader from "./components/GiftlistHeader.vue";
 import BreadcrumbNavigation from "./components/BreadcrumbNavigation.vue";
-import { useLogin } from "./composables/login";
 import { useBreadcrumbContent } from "./composables/breadcrumbContent";
+import { useAuth0 } from "@auth0/auth0-vue";
 
-const { isLoggedIn, setIsLoggedIn } = useLogin();
-
-provide(userInjectionKey, { isLoggedIn, setIsLoggedIn });
+const { isAuthenticated } = useAuth0();
 provide(darkModeInjectionKey, useDarkMode());
 provide(breadcrumbContentInjectionKey, useBreadcrumbContent());
 </script>
@@ -29,7 +26,7 @@ provide(breadcrumbContentInjectionKey, useBreadcrumbContent());
       <div
         class="flex flex-col flex-wrap justify-between mx-auto max-w-screen-xl"
       >
-        <BreadcrumbNavigation v-if="isLoggedIn" />
+        <BreadcrumbNavigation v-if="isAuthenticated" />
         <RouterView class="text-gray-900 dark:text-gray-400" />
       </div>
     </main>

@@ -2,8 +2,8 @@
 import { onMounted, ref, inject, reactive, watch, computed } from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
-import { lists as listsData } from "@/data/lists";
-import { gifts as giftsData } from "@/data/gifts";
+import DeleteListModal from "@/components/DeleteListModal.vue";
+import BookGiftModal from "@/components/BookGiftModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
@@ -25,20 +25,44 @@ import {
   ArchiveBoxXMarkIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
+import { useListsStore } from "@/stores/lists";
+import { useGiftsStore } from "@/stores/gifts";
+import { storeToRefs } from "pinia";
+import type { ListInfo } from "@/types/giftlist";
 
+// Router
 const router = useRouter();
 const currentRoute = useRoute();
+const listId =
+  typeof currentRoute.params.listId == "string"
+    ? currentRoute.params.listId
+    : currentRoute.params.listId[0];
 
+// Stores and data
+const listsStore = useListsStore();
+const giftsStore = useGiftsStore();
+const { selectedList } = storeToRefs(listsStore);
+const { gifts } = storeToRefs(giftsStore);
+
+const list = computed(() => selectedList.value);
+// TODO: Edit after ownersIds modifications
 // Define this depending on wether the logged in user is in the list owners.
-const isListOwner = ref(true);
+const isListOwner = ref(false);
 
-const list = computed(() =>
-  listsData.find((l) => l.id == currentRoute.params.listId)
-);
-const gifts = computed(() =>
-  giftsData.filter((g) => g.listId == currentRoute.params.listId)
-);
+// Breadcrumb
+const { setBreadcrumbContent } = inject(
+  breadcrumbContentInjectionKey
+) as BreadcrumbContentData;
 
+const initialBreadcrumbContent = computed(() => [
+  {
+    name: isListOwner.value ? "Mes listes" : "Listes partagées",
+    path: isListOwner.value ? "/app/lists" : "/app/lists/shared",
+  },
+  { name: list.value?.title ?? "Ma liste", path: currentRoute.fullPath },
+]);
+
+// Page content
 const ownerTableHeaders = [
   { name: "", key: "favorite", isMobile: true },
   { name: "", key: "hidden", isMobile: false },
@@ -67,6 +91,62 @@ const sorting = reactive({
   isDown: true,
 });
 
+// Modals
+const deleteGiftModal = reactive({
+  show: false,
+  listInfo: {
+    id: "",
+    title: "",
+  },
+  loading: false,
+  submitAction: (giftId: string) => {
+    deleteGiftModal.loading = true;
+    giftsStore.deleteGift(listId, giftId).then(() => {
+      deleteGiftModal.loading = false;
+      deleteGiftModal.show = false;
+      deleteGiftModal.listInfo.id = "";
+      deleteGiftModal.listInfo.title = "";
+    });
+  },
+  closeAction: () => {
+    deleteGiftModal.show = false;
+  },
+});
+
+const bookGiftModal = reactive({
+  show: false,
+  giftInfo: {
+    id: "",
+    title: "",
+    isBooked: false,
+  },
+  loading: false,
+  submitAction: (giftId: string) => {
+    bookGiftModal.loading = true;
+    if (bookGiftModal.giftInfo.isBooked) {
+      giftsStore.unbookGift(listId, giftId).then(() => {
+        bookGiftModal.loading = false;
+        bookGiftModal.show = false;
+        bookGiftModal.giftInfo.id = "";
+        bookGiftModal.giftInfo.title = "";
+        bookGiftModal.giftInfo.isBooked = false;
+      });
+    } else {
+      giftsStore.bookGift(listId, giftId).then(() => {
+        bookGiftModal.loading = false;
+        bookGiftModal.show = false;
+        bookGiftModal.giftInfo.id = "";
+        bookGiftModal.giftInfo.title = "";
+        bookGiftModal.giftInfo.isBooked = false;
+      });
+    }
+  },
+  closeAction: () => {
+    bookGiftModal.show = false;
+  },
+});
+
+// Handlers
 const handleTableHeaderClick = (
   e: Event,
   index: number,
@@ -81,28 +161,59 @@ const handleTableHeaderClick = (
   }
 };
 
+const handleGiftFav = (giftId: string) => {
+  giftsStore.favGift(listId, giftId);
+};
+
+const handleGiftUnfav = (giftId: string) => {
+  giftsStore.unfavGift(listId, giftId);
+};
+
+const handleGiftShow = (giftId: string) => {
+  giftsStore.showGift(listId, giftId);
+};
+
+const handleGiftHide = (giftId: string) => {
+  giftsStore.hideGift(listId, giftId);
+};
+
 const handleGiftClick = (giftId: string) => {
   const destination = isListOwner.value
-    ? `/app/lists/${list.value?.id}/gift/${giftId}/edit`
-    : `/app/lists/${list.value?.id}/gift/${giftId}`;
+    ? `/app/lists/${listId}/gift/${giftId}/edit`
+    : `/app/lists/${listId}/gift/${giftId}`;
+  listsStore.selectList(listId, true);
+  giftsStore.selectGift(giftId);
   router.push(destination);
 };
 
-const { setBreadcrumbContent } = inject(
-  breadcrumbContentInjectionKey
-) as BreadcrumbContentData;
+const handleGiftDelete = (giftInfo: ListInfo) => {
+  if (isListOwner.value) {
+    deleteGiftModal.listInfo = giftInfo;
+    deleteGiftModal.show = true;
+  }
+};
 
-const initialBreadcrumbContent = computed(() => [
-  {
-    name: isListOwner.value ? "Mes listes" : "Listes partagées",
-    path: isListOwner.value ? "/app/lists" : "/app/lists/shared",
-  },
-  { name: list.value?.title ?? "Ma liste", path: currentRoute.fullPath },
-]);
+const handleBookGift = (giftInfo: ListInfo & { isBooked: boolean }) => {
+  if (!isListOwner.value) {
+    bookGiftModal.giftInfo = giftInfo;
+    bookGiftModal.show = true;
+  }
+};
 
+const handleUnbookGift = (giftInfo: ListInfo & { isBooked: boolean }) => {
+  if (!isListOwner.value) {
+    bookGiftModal.giftInfo = giftInfo;
+    bookGiftModal.show = true;
+  }
+};
+
+// Initialization
 onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
+  listsStore.getList(listId).then(() => giftsStore.getGifts(listId));
 });
+
+// TODO : Reset gifts store if next page is not creation or edit page with onBeforeRouteLeave
 
 watch(currentRoute, () => {
   sorting.columnIndex = 0;
@@ -203,6 +314,23 @@ watch(isListOwner, () => {
       </div>
     </div>
 
+    <Teleport to="body">
+      <DeleteListModal
+        v-show="deleteGiftModal.show"
+        :list-info="deleteGiftModal.listInfo"
+        :loading="deleteGiftModal.loading"
+        @close="deleteGiftModal.closeAction"
+        @submit="deleteGiftModal.submitAction"
+      />
+      <BookGiftModal
+        v-show="bookGiftModal.show"
+        :gift-info="bookGiftModal.giftInfo"
+        :loading="bookGiftModal.loading"
+        @close="bookGiftModal.closeAction"
+        @submit="bookGiftModal.submitAction"
+      />
+    </Teleport>
+
     <div v-if="gifts.length" class="overflow-x-auto relative rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
@@ -255,8 +383,16 @@ watch(isListOwner, () => {
           >
             <!-- Column 1 -->
             <td v-if="isListOwner" class="py-4 px-3 md:px-6">
-              <HeartIconSolid v-if="gift.isFavorite" class="w-5 text-red-600" />
-              <HeartIcon v-else class="w-5 text-red-600" />
+              <HeartIconSolid
+                v-if="gift.isFavorite"
+                class="w-5 text-red-600 hover:text-red-800"
+                @click.stop="handleGiftUnfav(gift.id)"
+              />
+              <HeartIcon
+                v-else
+                class="w-5 text-red-600 hover:text-red-800"
+                @click.stop="handleGiftFav(gift.id)"
+              />
             </td>
 
             <!-- Column 2 -->
@@ -264,8 +400,16 @@ watch(isListOwner, () => {
               v-if="isListOwner"
               class="py-4 px-3 md:px-6 hidden md:table-cell"
             >
-              <EyeSlashIcon v-if="gift.isHidden" class="w-5" />
-              <EyeIcon v-else class="w-5" />
+              <EyeSlashIcon
+                v-if="gift.isHidden"
+                class="w-5 hover:text-gray-700"
+                @click.stop="handleGiftShow(gift.id)"
+              />
+              <EyeIcon
+                v-else
+                class="w-5 hover:text-gray-700"
+                @click.stop="handleGiftHide(gift.id)"
+              />
             </td>
 
             <!-- Column 3 -->
@@ -345,7 +489,9 @@ watch(isListOwner, () => {
                 v-if="isListOwner"
                 type="button"
                 class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-                @click.stop=""
+                @click.stop="
+                  handleGiftDelete({ id: gift.id, title: gift.title })
+                "
               >
                 <TrashIcon class="w-5" />
                 <span class="hidden lg:inline lg:ml-2">Supprimer</span>
@@ -354,10 +500,31 @@ watch(isListOwner, () => {
                 v-if="!isListOwner && !gift.isBooked"
                 type="button"
                 class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
-                @click.stop=""
+                @click.stop="
+                  handleBookGift({
+                    id: gift.id,
+                    title: gift.title,
+                    isBooked: false,
+                  })
+                "
               >
                 <TicketIcon class="w-5" />
                 <span class="hidden md:inline md:ml-2">Réserver</span>
+              </button>
+              <button
+                v-else-if="!isListOwner && gift.isBooked"
+                type="button"
+                class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-red-300 dark:hover:bg-red-800 dark:focus:ring-red-800"
+                @click.stop="
+                  handleUnbookGift({
+                    id: gift.id,
+                    title: gift.title,
+                    isBooked: true,
+                  })
+                "
+              >
+                <NoSymbolIcon class="w-5" />
+                <span class="hidden md:inline md:ml-2">Annuler</span>
               </button>
             </td>
           </tr>

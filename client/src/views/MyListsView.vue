@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { reactive, watch, onMounted, inject, computed } from "vue";
-import { lists as listsData } from "@/data/lists";
 import {
   PlusSmallIcon,
   ArchiveBoxXMarkIcon,
@@ -8,21 +7,37 @@ import {
 } from "@heroicons/vue/24/outline";
 import PageHeading from "@/components/PageHeading.vue";
 import NewSharedListModal from "@/components/NewSharedListModal.vue";
+import DeleteListModal from "@/components/DeleteListModal.vue";
 import { useRoute, useRouter } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 
 import ListsTable from "@/components/ListsTable.vue";
+import { useListsStore } from "@/stores/lists";
+import { storeToRefs } from "pinia";
+import type { List, ListInfo } from "@/types/giftlist";
 
+// Router
 const router = useRouter();
 const currentRoute = useRoute();
+const isSharedView = computed(() => currentRoute.fullPath.includes("/shared"));
 
+// Lists Store and Lists data
+const listsStore = useListsStore();
+const lists = computed<List[]>(() => {
+  return isSharedView.value ? sharedLists.value : myLists.value;
+});
+const { myLists, sharedLists } = storeToRefs(listsStore);
+const loadLists = () => {
+  isSharedView.value ? listsStore.getSharedLists() : listsStore.getMyLists();
+};
+
+// Breadcrumb
 const { setBreadcrumbContent, pushBreadcrumbContent } = inject(
   breadcrumbContentInjectionKey
 ) as BreadcrumbContentData;
 
-const isSharedView = computed(() => currentRoute.fullPath.includes("/shared"));
-
+// Page content
 const pageTitle = computed(() => {
   return isSharedView.value ? "Listes partagées" : "Mes listes";
 });
@@ -36,17 +51,6 @@ const headingButton = computed(() => {
       ),
   };
 });
-
-const newSharedListModal = {
-  show: computed(() => currentRoute.fullPath.endsWith("/shared/new")),
-  submitAction: (sharingCode: string) => {
-    console.log("Entered new sharing code or link: ", sharingCode);
-    router.push("/app/lists/shared");
-  },
-  closeAction: () => {
-    router.push("/app/lists/shared");
-  },
-};
 
 const listTableHeaders = [
   { name: "Liste", isMobile: true },
@@ -65,20 +69,56 @@ const sharedListTableHeaders = [
 const tableHeaders = computed(() =>
   isSharedView.value ? sharedListTableHeaders : listTableHeaders
 );
-const lists = computed(() =>
-  listsData.filter((list) => (isSharedView.value ? list.isShared : true))
-);
 
 const sorting = reactive({
   columnIndex: 0,
   isDown: true,
 });
 
-const handleTableHeaderClick = (
-  e: Event,
-  index: number,
-  isDown: string | boolean = ""
-) => {
+// Modals
+const newSharedListModal = {
+  show: computed(() => currentRoute.fullPath.endsWith("/shared/new")),
+  submitAction: (sharingCode: string) => {
+    listsStore.requestAccessToSharedList(sharingCode).then(() => {
+      router.push("/app/lists/shared");
+    });
+  },
+  closeAction: () => {
+    router.push("/app/lists/shared");
+  },
+};
+
+const deleteListModal = reactive({
+  show: false,
+  listInfo: {
+    id: "",
+    title: "",
+  },
+  loading: false,
+  submitAction: (listId: string) => {
+    deleteListModal.loading = true;
+    listsStore.deleteList(listId).then(() => {
+      deleteListModal.loading = false;
+      deleteListModal.show = false;
+      deleteListModal.listInfo.id = "";
+      deleteListModal.listInfo.title = "";
+    });
+  },
+  closeAction: () => {
+    deleteListModal.show = false;
+  },
+});
+
+// Handlers
+const handleTableHeaderClick = ({
+  e,
+  index,
+  isDown,
+}: {
+  e: Event;
+  index: number;
+  isDown?: string | boolean;
+}) => {
   e.stopPropagation();
   if (index == sorting.columnIndex) {
     sorting.isDown = !sorting.isDown;
@@ -89,15 +129,29 @@ const handleTableHeaderClick = (
 };
 
 const handleListClick = (listId: string) => {
+  listsStore.selectList(listId, isSharedView.value);
   router.push("/app/lists/" + listId);
 };
 
+const handleListEdit = (listId: string) => {
+  listsStore.selectList(listId, isSharedView.value);
+  router.push(`/app/lists/${listId}/edit`);
+};
+
+const handleListDelete = (listInfo: ListInfo) => {
+  deleteListModal.listInfo = listInfo;
+  deleteListModal.show = true;
+};
+
+// Initialisation
 onMounted(() => {
   setBreadcrumbContent([
     { name: currentRoute.name ?? "", path: currentRoute.fullPath },
   ]);
+  loadLists();
 });
 
+// Watch route change in case user navigates from /app/lists to /app/lists/shared
 watch(currentRoute, (currentRoute) => {
   if (newSharedListModal.show.value) {
     pushBreadcrumbContent({
@@ -108,6 +162,7 @@ watch(currentRoute, (currentRoute) => {
     setBreadcrumbContent([
       { name: currentRoute.name ?? "", path: currentRoute.fullPath },
     ]);
+    loadLists();
   }
 
   sorting.columnIndex = 0;
@@ -137,17 +192,26 @@ watch(currentRoute, (currentRoute) => {
         @close="newSharedListModal.closeAction"
         @submit="newSharedListModal.submitAction"
       />
+      <DeleteListModal
+        v-show="deleteListModal.show"
+        :list-info="deleteListModal.listInfo"
+        :loading="deleteListModal.loading"
+        @close="deleteListModal.closeAction"
+        @submit="deleteListModal.submitAction"
+      />
     </Teleport>
 
     <ListsTable
       v-if="lists.length"
+      :lists="lists"
+      :is-shared-view="isSharedView"
       :table-headers="tableHeaders"
       :sorting="sorting"
-      :lists="lists"
-      :handle-list-click="handleListClick"
-      :handle-table-header-click="handleTableHeaderClick"
-      :is-shared-view="isSharedView"
       :last-row-action="headingButton.action"
+      @sort="handleTableHeaderClick"
+      @select="handleListClick"
+      @edit="handleListEdit"
+      @delete="handleListDelete"
     />
     <div
       v-else

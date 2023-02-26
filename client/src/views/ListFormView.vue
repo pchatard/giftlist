@@ -3,23 +3,45 @@ import PageHeading from "@/components/PageHeading.vue";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import type { FormList, FormListValidation } from "@/types/giftlist";
-import { inject, onMounted, reactive, ref } from "vue";
+import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { lists } from "@/data/lists";
 import UsersTable from "@/components/UsersTable.vue";
 import UsersIconStack from "@/components/UsersIconStack.vue";
+import { useListsStore } from "@/stores/lists";
+import { storeToRefs } from "pinia";
 
+// Router
 const router = useRouter();
 const currentRoute = useRoute();
 
-const listForm: FormList = reactive({
-  title: "",
-  description: "",
-  closureDate: "",
-  isShared: false,
-  ownersIds: [],
-  grantedUsersIds: [],
+// Lists store
+const listsStore = useListsStore();
+const currentList = computed(() => {
+  return currentRoute.fullPath.endsWith("/edit") ? selectedList.value : null;
 });
+const { selectedList, myLists } = storeToRefs(listsStore);
+
+// List form data and validation
+const listForm: FormList = reactive(
+  currentList.value
+    ? {
+        title: currentList.value.title ?? "",
+        description: currentList.value.description,
+        closureDate: currentList.value.closureDate,
+        isShared: currentList.value.isShared,
+        ownersIds: currentList.value.ownersDTO?.map((owner) => owner.id) ?? [],
+        grantedUsersIds:
+          currentList.value.grantedUsersDTO?.map((granted) => granted.id) ?? [],
+      }
+    : {
+        title: "",
+        description: "",
+        closureDate: "",
+        isShared: false,
+        ownersIds: [],
+        grantedUsersIds: [],
+      }
+);
 
 const listFormValidation: FormListValidation = reactive({
   title: {
@@ -35,27 +57,6 @@ const listFormValidation: FormListValidation = reactive({
     errorMessage: "",
   },
 });
-
-const hasClosureDate = ref(false);
-
-const handleSubmit = () => {
-  if (validateList()) {
-    // API Call + Redirection to new list
-    resetListForm();
-    resetListFormValidation();
-    router.push("/app/lists");
-  }
-};
-
-const validateList = (): boolean => {
-  if (listForm.title.trim() === "") {
-    listFormValidation.title.isError = true;
-    listFormValidation.title.errorMessage =
-      "Le nom de la liste ne peut pas être vide";
-    return false;
-  }
-  return true;
-};
 
 const resetListForm = () => {
   listForm.title = "";
@@ -74,31 +75,107 @@ const resetListFormValidation = () => {
   listFormValidation.closureDate.isError = false;
 };
 
+const hasClosureDate = ref(Boolean(currentList.value?.closureDate));
+
+// Breadcrumb
 const { setBreadcrumbContent } = inject(
   breadcrumbContentInjectionKey
 ) as BreadcrumbContentData;
 
+// Handlers
+function handleSubmit() {
+  if (validateList()) {
+    currentList.value
+      ? listsStore
+          .editList(currentList.value.id, listForm)
+          .then((listId: string) => {
+            if (listId) {
+              resetListForm();
+              resetListFormValidation();
+              router.push("/app/lists/" + listId);
+            }
+          })
+      : listsStore
+          .createList(listForm)
+          .then((listId) => {
+            resetListForm();
+            resetListFormValidation();
+            router.push("/app/lists/" + listId);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+  }
+}
+
+const validateList = (): boolean => {
+  if (listForm.title.trim() === "") {
+    listFormValidation.title.isError = true;
+    listFormValidation.title.errorMessage =
+      "Le nom de la liste ne peut pas être vide";
+    return false;
+  }
+  return true;
+};
+
 onMounted(() => {
-  const listId = currentRoute.params.listId;
-  if (listId) {
-    // Get list data and populate listForm with it.
-    console.log("Editing list " + listId);
-  } else {
-    console.log("Creating new list");
+  let listId = "";
+  if (currentRoute.fullPath.includes("edit")) {
+    listId =
+      typeof currentRoute.params.listId == "string"
+        ? currentRoute.params.listId
+        : currentRoute.params.listId[0];
+    listsStore.getList(listId).then(() => {
+      listForm.title = currentList.value?.title ?? "";
+      listForm.description = currentList.value?.description;
+      listForm.closureDate = currentList.value?.closureDate;
+      hasClosureDate.value = Boolean(currentList.value?.closureDate);
+      listForm.isShared = currentList.value?.isShared ?? false;
+      listForm.ownersIds =
+        currentList.value?.ownersDTO?.map((owner) => owner.id) ?? [];
+      listForm.grantedUsersIds =
+        currentList.value?.grantedUsersDTO?.map((granted) => granted.id) ?? [];
+    });
   }
 
-  setBreadcrumbContent([
-    { name: "Mes listes", path: "/app/lists" },
-    ...(listId
-      ? [
-          {
-            name: lists.find((list) => list.id == listId)?.title ?? "Liste X",
-            path: "/app/lists/" + listId,
-          },
-        ]
-      : []),
-    { name: currentRoute.name ?? "", path: currentRoute.fullPath },
-  ]);
+  const list = myLists.value.find((list) => list.id === listId);
+  if (list) {
+    setBreadcrumbContent([
+      { name: "Mes listes", path: "/app/lists" },
+      ...(listId
+        ? [
+            {
+              name: list.title ?? "Liste X",
+              path: "/app/lists/" + listId,
+            },
+          ]
+        : []),
+      { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+    ]);
+  } else {
+    listsStore.getList(listId).then(() => {
+      setBreadcrumbContent([
+        { name: "Mes listes", path: "/app/lists" },
+        ...(listId
+          ? [
+              {
+                name: selectedList.value?.title ?? "Liste X",
+                path: "/app/lists/" + listId,
+              },
+            ]
+          : []),
+        { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+      ]);
+    });
+  }
+});
+
+watch(hasClosureDate, (newHasClosureDate) => {
+  if (newHasClosureDate && currentList.value) {
+    listForm.closureDate = currentList.value.closureDate;
+  } else {
+    listForm.closureDate = "";
+  }
 });
 </script>
 
