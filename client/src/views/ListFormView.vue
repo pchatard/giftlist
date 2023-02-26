@@ -5,7 +5,6 @@ import type { BreadcrumbContentData } from "@/types";
 import type { FormList, FormListValidation } from "@/types/giftlist";
 import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { lists } from "@/data/lists";
 import UsersTable from "@/components/UsersTable.vue";
 import UsersIconStack from "@/components/UsersIconStack.vue";
 import { useListsStore } from "@/stores/lists";
@@ -20,7 +19,7 @@ const listsStore = useListsStore();
 const currentList = computed(() => {
   return currentRoute.fullPath.endsWith("/edit") ? selectedList.value : null;
 });
-const { selectedList } = storeToRefs(listsStore);
+const { selectedList, myLists } = storeToRefs(listsStore);
 
 // List form data and validation
 const listForm: FormList = reactive(
@@ -139,18 +138,36 @@ onMounted(() => {
     });
   }
 
-  setBreadcrumbContent([
-    { name: "Mes listes", path: "/app/lists" },
-    ...(listId
-      ? [
-          {
-            name: lists.find((list) => list.id == listId)?.title ?? "Liste X",
-            path: "/app/lists/" + listId,
-          },
-        ]
-      : []),
-    { name: currentRoute.name ?? "", path: currentRoute.fullPath },
-  ]);
+  const list = myLists.value.find((list) => list.id === listId);
+  if (list) {
+    setBreadcrumbContent([
+      { name: "Mes listes", path: "/app/lists" },
+      ...(listId
+        ? [
+            {
+              name: list.title ?? "Liste X",
+              path: "/app/lists/" + listId,
+            },
+          ]
+        : []),
+      { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+    ]);
+  } else {
+    listsStore.getList(listId).then(() => {
+      setBreadcrumbContent([
+        { name: "Mes listes", path: "/app/lists" },
+        ...(listId
+          ? [
+              {
+                name: selectedList.value?.title ?? "Liste X",
+                path: "/app/lists/" + listId,
+              },
+            ]
+          : []),
+        { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+      ]);
+    });
+  }
 });
 
 watch(hasClosureDate, (newHasClosureDate) => {

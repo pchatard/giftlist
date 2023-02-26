@@ -105,7 +105,7 @@ onMounted(() => {
         />
       </div>
 
-      <div class="flex flex-col mt-8 gap-4">
+      <div class="flex flex-col mt-16 gap-4">
         <div
           class="flex flex-col md:flex-row md:justify-between md:items-center md:gap-4"
         >

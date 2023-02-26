@@ -211,7 +211,7 @@ const computedLastRowText = computed(() => {
             <button
               type="button"
               class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-              @click.stop=""
+              @click.stop="handleListDelete({ id: list.id, title: list.title })"
             >
               <TrashIcon class="w-4" />
               <span class="hidden lg:inline lg:ml-2">Supprimer</span>

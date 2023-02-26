@@ -2,25 +2,25 @@
 import type { ListInfo } from "@/types/giftlist";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
-export interface DeleteListModalProps {
-  listInfo: ListInfo;
+export interface BookGiftModalProps {
+  giftInfo: ListInfo & { isBooked: boolean };
   loading: boolean;
 }
 
-export interface DeleteListModalEmits {
+export interface BookGiftModalEmits {
   (e: "close"): void;
-  (e: "submit", listId: string): void;
+  (e: "submit", giftId: string): void;
 }
 
-defineProps<DeleteListModalProps>();
-const emit = defineEmits<DeleteListModalEmits>();
+defineProps<BookGiftModalProps>();
+const emit = defineEmits<BookGiftModalEmits>();
 
 const handleClose = () => {
   emit("close");
 };
 
-const handleConfirm = (listId: string) => {
-  emit("submit", listId);
+const handleConfirm = (giftId: string) => {
+  emit("submit", giftId);
 };
 </script>
 
@@ -43,15 +43,16 @@ const handleConfirm = (listId: string) => {
         </button>
         <div class="px-6 py-6 lg:px-8">
           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-            Supprimer {{ listInfo.title }}
+            Réserver {{ giftInfo.title }}
           </h3>
           <form class="space-y-6" action="#">
             <div>
               <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">
-                Voulez-vous vraiment supprimer cet élément ?
-              </p>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">
-                Cette action est irréversible.
+                Voulez-vous vraiment
+                {{
+                  giftInfo.isBooked ? "annuler la réservation pour" : "réserver"
+                }}
+                ce cadeau ?
               </p>
             </div>
 
@@ -87,16 +88,16 @@ const handleConfirm = (listId: string) => {
                     fill="currentColor"
                   />
                 </svg>
-                Suppression...
+                {{ giftInfo.isBooked ? "Confirmation" : "Réservation" }}...
               </button>
 
               <button
                 v-else
                 type="button"
                 class="w-1/3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                @click="handleConfirm(listInfo.id)"
+                @click="handleConfirm(giftInfo.id)"
               >
-                Supprimer
+                {{ giftInfo.isBooked ? "Confirmer" : "Réserver" }}
               </button>
             </div>
           </form>

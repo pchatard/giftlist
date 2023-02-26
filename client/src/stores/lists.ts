@@ -38,8 +38,8 @@ export const useListsStore = defineStore("lists", () => {
     return list;
   }
 
-  function formatEditedList(listId: string, formList: Partial<FormList>) {
-    const list = formList;
+  function formatEditedList(listId: string, formList: FormList) {
+    const list: Partial<FormList> = { ...formList };
     const originalListIndex = getListIndexInMyLists(listId);
     if (originalListIndex >= 0) {
       const originalList = myLists.value[originalListIndex];
@@ -93,7 +93,9 @@ export const useListsStore = defineStore("lists", () => {
   }
 
   function getAllLists() {
-    // TODO
+    fetchApi("lists?select=all").then((lists: List[]) => {
+      console.log(lists);
+    });
   }
 
   function getMyLists() {
@@ -136,7 +138,7 @@ export const useListsStore = defineStore("lists", () => {
     });
   }
 
-  function editList(listId: string, formList: Partial<FormList>) {
+  function editList(listId: string, formList: FormList) {
     const editedList = formatEditedList(listId, formList);
     return fetchApi(`lists/${listId}`, "PUT", JSON.stringify(editedList))
       .then(() => {
