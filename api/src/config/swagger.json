@@ -700,7 +700,7 @@
 						"description": "Success response"
 					},
 					"401": {
-						"description": "If user not owner or granted",
+						"description": "If user not owner and not granted",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -720,7 +720,7 @@
 						}
 					}
 				},
-				"description": "Delete a list.",
+				"description": "Delete a list if user is owner or remove from granted if user is granted.",
 				"tags": [
 					"List"
 				],
