@@ -74,12 +74,12 @@ export class ListController extends Controller {
 	}
 
 	/**
-	 * Delete a list.
+	 * Delete a list if user is owner or remove from granted if user is granted.
 	 * @param {UUID} listId the GUID of the list
 	 */
 	@SuccessResponse(204, "Success response")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
-	@Response<UnauthorizedErrorJSON>(401, "If user not owner or granted")
+	@Response<UnauthorizedErrorJSON>(401, "If user not owner and not granted")
 	@Delete("{listId}")
 	async delete(@Request() request: ERequest, @Path() listId: UUID): Promise<void> {
 		await this.deleteById(listId, request.userId);
