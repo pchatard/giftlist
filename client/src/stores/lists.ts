@@ -174,9 +174,12 @@ export const useListsStore = defineStore("lists", () => {
   }
 
   function requestAccessToSharedList(sharingCode: string) {
-    return fetchApi(`lists/invite/${sharingCode}`, "PUT").then(() => {
-      getSharedLists();
-    });
+    return fetchApi(`lists/invite/${sharingCode}`, "PUT").then(
+      (listId: string) => {
+        getList(listId);
+        return listId;
+      }
+    );
   }
 
   return {
