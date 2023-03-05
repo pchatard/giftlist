@@ -110,17 +110,20 @@ class UserService {
 			},
 		});
 		let res: List[] = [];
-		const grantedLists = (user.friendLists || []).filter((l) => reallyAll || l.isShared);
+		const ownedLists = (user.lists || []).map((list) => ({ ...list, isOwner: true }));
+		const grantedLists = (user.friendLists || [])
+			.filter((l) => reallyAll || l.isShared)
+			.map((list) => ({ ...list, isOwner: false }));
 		switch (select) {
 			case SelectKindList.OWNED:
-				res = user.lists || [];
+				res = ownedLists;
 				break;
 			case SelectKindList.GRANTED:
 				res = grantedLists;
 				break;
 			case SelectKindList.ALL:
 			default:
-				res = (user.lists || []).concat(grantedLists);
+				res = ownedLists.concat(grantedLists);
 				break;
 		}
 		return res.sort((a, b) => a.createdDate.valueOf() - b.createdDate.valueOf());

@@ -39,6 +39,8 @@ export class List {
 
 	public ownersDTO?: UserNameDTO[];
 
+	public isOwner?: boolean;
+
 	@Column({ default: false })
 	public isShared!: boolean;
 

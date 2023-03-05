@@ -7,6 +7,6 @@ export type CreateListDTO = Omit<List, "id"	| "sharingCode"	| "gifts"	| "owners"
 export interface ListIdDTO extends Expand<Pick<List, "id">> {}
 
 /* prettier-ignore */
-export type ListDTO = Pick<List, "id" | "description"	| "title"	| "isShared"	| "sharingCode"	| "closureDate"	| "ownersDTO"	| "grantedUsersDTO">;
+export type ListDTO = Pick<List, "id" | "description"	| "title"	| "isShared"	| "sharingCode"	| "closureDate"	| "ownersDTO"	| "grantedUsersDTO" | "isOwner">;
 
 export type EditListDTO = CreateListDTO;
