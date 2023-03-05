@@ -94,7 +94,8 @@ export const useListsStore = defineStore("lists", () => {
 
   function getAllLists() {
     fetchApi("lists?select=all").then((lists: List[]) => {
-      console.log(lists);
+      myLists.value = lists.filter((list) => list.isOwner);
+      sharedLists.value = lists.filter((list) => !list.isOwner);
     });
   }
 
@@ -117,14 +118,16 @@ export const useListsStore = defineStore("lists", () => {
         return fetchedList;
       })
       .then((fetchedList: List) => {
-        const myListsIndex = getListIndexInMyLists(fetchedList.id);
-        if (myListsIndex >= 0) {
-          myLists.value[myListsIndex] = fetchedList;
-        }
-
-        const sharedListsIndex = getListIndexInSharedLists(fetchedList.id);
-        if (sharedListsIndex >= 0) {
-          sharedLists.value[sharedListsIndex] = fetchedList;
+        if (fetchedList.isOwner) {
+          const myListsIndex = getListIndexInMyLists(fetchedList.id);
+          if (myListsIndex >= 0) {
+            myLists.value[myListsIndex] = fetchedList;
+          }
+        } else {
+          const sharedListsIndex = getListIndexInSharedLists(fetchedList.id);
+          if (sharedListsIndex >= 0) {
+            sharedLists.value[sharedListsIndex] = fetchedList;
+          }
         }
       });
   }
@@ -133,7 +136,7 @@ export const useListsStore = defineStore("lists", () => {
     const newList = formatList(formList);
     const response = fetchApi("lists", "POST", JSON.stringify(newList));
     return response.then(({ id }: { id: string }) => {
-      myLists.value.push({ ...newList, id, sharingCode: "" });
+      myLists.value.push({ ...newList, id, sharingCode: "", isOwner: true });
       return id;
     });
   }

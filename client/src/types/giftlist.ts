@@ -8,6 +8,7 @@ export interface List {
   title: string;
   sharingCode: string;
   isShared: boolean;
+  isOwner: boolean;
   description?: string;
   closureDate?: string;
   ownersDTO?: UserName[];

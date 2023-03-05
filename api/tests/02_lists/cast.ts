@@ -18,6 +18,7 @@ export function ListTestAsList(changes?: Partial<List>): List {
 		id: GlobalVar.ListTest_Id,
 		sharingCode: GlobalVar.ListTest_SharingCode,
 		owners: [UserTest],
+		isOwner: true,
 		...changes,
 	} as List;
 }
@@ -28,6 +29,7 @@ export function ListTestWithGrantedAsList(changes?: Partial<List>): List {
 		id: GlobalVar.ListTestWithGranted_Id,
 		sharingCode: GlobalVar.ListTestWithGranted_SharingCode,
 		owners: [UserTest],
+		isOwner: true,
 		grantedUsers: [User1],
 		...changes,
 	} as List;

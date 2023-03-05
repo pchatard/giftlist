@@ -133,13 +133,12 @@ export class ListController extends Controller {
 	@Response<UnauthorizedErrorJSON>(401, "If user not owner or granted")
 	@Get("{listId}")
 	async get(@Request() request: ERequest, @Path() listId: UUID): Promise<ListDTO> {
-		if (
-			!(await ListService.ownersAuth0Ids(listId)).includes(request.userId) &&
-			!(await ListService.grantedUsersAuth0Ids(listId)).includes(request.userId)
-		) {
+		const isOwner = (await ListService.ownersAuth0Ids(listId)).includes(request.userId);
+		const isGranted = (await ListService.grantedUsersAuth0Ids(listId)).includes(request.userId);
+		if (!isOwner && !isGranted) {
 			throw new UnauthorizedError();
 		}
-		return castListAsListDTO(await ListService.get(listId));
+		return castListAsListDTO({ ...(await ListService.get(listId)), isOwner });
 	}
 
 	/**
