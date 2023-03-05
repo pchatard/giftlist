@@ -901,8 +901,23 @@
 			"put": {
 				"operationId": "AccessFromCode",
 				"responses": {
+					"200": {
+						"description": "Success response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/ListIdDTO"
+										},
+										{}
+									]
+								}
+							}
+						}
+					},
 					"204": {
-						"description": "Success response"
+						"description": "Success response, but user is in owners"
 					},
 					"422": {
 						"description": "If body or request param type is violated",

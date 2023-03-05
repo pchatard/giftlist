@@ -2,14 +2,16 @@
 import PageHeading from "@/components/PageHeading.vue";
 import { useListsStore } from "@/stores/lists";
 import { onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
 
 const listsStore = useListsStore();
 const sharingCode = useRoute().params.sharingCode as string;
 
 onMounted(() => {
-  listsStore.requestAccessToSharedList(sharingCode).then(() => {
-    // TODO : Redirect to list
+  listsStore.requestAccessToSharedList(sharingCode).then((listId: string) => {
+    router.push("/app/lists/" + listId);
   });
 });
 </script>

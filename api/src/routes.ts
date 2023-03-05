@@ -415,7 +415,7 @@ export function RegisterRoutes(app: express.Router) {
 
 
               const promise = controller.accessFromCode.apply(controller, validatedArgs as any);
-              promiseHandler(controller, promise, response, 204, next);
+              promiseHandler(controller, promise, response, 200, next);
             } catch (err) {
                 return next(err);
             }

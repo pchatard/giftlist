@@ -170,18 +170,29 @@ export class ListController extends Controller {
 	 * Get a list from its sharing code.
 	 * @param {UUID} sharingCode the sharing code of the list
 	 */
-	@SuccessResponse(204, "Success response")
+	@SuccessResponse(200, "Success response")
+	@Response<UnauthorizedErrorJSON>(401, "User is part of the owners")
 	@Response<ValidateErrorJSON>(422, "If body or request param type is violated")
 	@Put("invite/{sharingCode}")
-	async accessFromCode(@Request() request: ERequest, @Path() sharingCode: UUID): Promise<void> {
+	async accessFromCode(
+		@Request() request: ERequest,
+		@Path() sharingCode: UUID
+	): Promise<ListIdDTO | void> {
 		try {
 			const list: List = await ListService.getFromSharingCode(sharingCode);
 			const user: User = await UserService.getByAuth0Id(request.userId);
 			if (!list.owners.find((u) => u.id == user.id)) {
 				await ListService.addGrantedUser(list.id, user);
+				return { id: list.id } as ListIdDTO;
+			} else {
+				throw new UnauthorizedError();
 			}
 		} catch (err: unknown) {
-			throw new ResourceNotFoundError();
+			if (err instanceof UnauthorizedError) {
+				throw err;
+			} else {
+				throw new ResourceNotFoundError();
+			}
 		}
 	}
 
