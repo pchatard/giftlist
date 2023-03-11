@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref, inject, reactive, watch, computed } from "vue";
+import { onMounted, inject, reactive, watch, computed } from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
 import DeleteListModal from "@/components/DeleteListModal.vue";
 import BookGiftModal from "@/components/BookGiftModal.vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import {
@@ -47,7 +47,7 @@ const { gifts } = storeToRefs(giftsStore);
 const list = computed(() => selectedList.value);
 // TODO: Edit after ownersIds modifications
 // Define this depending on wether the logged in user is in the list owners.
-const isListOwner = ref(false);
+const isListOwner = computed(() => selectedList.value?.isOwner);
 
 // Breadcrumb
 const { setBreadcrumbContent } = inject(
@@ -213,7 +213,16 @@ onMounted(() => {
   listsStore.getList(listId).then(() => giftsStore.getGifts(listId));
 });
 
-// TODO : Reset gifts store if next page is not creation or edit page with onBeforeRouteLeave
+onBeforeRouteLeave((to, from) => {
+  // TODO : Reset gifts store if next page is not creation or edit page with onBeforeRouteLeave
+  if (
+    !to.params ||
+    !to.params.listId ||
+    to.params.listId != from.params.listId
+  ) {
+    giftsStore.reset();
+  }
+});
 
 watch(currentRoute, () => {
   sorting.columnIndex = 0;
@@ -431,7 +440,7 @@ watch(isListOwner, () => {
               class="py-4 px-3 md:px-6"
               :class="[isListOwner ? '' : 'hidden md:table-cell']"
             >
-              {{ gift.price?.toFixed(2) ?? "-" }} €
+              {{ gift.price ?? "-" }} €
             </td>
 
             <!-- Column 5 -->
@@ -442,9 +451,7 @@ watch(isListOwner, () => {
               {{ gift.brand ?? "-" }}
             </td>
             <td v-else class="py-4 px-3 md:px-6">
-              <div class="mb-1 md:hidden">
-                {{ gift.price?.toFixed(2) ?? "-" }} €
-              </div>
+              <div class="mb-1 md:hidden">{{ gift.price ?? "-" }} €</div>
               <div
                 v-if="gift.isBooked"
                 class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
