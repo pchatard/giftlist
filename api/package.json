@@ -8,7 +8,8 @@
 		"build": "tsc && curl --create-dirs -o root.crt -O https://cockroachlabs.cloud/clusters/f82eaea0-cfe2-4492-aa07-e986cd93e46d/cert",
 		"clean": "rm -rf ./build/*",
 		"lint": "eslint -c .eslintrc.json './src/**/*.ts'",
-		"typeorm:dropschema": "NODE_ENV=test node -r ts-node/register ./node_modules/typeorm/cli.js -f ./src/config/ormconfig.ts schema:drop",
+		"db:test:dropschema": "NODE_ENV=test node -r ts-node/register ./node_modules/typeorm/cli.js schema:drop -d ./src/index.ts",
+		"db:test:sync": "NODE_ENV=test node -r ts-node/register ./node_modules/typeorm/cli.js schema:sync -d ./src/index.ts",
 		"prettier:check": "prettier --config .prettierrc.json --check '{src,tests}/**/*.ts' '!src/routes.ts'",
 		"prettier:write": "prettier --config .prettierrc.json --write '{src,tests}/**/*.ts' '!src/routes.ts'",
 		"start": "NODE_ENV=dev node -r ts-node/register ./build/index.js",
@@ -76,7 +77,7 @@
 		"watch": [
 			"./src"
 		],
-		"exec": "yarn swagger; yarn build; yarn start",
+		"exec": "npm run swagger; npm run build:local; npm run start",
 		"ext": "ts"
 	}
 }

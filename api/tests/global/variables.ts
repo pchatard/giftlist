@@ -9,4 +9,5 @@ export default class {
 	public static ListTestWithGranted_SharingCode: string = "";
 
 	public static GiftTest_Id: string = "";
+	public static GiftTestWithDecimalPrice_Id: string = "";
 }

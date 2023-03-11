@@ -49,7 +49,7 @@ export class Gift {
 
 	public bookedByDTO!: UserNameDTO[];
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, type: "numeric", scale: 2, precision: 10 })
 	public price?: number;
 
 	@Column({ nullable: true })

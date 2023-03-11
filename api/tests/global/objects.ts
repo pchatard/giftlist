@@ -32,3 +32,11 @@ export const GiftTest: CreateGiftDTO = {
 	isFavorite: false,
 	category: "book",
 };
+
+export const GiftTestWithDecimalPrice: CreateGiftDTO = {
+	title: "TestGiftTest",
+	isHidden: false,
+	isFavorite: false,
+	category: "book",
+	price: 25.92,
+};

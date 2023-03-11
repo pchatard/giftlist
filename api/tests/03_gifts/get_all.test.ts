@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { GiftTest, GlobalVar, Url_GiftGetAll } from "../global";
+import { GiftTest, GiftTestWithDecimalPrice, GlobalVar, Url_GiftGetAll } from "../global";
 import { get } from "../helpers/crud";
 import { expectError, expectValidationFailed } from "../helpers/error";
 import { expect200 } from "../helpers/success";
@@ -18,7 +18,13 @@ export default function suite() {
 		expect200(response);
 		expect(response).to.have.property("body").to.be.an("array");
 		const giftTest = { ...GiftTest, id: GlobalVar.GiftTest_Id, listId: GlobalVar.ListTest_Id };
-		expect(response.body).to.have.deep.members([giftTest]);
+		const giftTestWithDecimalPrice = {
+			...GiftTestWithDecimalPrice,
+			price: GiftTestWithDecimalPrice.price?.toString(),
+			id: GlobalVar.GiftTestWithDecimalPrice_Id,
+			listId: GlobalVar.ListTest_Id,
+		};
+		expect(response.body).to.have.deep.members([giftTest, giftTestWithDecimalPrice]);
 	});
 	it("Returns 200, with not hidden gifts for granted", async () => {
 		const response = await get(Url_GiftGetAll(ListGranted.id));
