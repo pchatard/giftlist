@@ -4,11 +4,12 @@ import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import type { FormList, FormListValidation } from "@/types/giftlist";
 import { computed, inject, onMounted, reactive, ref, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute, onBeforeRouteLeave } from "vue-router";
 import UsersTable from "@/components/UsersTable.vue";
 import UsersIconStack from "@/components/UsersIconStack.vue";
 import { useListsStore } from "@/stores/lists";
 import { storeToRefs } from "pinia";
+import { useGiftsStore } from "@/stores/gifts";
 
 // Router
 const router = useRouter();
@@ -16,6 +17,7 @@ const currentRoute = useRoute();
 
 // Lists store
 const listsStore = useListsStore();
+const giftsStore = useGiftsStore();
 const currentList = computed(() => {
   return currentRoute.fullPath.endsWith("/edit") ? selectedList.value : null;
 });
@@ -175,6 +177,16 @@ watch(hasClosureDate, (newHasClosureDate) => {
     listForm.closureDate = currentList.value.closureDate;
   } else {
     listForm.closureDate = "";
+  }
+});
+
+onBeforeRouteLeave((to, from) => {
+  if (
+    !to.params ||
+    !to.params.listId ||
+    to.params.listId != from.params.listId
+  ) {
+    giftsStore.reset();
   }
 });
 </script>

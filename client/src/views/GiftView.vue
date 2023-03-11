@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 
 import PageHeading from "@/components/PageHeading.vue";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
@@ -49,6 +49,16 @@ onMounted(() => {
         { name: gift.value?.title ?? "Mon cadeau", path: route.fullPath },
       ]);
     });
+});
+
+onBeforeRouteLeave((to, from) => {
+  if (
+    !to.params ||
+    !to.params.listId ||
+    to.params.listId != from.params.listId
+  ) {
+    giftsStore.reset();
+  }
 });
 </script>
 

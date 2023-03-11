@@ -55,7 +55,7 @@ export const useListsStore = defineStore("lists", () => {
       if (formList.closureDate === originalList.closureDate) {
         delete list.closureDate;
       } else if (formList.closureDate == "") {
-        list.closureDate = undefined;
+        list.closureDate = null;
       }
     }
 
@@ -136,7 +136,13 @@ export const useListsStore = defineStore("lists", () => {
     const newList = formatList(formList);
     const response = fetchApi("lists", "POST", JSON.stringify(newList));
     return response.then(({ id }: { id: string }) => {
-      myLists.value.push({ ...newList, id, sharingCode: "", isOwner: true });
+      myLists.value.push({
+        ...newList,
+        closureDate: newList.closureDate ?? "",
+        id,
+        sharingCode: "",
+        isOwner: true,
+      });
       return id;
     });
   }

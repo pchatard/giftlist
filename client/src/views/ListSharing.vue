@@ -9,9 +9,10 @@ import {
   ClipboardDocumentIcon,
 } from "@heroicons/vue/24/outline";
 import { inject, computed, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useListsStore } from "@/stores/lists";
 import { storeToRefs } from "pinia";
+import { useGiftsStore } from "@/stores/gifts";
 
 // Router
 const currentRoute = useRoute();
@@ -22,6 +23,7 @@ const listId =
 
 // Store and list data
 const listsStore = useListsStore();
+const giftsStore = useGiftsStore();
 const { selectedList } = storeToRefs(listsStore);
 
 const sharingLinkIsCopied = ref(false);
@@ -74,6 +76,16 @@ const handleCopy = () => {
 onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
   listsStore.getList(listId);
+});
+
+onBeforeRouteLeave((to, from) => {
+  if (
+    !to.params ||
+    !to.params.listId ||
+    to.params.listId != from.params.listId
+  ) {
+    giftsStore.reset();
+  }
 });
 </script>
 

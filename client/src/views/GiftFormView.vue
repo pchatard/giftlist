@@ -7,7 +7,7 @@ import type { BreadcrumbContentData } from "@/types";
 import type { FormGift, FormGiftValidation } from "@/types/giftlist";
 import { storeToRefs } from "pinia";
 import { computed, inject, onMounted, reactive } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 
 // Router
 const router = useRouter();
@@ -210,6 +210,16 @@ onMounted(() => {
         { name: currentRoute.name ?? "", path: currentRoute.fullPath },
       ]);
     });
+  }
+});
+
+onBeforeRouteLeave((to, from) => {
+  if (
+    !to.params ||
+    !to.params.listId ||
+    to.params.listId != from.params.listId
+  ) {
+    giftsStore.reset();
   }
 });
 </script>

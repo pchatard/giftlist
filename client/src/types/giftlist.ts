@@ -23,7 +23,7 @@ export interface FormValidation {
 export interface FormList {
   title: string;
   description?: string;
-  closureDate?: string;
+  closureDate?: string | null;
   isShared: boolean;
   ownersIds: string[];
   grantedUsersIds: string[];
