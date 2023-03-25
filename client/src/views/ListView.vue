@@ -23,6 +23,7 @@ import {
   PlusSmallIcon,
   UsersIcon,
   ArchiveBoxXMarkIcon,
+  ArrowTopRightOnSquareIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 import { useListsStore } from "@/stores/lists";
@@ -204,6 +205,12 @@ const handleUnbookGift = (giftInfo: ListInfo & { isBooked: boolean }) => {
   if (!isListOwner.value) {
     bookGiftModal.giftInfo = giftInfo;
     bookGiftModal.show = true;
+  }
+};
+
+const handleOpenGiftLink = (giftLink: string | undefined) => {
+  if (giftLink) {
+    window.open(giftLink, "_blank", "noreferrer");
   }
 };
 
@@ -532,6 +539,15 @@ watch(isListOwner, () => {
               >
                 <NoSymbolIcon class="w-5" />
                 <span class="hidden md:inline md:ml-2">Annuler</span>
+              </button>
+              <button
+                v-if="!isListOwner && gift.linkURL"
+                type="button"
+                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                @click.stop="handleOpenGiftLink(gift.linkURL)"
+              >
+                <ArrowTopRightOnSquareIcon class="w-5" />
+                <span class="hidden md:inline md:ml-2">Lien</span>
               </button>
             </td>
           </tr>
