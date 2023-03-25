@@ -8,6 +8,7 @@ import type { FormGift, FormGiftValidation } from "@/types/giftlist";
 import { storeToRefs } from "pinia";
 import { computed, inject, onMounted, reactive } from "vue";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/vue/24/outline";
 
 // Router
 const router = useRouter();
@@ -155,6 +156,12 @@ const resetGiftFormValidation = () => {
   giftFormValidation.linkURL.isError = false;
   giftFormValidation.comments.errorMessage = "";
   giftFormValidation.comments.isError = false;
+};
+
+const handleGiftLinkClick = () => {
+  if (giftForm.linkURL) {
+    window.open(giftForm.linkURL, "_blank", "noreferrer");
+  }
 };
 
 onMounted(() => {
@@ -337,14 +344,32 @@ onBeforeRouteLeave((to, from) => {
           >
             Lien
           </label>
-          <input
+          <!-- <input
             id="gift-link"
             v-model="giftForm.linkURL"
             type="link"
             name="gift-link"
             placeholder="Lien vers le cadeau"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-          />
+          /> -->
+
+          <div class="flex">
+            <input
+              id="gift-link"
+              v-model="giftForm.linkURL"
+              type="link"
+              name="gift-link"
+              class="rounded-none rounded-l-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block min-w-0 w-full md:w-1/2 text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              :class="{ 'rounded-r-lg': !giftForm.linkURL }"
+            />
+            <span
+              v-if="giftForm.linkURL"
+              class="inline-flex cursor-pointer items-center px-3 text-sm text-primary-600 hover:text-primary-700 bg-gray-100 hover:bg-gray-200 border border-l-0 border-gray-300 rounded-r-md dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-primary-400 dark:border-gray-600"
+              @click="handleGiftLinkClick"
+            >
+              <ArrowTopRightOnSquareIcon class="w-5" />
+            </span>
+          </div>
         </div>
 
         <div>
