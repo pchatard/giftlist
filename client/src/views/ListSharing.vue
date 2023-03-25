@@ -2,7 +2,10 @@
 import PageHeading from "@/components/PageHeading.vue";
 import UsersTable from "@/components/UsersTable.vue";
 import UsersIconStack from "@/components/UsersIconStack.vue";
-import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import {
+  breadcrumbContentInjectionKey,
+  showFriendsFeaturesInjectionKey,
+} from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import {
   ClipboardDocumentCheckIcon,
@@ -20,6 +23,9 @@ const listId =
   typeof currentRoute.params.listId == "string"
     ? currentRoute.params.listId
     : currentRoute.params.listId[0];
+
+// Injections
+const showFriendsFeatures = inject(showFriendsFeaturesInjectionKey);
 
 // Store and list data
 const listsStore = useListsStore();
@@ -145,7 +151,7 @@ onBeforeRouteLeave((to, from) => {
       </div>
     </div>
 
-    <div v-if="selectedList?.isShared" class="my-8">
+    <div v-if="showFriendsFeatures && selectedList?.isShared" class="my-8">
       <div class="mt-8 space-y-2">
         <h2 class="text-xl md:text-2xl font-bold dark:text-white mb-2">
           Gérer les invités

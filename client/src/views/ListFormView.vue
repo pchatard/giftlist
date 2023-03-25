@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
-import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import {
+  breadcrumbContentInjectionKey,
+  showFriendsFeaturesInjectionKey,
+} from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import type { FormList, FormListValidation } from "@/types/giftlist";
 import { computed, inject, onMounted, reactive, ref, watch } from "vue";
@@ -14,6 +17,9 @@ import { useGiftsStore } from "@/stores/gifts";
 // Router
 const router = useRouter();
 const currentRoute = useRoute();
+
+// Injection
+const showFriendsFeatures = inject(showFriendsFeaturesInjectionKey);
 
 // Lists store
 const listsStore = useListsStore();
@@ -285,7 +291,7 @@ onBeforeRouteLeave((to, from) => {
           </div>
         </div>
 
-        <div>
+        <div v-if="showFriendsFeatures">
           <label
             for="list-closure-date"
             class="inline-block mb-2 text-sm font-medium text-gray-900 dark:text-white"
