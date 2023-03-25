@@ -2,7 +2,10 @@
 import PageHeading from "@/components/PageHeading.vue";
 import UsersTable from "@/components/UsersTable.vue";
 import { useGiftlistApi } from "@/composables/giftlistApi";
-import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
+import {
+  breadcrumbContentInjectionKey,
+  showFriendsFeaturesInjectionKey,
+} from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import { useAuth0 } from "@auth0/auth0-vue";
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
@@ -18,6 +21,8 @@ let data = reactive<UserDTO>({
   email: "",
   bookingsDTO: [],
 });
+
+const showFriendsFeatures = inject(showFriendsFeaturesInjectionKey);
 
 const currentRoute = useRoute();
 const { setBreadcrumbContent } = inject(
@@ -82,7 +87,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="mt-4">
+    <div class="mt-4" v-if="showFriendsFeatures">
       <h2 class="text-xl md:text-2xl font-bold dark:text-white">
         Gérer mes amis
       </h2>

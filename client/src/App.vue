@@ -5,6 +5,7 @@ import { useDarkMode } from "./composables/darkMode";
 import {
   darkModeInjectionKey,
   breadcrumbContentInjectionKey,
+  showFriendsFeaturesInjectionKey,
 } from "./injectionSymbols";
 
 import GiftlistHeader from "./components/GiftlistHeader.vue";
@@ -15,6 +16,10 @@ import { useAuth0 } from "@auth0/auth0-vue";
 const { isAuthenticated } = useAuth0();
 provide(darkModeInjectionKey, useDarkMode());
 provide(breadcrumbContentInjectionKey, useBreadcrumbContent());
+provide(
+  showFriendsFeaturesInjectionKey,
+  import.meta.env.VITE_SHOW_FRIENDS_FEATURES === "true"
+);
 </script>
 
 <template>
