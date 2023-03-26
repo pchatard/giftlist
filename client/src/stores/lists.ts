@@ -100,13 +100,13 @@ export const useListsStore = defineStore("lists", () => {
   }
 
   function getMyLists() {
-    fetchApi("lists?select=owned").then((ownedLists: List[]) => {
+    return fetchApi("lists?select=owned").then((ownedLists: List[]) => {
       myLists.value = ownedLists;
     });
   }
 
   function getSharedLists() {
-    fetchApi("lists?select=granted").then((grantedLists: List[]) => {
+    return fetchApi("lists?select=granted").then((grantedLists: List[]) => {
       sharedLists.value = grantedLists;
     });
   }

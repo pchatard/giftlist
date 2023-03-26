@@ -56,7 +56,7 @@ export const useGiftsStore = defineStore("gifts", () => {
   }
 
   function getGifts(listId: string) {
-    fetchApi(`lists/${listId}/gifts`).then((fetchedGifts: Gift[]) => {
+    return fetchApi(`lists/${listId}/gifts`).then((fetchedGifts: Gift[]) => {
       gifts.value = fetchedGifts;
     });
   }
