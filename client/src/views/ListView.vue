@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { onMounted, inject, reactive, watch, computed, ref } from "vue";
+import {
+  onMounted,
+  inject,
+  reactive,
+  watch,
+  computed,
+  ref,
+  onUnmounted,
+} from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
 import DeleteListModal from "@/components/DeleteListModal.vue";
 import BookGiftModal from "@/components/BookGiftModal.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteLeave, routerKey } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import {
@@ -25,6 +33,9 @@ import {
   UsersIcon,
   ArchiveBoxXMarkIcon,
   ArrowTopRightOnSquareIcon,
+  EllipsisHorizontalCircleIcon,
+  EllipsisVerticalIcon,
+  CalendarDaysIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 import { useListsStore } from "@/stores/lists";
@@ -68,6 +79,8 @@ const initialBreadcrumbContent = computed(() => [
 ]);
 
 // Page content
+const showOptions = ref(false);
+
 const ownerTableHeaders = [
   { name: "", key: "favorite", isMobile: true },
   { name: "", key: "hidden", isMobile: false },
@@ -97,6 +110,28 @@ const sorting = reactive({
 });
 
 // Modals
+const deleteListModal = reactive({
+  show: false,
+  listInfo: {
+    id: "",
+    title: "",
+  },
+  loading: false,
+  submitAction: (listId: string) => {
+    deleteListModal.loading = true;
+    listsStore.deleteList(listId).then(() => {
+      deleteListModal.loading = false;
+      deleteListModal.show = false;
+      deleteListModal.listInfo.id = "";
+      deleteListModal.listInfo.title = "";
+      router.push("/app/lists" + isListOwner.value ? "" : "/shared");
+    });
+  },
+  closeAction: () => {
+    deleteListModal.show = false;
+  },
+});
+
 const deleteGiftModal = reactive({
   show: false,
   listInfo: {
@@ -218,6 +253,13 @@ const handleOpenGiftLink = (giftLink: string | undefined) => {
   }
 };
 
+const handleListDelete = (listInfo: ListInfo) => {
+  deleteListModal.listInfo = listInfo;
+  deleteListModal.show = true;
+};
+
+let eventListenerCloseFunction: (e: MouseEvent) => void;
+
 // Initialization
 onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
@@ -230,6 +272,21 @@ onMounted(() => {
       listLoading.value = false;
       giftsLoading.value = false;
     });
+
+  eventListenerCloseFunction = (e) => {
+    const button = document.getElementById("list-options-button");
+    const icon = button?.querySelector("list-options-icon");
+
+    if (e.target !== button && e.target !== icon) {
+      showOptions.value = false;
+    }
+  };
+
+  document.addEventListener("click", eventListenerCloseFunction);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("click", eventListenerCloseFunction);
 });
 
 onBeforeRouteLeave((to, from) => {
@@ -261,18 +318,60 @@ watch(isListOwner, () => {
     <LoadingSpinner />
   </div>
   <div v-else>
-    <div class="flex justify-between items-end mb-4">
-      <div>
-        <PageHeading class="mb-0 flex items-baseline gap-4">
-          <span>{{ list?.title }}</span>
+    <div class="flex flex-col justify-between mb-4">
+      <PageHeading class="flex flex-row justify-between items-center gap-4">
+        <span>{{ list?.title }}</span>
+        <div class="relative">
           <button
-            v-if="isListOwner"
-            class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm px-2 py-2 mr-2 lg:cursor-pointer dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-            @click="router.push(`${currentRoute.fullPath}/edit`)"
+            id="list-options-button"
+            class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm self-center px-2 py-2 lg:cursor-pointer dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+            @click.stop="showOptions = !showOptions"
           >
-            <PencilIcon class="w-5 text-primary-600" />
+            <EllipsisHorizontalCircleIcon
+              id="list-options-icon"
+              class="w-6 text-primary-600 rotate-90"
+            />
           </button>
-        </PageHeading>
+          <div
+            v-if="showOptions"
+            class="z-10 absolute right-0 mt-1 bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-44 dark:bg-gray-700"
+          >
+            <ul
+              class="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownDefaultButton"
+            >
+              <li v-if="isListOwner">
+                <RouterLink
+                  :to="`${currentRoute.fullPath}/edit`"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Modifier
+                </RouterLink>
+              </li>
+              <li v-if="isListOwner">
+                <RouterLink
+                  :to="`${currentRoute.fullPath}/share`"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  >Partager
+                </RouterLink>
+              </li>
+              <li
+                class="block px-4 py-2 text-red-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                @click="
+                  handleListDelete({
+                    id: list?.id ?? '',
+                    title: list?.title ?? '',
+                  })
+                "
+              >
+                {{ isListOwner ? "Supprimer" : "Retirer de mes listes" }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </PageHeading>
+
+      <div class="-mt-2 flex gap-4">
         <div
           v-if="isListOwner && list?.isShared"
           class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
@@ -287,25 +386,13 @@ watch(isListOwner, () => {
           <NoSymbolIcon class="w-4 mr-2" />
           <span>Privée</span>
         </div>
-        <div v-if="isListOwner">
-          <p class="text-sm">
-            par
-            {{
-              list?.ownersDTO
-                ? list.ownersDTO
-                    .map((user) => user.displayName)
-                    .reduce(
-                      (ownersList, newOwner, index) =>
-                        ownersList + (index == 0 ? "" : ", ") + newOwner,
-                      "Vous, "
-                    )
-                : ""
-            }}
-          </p>
-        </div>
-        <div v-else>
-          <p class="text-sm">
-            par
+
+        <div
+          v-if="!isListOwner"
+          class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+        >
+          <UsersIcon class="w-4 mr-2" />
+          <p>
             {{
               list?.ownersDTO
                 ? list.ownersDTO
@@ -319,36 +406,46 @@ watch(isListOwner, () => {
             }}
           </p>
         </div>
-        <p v-if="list?.closureDate" class="text-sm">
-          Date d'échéance : {{ list?.closureDate }}
-        </p>
-      </div>
-      <div class="flex gap-2">
-        <button
-          v-if="isListOwner"
-          type="button"
-          class="hidden text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 md:px-5 py-2 text-center md:inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-          @click="router.push(`${currentRoute.fullPath}/share`)"
+        <div
+          v-if="list?.closureDate"
+          class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-gray-200"
         >
-          Partager
-          <ShareIcon class="ml-2 -mr-1 w-5 h-5" />
-        </button>
+          <CalendarDaysIcon class="w-4 mr-2" />
+          {{ list?.closureDate }}
+        </div>
+
         <button
           v-if="isListOwner"
           type="button"
-          class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          class="hidden md:inline-flex text-white w-full md:w-auto md:ml-auto bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center justify-center items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           @click="router.push(`${currentRoute.fullPath}/gift/new`)"
         >
-          <span class="hidden sr-only md:not-sr-only md:inline"
-            >Nouveau cadeau</span
-          >
-          <GiftIcon class="w-5 md:ml-2" />
-          <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5 md:hidden" />
+          <span>Nouveau cadeau</span>
+          <GiftIcon class="ml-4 -mr-1 w-5 h-5" />
+        </button>
+      </div>
+
+      <div class="mt-4 w-full md:hidden">
+        <button
+          v-if="isListOwner"
+          type="button"
+          class="text-white w-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex justify-center items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          @click="router.push(`${currentRoute.fullPath}/gift/new`)"
+        >
+          <span>Nouveau cadeau</span>
+          <GiftIcon class="ml-4 -mr-1 w-5 h-5" />
         </button>
       </div>
     </div>
 
     <Teleport to="body">
+      <DeleteListModal
+        v-show="deleteListModal.show"
+        :list-info="deleteListModal.listInfo"
+        :loading="deleteListModal.loading"
+        @close="deleteListModal.closeAction"
+        @submit="deleteListModal.submitAction"
+      />
       <DeleteListModal
         v-show="deleteGiftModal.show"
         :list-info="deleteGiftModal.listInfo"
@@ -577,7 +674,7 @@ watch(isListOwner, () => {
           </tr>
 
           <!-- Action row -->
-          <tr
+          <!-- <tr
             v-if="isListOwner"
             class="bg-white border-b cursor-pointer dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
             @click="router.push('/app/lists/' + list?.id + '/gift/new')"
@@ -588,7 +685,7 @@ watch(isListOwner, () => {
                 <GiftIcon class="w-4 ml-2" />
               </div>
             </td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </div>
@@ -612,22 +709,9 @@ watch(isListOwner, () => {
         class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
         @click="router.push(`${currentRoute.fullPath}/gift/new`)"
       >
-        <span class="hidden sr-only md:not-sr-only md:inline"
-          >Nouveau cadeau</span
-        >
-        <GiftIcon class="w-5 md:ml-2" />
-        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5 md:hidden" />
+        <span class="">Nouveau cadeau</span>
+        <PlusSmallIcon class="ml-2 -mr-1 w-5 h-5" />
       </button>
     </div>
-
-    <button
-      v-if="isListOwner"
-      type="button"
-      class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm py-3 text-center w-full flex justify-center items-center md:hidden dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-      @click="router.push(`${currentRoute.fullPath}/share`)"
-    >
-      Partager
-      <ShareIcon class="ml-2 -mr-1 w-5 h-5" />
-    </button>
   </div>
 </template>
