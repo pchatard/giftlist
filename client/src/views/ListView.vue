@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { onMounted, inject, reactive, watch, computed } from "vue";
+import { onMounted, inject, reactive, watch, computed, ref } from "vue";
 
 import PageHeading from "@/components/PageHeading.vue";
 import DeleteListModal from "@/components/DeleteListModal.vue";
 import BookGiftModal from "@/components/BookGiftModal.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
@@ -49,6 +50,9 @@ const list = computed(() => selectedList.value);
 // TODO: Edit after ownersIds modifications
 // Define this depending on wether the logged in user is in the list owners.
 const isListOwner = computed(() => selectedList.value?.isOwner);
+
+const listLoading = ref(!list.value?.title);
+const giftsLoading = ref(true);
 
 // Breadcrumb
 const { setBreadcrumbContent } = inject(
@@ -217,7 +221,15 @@ const handleOpenGiftLink = (giftLink: string | undefined) => {
 // Initialization
 onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
-  listsStore.getList(listId).then(() => giftsStore.getGifts(listId));
+  listsStore
+    .getList(listId)
+    .then(() => {
+      return giftsStore.getGifts(listId);
+    })
+    .then(() => {
+      listLoading.value = false;
+      giftsLoading.value = false;
+    });
 });
 
 onBeforeRouteLeave((to, from) => {
@@ -242,7 +254,13 @@ watch(isListOwner, () => {
 </script>
 
 <template>
-  <div>
+  <div
+    v-if="listLoading"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <LoadingSpinner />
+  </div>
+  <div v-else>
     <div class="flex justify-between items-end mb-4">
       <div>
         <PageHeading class="mb-0 flex items-baseline gap-4">
@@ -316,7 +334,7 @@ watch(isListOwner, () => {
           <ShareIcon class="ml-2 -mr-1 w-5 h-5" />
         </button>
         <button
-          v-if="isListOwner && gifts.length"
+          v-if="isListOwner"
           type="button"
           class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           @click="router.push(`${currentRoute.fullPath}/gift/new`)"
@@ -347,7 +365,13 @@ watch(isListOwner, () => {
       />
     </Teleport>
 
-    <div v-if="gifts.length" class="overflow-x-auto relative rounded-lg">
+    <div
+      v-if="giftsLoading"
+      class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px-0.625rem)] text-gray-400"
+    >
+      <LoadingSpinner />
+    </div>
+    <div v-else-if="gifts.length" class="overflow-x-auto relative rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"

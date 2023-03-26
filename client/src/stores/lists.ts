@@ -100,13 +100,13 @@ export const useListsStore = defineStore("lists", () => {
   }
 
   function getMyLists() {
-    fetchApi("lists?select=owned").then((ownedLists: List[]) => {
+    return fetchApi("lists?select=owned").then((ownedLists: List[]) => {
       myLists.value = ownedLists;
     });
   }
 
   function getSharedLists() {
-    fetchApi("lists?select=granted").then((grantedLists: List[]) => {
+    return fetchApi("lists?select=granted").then((grantedLists: List[]) => {
       sharedLists.value = grantedLists;
     });
   }
@@ -183,12 +183,18 @@ export const useListsStore = defineStore("lists", () => {
   }
 
   function requestAccessToSharedList(sharingCode: string) {
-    return fetchApi(`lists/invite/${sharingCode}`, "PUT").then(
-      (listId: string) => {
-        getList(listId);
-        return listId;
-      }
-    );
+    return fetchApi(`lists/invite/${sharingCode}`, "PUT")
+      .then(({ id }: { id: string }) => {
+        getList(id);
+        return { listId: id };
+      })
+      .catch((err: string) => {
+        if (err == "Unauthorized") {
+          return { error: "Vous n'êtes pas autorisé à accéder à cette liste." };
+        } else {
+          return { error: "Le lien de partage est invalide." };
+        }
+      });
   }
 
   return {
