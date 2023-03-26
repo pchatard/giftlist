@@ -19,6 +19,9 @@ export function useGiftlistApi() {
     });
     if (response.ok && response.status == 204) {
       return;
+    } else if (!response.ok) {
+      const error = await response.json();
+      throw error.message;
     }
     return await response.json();
   };

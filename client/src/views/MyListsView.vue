@@ -215,7 +215,7 @@ watch(currentRoute, (currentRoute) => {
     />
     <div
       v-else
-      class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-158px-0.625rem)] text-gray-400"
+      class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-158px-1rem)] text-gray-400"
     >
       <div class="flex flex-col items-center justify-center px-4">
         <ArchiveBoxXMarkIcon class="w-1/3" />
