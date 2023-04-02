@@ -12,36 +12,34 @@ import {
 import PageHeading from "@/components/PageHeading.vue";
 import DeleteListModal from "@/components/DeleteListModal.vue";
 import BookGiftModal from "@/components/BookGiftModal.vue";
+import GiftOptionsModal from "@/components/GiftOptionsModal.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import { useRoute, useRouter, onBeforeRouteLeave, routerKey } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteLeave } from "vue-router";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 import {
   ArrowSmallDownIcon,
   ArrowSmallUpIcon,
   HeartIcon,
-  EyeIcon,
-  EyeSlashIcon,
   TrashIcon,
   PencilIcon,
   TicketIcon,
   NoSymbolIcon,
   CheckIcon,
-  ShareIcon,
   GiftIcon,
   PlusSmallIcon,
   UsersIcon,
   ArchiveBoxXMarkIcon,
   ArrowTopRightOnSquareIcon,
   EllipsisHorizontalCircleIcon,
-  EllipsisVerticalIcon,
   CalendarDaysIcon,
+  Cog6ToothIcon,
 } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 import { useListsStore } from "@/stores/lists";
 import { useGiftsStore } from "@/stores/gifts";
 import { storeToRefs } from "pinia";
-import type { ListInfo } from "@/types/giftlist";
+import type { Gift, ListInfo } from "@/types/giftlist";
 
 // Router
 const router = useRouter();
@@ -59,7 +57,6 @@ const { gifts } = storeToRefs(giftsStore);
 
 const list = computed(() => selectedList.value);
 // TODO: Edit after ownersIds modifications
-// Define this depending on wether the logged in user is in the list owners.
 const isListOwner = computed(() => selectedList.value?.isOwner);
 
 const listLoading = ref(!list.value?.title);
@@ -83,21 +80,18 @@ const showOptions = ref(false);
 
 const ownerTableHeaders = [
   { name: "", key: "favorite", isMobile: true },
-  { name: "", key: "hidden", isMobile: false },
   { name: "Cadeau", key: "gift", isMobile: true },
   { name: "Prix", key: "price", isMobile: true },
-  { name: "Marque", key: "brand", isMobile: false },
-  { name: "Taille", key: "size", isMobile: false },
-  { name: "Actions", key: "actions", isMobile: true },
+  { name: "Détails", key: "details", isMobile: false },
+  { name: "", key: "actions", isMobile: true },
 ];
 
 const visitorTableHeaders = [
   { name: "Cadeau", key: "gift", isMobile: true },
-  { name: "Prix", key: "price", isMobile: false },
-  { name: "Disponibilité", key: "available", isMobile: true },
-  { name: "Marque", key: "brand", isMobile: false },
-  { name: "Taille", key: "size", isMobile: false },
-  { name: "Actions", key: "actions", isMobile: true },
+  { name: "Prix", key: "price", isMobile: true },
+  { name: "Disponibilité", key: "available", isMobile: false },
+  { name: "Détails", key: "details", isMobile: false },
+  { name: "", key: "actions", isMobile: true },
 ];
 
 const tableHeaders = computed(() =>
@@ -186,6 +180,42 @@ const bookGiftModal = reactive({
   },
 });
 
+const giftOptionsModal = reactive({
+  show: false,
+  giftInfo: {} as Gift,
+  closeAction: function () {
+    giftOptionsModal.show = false;
+  },
+  linkAction: function (link: string) {
+    giftOptionsModal.closeAction();
+    handleOpenGiftLink(link);
+  },
+  editAction: function (id: string) {
+    giftOptionsModal.closeAction();
+    handleGiftClick(id);
+  },
+  deleteAction: function (id: string) {
+    giftOptionsModal.closeAction();
+    handleGiftDelete({ id, title: giftOptionsModal.giftInfo.title });
+  },
+  bookAction: function (id: string) {
+    giftOptionsModal.closeAction();
+    handleBookGift({
+      id,
+      title: giftOptionsModal.giftInfo.title,
+      isBooked: giftOptionsModal.giftInfo.isBooked ?? false,
+    });
+  },
+  unbookAction: function (id: string) {
+    giftOptionsModal.closeAction();
+    handleUnbookGift({
+      id,
+      title: giftOptionsModal.giftInfo.title,
+      isBooked: giftOptionsModal.giftInfo.isBooked ?? false,
+    });
+  },
+});
+
 // Handlers
 const handleTableHeaderClick = (
   e: Event,
@@ -207,14 +237,6 @@ const handleGiftFav = (giftId: string) => {
 
 const handleGiftUnfav = (giftId: string) => {
   giftsStore.unfavGift(listId, giftId);
-};
-
-const handleGiftShow = (giftId: string) => {
-  giftsStore.showGift(listId, giftId);
-};
-
-const handleGiftHide = (giftId: string) => {
-  giftsStore.hideGift(listId, giftId);
 };
 
 const handleGiftClick = (giftId: string) => {
@@ -256,6 +278,11 @@ const handleOpenGiftLink = (giftLink: string | undefined) => {
 const handleListDelete = (listInfo: ListInfo) => {
   deleteListModal.listInfo = listInfo;
   deleteListModal.show = true;
+};
+
+const handleOptionsClick = (gift: Gift) => {
+  giftOptionsModal.giftInfo = gift;
+  giftOptionsModal.show = true;
 };
 
 let eventListenerCloseFunction: (e: MouseEvent) => void;
@@ -324,12 +351,13 @@ watch(isListOwner, () => {
         <div class="relative">
           <button
             id="list-options-button"
-            class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm self-center px-2 py-2 lg:cursor-pointer dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+            class="flex items-center text-primary-600 dark:text-white hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 font-medium rounded-lg text-sm self-center px-4 py-2 lg:cursor-pointer dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
             @click.stop="showOptions = !showOptions"
           >
-            <EllipsisHorizontalCircleIcon
+            <span class="mr-2 hidden md:inline">Options</span>
+            <Cog6ToothIcon
               id="list-options-icon"
-              class="w-6 text-primary-600 rotate-90"
+              class="w-6 transition-transform hover:rotate-12"
             />
           </button>
           <div
@@ -389,7 +417,7 @@ watch(isListOwner, () => {
 
         <div
           v-if="!isListOwner"
-          class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+          class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-primary-200 dark:bg-primary-900 text-primary-900 dark:text-primary-200"
         >
           <UsersIcon class="w-4 mr-2" />
           <p>
@@ -460,11 +488,22 @@ watch(isListOwner, () => {
         @close="bookGiftModal.closeAction"
         @submit="bookGiftModal.submitAction"
       />
+      <GiftOptionsModal
+        v-show="giftOptionsModal.show"
+        :is-list-owner="isListOwner"
+        :gift-info="giftOptionsModal.giftInfo"
+        @close="giftOptionsModal.closeAction"
+        @link="giftOptionsModal.linkAction"
+        @edit="giftOptionsModal.editAction"
+        @delete="giftOptionsModal.deleteAction"
+        @book="giftOptionsModal.bookAction"
+        @unbook="giftOptionsModal.unbookAction"
+      />
     </Teleport>
 
     <div
       v-if="giftsLoading"
-      class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px-0.625rem)] text-gray-400"
+      class="m-auto md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px-0.625rem)] text-gray-400"
     >
       <LoadingSpinner />
     </div>
@@ -486,7 +525,11 @@ watch(isListOwner, () => {
               @click="(e) => handleTableHeaderClick(e, index)"
             >
               <div class="flex items-center">
-                <span class="mr-1 md:cursor-pointer">{{ header.name }}</span>
+                <span
+                  class="mr-1 md:cursor-pointer"
+                  :class="{ hidden: header.name === 'Actions' }"
+                  >{{ header.name }}</span
+                >
                 <ArrowSmallDownIcon
                   :class="[
                     index == sorting.columnIndex && sorting.isDown
@@ -533,143 +576,153 @@ watch(isListOwner, () => {
             </td>
 
             <!-- Column 2 -->
-            <td
-              v-if="isListOwner"
-              class="py-4 px-3 md:px-6 hidden md:table-cell"
+            <th
+              scope="row"
+              class="relative py-4 px-3 md:px-6 max-w-[120px] md:max-w-none"
             >
-              <EyeSlashIcon
-                v-if="gift.isHidden"
-                class="w-5 hover:text-gray-700"
-                @click.stop="handleGiftShow(gift.id)"
+              <HeartIconSolid
+                v-if="!isListOwner && gift.isFavorite"
+                class="w-4 md:w-5 absolute top-1 left-1 -rotate-12 text-red-600"
               />
-              <EyeIcon
-                v-else
-                class="w-5 hover:text-gray-700"
-                @click.stop="handleGiftHide(gift.id)"
-              />
-            </td>
-
-            <!-- Column 3 -->
-            <th scope="row" class="py-4 px-3 md:px-6 w-full md:w-auto">
               <div
-                class="relative font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                class="relative font-medium text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis dark:text-white"
               >
-                <HeartIconSolid
-                  v-if="!isListOwner && gift.isFavorite"
-                  class="w-4 md:w-5 absolute top-0 left-0 -translate-x-2/3 -translate-y-2/3 -rotate-12 text-red-600"
-                />
                 {{ gift.title }}
               </div>
-              <div class="font-normal text-xs">{{ gift.category }}</div>
+              <div class="font-normal text-xs">
+                {{ gift.category }}
+              </div>
+              <div class="font-normal text-xs md:hidden">
+                {{ gift.brand }} {{ gift.size ? "- " + gift.size : "" }}
+              </div>
             </th>
 
+            <!-- Column 3 -->
+            <td class="py-4 px-3 md:px-6">{{ gift.price ?? "-" }} €</td>
+
             <!-- Column 4 -->
-            <td
-              class="py-4 px-3 md:px-6"
-              :class="[isListOwner ? '' : 'hidden md:table-cell']"
-            >
-              {{ gift.price ?? "-" }} €
+            <td class="py-4 px-3 hidden md:px-6 md:table-cell">
+              <!-- Column 4 List owner : Details -->
+              <div v-if="isListOwner" class="flex flex-col">
+                <div>
+                  {{ gift.brand }}
+                  {{ gift.size ? "- Taille " + gift.size : "" }}
+                </div>
+                <div v-if="gift.color">{{ gift.color }}</div>
+              </div>
+              <!-- Column 4 visitor : Availability -->
+              <div v-else>
+                <div
+                  v-if="gift.isBooked"
+                  class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+                >
+                  <NoSymbolIcon class="w-4 mr-2" />
+                  <span>Réservé</span>
+                </div>
+                <div
+                  v-else
+                  class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
+                >
+                  <CheckIcon class="w-4 mr-2" />
+                  <span>Disponible</span>
+                </div>
+              </div>
             </td>
 
             <!-- Column 5 -->
             <td
-              v-if="isListOwner"
-              class="py-4 px-3 md:px-6 hidden md:table-cell"
-            >
-              {{ gift.brand ?? "-" }}
-            </td>
-            <td v-else class="py-4 px-3 md:px-6">
-              <div class="mb-1 md:hidden">{{ gift.price ?? "-" }} €</div>
-              <div
-                v-if="gift.isBooked"
-                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
-              >
-                <NoSymbolIcon class="w-4 mr-2" />
-                <span>Réservé</span>
-              </div>
-              <div
-                v-else
-                class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
-              >
-                <CheckIcon class="w-4 mr-2" />
-                <span>Disponible</span>
-              </div>
-            </td>
-
-            <!-- Column 6 -->
-            <td class="py-4 px-3 md:px-6 hidden md:table-cell">
-              {{ isListOwner ? gift.size ?? "-" : gift.brand ?? "-" }}
-            </td>
-
-            <!-- Column 7 -->
-            <td
               v-if="!isListOwner"
-              class="py-4 px-3 md:px-6 hidden md:table-cell"
+              class="py-4 px-3 hidden md:px-6 md:table-cell"
             >
-              {{ gift.size ?? "-" }}
+              <div>
+                {{ gift.brand }}
+                {{ gift.size ? "- Taille " + gift.size : "" }}
+              </div>
+              <div v-if="gift.color">{{ gift.color }}</div>
             </td>
 
             <!-- Column 8 -->
             <td class="py-4 px-3 md:px-6">
-              <button
-                v-if="isListOwner"
-                type="button"
-                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
-                @click.stop="handleGiftClick(gift.id)"
-              >
-                <PencilIcon class="w-5" />
-                <span class="hidden lg:inline lg:ml-2">Modifier</span>
-              </button>
-              <button
-                v-if="isListOwner"
-                type="button"
-                class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-                @click.stop="
-                  handleGiftDelete({ id: gift.id, title: gift.title })
-                "
-              >
-                <TrashIcon class="w-5" />
-                <span class="hidden lg:inline lg:ml-2">Supprimer</span>
-              </button>
-              <button
-                v-if="!isListOwner && !gift.isBooked"
-                type="button"
-                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
-                @click.stop="
-                  handleBookGift({
-                    id: gift.id,
-                    title: gift.title,
-                    isBooked: false,
-                  })
-                "
-              >
-                <TicketIcon class="w-5" />
-                <span class="hidden md:inline md:ml-2">Réserver</span>
-              </button>
-              <button
-                v-else-if="!isListOwner && gift.isBooked"
-                type="button"
-                class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-red-300 dark:hover:bg-red-800 dark:focus:ring-red-800"
-                @click.stop="
-                  handleUnbookGift({
-                    id: gift.id,
-                    title: gift.title,
-                    isBooked: true,
-                  })
-                "
-              >
-                <NoSymbolIcon class="w-5" />
-                <span class="hidden md:inline md:ml-2">Annuler</span>
-              </button>
-              <button
-                v-if="!isListOwner && gift.linkURL"
-                type="button"
-                class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
-                @click.stop="handleOpenGiftLink(gift.linkURL)"
-              >
-                <ArrowTopRightOnSquareIcon class="w-5" />
-                <span class="hidden md:inline md:ml-2">Lien</span>
-              </button>
+              <div class="hidden md:flex items-stretch justify-end">
+                <button
+                  v-if="isListOwner && gift.linkURL"
+                  type="button"
+                  class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                  @click.stop="handleOpenGiftLink(gift.linkURL)"
+                >
+                  <ArrowTopRightOnSquareIcon class="w-5" />
+                  <span class="hidden lg:inline lg:ml-2">Lien</span>
+                </button>
+                <button
+                  v-if="isListOwner"
+                  type="button"
+                  class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                  @click.stop="handleGiftClick(gift.id)"
+                >
+                  <PencilIcon class="w-5" />
+                  <span class="hidden lg:inline lg:ml-2">Modifier</span>
+                </button>
+                <button
+                  v-if="isListOwner"
+                  type="button"
+                  class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
+                  @click.stop="
+                    handleGiftDelete({ id: gift.id, title: gift.title })
+                  "
+                >
+                  <TrashIcon class="w-5" />
+                  <span class="hidden lg:inline lg:ml-2">Supprimer</span>
+                </button>
+                <button
+                  v-if="!isListOwner && gift.linkURL"
+                  type="button"
+                  class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                  @click.stop="handleOpenGiftLink(gift.linkURL)"
+                >
+                  <ArrowTopRightOnSquareIcon class="w-5" />
+                  <span class="hidden md:inline md:ml-2">Lien</span>
+                </button>
+                <button
+                  v-if="!isListOwner && !gift.isBooked"
+                  type="button"
+                  class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                  @click.stop="
+                    handleBookGift({
+                      id: gift.id,
+                      title: gift.title,
+                      isBooked: false,
+                    })
+                  "
+                >
+                  <TicketIcon class="w-5" />
+                  <span class="hidden md:inline md:ml-2">Réserver</span>
+                </button>
+                <button
+                  v-else-if="!isListOwner && gift.isBooked"
+                  type="button"
+                  class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-red-300 dark:hover:bg-red-800 dark:focus:ring-red-800"
+                  @click.stop="
+                    handleUnbookGift({
+                      id: gift.id,
+                      title: gift.title,
+                      isBooked: true,
+                    })
+                  "
+                >
+                  <NoSymbolIcon class="w-5" />
+                  <span class="hidden md:inline md:ml-2">Annuler</span>
+                </button>
+              </div>
+              <div class="flex md:hidden text-primary-600">
+                <button
+                  type="button"
+                  class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
+                  @click.stop="handleOptionsClick(gift)"
+                >
+                  <EllipsisHorizontalCircleIcon class="w-5" />
+                  <span class="sr-only">Options</span>
+                </button>
+              </div>
             </td>
           </tr>
 
