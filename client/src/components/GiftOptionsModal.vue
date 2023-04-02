@@ -111,7 +111,11 @@ function handleUnbookClick() {
               <span class="md:inline md:ml-2">Réserver</span>
             </button>
             <button
-              v-else-if="!isListOwner && props.giftInfo.isBooked"
+              v-else-if="
+                !isListOwner &&
+                props.giftInfo.isBooked &&
+                props.giftInfo.isBookedByMe
+              "
               type="button"
               class="text-red-800 bg-red-50 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-2 text-center relative dark:bg-red-200 dark:hover:bg-red-900 dark:focus:ring-red-800"
               @click.stop="handleUnbookClick"

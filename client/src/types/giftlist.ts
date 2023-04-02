@@ -44,6 +44,7 @@ export interface Gift {
   id: string;
   title: string;
   isBooked?: boolean;
+  isBookedByMe?: boolean;
   isFavorite: boolean;
   isHidden: boolean;
   category: string;

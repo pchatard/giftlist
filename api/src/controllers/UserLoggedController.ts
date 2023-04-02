@@ -34,7 +34,9 @@ export class UserLoggedController extends Controller {
 	async get(@Request() request: ERequest): Promise<UserDTO> {
 		const user: User = await UserService.getByAuth0Id(request.userId);
 		const { id, bookings, createdDate, ...rest } = user;
-		rest.bookingsDTO = bookings.map((gift) => castGiftAsGiftDTO(gift, false) as GiftDTO);
+		rest.bookingsDTO = bookings.map(
+			(gift) => castGiftAsGiftDTO(gift, false, request.userId) as GiftDTO
+		);
 		return rest;
 	}
 

@@ -133,7 +133,7 @@ export class GiftController extends Controller {
 		} else {
 			throw new UnauthorizedError();
 		}
-		return gifts.map((gift) => castGiftAsGiftDTO(gift, isOwner));
+		return gifts.map((gift) => castGiftAsGiftDTO(gift, isOwner, request.userId));
 	}
 
 	/**
@@ -160,7 +160,7 @@ export class GiftController extends Controller {
 		) {
 			throw new UnauthorizedError();
 		}
-		return castGiftAsGiftDTO(await GiftService.get(giftId), isOwner);
+		return castGiftAsGiftDTO(await GiftService.get(giftId), isOwner, request.userId);
 	}
 
 	/**

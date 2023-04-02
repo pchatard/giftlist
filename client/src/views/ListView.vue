@@ -748,7 +748,7 @@ watch(isListOwner, () => {
                   <span class="hidden md:inline md:ml-2">Réserver</span>
                 </button>
                 <button
-                  v-else-if="!isListOwner && gift.isBooked"
+                  v-else-if="!isListOwner && gift.isBooked && gift.isBookedByMe"
                   type="button"
                   class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-red-300 dark:hover:bg-red-800 dark:focus:ring-red-800"
                   @click.stop="
@@ -765,6 +765,12 @@ watch(isListOwner, () => {
               </div>
               <div class="flex md:hidden text-primary-600">
                 <button
+                  v-if="
+                    isListOwner ||
+                    !gift.isBooked ||
+                    gift.linkURL ||
+                    (gift.isBooked && gift.isBookedByMe)
+                  "
                   type="button"
                   class="text-primary-600 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center mr-1 lg:mr-2 dark:text-primary-300 dark:hover:bg-primary-800 dark:focus:ring-primary-800"
                   @click.stop="handleOptionsClick(gift)"
