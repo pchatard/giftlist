@@ -23,7 +23,12 @@ export default function suite() {
 			.to.have.property("body")
 			.to.eql(
 				castAsGiftDTO(
-					{ ...Gift3, isBooked: true, bookedByDTO: [castUserAsUserNameDTO(UserTest)] },
+					{
+						...Gift3,
+						isBooked: true,
+						bookedByDTO: [castUserAsUserNameDTO(UserTest)],
+						isBookedByMe: true,
+					},
 					true
 				)
 			);
