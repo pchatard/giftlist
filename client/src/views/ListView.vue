@@ -285,6 +285,24 @@ const handleOptionsClick = (gift: Gift) => {
   giftOptionsModal.show = true;
 };
 
+function categoryName(categoryId: string) {
+  switch (categoryId) {
+    case "clothes":
+      return "Vêtements";
+    case "furniture":
+      return "Mobilier / Décoration";
+    case "concerts":
+      return "Spectacles / Concerts";
+    case "experience":
+      return "Expérience";
+    case "tech":
+      return "High tech / Jeux vidéos";
+    case "other":
+    default:
+      return "Autres";
+  }
+}
+
 let eventListenerCloseFunction: (e: MouseEvent) => void;
 
 // Initialization
@@ -590,7 +608,7 @@ watch(isListOwner, () => {
                 {{ gift.title }}
               </div>
               <div class="font-normal text-xs">
-                {{ gift.category }}
+                {{ categoryName(gift.category) }}
               </div>
               <div class="font-normal text-xs md:hidden">
                 {{ gift.brand }} {{ gift.size ? "- " + gift.size : "" }}
