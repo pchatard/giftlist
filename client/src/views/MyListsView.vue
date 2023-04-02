@@ -49,7 +49,7 @@ const pageTitle = computed(() => {
 
 const headingButton = computed(() => {
   return {
-    text: isSharedView.value ? "Lien de partage" : "Nouvelle liste",
+    text: isSharedView.value ? "Code" : "Nouvelle liste",
     action: () =>
       router.push(
         isSharedView.value ? "/app/lists/shared/new" : "/app/lists/new"
@@ -179,17 +179,19 @@ watch(currentRoute, (currentRoute) => {
 
 <template>
   <div>
-    <div class="flex justify-between items-center mb-4">
-      <PageHeading class="mb-0">{{ pageTitle }}</PageHeading>
-      <button
-        type="button"
-        class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        @click="headingButton.action"
-      >
-        {{ headingButton.text }}
-        <LinkIcon v-if="isSharedView" class="ml-2 -mr-1 w-5 h-5" />
-        <PlusSmallIcon v-else class="ml-2 -mr-1 w-5 h-5" />
-      </button>
+    <div class="flex justify-between items-end mb-4">
+      <PageHeading class="mb-0 w-full flex justify-between items-center">
+        <span>{{ pageTitle }}</span>
+        <button
+          type="button"
+          class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          @click="headingButton.action"
+        >
+          {{ headingButton.text }}
+          <LinkIcon v-if="isSharedView" class="ml-2 -mr-1 w-5 h-5" />
+          <PlusSmallIcon v-else class="ml-2 -mr-1 w-5 h-5" />
+        </button>
+      </PageHeading>
     </div>
 
     <Teleport to="body">

@@ -129,6 +129,11 @@ export const useListsStore = defineStore("lists", () => {
             sharedLists.value[sharedListsIndex] = fetchedList;
           }
         }
+      })
+      .catch((err: string) => {
+        if (err == "Unauthorized") {
+          // router.push("/app/lists");
+        }
       });
   }
 

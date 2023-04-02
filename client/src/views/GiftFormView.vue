@@ -311,12 +311,12 @@ onBeforeRouteLeave((to, from) => {
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-1/3 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option selected>Choisir une catégorie</option>
-            <option value="US">Vêtements</option>
-            <option value="CA">Mobilier / Décoration</option>
-            <option value="FR">Spectacles / Concerts</option>
-            <option value="DE">Expérience</option>
-            <option value="DE">High Tech / Jeux vidéos</option>
-            <option value="DE">Autres</option>
+            <option value="clothes">Vêtements</option>
+            <option value="furniture">Mobilier / Décoration</option>
+            <option value="concerts">Spectacles / Concerts</option>
+            <option value="experience">Expérience</option>
+            <option value="tech">High Tech / Jeux vidéos</option>
+            <option value="other">Autres</option>
           </select>
         </div>
 
