@@ -471,9 +471,8 @@ watch(isListOwner, () => {
         </button>
       </div>
 
-      <div class="mt-4 w-full md:hidden">
+      <div v-if="isListOwner" class="mt-4 w-full md:hidden">
         <button
-          v-if="isListOwner"
           type="button"
           class="text-white w-full bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 md:px-5 py-2 text-center inline-flex justify-center items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
           @click="router.push(`${currentRoute.fullPath}/gift/new`)"
@@ -580,7 +579,7 @@ watch(isListOwner, () => {
             @click="handleGiftClick(gift.id)"
           >
             <!-- Column 1 -->
-            <td v-if="isListOwner" class="py-4 px-3 md:px-6">
+            <td v-if="isListOwner" class="py-4 px-3 w-1/12 md:px-6">
               <HeartIconSolid
                 v-if="gift.isFavorite"
                 class="w-5 text-red-600 hover:text-red-800"
@@ -593,10 +592,14 @@ watch(isListOwner, () => {
               />
             </td>
 
-            <!-- Column 2 -->
+            <!-- Column 2: 7/12 (owner) et 8/12 -->
             <th
               scope="row"
-              class="relative py-4 px-3 md:px-6 max-w-[120px] md:max-w-none"
+              class="relative py-4 px-3 md:w-4/12 md:px-6 max-w-[120px] md:max-w-none"
+              :class="{
+                'w-7/12': isListOwner,
+                'w-8/12': !isListOwner,
+              }"
             >
               <HeartIconSolid
                 v-if="!isListOwner && gift.isFavorite"
@@ -615,11 +618,37 @@ watch(isListOwner, () => {
               </div>
             </th>
 
-            <!-- Column 3 -->
-            <td class="py-4 px-3 md:px-6">{{ gift.price ?? "-" }} €</td>
+            <!-- Column 3 : 2/12 (owner) et 3/12 (shared) -->
+            <td
+              class="py-4 px-3 md:px-6"
+              :class="{
+                'w-2/12': isListOwner,
+                'w-3/12 md:w-2/12': !isListOwner,
+              }"
+            >
+              <div class="flex flex-col gap-1 justify-center">
+                <div class="text-sm">{{ gift.price ?? "-" }}€</div>
+                <div v-if="!isListOwner" class="md:hidden">
+                  <div
+                    v-if="gift.isBooked"
+                    class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
+                  >
+                    <NoSymbolIcon class="w-4 mr-1" />
+                    <span>Pris</span>
+                  </div>
+                  <div
+                    v-else
+                    class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
+                  >
+                    <CheckIcon class="w-4 mr-1" />
+                    <span>Dispo</span>
+                  </div>
+                </div>
+              </div>
+            </td>
 
             <!-- Column 4 -->
-            <td class="py-4 px-3 hidden md:px-6 md:table-cell">
+            <td class="py-4 px-3 hidden md:w-2/12 md:px-6 md:table-cell">
               <!-- Column 4 List owner : Details -->
               <div v-if="isListOwner" class="flex flex-col">
                 <div>
@@ -650,7 +679,7 @@ watch(isListOwner, () => {
             <!-- Column 5 -->
             <td
               v-if="!isListOwner"
-              class="py-4 px-3 hidden md:px-6 md:table-cell"
+              class="py-4 px-3 hidden md:w-2/12 md:px-6 md:table-cell"
             >
               <div>
                 {{ gift.brand }}
@@ -659,8 +688,11 @@ watch(isListOwner, () => {
               <div v-if="gift.color">{{ gift.color }}</div>
             </td>
 
-            <!-- Column 8 -->
-            <td class="py-4 px-3 md:px-6">
+            <!-- Column 8: 1/12 (owner) et 1/12 (shared) -->
+            <td
+              class="py-4 px-3 w-1/12 md:px-6"
+              :class="{ 'md:w-3/12': isListOwner, 'md:w-2/12': !isListOwner }"
+            >
               <div class="hidden md:flex items-stretch justify-end">
                 <button
                   v-if="isListOwner && gift.linkURL"

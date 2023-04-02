@@ -77,46 +77,46 @@ function handleUnbookClick() {
             <button
               v-if="props.giftInfo.linkURL"
               type="button"
-              class="text-primary-800 bg-primary-50 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 py-1.5 text-center relative dark:bg-primary-200 dark:hover:bg-primary-300 dark:focus:ring-primary-800"
+              class="text-primary-800 bg-primary-50 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 py-2 text-center relative dark:bg-primary-200 dark:hover:bg-primary-300 dark:focus:ring-primary-800"
               @click.stop="handleLinkClick"
             >
-              <ArrowTopRightOnSquareIcon class="w-5 absolute left-2" />
+              <ArrowTopRightOnSquareIcon class="w-5 absolute left-4" />
               <span class="lg:inline lg:ml-2">Ouvrir le lien</span>
             </button>
             <button
               v-if="props.isListOwner"
               type="button"
-              class="text-primary-800 bg-primary-50 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 py-1.5 text-center relative dark:bg-primary-200 dark:hover:bg-primary-300 dark:focus:ring-primary-800"
+              class="text-primary-800 bg-primary-50 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 py-2 text-center relative dark:bg-primary-200 dark:hover:bg-primary-300 dark:focus:ring-primary-800"
               @click.stop="handleEditClick"
             >
-              <PencilIcon class="w-5 absolute left-2" />
+              <PencilIcon class="w-5 absolute left-4" />
               <span class="lg:inline lg:ml-2">Modifier</span>
             </button>
             <button
               v-if="props.isListOwner"
               type="button"
-              class="text-red-800 bg-red-50 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 text-center relative dark:bg-red-200 dark:hover:bg-red-900 dark:focus:ring-red-800"
+              class="text-red-800 bg-red-50 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-2 text-center relative dark:bg-red-200 dark:hover:bg-red-900 dark:focus:ring-red-800"
               @click.stop="handleDeleteClick"
             >
-              <TrashIcon class="w-5 absolute left-2" />
+              <TrashIcon class="w-5 absolute left-4" />
               <span class="lg:inline lg:ml-2">Supprimer</span>
             </button>
             <button
               v-if="!isListOwner && !props.giftInfo.isBooked"
               type="button"
-              class="text-primary-800 bg-primary-50 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 py-1.5 text-center relative dark:bg-primary-200 dark:hover:bg-primary-300 dark:focus:ring-primary-800"
+              class="text-primary-800 bg-primary-50 hover:bg-primary-100 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-2 py-2 text-center relative dark:bg-primary-200 dark:hover:bg-primary-300 dark:focus:ring-primary-800"
               @click.stop="handleBookClick"
             >
-              <TicketIcon class="w-5 absolute left-2" />
+              <TicketIcon class="w-5 absolute left-4" />
               <span class="md:inline md:ml-2">Réserver</span>
             </button>
             <button
               v-else-if="!isListOwner && props.giftInfo.isBooked"
               type="button"
-              class="text-red-800 bg-red-50 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-1.5 text-center relative dark:bg-red-200 dark:hover:bg-red-900 dark:focus:ring-red-800"
+              class="text-red-800 bg-red-50 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-2 text-center relative dark:bg-red-200 dark:hover:bg-red-900 dark:focus:ring-red-800"
               @click.stop="handleUnbookClick"
             >
-              <NoSymbolIcon class="w-5 absolute left-2" />
+              <NoSymbolIcon class="w-5 absolute left-4" />
               <span class="md:inline md:ml-2">Annuler ma réservation</span>
             </button>
           </div>
