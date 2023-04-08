@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, onMounted } from "vue";
+import { computed, inject, onMounted } from "vue";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 
 import PageHeading from "@/components/PageHeading.vue";
@@ -38,17 +38,21 @@ const { setBreadcrumbContent } = inject(
   breadcrumbContentInjectionKey
 ) as BreadcrumbContentData;
 
+const initialBreadcrumbContent = computed(() => [
+  {
+    name: "Listes partagées",
+    path: "/app/lists/shared",
+  },
+  { name: list.value?.title ?? "Liste partagée", path: "/app/lists/" + listId },
+  { name: gift.value?.title ?? "Mon cadeau", path: route.fullPath },
+]);
+
 onMounted(() => {
+  setBreadcrumbContent(initialBreadcrumbContent.value);
   listsStore
     .getList(listId)
     .then(() => giftsStore.getGift(listId, giftId))
-    .then(() => {
-      setBreadcrumbContent([
-        { name: "Listes partagées", path: "/app/lists/shared" },
-        { name: list.value?.title, path: `/app/lists/${list.value?.id}` },
-        { name: gift.value?.title ?? "Mon cadeau", path: route.fullPath },
-      ]);
-    });
+    .then(() => setBreadcrumbContent(initialBreadcrumbContent.value));
 });
 
 onBeforeRouteLeave((to, from) => {

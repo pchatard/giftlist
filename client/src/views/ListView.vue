@@ -781,20 +781,6 @@ watch(isListOwner, () => {
               </div>
             </td>
           </tr>
-
-          <!-- Action row -->
-          <!-- <tr
-            v-if="isListOwner"
-            class="bg-white border-b cursor-pointer dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
-            @click="router.push('/app/lists/' + list?.id + '/gift/new')"
-          >
-            <td colspan="100%" class="py-4 px-3 md:px-6">
-              <div class="flex items-center justify-center">
-                <span>Nouveau cadeau</span>
-                <GiftIcon class="w-4 ml-2" />
-              </div>
-            </td>
-          </tr> -->
         </tbody>
       </table>
     </div>

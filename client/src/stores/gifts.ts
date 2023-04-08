@@ -153,6 +153,7 @@ export const useGiftsStore = defineStore("gifts", () => {
       const giftIndex = getGiftIndex(giftId);
       if (giftIndex >= 0) {
         gifts.value[giftIndex].isBooked = true;
+        gifts.value[giftIndex].isBookedByMe = true;
         // TODO : Query gift again to get bookedByDTO info
       }
     });
