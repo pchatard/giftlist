@@ -45,7 +45,29 @@ const { breadcrumbContent } = inject(
           </RouterLink>
         </div>
 
-        <div class="md:hidden flex items-center">
+        <div
+          v-if="
+            breadcrumbContent.length >= 3 &&
+            index < breadcrumbContent.length - 2
+          "
+          class="md:hidden flex items-center"
+        >
+          <ChevronRightIcon class="w-4 text-gray-500 dark:text-gray-400" />
+          <span
+            v-if="index == breadcrumbContent.length - 1"
+            class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400"
+          >
+            ...
+          </span>
+          <RouterLink
+            v-else
+            :to="path ?? ''"
+            class="ml-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+          >
+            ...
+          </RouterLink>
+        </div>
+        <div v-else class="md:hidden flex items-center">
           <ChevronRightIcon class="w-4 text-gray-500 dark:text-gray-400" />
           <span
             v-if="index == breadcrumbContent.length - 1"
