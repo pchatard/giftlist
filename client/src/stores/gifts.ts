@@ -62,15 +62,19 @@ export const useGiftsStore = defineStore("gifts", () => {
   }
 
   function getGift(listId: string, giftId: string) {
-    return fetchApi(`lists/${listId}/gifts/${giftId}`).then((gift: Gift) => {
-      const index = getGiftIndex(giftId);
-      if (index >= 0) {
-        gifts.value[index] = gift;
-      } else {
-        gifts.value.push(gift);
-      }
-      selectGift(giftId);
-    });
+    return fetchApi(`lists/${listId}/gifts/${giftId}`)
+      .then((gift: Gift) => {
+        selectedGift.value = gift;
+        return gift;
+      })
+      .then((gift: Gift) => {
+        const index = getGiftIndex(giftId);
+        if (index >= 0) {
+          gifts.value[index] = gift;
+        } else {
+          gifts.value.push(gift);
+        }
+      });
   }
 
   function createGift(listId: string, formGift: FormGift) {

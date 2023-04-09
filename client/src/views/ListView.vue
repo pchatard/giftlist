@@ -39,7 +39,7 @@ import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 import { useListsStore } from "@/stores/lists";
 import { useGiftsStore } from "@/stores/gifts";
 import { storeToRefs } from "pinia";
-import type { Gift, ListInfo } from "@/types/giftlist";
+import { giftCategory, type Gift, type ListInfo } from "@/types/giftlist";
 
 // Router
 const router = useRouter();
@@ -285,22 +285,8 @@ const handleOptionsClick = (gift: Gift) => {
   giftOptionsModal.show = true;
 };
 
-function categoryName(categoryId: string) {
-  switch (categoryId) {
-    case "clothes":
-      return "Vêtements";
-    case "furniture":
-      return "Mobilier / Décoration";
-    case "concerts":
-      return "Spectacles / Concerts";
-    case "experience":
-      return "Expérience";
-    case "tech":
-      return "High tech / Jeux vidéos";
-    case "other":
-    default:
-      return "Autres";
-  }
+function categoryName(categoryId: keyof typeof giftCategory | "") {
+  return giftCategory[categoryId != "" ? categoryId : "other"];
 }
 
 let eventListenerCloseFunction: (e: MouseEvent) => void;

@@ -40,6 +40,17 @@ export interface ListInfo {
   title: string;
 }
 
+export const giftCategory = {
+  clothes: "Vêtements",
+  books: "Livres",
+  furniture: "Mobilier / Décoration",
+  concerts: "Spectacles / Concerts",
+  experience: "Expérience",
+  tech: "High Tech / Jeux vidéos",
+  money: "Argent / Bons d'achats",
+  other: "Autres",
+};
+
 export interface Gift {
   id: string;
   title: string;
@@ -47,7 +58,7 @@ export interface Gift {
   isBookedByMe?: boolean;
   isFavorite: boolean;
   isHidden: boolean;
-  category: string;
+  category: keyof typeof giftCategory | "";
   listId: string;
   price?: number;
   linkURL?: string;
@@ -61,7 +72,7 @@ export interface FormGift {
   title: string;
   isFavorite: boolean;
   isHidden: boolean;
-  category: string;
+  category: keyof typeof giftCategory | "";
   price?: number;
   linkURL?: string;
   brand?: string;

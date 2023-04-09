@@ -5,6 +5,7 @@ import { useGiftsStore } from "@/stores/gifts";
 import { useListsStore } from "@/stores/lists";
 import type { BreadcrumbContentData } from "@/types";
 import type { FormGift, FormGiftValidation } from "@/types/giftlist";
+import { giftCategory } from "@/types/giftlist";
 import { storeToRefs } from "pinia";
 import { computed, inject, onMounted, reactive } from "vue";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
@@ -311,12 +312,13 @@ onBeforeRouteLeave((to, from) => {
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-1/3 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option selected>Choisir une catégorie</option>
-            <option value="clothes">Vêtements</option>
-            <option value="furniture">Mobilier / Décoration</option>
-            <option value="concerts">Spectacles / Concerts</option>
-            <option value="experience">Expérience</option>
-            <option value="tech">High Tech / Jeux vidéos</option>
-            <option value="other">Autres</option>
+            <option
+              v-for="(key, value) of giftCategory"
+              :key="value"
+              :value="value"
+            >
+              {{ key }}
+            </option>
           </select>
         </div>
 
