@@ -31,12 +31,6 @@ onMounted(() => {
       >
         Mes listes partagées
       </RouterLink>
-      <RouterLink
-        to="/app/lists/id1"
-        class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-      >
-        Ma liste
-      </RouterLink>
     </div>
   </div>
 </template>
