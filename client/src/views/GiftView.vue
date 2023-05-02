@@ -22,6 +22,7 @@ import {
   TicketIcon,
   NoSymbolIcon,
   CheckIcon,
+  SparklesIcon,
 } from "@heroicons/vue/24/outline";
 import { useListsStore } from "@/stores/lists";
 import { useGiftsStore } from "@/stores/gifts";
@@ -202,7 +203,7 @@ onBeforeRouteLeave((to, from) => {
               class="w-8 text-primary-800"
             />
             <ShoppingBagIcon
-              v-if="gift?.category == 'clothes'"
+              v-if="gift?.category == 'clothes' || gift?.category == 'shoes'"
               class="w-8 text-primary-800"
             />
             <HomeModernIcon
@@ -223,6 +224,10 @@ onBeforeRouteLeave((to, from) => {
             />
             <CpuChipIcon
               v-if="gift?.category == 'tech'"
+              class="w-8 text-primary-800"
+            />
+            <SparklesIcon
+              v-if="gift?.category == 'jewels'"
               class="w-8 text-primary-800"
             />
             <GiftIcon

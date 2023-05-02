@@ -48,6 +48,8 @@ export const giftCategory = {
   experience: "Expérience",
   tech: "High Tech / Jeux vidéos",
   money: "Argent / Bons d'achats",
+  jewels: "Montres / Bijoux",
+  shoes: "Chaussures",
   other: "Autres",
 };
 
