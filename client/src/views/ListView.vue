@@ -404,20 +404,22 @@ watch(isListOwner, () => {
       </PageHeading>
 
       <div class="-mt-2 flex gap-4">
-        <div
+        <RouterLink
           v-if="isListOwner && list?.isShared"
+          :to="`${currentRoute.fullPath}/share`"
           class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-green-200 dark:bg-green-900 text-green-900 dark:text-green-200"
         >
           <UsersIcon class="w-4 mr-2" />
           <span>Partagée</span>
-        </div>
-        <div
+        </RouterLink>
+        <RouterLink
           v-else-if="isListOwner && !list?.isShared"
+          :to="`${currentRoute.fullPath}/share`"
           class="flex items-center px-2 py-1 text-xs text-center w-fit rounded-full bg-red-200 dark:bg-red-900 text-red-900 dark:text-red-200"
         >
           <NoSymbolIcon class="w-4 mr-2" />
           <span>Privée</span>
-        </div>
+        </RouterLink>
 
         <div
           v-if="!isListOwner"
