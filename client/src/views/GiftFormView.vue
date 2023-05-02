@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import { useGiftsStore } from "@/stores/gifts";
 import { useListsStore } from "@/stores/lists";
@@ -7,7 +9,7 @@ import type { BreadcrumbContentData } from "@/types";
 import type { FormGift, FormGiftValidation } from "@/types/giftlist";
 import { giftCategory } from "@/types/giftlist";
 import { storeToRefs } from "pinia";
-import { computed, inject, onMounted, reactive } from "vue";
+import { computed, inject, onMounted, reactive, ref } from "vue";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/vue/24/outline";
 
@@ -19,17 +21,28 @@ const listId =
     ? currentRoute.params.listId
     : currentRoute.params.listId[0];
 
+const isEditMode =
+  currentRoute.fullPath.endsWith("/edit") &&
+  currentRoute.fullPath.includes("gift");
+
 // Gift store
 const giftsStore = useGiftsStore();
 const listsStore = useListsStore();
 const currentGift = computed(() => {
-  return currentRoute.fullPath.endsWith("/edit") &&
-    currentRoute.fullPath.includes("gift")
-    ? selectedGift.value
-    : null;
+  return isEditMode ? selectedGift.value : null;
 });
 const { selectedGift } = storeToRefs(giftsStore);
-const { myLists, selectedList } = storeToRefs(listsStore);
+const { selectedList } = storeToRefs(listsStore);
+
+const loading = ref(true);
+const defaultErrorMessage = "Vous n'êtes pas autorisé à consulter cette page.";
+const errorMessage = ref(
+  selectedList.value?.isOwner === false ? defaultErrorMessage : ""
+);
+const errorRedirection = ref({
+  name: selectedList.value?.title ?? "Liste partagée",
+  path: "/app/lists/" + listId,
+});
 
 // Gift form data and validation
 const giftForm: FormGift = reactive(
@@ -103,7 +116,7 @@ const { setBreadcrumbContent } = inject(
 // Handlers
 const handleSubmit = () => {
   if (validateGift()) {
-    currentGift.value
+    isEditMode && currentGift.value
       ? giftsStore.editGift(listId, currentGift.value.id, giftForm).then(() => {
           resetGiftForm();
           resetGiftFormValidation();
@@ -165,60 +178,55 @@ const handleGiftLinkClick = () => {
   }
 };
 
-onMounted(() => {
-  let giftId = "";
-  if (currentRoute.fullPath.includes("edit")) {
-    giftId =
-      typeof currentRoute.params.giftId == "string"
-        ? currentRoute.params.giftId
-        : currentRoute.params.giftId[0];
-    giftsStore.getGift(listId, giftId).then(() => {
-      if (currentGift.value) {
-        giftForm.title = currentGift.value?.title;
-        giftForm.isFavorite = currentGift.value?.isFavorite;
-        giftForm.isHidden = currentGift.value?.isHidden;
-        giftForm.category = currentGift.value?.category;
-        giftForm.price = currentGift.value?.price;
-        giftForm.linkURL = currentGift.value?.linkURL;
-        giftForm.brand = currentGift.value?.brand;
-        giftForm.size = currentGift.value?.size;
-        giftForm.color = currentGift.value?.color;
-        giftForm.comments = currentGift.value?.color;
-      }
-    });
-  }
+const initialCreationBreadcrumbContent = computed(() => [
+  { name: "Mes listes", path: "/app/lists" },
+  {
+    name: selectedList.value?.title ?? "...",
+    path: "/app/lists/" + listId,
+  },
+  { name: currentRoute.name ?? "", path: currentRoute.fullPath },
+]);
 
-  const list = myLists.value.find((list) => list.id === listId);
-  if (list) {
-    listsStore.selectList(listId, false);
-    setBreadcrumbContent([
-      { name: "Mes listes", path: "/app/lists" },
-      ...(listId
-        ? [
-            {
-              name: list.title ?? "Liste",
-              path: "/app/lists/" + listId,
-            },
-          ]
-        : []),
-      { name: currentRoute.name ?? "", path: currentRoute.fullPath },
-    ]);
-  } else {
-    listsStore.getList(listId).then(() => {
-      setBreadcrumbContent([
-        { name: "Mes listes", path: "/app/lists" },
-        ...(listId
-          ? [
-              {
-                name: selectedList.value?.title ?? "Liste",
-                path: "/app/lists/" + listId,
-              },
-            ]
-          : []),
-        { name: currentRoute.name ?? "", path: currentRoute.fullPath },
-      ]);
+onMounted(() => {
+  setBreadcrumbContent(initialCreationBreadcrumbContent.value);
+  listsStore
+    .getList(listId)
+    .then(() => {
+      if (!selectedList.value?.isOwner) {
+        errorRedirection.value.name =
+          selectedList.value?.title ?? "Liste partagée";
+        throw new Error(defaultErrorMessage);
+      }
+      setBreadcrumbContent(initialCreationBreadcrumbContent.value);
+    })
+    .then(() => {
+      if (isEditMode) {
+        let giftId =
+          typeof currentRoute.params.giftId == "string"
+            ? currentRoute.params.giftId
+            : currentRoute.params.giftId[0];
+        giftsStore.getGift(listId, giftId).then(() => {
+          if (currentGift.value) {
+            giftForm.title = currentGift.value?.title;
+            giftForm.isFavorite = currentGift.value?.isFavorite;
+            giftForm.isHidden = currentGift.value?.isHidden;
+            giftForm.category = currentGift.value?.category;
+            giftForm.price = currentGift.value?.price;
+            giftForm.linkURL = currentGift.value?.linkURL;
+            giftForm.brand = currentGift.value?.brand;
+            giftForm.size = currentGift.value?.size;
+            giftForm.color = currentGift.value?.color;
+            giftForm.comments = currentGift.value?.color;
+          }
+        });
+      }
+    })
+    .catch((error: Error) => {
+      errorMessage.value = error.message;
+    })
+    .then(() => {
+      loading.value = false;
     });
-  }
 });
 
 onBeforeRouteLeave((to, from) => {
@@ -233,7 +241,27 @@ onBeforeRouteLeave((to, from) => {
 </script>
 
 <template>
-  <div>
+  <div
+    v-if="loading"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <LoadingSpinner />
+  </div>
+  <div
+    v-else-if="errorMessage"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <ErrorInfo
+      :message="errorMessage"
+      :redirection="errorRedirection"
+      @redirect="
+        () => {
+          $router.push(errorRedirection.path);
+        }
+      "
+    />
+  </div>
+  <div v-else>
     <div class="flex justify-between items-center mb-4">
       <PageHeading class="mb-0">{{
         currentRoute.fullPath.includes("edit")

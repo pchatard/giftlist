@@ -2,6 +2,8 @@
 import PageHeading from "@/components/PageHeading.vue";
 import UsersTable from "@/components/UsersTable.vue";
 import UsersIconStack from "@/components/UsersIconStack.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import {
   breadcrumbContentInjectionKey,
   showFriendsFeaturesInjectionKey,
@@ -32,6 +34,16 @@ const listsStore = useListsStore();
 const giftsStore = useGiftsStore();
 const { selectedList } = storeToRefs(listsStore);
 
+const loading = ref(!selectedList.value);
+const defaultErrorMessage = "Vous n'êtes pas autorisé à consulter cette page.";
+const errorMessage = ref(
+  selectedList.value?.isOwner === false ? defaultErrorMessage : ""
+);
+const errorRedirection = ref({
+  name: "Mes listes partagées",
+  path: "/app/lists/shared",
+});
+
 const sharingLinkIsCopied = ref(false);
 const sharingLink = computed(() => {
   const link = new URL(
@@ -53,7 +65,7 @@ const initialBreadcrumbContent = computed(() => [
     path: `/app/lists`,
   },
   {
-    name: selectedList.value?.title ?? "Liste X",
+    name: selectedList.value?.title ?? "...",
     path: `/app/lists/${listId}`,
   },
   { name: currentRoute.name?.toString(), path: currentRoute.fullPath },
@@ -81,7 +93,20 @@ const handleCopy = () => {
 // Initialization
 onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
-  listsStore.getList(listId);
+  listsStore
+    .getList(listId)
+    .then(() => {
+      if (!selectedList.value?.isOwner) {
+        throw new Error(defaultErrorMessage);
+      }
+      setBreadcrumbContent(initialBreadcrumbContent.value);
+    })
+    .catch((error: Error) => {
+      errorMessage.value = error.message;
+    })
+    .then(() => {
+      loading.value = false;
+    });
 });
 
 onBeforeRouteLeave((to, from) => {
@@ -96,7 +121,27 @@ onBeforeRouteLeave((to, from) => {
 </script>
 
 <template>
-  <div>
+  <div
+    v-if="loading"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <LoadingSpinner />
+  </div>
+  <div
+    v-else-if="errorMessage"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <ErrorInfo
+      :message="errorMessage"
+      :redirection="errorRedirection"
+      @redirect="
+        () => {
+          $router.push(errorRedirection.path);
+        }
+      "
+    />
+  </div>
+  <div v-else>
     <PageHeading>{{ selectedList?.title }} - Options de partage</PageHeading>
 
     <div>
