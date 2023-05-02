@@ -613,7 +613,9 @@ watch(isListOwner, () => {
               }"
             >
               <div class="flex flex-col gap-1 justify-center">
-                <div class="text-sm">{{ gift.price ?? "-" }}€</div>
+                <div class="text-sm">
+                  {{ gift.price && gift.price > 0 ? gift.price + "€" : "-" }}
+                </div>
                 <div v-if="!isListOwner" class="md:hidden">
                   <div
                     v-if="gift.isBooked"
