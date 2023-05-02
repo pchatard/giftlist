@@ -72,7 +72,7 @@ const initialBreadcrumbContent = computed(() => [
     name: isListOwner.value ? "Mes listes" : "Listes partagées",
     path: isListOwner.value ? "/app/lists" : "/app/lists/shared",
   },
-  { name: list.value?.title ?? "Ma liste", path: currentRoute.fullPath },
+  { name: list.value?.title ?? "...", path: currentRoute.fullPath },
 ]);
 
 // Page content

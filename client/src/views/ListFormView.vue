@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import PageHeading from "@/components/PageHeading.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import {
   breadcrumbContentInjectionKey,
   showFriendsFeaturesInjectionKey,
@@ -17,6 +19,11 @@ import { useGiftsStore } from "@/stores/gifts";
 // Router
 const router = useRouter();
 const currentRoute = useRoute();
+const isEditMode = currentRoute.fullPath.endsWith("/edit");
+const listId =
+  isEditMode && typeof currentRoute.params.listId == "string"
+    ? currentRoute.params.listId
+    : "";
 
 // Injection
 const showFriendsFeatures = inject(showFriendsFeaturesInjectionKey);
@@ -25,9 +32,19 @@ const showFriendsFeatures = inject(showFriendsFeaturesInjectionKey);
 const listsStore = useListsStore();
 const giftsStore = useGiftsStore();
 const currentList = computed(() => {
-  return currentRoute.fullPath.endsWith("/edit") ? selectedList.value : null;
+  return isEditMode ? selectedList.value : null;
 });
-const { selectedList, myLists } = storeToRefs(listsStore);
+const { selectedList } = storeToRefs(listsStore);
+
+const loading = ref(isEditMode && !currentList.value);
+const defaultErrorMessage = "Vous n'êtes pas autorisé à consulter cette page.";
+const errorMessage = ref(
+  selectedList.value?.isOwner === false ? defaultErrorMessage : ""
+);
+const errorRedirection = ref({
+  name: "Mes listes partagées",
+  path: "/app/lists/shared",
+});
 
 // List form data and validation
 const listForm: FormList = reactive(
@@ -126,55 +143,49 @@ const validateList = (): boolean => {
   return true;
 };
 
-onMounted(() => {
-  let listId = "";
-  if (currentRoute.fullPath.includes("edit")) {
-    listId =
-      typeof currentRoute.params.listId == "string"
-        ? currentRoute.params.listId
-        : currentRoute.params.listId[0];
-    listsStore.getList(listId).then(() => {
-      listForm.title = currentList.value?.title ?? "";
-      listForm.description = currentList.value?.description;
-      listForm.closureDate = currentList.value?.closureDate;
-      hasClosureDate.value = Boolean(currentList.value?.closureDate);
-      listForm.isShared = currentList.value?.isShared ?? false;
-      listForm.ownersIds =
-        currentList.value?.ownersDTO?.map((owner) => owner.id) ?? [];
-      listForm.grantedUsersIds =
-        currentList.value?.grantedUsersDTO?.map((granted) => granted.id) ?? [];
-    });
-  }
-
-  const list = myLists.value.find((list) => list.id === listId);
-  if (list) {
-    setBreadcrumbContent([
-      { name: "Mes listes", path: "/app/lists" },
-      ...(listId
-        ? [
-            {
-              name: list.title ?? "Liste X",
-              path: "/app/lists/" + listId,
-            },
-          ]
-        : []),
-      { name: currentRoute.name ?? "", path: currentRoute.fullPath },
-    ]);
-  } else {
-    listsStore.getList(listId).then(() => {
-      setBreadcrumbContent([
-        { name: "Mes listes", path: "/app/lists" },
-        ...(listId
-          ? [
-              {
-                name: selectedList.value?.title ?? "Liste X",
-                path: "/app/lists/" + listId,
-              },
-            ]
-          : []),
+const initialCreationBreadcrumbContent = computed(() => [
+  { name: "Mes listes", path: "/app/lists" },
+  ...(isEditMode
+    ? [
+        {
+          name: selectedList.value?.title ?? "...",
+          path: "/app/lists/" + listId,
+        },
         { name: currentRoute.name ?? "", path: currentRoute.fullPath },
-      ]);
-    });
+      ]
+    : [{ name: currentRoute.name ?? "", path: currentRoute.fullPath }]),
+]);
+
+onMounted(() => {
+  setBreadcrumbContent(initialCreationBreadcrumbContent.value);
+
+  if (isEditMode) {
+    listsStore
+      .getList(listId)
+      .then(() => {
+        if (!selectedList.value?.isOwner) {
+          throw new Error(defaultErrorMessage);
+        }
+        setBreadcrumbContent(initialCreationBreadcrumbContent.value);
+      })
+      .then(() => {
+        listForm.title = currentList.value?.title ?? "";
+        listForm.description = currentList.value?.description;
+        listForm.closureDate = currentList.value?.closureDate;
+        hasClosureDate.value = Boolean(currentList.value?.closureDate);
+        listForm.isShared = currentList.value?.isShared ?? false;
+        listForm.ownersIds =
+          currentList.value?.ownersDTO?.map((owner) => owner.id) ?? [];
+        listForm.grantedUsersIds =
+          currentList.value?.grantedUsersDTO?.map((granted) => granted.id) ??
+          [];
+      })
+      .catch((error: Error) => {
+        errorMessage.value = error.message;
+      })
+      .then(() => {
+        loading.value = false;
+      });
   }
 });
 
@@ -198,7 +209,27 @@ onBeforeRouteLeave((to, from) => {
 </script>
 
 <template>
-  <div>
+  <div
+    v-if="loading"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <LoadingSpinner />
+  </div>
+  <div
+    v-else-if="errorMessage"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <ErrorInfo
+      :message="errorMessage"
+      :redirection="errorRedirection"
+      @redirect="
+        () => {
+          $router.push(errorRedirection.path);
+        }
+      "
+    />
+  </div>
+  <div v-else>
     <div class="flex justify-between items-center mb-4">
       <PageHeading class="mb-0">{{ currentRoute.name }}</PageHeading>
     </div>

@@ -5,6 +5,7 @@ import { onBeforeRouteLeave, useRoute } from "vue-router";
 import PageHeading from "@/components/PageHeading.vue";
 import BookGiftModal from "@/components/BookGiftModal.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import ErrorInfo from "@/components/ErrorInfo.vue";
 import { breadcrumbContentInjectionKey } from "@/injectionSymbols";
 import type { BreadcrumbContentData } from "@/types";
 
@@ -46,6 +47,12 @@ const { selectedList: list } = storeToRefs(listsStore);
 const { selectedGift: gift } = storeToRefs(giftsStore);
 
 const loading = ref(!gift.value);
+const defaultErrorMessage = "Vous n'êtes pas autorisé à consulter cette page.";
+const errorMessage = ref(list.value?.isOwner ? defaultErrorMessage : "");
+const errorRedirection = ref({
+  name: list.value?.title ?? "Ma liste",
+  path: "/app/lists/" + listId,
+});
 
 // Computed
 const categoryName = computed(() => {
@@ -107,16 +114,27 @@ const initialBreadcrumbContent = computed(() => [
     name: "Listes partagées",
     path: "/app/lists/shared",
   },
-  { name: list.value?.title ?? "Liste partagée", path: "/app/lists/" + listId },
-  { name: gift.value?.title ?? "Mon cadeau", path: route.fullPath },
+  { name: list.value?.title ?? "...", path: "/app/lists/" + listId },
+  { name: gift.value?.title ?? "...", path: route.fullPath },
 ]);
 
 onMounted(() => {
   setBreadcrumbContent(initialBreadcrumbContent.value);
   listsStore
     .getList(listId)
-    .then(() => giftsStore.getGift(listId, giftId))
-    .then(() => setBreadcrumbContent(initialBreadcrumbContent.value))
+    .then(() => {
+      if (list.value?.isOwner) {
+        errorRedirection.value.name = list.value.title ?? "Ma liste";
+        throw new Error(defaultErrorMessage);
+      }
+      return giftsStore.getGift(listId, giftId);
+    })
+    .catch((error: Error) => {
+      errorMessage.value = error.message;
+    })
+    .then(() => {
+      setBreadcrumbContent(initialBreadcrumbContent.value);
+    })
     .then(() => {
       loading.value = false;
     });
@@ -139,6 +157,20 @@ onBeforeRouteLeave((to, from) => {
     class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
   >
     <LoadingSpinner />
+  </div>
+  <div
+    v-else-if="errorMessage"
+    class="m-auto w-full md:w-1/2 flex flex-col justify-center gap-8 items-center h-[calc(100vh-270px)] text-gray-400"
+  >
+    <ErrorInfo
+      :message="errorMessage"
+      :redirection="errorRedirection"
+      @redirect="
+        () => {
+          $router.push(errorRedirection.path);
+        }
+      "
+    />
   </div>
   <div v-else>
     <div class="flex justify-between items-center mb-2">
