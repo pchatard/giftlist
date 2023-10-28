@@ -50,10 +50,12 @@ const pageTitle = computed(() => {
 const headingButton = computed(() => {
   return {
     text: isSharedView.value ? "Code" : "Nouvelle liste",
-    action: () =>
+    action: () => {
+      listsStore.unselectList();
       router.push(
         isSharedView.value ? "/app/lists/shared/new" : "/app/lists/new"
-      ),
+      );
+    },
   };
 });
 
