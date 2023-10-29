@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/react";
+import "../src/index.css";
 
 const preview: Preview = {
   parameters: {
@@ -9,6 +10,13 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    docs: {
+      toc: {
+        title: "Table of Contents",
+        disable: false,
+      },
+    },
+    layout: "centered",
   },
 };
 
