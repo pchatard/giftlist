@@ -87,7 +87,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="mt-4" v-if="showFriendsFeatures">
+    <div v-if="showFriendsFeatures" class="mt-4">
       <h2 class="text-xl md:text-2xl font-bold dark:text-white">
         Gérer mes amis
       </h2>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { ListInfo } from "@/types/giftlist";
+import type { GiftInfo } from "@/types/giftlist";
 import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 export interface BookGiftModalProps {
-  giftInfo: ListInfo & { isBooked: boolean };
+  giftInfo: GiftInfo;
   loading: boolean;
 }
 

@@ -11,6 +11,7 @@ import {
 
 import PageHeading from "@/components/PageHeading.vue";
 import DeleteListModal from "@/components/DeleteListModal.vue";
+import DeleteGiftModal from "@/components/DeleteGiftModal.vue";
 import BookGiftModal from "@/components/BookGiftModal.vue";
 import GiftOptionsModal from "@/components/GiftOptionsModal.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
@@ -39,7 +40,12 @@ import { HeartIcon as HeartIconSolid } from "@heroicons/vue/24/solid";
 import { useListsStore } from "@/stores/lists";
 import { useGiftsStore } from "@/stores/gifts";
 import { storeToRefs } from "pinia";
-import { giftCategory, type Gift, type ListInfo } from "@/types/giftlist";
+import {
+  giftCategory,
+  type Gift,
+  type ListInfo,
+  type GiftInfo,
+} from "@/types/giftlist";
 
 // Router
 const router = useRouter();
@@ -118,7 +124,7 @@ const deleteListModal = reactive({
       deleteListModal.show = false;
       deleteListModal.listInfo.id = "";
       deleteListModal.listInfo.title = "";
-      router.push("/app/lists" + isListOwner.value ? "" : "/shared");
+      router.push("/app/lists" + (isListOwner.value ? "" : "/shared"));
     });
   },
   closeAction: () => {
@@ -128,18 +134,18 @@ const deleteListModal = reactive({
 
 const deleteGiftModal = reactive({
   show: false,
-  listInfo: {
+  giftInfo: {
     id: "",
     title: "",
-  },
+  } as GiftInfo,
   loading: false,
   submitAction: (giftId: string) => {
     deleteGiftModal.loading = true;
     giftsStore.deleteGift(listId, giftId).then(() => {
       deleteGiftModal.loading = false;
       deleteGiftModal.show = false;
-      deleteGiftModal.listInfo.id = "";
-      deleteGiftModal.listInfo.title = "";
+      deleteGiftModal.giftInfo.id = "";
+      deleteGiftModal.giftInfo.title = "";
     });
   },
   closeAction: () => {
@@ -153,7 +159,7 @@ const bookGiftModal = reactive({
     id: "",
     title: "",
     isBooked: false,
-  },
+  } as GiftInfo,
   loading: false,
   submitAction: (giftId: string) => {
     bookGiftModal.loading = true;
@@ -248,21 +254,21 @@ const handleGiftClick = (giftId: string) => {
   router.push(destination);
 };
 
-const handleGiftDelete = (giftInfo: ListInfo) => {
+const handleGiftDelete = (giftInfo: GiftInfo) => {
   if (isListOwner.value) {
-    deleteGiftModal.listInfo = giftInfo;
+    deleteGiftModal.giftInfo = giftInfo;
     deleteGiftModal.show = true;
   }
 };
 
-const handleBookGift = (giftInfo: ListInfo & { isBooked: boolean }) => {
+const handleBookGift = (giftInfo: GiftInfo) => {
   if (!isListOwner.value) {
     bookGiftModal.giftInfo = giftInfo;
     bookGiftModal.show = true;
   }
 };
 
-const handleUnbookGift = (giftInfo: ListInfo & { isBooked: boolean }) => {
+const handleUnbookGift = (giftInfo: GiftInfo) => {
   if (!isListOwner.value) {
     bookGiftModal.giftInfo = giftInfo;
     bookGiftModal.show = true;
@@ -479,9 +485,9 @@ watch(isListOwner, () => {
         @close="deleteListModal.closeAction"
         @submit="deleteListModal.submitAction"
       />
-      <DeleteListModal
+      <DeleteGiftModal
         v-show="deleteGiftModal.show"
-        :list-info="deleteGiftModal.listInfo"
+        :gift-info="deleteGiftModal.giftInfo"
         :loading="deleteGiftModal.loading"
         @close="deleteGiftModal.closeAction"
         @submit="deleteGiftModal.submitAction"

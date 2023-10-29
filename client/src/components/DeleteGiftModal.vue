@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import type { ListInfo } from "@/types/giftlist";
+import type { GiftInfo } from "@/types/giftlist";
 import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 
-export interface DeleteListModalProps {
-  listInfo: ListInfo;
+export interface DeleteGiftModalProps {
+  giftInfo: GiftInfo;
   loading: boolean;
 }
 
-export interface DeleteListModalEmits {
+export interface DeleteGiftModalEmits {
   (e: "close"): void;
   (e: "submit", listId: string): void;
 }
 
-defineProps<DeleteListModalProps>();
-const emit = defineEmits<DeleteListModalEmits>();
+defineProps<DeleteGiftModalProps>();
+const emit = defineEmits<DeleteGiftModalEmits>();
 
 const handleClose = () => {
   emit("close");
@@ -43,23 +43,19 @@ const handleConfirm = (listId: string) => {
         </button>
         <div class="px-6 py-6 lg:px-8">
           <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-            Supprimer {{ listInfo.title }}
+            Supprimer {{ giftInfo.title }}
           </h3>
           <form class="space-y-6" action="#">
             <div>
               <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">
-                Voulez-vous vraiment supprimer la liste
-                <b>{{ listInfo.title }}</b> ?
+                Voulez-vous vraiment supprimer le cadeau
+                <b>{{ giftInfo.title }}</b> ?
               </p>
               <p
                 class="mt-2 text-sm flex gap-2 items-stretch text-red-600 dark:text-red-300"
               >
                 <ExclamationTriangleIcon class="w-5" />
-                <span class="flex-1">
-                  Cette action est irréversible. Si vous avez partagé cette
-                  liste, il est possible que vos proches aient déjà réservé ou
-                  acheté quelque chose !
-                </span>
+                <span class="flex-1"> Cette action est irréversible. </span>
               </p>
             </div>
 
@@ -102,7 +98,7 @@ const handleConfirm = (listId: string) => {
                 v-else
                 type="button"
                 class="w-1/3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                @click="handleConfirm(listInfo.id)"
+                @click="handleConfirm(giftInfo.id)"
               >
                 Supprimer
               </button>

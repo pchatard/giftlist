@@ -40,6 +40,12 @@ export interface ListInfo {
   title: string;
 }
 
+export interface GiftInfo {
+  id: string;
+  title: string;
+  isBooked?: boolean;
+}
+
 export const giftCategory = {
   clothes: "Vêtements",
   books: "Livres",
