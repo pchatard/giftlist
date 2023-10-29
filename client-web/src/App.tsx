@@ -1,12 +1,15 @@
 import "./App.css";
 
-import { Button } from "./components/ui/button";
+import { ChevronRight } from "lucide-react";
+
+import { GButton } from "./components/giftlist/button";
 
 function App() {
   return (
-    <>
-      <Button>Hello</Button>
-    </>
+    <div className="flex gap-2">
+      <GButton>Hello</GButton>
+      <GButton icon={<ChevronRight />}>Hello</GButton>
+    </div>
   );
 }
 

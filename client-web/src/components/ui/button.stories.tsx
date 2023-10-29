@@ -4,12 +4,19 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { ChevronRight } from "lucide-react";
 
+import { userEvent, within } from "@storybook/testing-library";
+
 import { Button } from "./button";
 
 const meta: Meta<typeof Button> = {
   title: "Components/Atoms/Button",
   component: Button,
   tags: ["autodocs"],
+  argTypes: {
+    children: {
+      name: "text",
+    },
+  },
 };
 
 export default meta;
@@ -23,6 +30,11 @@ export const Simple: Story = {
     variant: "default",
     children: "Button",
     size: "default",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(await canvas.findByRole("button"));
   },
 };
 
@@ -54,7 +66,7 @@ export const Disabled: Story = {
 export const AsChild: Story = {
   args: {
     variant: "link",
-    children: <a href="">Click me</a>,
+    children: <a href="">Click me!</a>,
     asChild: true,
   },
 };
