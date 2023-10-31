@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
 import React, { cloneElement, ReactElement } from "react";
 
-import { Button, ButtonProps } from "../ui/button";
+import { Button, ButtonProps } from "../../ui/button";
 
 export interface GButtonProps extends ButtonProps {
   icon?: ReactElement;
