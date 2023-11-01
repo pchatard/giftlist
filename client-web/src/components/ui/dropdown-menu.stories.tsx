@@ -9,7 +9,7 @@ import {
 } from "./dropdown-menu";
 
 const meta: Meta<typeof DropdownMenu> = {
-  title: "Components/Atoms/DropdownMenu",
+  title: "UI/Atoms/DropdownMenu",
   component: DropdownMenu,
   tags: ["autodocs"],
   argTypes: {},
@@ -22,7 +22,7 @@ type Story = StoryObj<typeof DropdownMenu>;
  * A simple text button.
  */
 const DropdownMenuTemplate: Story = {
-  render: (args) => (
+  render: () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button>Open</Button>

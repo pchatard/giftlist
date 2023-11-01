@@ -7,7 +7,7 @@ import { userEvent, within } from "@storybook/testing-library";
 import { MobileMenu } from "./menu";
 
 const meta: Meta<typeof MobileMenu> = {
-  title: "Components/UI/MobileMenu",
+  title: "Components/MobileMenu",
   component: MobileMenu,
   parameters: {
     viewport: {

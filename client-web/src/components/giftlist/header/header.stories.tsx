@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Header } from "./header";
 
 const meta: Meta<typeof Header> = {
-  title: "Components/UI/Header",
+  title: "Components/Header",
   component: Header,
   tags: ["autodocs"],
   parameters: {
@@ -20,8 +20,6 @@ type Story = StoryObj<typeof Header>;
 export const LoggedOut: Story = {
   args: {
     loggedIn: false,
-    fixed: false,
-    navigation: false,
   },
 };
 
@@ -31,7 +29,5 @@ export const LoggedOut: Story = {
 export const LoggedIn: Story = {
   args: {
     loggedIn: true,
-    fixed: false,
-    navigation: true,
   },
 };

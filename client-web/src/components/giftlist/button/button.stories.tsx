@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { GButton } from "./button";
 
 const meta: Meta<typeof GButton> = {
-  title: "Components/UI/Button",
+  title: "Components/Button",
   component: GButton,
   tags: ["autodocs"],
 };

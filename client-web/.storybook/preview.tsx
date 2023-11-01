@@ -1,6 +1,9 @@
 import type { Preview } from "@storybook/react";
 import "../src/index.css";
 
+import React from "react";
+import { MemoryRouter } from "react-router-dom";
+
 import { withThemeByClassName } from "@storybook/addon-themes";
 
 const preview: Preview = {
@@ -33,4 +36,9 @@ export const decorators = [
     defaultTheme: "light",
     parentSelector: ":root",
   }),
+  (Story) => (
+    <MemoryRouter initialEntries={["/"]}>
+      <Story />
+    </MemoryRouter>
+  ),
 ];

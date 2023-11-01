@@ -7,7 +7,7 @@ import { within } from "@storybook/testing-library";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 
 const meta: Meta<typeof Avatar> = {
-  title: "Components/Atoms/Avatar",
+  title: "UI/Atoms/Avatar",
   component: Avatar,
   tags: ["autodocs"],
 };

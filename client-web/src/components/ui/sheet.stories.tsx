@@ -6,7 +6,7 @@ import { Button } from "./button";
 import { Sheet, SheetContent, SheetTrigger } from "./sheet";
 
 const meta: Meta<typeof Sheet> = {
-  title: "Components/Atoms/Sheet",
+  title: "UI/Atoms/Sheet",
   component: Sheet,
   tags: ["autodocs"],
   argTypes: {},

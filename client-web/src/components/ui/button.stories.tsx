@@ -9,7 +9,7 @@ import { userEvent, within } from "@storybook/testing-library";
 import { Button } from "./button";
 
 const meta: Meta<typeof Button> = {
-  title: "Components/Atoms/Button",
+  title: "UI/Atoms/Button",
   component: Button,
   tags: ["autodocs"],
   argTypes: {
