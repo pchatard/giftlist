@@ -1,13 +1,14 @@
-import giftlistLogo from "/giftlist.svg";
-
 import cat from "@/assets/cat.jpg";
+import { CONTAINER_LAYOUT } from "@/lib/styles";
 import { User } from "@/lib/types/types";
 import { cn } from "@/lib/utils";
 
 import { GButton } from "../button/button";
 import { MobileMenu } from "../menu/menu";
-import GNavigationMenu from "./navigation-menu/navigation-menu";
-import UserDropdown from "./user-dropdown/user-dropdown";
+import { ModeToggle } from "../mode-toggle/mode-toggle";
+import { Logo } from "./logo/logo";
+import { GNavigationMenu } from "./navigation-menu/navigation-menu";
+import { UserDropdown } from "./user-dropdown/user-dropdown";
 
 export interface HeaderProps {
   loggedIn: boolean;
@@ -30,11 +31,14 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header
       className={cn(
-        "w-full flex items-center justify-between px-4 py-4",
+        "bg-background",
+        CONTAINER_LAYOUT,
+        "py-2",
+        "flex items-center justify-between",
         fixed ? "fixed top-0 left-0 right-0" : ""
       )}
     >
-      <img alt="Giftlist Logo" src={giftlistLogo} />
+      <Logo />
       {loggedIn ? (
         <>
           {navigation && (
@@ -43,12 +47,16 @@ const Header: React.FC<HeaderProps> = ({
             </div>
           )}
           <div className="flex items-center gap-4">
+            <ModeToggle />
             <UserDropdown user={user} />
             <MobileMenu />
           </div>
         </>
       ) : (
-        <GButton>Connexion</GButton>
+        <div className="flex items-center gap-4">
+          <ModeToggle />
+          <GButton>Connexion</GButton>
+        </div>
       )}
     </header>
   );

@@ -19,7 +19,7 @@ export interface UserDropdownProps {
   user: User;
 }
 
-const UserDropdown: FC<UserDropdownProps> = ({ user }) => {
+export const UserDropdown: FC<UserDropdownProps> = ({ user }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -58,5 +58,3 @@ const UserDropdown: FC<UserDropdownProps> = ({ user }) => {
     </DropdownMenu>
   );
 };
-
-export default UserDropdown;

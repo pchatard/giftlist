@@ -13,7 +13,7 @@ import {
 
 export interface GNavigationMenuProps {}
 
-const GNavigationMenu: FC<GNavigationMenuProps> = () => {
+export const GNavigationMenu: FC<GNavigationMenuProps> = () => {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -67,5 +67,3 @@ const GNavigationMenu: FC<GNavigationMenuProps> = () => {
     </NavigationMenu>
   );
 };
-
-export default GNavigationMenu;
