@@ -54,7 +54,7 @@ export const giftCategory = {
   entertainment: "Jeux de sociétés",
   concerts: "Spectacles / Concerts",
   experience: "Expérience",
-  tech: "High Tech",
+  tech: "High Tech / Jeux vidéos",
   money: "Argent / Bons d'achats",
   jewels: "Montres / Bijoux",
   shoes: "Chaussures",
