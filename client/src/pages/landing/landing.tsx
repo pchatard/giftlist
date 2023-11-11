@@ -115,8 +115,8 @@ export const LandingPage = () => {
                 alt="Arrow"
                 className="hidden translate-y-3 dark:inline-block"
               />
-              <p className="transform -rotate-3 font-virgil">
-                Fatigué(e) de ces réactions ?
+              <p className="transform -rotate-3 -translate-y-6 font-virgil">
+                Fini de pleurer à cause de tes cadeaux nuls !
               </p>
             </div>
           </Transition.Child>
