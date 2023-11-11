@@ -70,16 +70,17 @@ export const LandingPage = () => {
       <section
         className={cn(
           GRID,
-          "h-[calc(100vh-58px-58px)] pb-6 mb-6 overflow-auto"
+          "h-[calc(100vh-58px-58px)] pb-6 mb-6 overflow-y-visible"
         )}
       >
         <Transition
           as="div"
           appear
           show={showHeroSection}
-          className="col-start-1 col-span-2 md:col-start-2 md:col-span-4 h-fit my-auto relative"
+          className="col-start-1 col-span-2 md:col-start-2 md:col-span-4 my-auto relative"
         >
           <Transition.Child
+            className={"h-full"}
             enter="transition-all duration-500"
             enterFrom="transform opacity-0 translate-y-2"
             enterTo="transform opacity-1 translate-y-0"
@@ -91,7 +92,7 @@ export const LandingPage = () => {
             <img
               src={crying}
               alt="Crying Baby"
-              className={`rounded-lg max-h-[50vh] md:max-h-none`}
+              className={`rounded-lg h-auto w-auto aspect-auto`}
             />
           </Transition.Child>
           <Transition.Child
@@ -169,7 +170,7 @@ export const LandingPage = () => {
       <section
         id="features"
         ref={featuresSection}
-        className={cn(GRID, "h-[calc(100vh-58px-58px)] my-6 overflow-auto")}
+        className={cn(GRID, "h-[calc(100vh-58px-58px)] my-6 overflow-visible")}
       ></section>
     </div>
   );

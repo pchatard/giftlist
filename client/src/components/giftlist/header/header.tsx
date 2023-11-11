@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ loggedIn }) => {
       appear
       as="header"
       className={cn(
-        // "bg-background border-b border-b-border",
+        "bg-background",
         CONTAINER_LAYOUT,
         "py-2",
         "flex items-center justify-between",
