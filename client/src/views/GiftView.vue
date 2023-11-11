@@ -23,6 +23,8 @@ import {
   NoSymbolIcon,
   CheckIcon,
   SparklesIcon,
+  PuzzlePieceIcon,
+  CubeTransparentIcon,
 } from "@heroicons/vue/24/outline";
 import { useListsStore } from "@/stores/lists";
 import { useGiftsStore } from "@/stores/gifts";
@@ -230,8 +232,16 @@ onBeforeRouteLeave((to, from) => {
               v-if="gift?.category == 'jewels'"
               class="w-8 text-primary-800"
             />
+            <PuzzlePieceIcon
+              v-if="gift?.category == 'entertainment'"
+              class="w-8 text-primary-800"
+            />
             <GiftIcon
               v-if="gift?.category == 'other' || gift?.category == ''"
+              class="w-8 text-primary-800"
+            />
+            <CubeTransparentIcon
+              v-if="gift?.category == 'toys'"
               class="w-8 text-primary-800"
             />
           </span>
