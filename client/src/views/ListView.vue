@@ -115,6 +115,7 @@ const deleteListModal = reactive({
   listInfo: {
     id: "",
     title: "",
+    isSharedView: !isListOwner.value,
   },
   loading: false,
   submitAction: (listId: string) => {
@@ -399,6 +400,7 @@ watch(isListOwner, () => {
                   handleListDelete({
                     id: list?.id ?? '',
                     title: list?.title ?? '',
+                    isSharedView: !isListOwner,
                   })
                 "
               >

@@ -29,7 +29,7 @@ export interface ListsTableEmits {
   ): void;
   (e: "select", listId: string): void;
   (e: "edit", listId: string): void;
-  (e: "delete", listInfo: { id: string; title: string }): void;
+  (e: "delete", listInfo: ListInfo): void;
 }
 
 const props = defineProps<ListsTableProps>();
@@ -211,7 +211,13 @@ const computedLastRowText = computed(() => {
             <button
               type="button"
               class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-              @click.stop="handleListDelete({ id: list.id, title: list.title })"
+              @click.stop="
+                handleListDelete({
+                  id: list.id,
+                  title: list.title,
+                  isSharedView,
+                })
+              "
             >
               <TrashIcon class="w-4" />
               <span class="hidden lg:inline lg:ml-2">Supprimer</span>
@@ -231,7 +237,13 @@ const computedLastRowText = computed(() => {
             <button
               type="button"
               class="text-red-600 hover:bg-red-100 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm pl-2 lg:px-3 py-1.5 text-center inline-flex items-center dark:text-red-300 dark:hover:bg-red-900 dark:focus:ring-red-800"
-              @click.stop="handleListDelete({ id: list.id, title: list.title })"
+              @click.stop="
+                handleListDelete({
+                  id: list.id,
+                  title: list.title,
+                  isSharedView,
+                })
+              "
             >
               <TrashIcon class="w-5" />
               <span class="hidden lg:inline lg:ml-2">Supprimer</span>

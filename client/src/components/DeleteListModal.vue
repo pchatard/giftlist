@@ -47,11 +47,19 @@ const handleConfirm = (listId: string) => {
           </h3>
           <form class="space-y-6" action="#">
             <div>
-              <p class="mt-2 text-sm text-gray-500 dark:text-gray-300">
+              <p
+                v-if="!listInfo.isSharedView"
+                class="mt-2 text-sm text-gray-500 dark:text-gray-300"
+              >
                 Voulez-vous vraiment supprimer la liste
                 <b>{{ listInfo.title }}</b> ?
               </p>
+              <p v-else class="mt-2 text-sm text-gray-500 dark:text-gray-300">
+                Voulez-vous vraiment arrêter de suivre la liste
+                <b>{{ listInfo.title }}</b> ?
+              </p>
               <p
+                v-if="!listInfo.isSharedView"
                 class="mt-2 text-sm flex gap-2 items-stretch text-red-600 dark:text-red-300"
               >
                 <ExclamationTriangleIcon class="w-5" />

@@ -38,6 +38,7 @@ export interface FormListValidation {
 export interface ListInfo {
   id: string;
   title: string;
+  isSharedView: boolean;
 }
 
 export interface GiftInfo {

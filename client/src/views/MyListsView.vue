@@ -100,6 +100,7 @@ const deleteListModal = reactive({
   listInfo: {
     id: "",
     title: "",
+    isSharedView,
   },
   loading: false,
   submitAction: (listId: string) => {
