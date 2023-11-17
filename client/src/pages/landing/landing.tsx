@@ -2,6 +2,7 @@ import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { GiftCard, GiftCardVariant } from "@/components/giftlist/gift-card/gift-card";
 import { Text } from "@/components/giftlist/text/text";
 import { Title } from "@/components/giftlist/title/title";
 import { Button } from "@/components/ui/button";
@@ -170,8 +171,28 @@ export const LandingPage = () => {
       <section
         id="features"
         ref={featuresSection}
-        className={cn(GRID, "h-[calc(100vh-58px-58px)] my-6 overflow-visible")}
-      ></section>
+        className={cn(
+          "h-[calc(100vh-58px-58px)] flex flex-col justify-center my-6 overflow-visible"
+        )}
+      >
+        <div className="grid grid-cols-3 items-start gap-4">
+          {Array(2)
+            .fill(0)
+            .map((_, i) =>
+              i % 2 === 0 ? (
+                <GiftCard
+                  title={"Chat noir et blanc"}
+                  description={"Animaux"}
+                />
+              ) : (
+                <GiftCardVariant
+                  title={"Chat noir et blanc"}
+                  description={"Animaux"}
+                />
+              )
+            )}
+        </div>
+      </section>
     </div>
   );
 };
