@@ -14,9 +14,9 @@ export const useUsername = (defaultShow: boolean, onDisappear: () => void) => {
   const onPass = () => {
     setShowUserForm(false);
 
-    // setTimeout(() => {
-    //   onDisappear();
-    // }, 100);
+    setTimeout(() => {
+      onDisappear();
+    }, 400);
   };
 
   return {

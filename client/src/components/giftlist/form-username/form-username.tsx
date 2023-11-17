@@ -42,14 +42,12 @@ export const FormUsername: FC<FormUsernameProps> = ({ show, onDisappear }) => {
           <Title variant={"h3"} className="hidden md:block text-left">
             Comment devons-nous t'appeler ?
           </Title>
-
           <div className="w-full flex flex-col items-center">
             <Input placeholder={"Henry4"} className="w-full md:w-3/4" />
             <Button className="mt-4 w-full md:w-3/4" onClick={onConfirm}>
               Continuer
             </Button>
           </div>
-
           <Button variant={"link"} onClick={onPass}>
             <Text variant={"muted"}>Passer</Text>
           </Button>

@@ -9,7 +9,7 @@ export const DashboardPage = () => {
   const [showWelcome, setShowWelcome] = useState(false);
 
   return (
-    <div className="h-[calc(100vh-58px-24px)] overflow-auto">
+    <div className="h-[calc(100vh-58px-24px)] -mt-6 overflow-auto">
       <FormUsername
         show={!hasUsername}
         onDisappear={() => {
@@ -19,7 +19,7 @@ export const DashboardPage = () => {
 
       <Welcome
         show={showWelcome}
-        onBackButton={() => setShowWelcome(!showWelcome)}
+        // onBackButton={() => setShowWelcome(!showWelcome)}
       />
     </div>
   );
