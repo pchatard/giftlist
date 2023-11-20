@@ -111,7 +111,7 @@ export const GiftCardVariant: FC<GiftCardProps> = ({ gift }) => {
   return (
     <Card className="flex flex-col relative group">
       {isFavorite && (
-        <StarIcon className="z-index-10 absolute top-0 left-0 -translate-x-1/3 -translate-y-1/2 w-6 bg-white" />
+        <StarIcon className="z-index-10 absolute top-0 left-0 -translate-x-1/3 -translate-y-1/2 w-6 bg-background" />
       )}
       <CardHeader className="p-4 w-full flex flex-row gap-4">
         <div className="w-1/4  aspect-square overflow-hidden rounded-md self-center grid place-items-center bg-purple-100 dark:bg-purple-900">
@@ -269,7 +269,7 @@ export const GiftCardVariantNoButtons: FC<GiftCardProps> = ({ gift }) => {
       <ContextMenuTrigger>
         <Card className="flex flex-col relative group">
           {isFavorite && (
-            <StarIcon className="z-index-10 absolute top-0 left-0 -translate-x-1/3 -translate-y-1/2 w-6 bg-white" />
+            <StarIcon className="z-index-10 absolute top-0 left-0 -translate-x-1/3 -translate-y-1/2 w-6 bg-background" />
           )}
           <CardHeader className="p-4 w-full flex flex-row gap-4">
             <div className="w-1/4 aspect-square overflow-hidden rounded-md self-center grid place-items-center bg-purple-100 dark:bg-purple-900">
