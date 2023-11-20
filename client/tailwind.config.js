@@ -73,6 +73,7 @@ module.exports = {
       },
       fontFamily: {
         virgil: ["Virgil"],
+        syne: ["Syne"],
       },
     },
   },

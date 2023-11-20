@@ -2,17 +2,84 @@ import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { GiftCard, GiftCardVariant } from "@/components/giftlist/gift-card/gift-card";
+import {
+  GiftCardVariant,
+  GiftCardVariantBudget,
+  GiftCardVariantBudgetNoButtons,
+  GiftCardVariantNoButtons,
+  GiftCardVariantOptions,
+  GiftCardVariantOptionsNoButtons,
+  GiftCardVariantPlacement,
+  GiftCardVariantPlacementBudget,
+  GiftCardVariantPlacementOptions,
+} from "@/components/giftlist/gift-card/gift-card";
 import { Text } from "@/components/giftlist/text/text";
 import { Title } from "@/components/giftlist/title/title";
 import { Button } from "@/components/ui/button";
 import arrowDark from "@/images/Arrow-dark.svg";
 import arrowLight from "@/images/Arrow-light.svg";
+import cat from "@/images/cat.jpg";
 import crying from "@/images/crying.webp";
 import { useHeader } from "@/lib/providers/header.provider";
 import { GRID } from "@/lib/styles";
+import { Gift } from "@/lib/types/types";
 import { cn } from "@/lib/utils";
 import { Transition } from "@headlessui/react";
+
+const gift: Gift = {
+  title: "Chat noir et blanc",
+  category: "Animaux",
+  price: "13,00€",
+  isFavorite: false,
+  isOwner: false,
+  link: "https://www.youtube.com/watch?v=y0sF5xhGreA&pp=ygUJY3V0ZSBjYXRz",
+};
+
+const giftWithImage: Gift = {
+  ...gift,
+  image: cat,
+  isFavorite: true,
+  status: "Disponible",
+};
+
+const giftWithoutImage: Gift = {
+  ...gift,
+  isFavorite: true,
+  status: "Disponible",
+};
+
+const giftBookedWithImage: Gift = {
+  ...giftWithImage,
+  status: "Réservé",
+};
+
+const giftWithoutLink: Gift = {
+  ...giftWithImage,
+  status: "Disponible",
+  link: undefined,
+};
+
+const giftWithOptions: Gift = {
+  title: "Chat",
+  category: "Animaux",
+  status: "Disponible",
+  isFavorite: false,
+  isOwner: false,
+  options: ["Chat Noir et Blanc", "Chat noir", "Chat Blanc"],
+};
+
+const giftWithBudget: Gift = {
+  title: "Cagnotte pour un chat",
+  category: "Argent",
+  status: "En cours",
+  image: cat,
+  isFavorite: false,
+  isOwner: false,
+  budget: {
+    goal: 1000,
+    current: 120,
+  },
+};
 
 export const LandingPage = () => {
   const navigate = useNavigate();
@@ -136,7 +203,7 @@ export const LandingPage = () => {
           leaveTo="opacity-0"
           unmount={false}
         >
-          <Title>GRUMO</Title>
+          <Title>grumo</Title>
           <Text>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente,
             perferendis eligendi voluptates ea suscipit illum, soluta rem facere
@@ -172,25 +239,101 @@ export const LandingPage = () => {
         id="features"
         ref={featuresSection}
         className={cn(
-          "h-[calc(100vh-58px-58px)] flex flex-col justify-center my-6 overflow-visible"
+          "min-h-[calc(100vh-58px-58px)] flex flex-col gap-4 my-6 overflow-visible"
         )}
       >
-        <div className="grid grid-cols-3 items-start gap-4">
-          {Array(2)
-            .fill(0)
-            .map((_, i) =>
-              i % 2 === 0 ? (
-                <GiftCard
-                  title={"Chat noir et blanc"}
-                  description={"Animaux"}
-                />
-              ) : (
-                <GiftCardVariant
-                  title={"Chat noir et blanc"}
-                  description={"Animaux"}
-                />
-              )
-            )}
+        <Title variant="h1">gifts</Title>
+        <Title variant="h2">gifts in your lists</Title>
+        <div>
+          <Title variant="h3" className="mt-4">
+            gift with image
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4 gap-y-8">
+            <GiftCardVariant gift={{ ...giftWithImage, isOwner: true }} />
+            <GiftCardVariant gift={{ ...giftWithImage, isOwner: true }} />
+            <GiftCardVariant gift={{ ...giftWithImage, isOwner: true }} />
+            <GiftCardVariant gift={{ ...giftWithImage, isOwner: true }} />
+            <GiftCardVariant gift={{ ...giftWithImage, isOwner: true }} />
+            <GiftCardVariant gift={{ ...giftWithImage, isOwner: true }} />
+            <GiftCardVariantNoButtons
+              gift={{ ...giftWithImage, isOwner: true }}
+            />
+          </div>
+          <Title variant="h3" className="mt-4">
+            gift without image
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4"></div>
+          <Title variant="h3" className="mt-4">
+            gift without link
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4"></div>
+          <Title variant="h3" className="mt-4">
+            gift with options
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4"></div>
+          <Title variant="h3" className="mt-4">
+            gift with budget goal
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4"></div>
+        </div>
+        <Title variant="h2">gifts in shared lists</Title>
+        <div>
+          <Title variant="h3">gift with image</Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4">
+            <GiftCardVariant gift={giftWithImage} />
+            <GiftCardVariantPlacement gift={giftWithImage} />
+            <GiftCardVariantNoButtons gift={giftWithImage} />
+          </div>
+        </div>
+        <div>
+          <Title variant="h3" className="mt-4">
+            gift without image
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4">
+            <GiftCardVariant gift={giftWithoutImage} />
+            <GiftCardVariantPlacement gift={giftWithoutImage} />
+            <GiftCardVariantNoButtons gift={giftWithoutImage} />
+          </div>
+        </div>
+        <div>
+          <Title variant="h3" className="mt-4">
+            gift booked
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4">
+            <GiftCardVariant gift={giftBookedWithImage} />
+            <GiftCardVariantPlacement gift={giftBookedWithImage} />
+            <GiftCardVariantNoButtons gift={giftBookedWithImage} />
+          </div>
+        </div>
+        <div>
+          <Title variant="h3" className="mt-4">
+            gift without link
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4">
+            <GiftCardVariant gift={giftWithoutLink} />
+            <GiftCardVariantPlacement gift={giftWithoutLink} />
+            <GiftCardVariantNoButtons gift={giftWithoutLink} />
+          </div>
+        </div>
+        <div>
+          <Title variant="h3" className="mt-4">
+            gift with multiple options
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4">
+            <GiftCardVariantOptions gift={giftWithOptions} />
+            <GiftCardVariantPlacementOptions gift={giftWithOptions} />
+            <GiftCardVariantOptionsNoButtons gift={giftWithOptions} />
+          </div>
+        </div>
+        <div>
+          <Title variant="h3" className="mt-4">
+            gift with budget goal
+          </Title>
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-3 items-start gap-4">
+            <GiftCardVariantBudget gift={giftWithBudget} />
+            <GiftCardVariantPlacementBudget gift={giftWithBudget} />
+            <GiftCardVariantBudgetNoButtons gift={giftWithBudget} />
+          </div>
         </div>
       </section>
     </div>
